@@ -73,16 +73,16 @@ const LoginUI = () => {
             <div className={styles.LoginMain}>
               <div className="d-flex col-12">
                 <div className="col-6">
-                  <button className={salesRepLogin ? styles.tab : styles.tabNotActive} onClick={handleSalesRepLogin}>
+                  <button className={styles.tab}>
                     Sales Rep Login
                   </button>
-                  <hr className={salesRepLogin ? styles.hr : null} />
+                  <hr className={styles.hr} />
                 </div>
                 <div className="col-6">
-                  <button className={salesRepLogin ? styles.tabNotActive : styles.tab} onClick={handleRetailerLogin}>
+                  <a className={styles.tabNotActive} href="https://bfs-b2bportal-retailer.vercel.app/">
                     Retailer Login
-                  </button>
-                  <hr className={salesRepLogin ? null : styles.hr} />
+                  </a>
+                  <hr />
                 </div>
               </div>
               <h4>Access My Account</h4>
