@@ -15,12 +15,13 @@ function MyBagFinal() {
   const [orderDesc, setOrderDesc] = useState(null);
   const [PONumber, setPONumber] = useState(POGenerator());
   const [buttonActive, setButtonActive] = useState(false);
-  const { addOrder, orderQuantity, deleteOrder, orders, setOrders,setOrderProductPrice } = useBag();
+  const { addOrder, orderQuantity, deleteOrder, orders, setOrders, setOrderProductPrice } = useBag();
   const [bagValue, setBagValue] = useState(fetchBeg());
   const [isOrderPlaced, setIsOrderPlaced] = useState(0);
   const [isPOEditable, setIsPOEditable] = useState(false);
   const [PONumberFilled, setPONumberFilled] = useState(true);
-  const [clearConfim,setClearConfim] = useState(false)
+  const [clearConfim, setClearConfim] = useState(false)
+  const [orderStatus, setorderStatus] = useState({ status: false, message: "" })
 
   useEffect(() => {
     if (bagValue?.Account?.id && bagValue?.Manufacturer?.id && Object.values(bagValue?.orderList)?.length > 0) {
@@ -33,10 +34,10 @@ function MyBagFinal() {
       setButtonActive(true);
     }
   }, [total, bagValue]);
-  const onPriceChangeHander = (product,price='0')=>{
-    if(price == '') price = 0;
-    setOrderProductPrice(product,price).then((res)=>{
-      if(res){
+  const onPriceChangeHander = (product, price = '0') => {
+    if (price == '') price = 0;
+    setOrderProductPrice(product, price).then((res) => {
+      if (res) {
         setBagValue(fetchDataFromBag());
       }
     })
@@ -73,22 +74,27 @@ function MyBagFinal() {
             desc: orderDesc,
             SalesRepId: user.Sales_Rep__c,
             Type: orderType,
-            ShippingCity:bagValue?.Account?.address?.city,
-            ShippingStreet:bagValue?.Account?.address?.street,
-            ShippingState:bagValue?.Account?.address?.state,
-            ShippingCountry:bagValue?.Account?.address?.country,
-            ShippingZip:bagValue?.Account?.address?.postalCode,
+            ShippingCity: bagValue?.Account?.address?.city,
+            ShippingStreet: bagValue?.Account?.address?.street,
+            ShippingState: bagValue?.Account?.address?.state,
+            ShippingCountry: bagValue?.Account?.address?.country,
+            ShippingZip: bagValue?.Account?.address?.postalCode,
             list,
             key: user.x_access_token,
           };
           OrderPlaced({ order: begToOrder })
             .then((response) => {
-              console.log({response});
               if (response) {
-                bagValue.orderList.map((ele) => addOrder(ele.product, 0, ele.discount));
-                localStorage.removeItem("orders");
-                navigate("/order-list");
-                setIsOrderPlaced(2);
+                if (response.length) {
+                  setIsOrderPlaced(0);
+                  setorderStatus({ status: true, message: response[0].message })
+                  // alert(response[0].message)
+                } else {
+                  bagValue.orderList.map((ele) => addOrder(ele.product, 0, ele.discount));
+                  localStorage.removeItem("orders");
+                  navigate("/order-list");
+                  setIsOrderPlaced(2);
+                }
               }
             })
             .catch((err) => {
@@ -104,7 +110,7 @@ function MyBagFinal() {
     addOrder(ele.product, 0, ele.discount);
   };
 
-  const fetchDataFromBag = ()=>{
+  const fetchDataFromBag = () => {
     let orderStr = localStorage.getItem("orders");
     let orderDetails = {
       orderList: [],
@@ -131,7 +137,7 @@ function MyBagFinal() {
     }
     return orderDetails;
   }
-  const deleteBag= ()=>{
+  const deleteBag = () => {
     localStorage.removeItem("orders")
     window.location.reload();
   }
@@ -139,30 +145,51 @@ function MyBagFinal() {
   return (
     <div className="mt-4">
       <section>
-      {clearConfim ? (
-        <ModalPage
-          open
-          content={
-            <div className="d-flex flex-column gap-3">
-              <h2 className={`${Styles.warning} `}>Warning</h2>
-              <p className={`${Styles.warningContent} `}>
-                Are you Sure you want to clear bag?
-              </p>
-              <div className="d-flex justify-content-around ">
-                <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={deleteBag}>
-                  Yes
-                </button>
-                <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setClearConfim(false)}>
-                  Cancel
-                </button>
+        {clearConfim ? (
+          <ModalPage
+            open
+            content={
+              <div className="d-flex flex-column gap-3">
+                <h2 className={`${Styles.warning} `}>Warning</h2>
+                <p className={`${Styles.warningContent} `}>
+                  Are you Sure you want to clear bag?
+                </p>
+                <div className="d-flex justify-content-around ">
+                  <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={deleteBag}>
+                    Yes
+                  </button>
+                  <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setClearConfim(false)}>
+                    Cancel
+                  </button>
+                </div>
               </div>
-            </div>
-          }
-          onClose={() => {
-            setClearConfim(false);
-          }}
-        />
-      ) : null}
+            }
+            onClose={() => {
+              setClearConfim(false);
+            }}
+          />
+        ) : null}
+        {orderStatus?.status ? (
+          <ModalPage
+            open
+            content={
+              <div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
+                <h2 className={`${Styles.warning} `}>SalesForce Error</h2>
+                <p className={`${Styles.warningContent} `} style={{ lineHeight: '22px' }}>
+                  {orderStatus.message}
+                </p>
+                <div className="d-flex justify-content-around ">
+                  <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setorderStatus({ status: false, message: "" })}>
+                    OK
+                  </button>
+                </div>
+              </div>
+            }
+            onClose={() => {
+              setorderStatus({ status: false, message: "" });
+            }}
+          />
+        ) : null}
         <div className="">
           <div>
             <div className={Styles.MyBagFinalTop}>
@@ -216,7 +243,7 @@ function MyBagFinal() {
                         {localStorage.getItem("orders") && Object.values(JSON.parse(localStorage.getItem("orders"))).length > 0 ? (
                           Object.values(JSON.parse(localStorage.getItem("orders"))).map((ele) => {
                             // console.log(ele);
-                            total +=parseFloat(ele.product?.salesPrice*ele.quantity)
+                            total += parseFloat(ele.product?.salesPrice * ele.quantity)
                             return (
                               <div className={Styles.Mainbox}>
                                 <div className={Styles.Mainbox1M}>
@@ -230,7 +257,7 @@ function MyBagFinal() {
                                         {ele.product?.usdRetail__c.includes("$") ? `$${(+ele.product?.usdRetail__c.substring(1)).toFixed(2)}` : `$${Number(ele.product?.usdRetail__c).toFixed(2)}`}
                                       </span>
                                       <span className={Styles.Span2}>${Number(ele.product?.salesPrice).toFixed(2)}</span>
-                                      {false &&<span className={Styles.Span2}><input type="number" onKeyUp={(e)=>onPriceChangeHander(ele.product, e.target.value)}/></span>}
+                                      {false && <span className={Styles.Span2}><input type="number" onKeyUp={(e) => onPriceChangeHander(ele.product, e.target.value)} /></span>}
                                     </p>
                                   </div>
                                 </div>
@@ -347,7 +374,7 @@ function MyBagFinal() {
                       >
                         ${Number(total).toFixed(2)} PLACE ORDER
                       </button>
-                      <p className={`${Styles.ClearBag}`} style={{textAlign:'center',cursor:'pointer'}} onClick={()=>{setClearConfim(true)}}>Clear Bag</p>
+                      <p className={`${Styles.ClearBag}`} style={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => { setClearConfim(true) }}>Clear Bag</p>
                       {/* {Number(total) ? null : window.location.reload()} */}
                     </div>
                   </div>
