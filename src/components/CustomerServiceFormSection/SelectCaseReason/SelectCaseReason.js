@@ -58,6 +58,7 @@ const SelectCaseReason = ({ reasons, onClose, recordType }) => {
           month: "",
         })
           .then((order) => {
+            console.log({order});
             let sorting = sortingList(order);
             setOrders(sorting);
             setOrderGet(true)
@@ -120,7 +121,7 @@ const SelectCaseReason = ({ reasons, onClose, recordType }) => {
   const filteredContact = () => {
     const element = orders.filter((ele) => ele.Id == orderData.opportunityId)[0];
     return element
-      ? `Order from ${element?.Account?.Name} for (${element?.OpportunityLineItems?.totalSize} Products) Actual Amount ${element?.Amount} | ${element?.ManufacturerName__c} | PO #${element?.PO_Number__c}`
+      ? `Order from ${element?.Account?.Name||element?.AccountName} for (${element?.OpportunityLineItems?.totalSize} Products) Actual Amount ${element?.Amount} | ${element?.ManufacturerName__c} | PO #${element?.PO_Number__c}`
       : "Search...";
   };
   const onChnageAccountHander = (value) => {
@@ -268,7 +269,7 @@ const SelectCaseReason = ({ reasons, onClose, recordType }) => {
                         options={orders.map((element) => {
                           return {
                             value: element.Id,
-                            label: `Order from ${element?.Account?.Name} for (${element?.ProductCount||element?.OpportunityLineItems?.totalSize||0} Products) Actual Amount ${element?.Amount} | ${element?.ManufacturerName__c} | PO #${element?.PO_Number__c}`,
+                            label: `Order from ${element?.AccountName||element?.Account?.Name} for (${element?.ProductCount||element?.OpportunityLineItems?.totalSize||0} Products) Actual Amount ${element?.Amount} | ${element?.ManufacturerName__c} | PO #${element?.PO_Number__c}`,
                           };
                         })}
                         defaultValue={{
