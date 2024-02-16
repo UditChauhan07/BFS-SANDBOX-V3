@@ -137,7 +137,11 @@ export async function OrderPlaced({ order }) {
   } else if (data.status == 300) {
     DestoryAuth();
   } else {
-    return false;
+    if(data?.data){
+      return data.data
+    }else{
+      return false;
+    }
   }
 }
 

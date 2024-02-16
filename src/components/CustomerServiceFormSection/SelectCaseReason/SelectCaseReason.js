@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Styles from "./style.module.css";
 import { useNavigate } from "react-router-dom";
 import { CloseButton } from "../../../lib/svg";
-import { DestoryAuth, GetAuthData, getAllAccount, getOrderList, getOrderofSalesRep, getSupportFormRaw, postSupportAny, supportDriveBeg, supportShare } from "../../../lib/store";
+import { DestoryAuth, GetAuthData, getAllAccount, getOrderList, postSupportAny } from "../../../lib/store";
 import Select from "react-select";
 import ModalPage from "../../Modal UI";
 import styles from "../../Modal UI/Styles.module.css";
@@ -41,18 +41,25 @@ const SelectCaseReason = ({ reasons, onClose, recordType }) => {
   // });
   const [reasonChangeModalOpen, setReasonChangeModalOpen] = useState(false);
   const [step, setStep] = useState(0);
+  function sortingList(data) {
+    data.sort(function (a, b) {
+      return new Date(b.CreatedDate) - new Date(a.CreatedDate);
+    });
+    return data;
+  }
   useEffect(() => {
     GetAuthData()
       .then((response) => {
-        getOrderofSalesRep({
+        getOrderList({
           user: {
             key: response.x_access_token,
-            Sales_Rep__c: false ? "00530000005AdvsAAC" : response.Sales_Rep__c,
+            Sales_Rep__c: true ? "00530000005AdvsAAC" : response.Sales_Rep__c,
           },
           month: "",
         })
           .then((order) => {
-            setOrders(JSON.parse(order));
+            let sorting = sortingList(order);
+            setOrders(sorting);
             setOrderGet(true)
           })
           .catch((error) => {
@@ -261,7 +268,7 @@ const SelectCaseReason = ({ reasons, onClose, recordType }) => {
                         options={orders.map((element) => {
                           return {
                             value: element.Id,
-                            label: `Order from ${element?.Account?.Name} for (${element?.OpportunityLineItems?.totalSize} Products) Actual Amount ${element?.Amount} | ${element?.ManufacturerName__c} | PO #${element?.PO_Number__c}`,
+                            label: `Order from ${element?.Account?.Name} for (${element?.ProductCount||element?.OpportunityLineItems?.totalSize||0} Products) Actual Amount ${element?.Amount} | ${element?.ManufacturerName__c} | PO #${element?.PO_Number__c}`,
                           };
                         })}
                         defaultValue={{

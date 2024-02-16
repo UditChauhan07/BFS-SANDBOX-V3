@@ -19,7 +19,9 @@ const CustomerSupportDetails = () => {
         let rawData = { key: user.x_access_token, caseId: deatilsId };
         getSupportDetails({ rawData })
           .then((deatils) => {
+            console.log({deatils});
             deatils.salesRepName = user.Name;
+            deatils.salesRepId = user.Sales_Rep__c;
             setDetailsData(deatils);
             setLoaded(true);
           })

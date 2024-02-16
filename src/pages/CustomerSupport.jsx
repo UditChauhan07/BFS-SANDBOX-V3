@@ -27,6 +27,7 @@ const CustomerSupport = () => {
           getSupportList({ user })
             .then((supports) => {
               if (supports) {
+                console.log({supports});
                 setSupportList(supports);
               }
               setLoaded(true);
