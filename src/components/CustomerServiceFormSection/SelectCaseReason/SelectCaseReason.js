@@ -105,12 +105,12 @@ const SelectCaseReason = ({ reasons, onClose, recordType }) => {
       if (element.Id === id) {
         setOrderData({
           accountId: element.AccountId,
-          orderNumber: element.Order_Number__c ?? "N/A",
+          orderNumber: element.Order_Number__c ?? "Not Available",
           poNumber: element.PO_Number__c,
           manufacturerId: element.ManufacturerId__c,
           opportunityId: element.Id,
           actualAmount: element.Amount,
-          invoiceNumber: element.Wholesale_Invoice__c,
+          invoiceNumber: element.Wholesale_Invoice__c?? "Not Available",
         });
         setOrderIdChild(element.OpportunityLineItems.records);
         setStep(2);
@@ -148,12 +148,12 @@ const SelectCaseReason = ({ reasons, onClose, recordType }) => {
               salesRepId: user.Sales_Rep__c,
               reason,
               accountId: orderData.accountId,
-              orderNumber: orderData.orderNumber,
-              PONumber: orderData.poNumber,
-              manufacturerId: orderData.manufacturerId,
-              amount: orderData.actualAmount,
-              invoiceNumber: orderData.invoiceNumber ? orderData.invoiceNumber : 'NA',
-              amount: orderData.actualAmount,
+              orderNumber: orderData.opportunityId ? orderData.orderNumber:null,
+              PONumber: orderData.opportunityId ? orderData.poNumber:null,
+              manufacturerId:orderData.opportunityId ?  orderData.manufacturerId:null,
+              amount:orderData.opportunityId ?  orderData.actualAmount:null,
+              invoiceNumber:orderData.opportunityId ?  orderData.invoiceNumber ? orderData.invoiceNumber: "Not Available":null,
+              amount: orderData.opportunityId ? orderData.actualAmount:null,
               desc,
               opportunityId: orderData.opportunityId,
               priority: "Medium",
