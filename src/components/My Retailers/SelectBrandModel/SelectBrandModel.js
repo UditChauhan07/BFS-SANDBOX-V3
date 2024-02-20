@@ -33,9 +33,8 @@ const SelectBrandModel = ({ brands, onClose }) => {
                       setSelectedBrandManufacturer(true);
                       localStorage.setItem("manufacturer", brand.ManufacturerName__c|| brand.Name);
                       localStorage.setItem("ManufacturerId__c", brand.ManufacturerId__c||  brand.Id);
-                      // if (selectedBrandManufacturer) {
-                        navigate(`/product`);
-                      // } 
+                      localStorage.setItem("shippingMethod", JSON.stringify({number:brand.Shipping_Account_Number__c,method:brand.Shipping_Method__c}));
+                      navigate(`/product`);
                     }}
                     id={brand.ManufacturerName__c||brand.Name}
                   />

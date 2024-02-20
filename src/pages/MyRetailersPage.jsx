@@ -13,6 +13,7 @@ const MyRetailersPage = () => {
   const [searchParams] = useSearchParams();
   const manufacturerId = searchParams.get("manufacturerId");
   const { data, isLoading } = useRetailersData();
+  console.log({data});
   const [manufacturerFilter, setManufacturerFilter] = useState(manufacturerId);
   const [sortBy, setSortBy] = useState();
   const [searchBy, setSearchBy] = useState("");
