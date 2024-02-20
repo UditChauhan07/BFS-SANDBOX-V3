@@ -78,6 +78,7 @@ function MyBagFinal() {
             ShippingZip: bagValue?.Account?.address?.postalCode,
             list,
             key: user.x_access_token,
+            shippingMethod:bagValue.Account.shippingMethod
           };
           OrderPlaced({ order: begToOrder })
             .then((response) => {

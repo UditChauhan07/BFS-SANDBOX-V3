@@ -9,7 +9,7 @@ import img4 from "./Images/Group1.png";
 import img5 from "./Images/Rectangle 304.png";
 import { PieChart, Pie, Cell } from "recharts";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthCheck, GetAuthData, getDashboardata } from "../../lib/store";
+import { AuthCheck, GetAuthData, formatNumber, getDashboardata } from "../../lib/store";
 import { getRandomColors } from "../../lib/color";
 import ContentLoader from "react-content-loader";
 import SelectBrandModel from "../My Retailers/SelectBrandModel/SelectBrandModel";
@@ -302,6 +302,8 @@ function Dashboard({ dashboardData }) {
           .then((dashboard) => {
             console.log({aa:dashboard});
             setBox({ RETAILERS: dashboard?.activeAccount || 0, GROWTH: 0, ORDERS: dashboard?.totalOrder || 0, REVENUE: dashboard?.totalPrice || 0, TARGET: dashboard.salesRepTarget || 0 })
+            setTargetValue(Number(dashboard.salesRepTarget ));
+            setAchievedSales(Number(dashboard?.totalPrice));
             if (dashboard.rawPerformance) {
               setAccountPerformance({ isLoaded: true, data: dashboard.rawPerformance })
             }
@@ -419,10 +421,6 @@ function Dashboard({ dashboardData }) {
         console.error({ error });
       });
   };
-  useEffect(() => {
-    setTargetValue(Number(box.TARGET / 1000).toFixed(0));
-    setAchievedSales(Number(box.REVENUE / 1000).toFixed(0));
-  }, [Monthlydataa]);
   useEffect(() => {
     setNeedle_data([
       { name: "A", value: parseInt(targetValue> 0 ? targetValue : achievedSales), color: "#16BC4E" },
@@ -573,17 +571,17 @@ function Dashboard({ dashboardData }) {
                               <tbody>
                                 {Monthlydataa.data?.map((e) => {
                                   // console.log("e.....", e);
-                                  totalTargetForMTDSalesRep = Number((Number(e?.target || 0) / 1000).toFixed(0)) + Number(totalTargetForMTDSalesRep);
-                                  totalAmountForMTDSalesRep = Number((Number(e?.sale || 0) / 1000).toFixed(0)) + Number(totalAmountForMTDSalesRep);
-                                  totalDiffForMTDSalesRep = Number((Number(e?.diff || 0) / 1000).toFixed(0)) + Number(totalDiffForMTDSalesRep);
+                                  totalTargetForMTDSalesRep = Number(e?.target || 0) + Number(totalTargetForMTDSalesRep);
+                                  totalAmountForMTDSalesRep = Number(e.sale||0) + Number(totalAmountForMTDSalesRep);
+                                  totalDiffForMTDSalesRep = Number(e?.diff ||0) + Number(totalDiffForMTDSalesRep);
                                   return (
                                     <tr key={e}>
                                       <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.name }) }} style={{ cursor: 'pointer' }}>
                                         <UserIcon /> {e.name}
                                       </td>
-                                      <td className={Styles.tabletd}>${(Number(e?.target || 0) / 1000).toFixed(0)}K</td>
-                                      <td className={Styles.tabletd}>${(Number(e.sale) / 1000).toFixed(0)}K</td>
-                                      <td className={Styles.tabletd}>${(Number(e?.diff || 0) / 1000).toFixed(0)}K</td>
+                                      <td className={Styles.tabletd}>${formatNumber(e?.target || 0)}</td>
+                                      <td className={Styles.tabletd}>${formatNumber(e.sale||0)}</td>
+                                      <td className={Styles.tabletd}>${formatNumber(e?.diff ||0)}</td>
                                     </tr>
                                   );
                                 })}
@@ -591,9 +589,9 @@ function Dashboard({ dashboardData }) {
                                   <th scope="col" className="ps-3">
                                     Total
                                   </th>
-                                  <th scope="col">${totalTargetForMTDSalesRep ?? "0"}K</th>
-                                  <th scope="col">${totalAmountForMTDSalesRep ?? "0"}K</th>
-                                  <th scope="col">${totalDiffForMTDSalesRep ?? "0"}K</th>
+                                  <th scope="col">${formatNumber(totalTargetForMTDSalesRep) ?? "0"}</th>
+                                  <th scope="col">${formatNumber(totalAmountForMTDSalesRep) ?? "0"}</th>
+                                  <th scope="col">${formatNumber(totalDiffForMTDSalesRep) ?? "0"}</th>
                                 </tr>
                               </tbody>
                             ) : (
@@ -640,18 +638,18 @@ function Dashboard({ dashboardData }) {
                             {Yearlydataa.data ? (
                               <tbody>
                                 {Yearlydataa.data?.map((e, index) => {
-                                  totalTargetForYTDSalesRep = Number((Number(e?.target || 0) / 1000).toFixed(0)) + Number(totalTargetForYTDSalesRep);
-                                  totalAmountForYTDSalesRep = Number((Number(e?.sale || 0) / 1000).toFixed(0)) + Number(totalAmountForYTDSalesRep);
-                                  totalDiffForYTDSalesRep = Number((Number(e?.diff || 0) / 1000).toFixed(0)) + Number(totalDiffForYTDSalesRep);
+                                  totalTargetForYTDSalesRep = Number(e?.target || 0) + Number(totalTargetForYTDSalesRep);
+                                  totalAmountForYTDSalesRep = Number(e.sale||0) + Number(totalAmountForYTDSalesRep);
+                                  totalDiffForYTDSalesRep = Number(e?.diff ||0) + Number(totalDiffForYTDSalesRep);
 
                                   return (
                                     <tr key={e}>
                                       <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.name }) }} style={{ cursor: 'pointer' }}>
                                         <UserIcon /> {e.name}
                                       </td>
-                                      <td className={Styles.tabletd}>${(Number(e.target) / 1000).toFixed(0)}K</td>
-                                      <td className={Styles.tabletd}>${(Number(e.sale) / 1000).toFixed(0)}K</td>
-                                      <td className={Styles.tabletd}>${(Number(e.diff) / 1000).toFixed(0)}K</td>
+                                      <td className={Styles.tabletd}>${formatNumber(e.target)}</td>
+                                      <td className={Styles.tabletd}>${formatNumber(e.sale)}</td>
+                                      <td className={Styles.tabletd}>${formatNumber(e.diff)}</td>
                                     </tr>
                                   );
                                 })}
@@ -659,9 +657,9 @@ function Dashboard({ dashboardData }) {
                                   <th scope="col" className="ps-3">
                                     Total
                                   </th>
-                                  <th scope="col">${totalTargetForYTDSalesRep}K</th>
-                                  <th scope="col">${totalAmountForYTDSalesRep}K</th>
-                                  <th scope="col">${totalDiffForYTDSalesRep}K</th>
+                                  <th scope="col">${formatNumber(totalTargetForYTDSalesRep)}</th>
+                                  <th scope="col">${formatNumber(totalAmountForYTDSalesRep)}</th>
+                                  <th scope="col">${formatNumber(totalDiffForYTDSalesRep)}</th>
                                 </tr>
                               </tbody>
                             ) : (
@@ -709,17 +707,17 @@ function Dashboard({ dashboardData }) {
                             {brandData.data.length ? (
                               <>
                                 {brandData.data?.map((e, i) => {
-                                  totalTargetForMTDGoalBrand = Number((Number(e.target) / 1000 || 0).toFixed(0)) + Number(totalTargetForMTDGoalBrand);
-                                  totalAmountForMTDGoalBrand = Number((Number(e.sale) / 1000 || 0).toFixed(0)) + Number(totalAmountForMTDGoalBrand);
-                                  totalDiffForMTDGoalBrand = Number((Number(e.target - e.sale || 0) / 1000).toFixed(0)) + Number(totalDiffForMTDGoalBrand);
+                                  totalTargetForMTDGoalBrand = Number(e?.target || 0) + Number(totalTargetForMTDGoalBrand);
+                                  totalAmountForMTDGoalBrand = Number(e.sale||0) + Number(totalAmountForMTDGoalBrand);
+                                  totalDiffForMTDGoalBrand = Number((Number(e.target - e.sale || 0)).toFixed(0)) + Number(totalDiffForMTDGoalBrand);
                                   // console.log({e,i});
                                   return (
                                     <tr key={e}>
                                       <td className={` ps-3 ${Styles.tabletd}`} onClick={() => { sendDataTargetHandler({ manufacturerId: e.id }) }} style={{ cursor: 'pointer' }}>{e.name}</td>
                                       {/* <td className={Styles.tabletd}>{e.totalOrder}</td> */}
-                                      <td className={Styles.tabletd}>${(Number(e.target) / 1000).toFixed(0)}K</td>
-                                      <td className={Styles.tabletd}>${(Number(e.sale) / 1000).toFixed(0)}K</td>
-                                      <td className={Styles.tabletd}>${(Number(e.target - e.sale || 0) / 1000).toFixed(0)}K</td>
+                                      <td className={Styles.tabletd}>${formatNumber(e.target)}</td>
+                                      <td className={Styles.tabletd}>${formatNumber(e.sale)}</td>
+                                      <td className={Styles.tabletd}>${formatNumber(e.target - e.sale || 0)}</td>
                                     </tr>
                                   );
                                 })}
@@ -727,9 +725,9 @@ function Dashboard({ dashboardData }) {
                                   <th scope="col" className="ps-3">
                                     Total
                                   </th>
-                                  <th scope="col">${totalTargetForMTDGoalBrand}K</th>
-                                  <th scope="col">${totalAmountForMTDGoalBrand}K</th>
-                                  <th scope="col">${totalDiffForMTDGoalBrand}K</th>
+                                  <th scope="col">${formatNumber(totalTargetForMTDGoalBrand)}</th>
+                                  <th scope="col">${formatNumber(totalAmountForMTDGoalBrand)}</th>
+                                  <th scope="col">${formatNumber(totalDiffForMTDGoalBrand)}</th>
                                 </tr>
                               </>
                             ) : (
@@ -918,10 +916,10 @@ function Dashboard({ dashboardData }) {
                       <div className={Styles.donuttop1}>
                         <div className="container">
                           <p className={`text-end ${Styles.Tabletxt}`}>
-                            Your Target: <span className={Styles.Tabletext_head}>{Number(targetValue) || 0}K</span>
+                            Your Target: <span className={Styles.Tabletext_head}>{formatNumber(targetValue) || 0}</span>
                           </p>
                           <p className={`text-end ${Styles.Tabletxt1}`}>
-                            Achieved Sales: <span className={Styles.Tabletext_head}>{Number(achievedSales) || 0}K</span>
+                            Achieved Sales: <span className={Styles.Tabletext_head}>{formatNumber(achievedSales) || 0}</span>
                           </p>
                           <div className={Styles.donutbox}>
                             <PieChart width={400} height={400}>
@@ -987,7 +985,7 @@ function Dashboard({ dashboardData }) {
                 </div>
                 <div className="">
                   <p className={`text-end ${Styles.activetext}`}>REVENUE</p>
-                  <h1 className={`text-end ${Styles.activetext1}`}>${box.REVENUE >= 1000 ? (Number((Number(box.REVENUE) / 1000).toFixed(0)) + 'K') : box.REVENUE}</h1>
+                  <h1 className={`text-end ${Styles.activetext1}`}>${formatNumber(box.REVENUE)}</h1>
                 </div>
               </div>
             </div>

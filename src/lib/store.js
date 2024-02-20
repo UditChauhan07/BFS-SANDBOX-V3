@@ -66,6 +66,18 @@ function padNumber(n, isTwoDigit) {
     }
   }
 }
+
+export function formatNumber(num) {
+  if (num >= 0 && num < 10000) {
+    return (num / 1000).toFixed(1) + 'K';
+  } else if (num >= 10000) {
+    return (num / 10000).toFixed(0) + 'M';
+  }else if(num <0){
+    return (num / 1000).toFixed(1) + 'K';
+  } else {
+    return num;
+  }
+}
 export function supportDriveBeg() {
   let supportList = localStorage.getItem(support);
   return JSON.parse(supportList);
@@ -91,6 +103,7 @@ export function fetchBeg() {
       name: null,
       id: null,
       address: null,
+      shippingMethod:null
     },
     Manufacturer: {
       name: null,
@@ -102,6 +115,7 @@ export function fetchBeg() {
     if (orderList.length > 0) {
       orderDetails.Account.id = orderList[0].account.id;
       orderDetails.Account.name = orderList[0].account.name;
+      orderDetails.Account.shippingMethod = orderList[0].account.shippingMethod;
       orderDetails.Account.address = JSON.parse(orderList[0].account.address);
       orderDetails.Manufacturer.id = orderList[0].manufacturer.id;
       orderDetails.Manufacturer.name = orderList[0].manufacturer.name;
