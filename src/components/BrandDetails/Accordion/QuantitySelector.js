@@ -18,12 +18,16 @@ const QuantitySelector = ({ onChange, value = 0, min = 0 }) => {
   const qtyChangeHandler = ({ previous, newQty = 0 }) => {
     if (newQty) {
       if (newQty < min) {
+        setNewQtyInput(null)
+        setLimitInput('')
         setQtyErrorModalOpen(true)
       } else {
         if ((min>0 &&newQty % min == 0)||min==0) {
           onChange?.(newQty);
           setQtyErrorModalOpen(false)
         } else {
+          setNewQtyInput(null)
+          setLimitInput('')
           setQtyErrorModalOpen(true)
         }
       }
