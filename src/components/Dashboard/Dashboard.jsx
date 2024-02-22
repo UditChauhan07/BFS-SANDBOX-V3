@@ -300,9 +300,14 @@ function Dashboard({ dashboardData }) {
         }
         getDashboardata({ user })
           .then((dashboard) => {
-            console.log({aa:dashboard});
             setBox({ RETAILERS: dashboard?.activeAccount || 0, GROWTH: 0, ORDERS: dashboard?.totalOrder || 0, REVENUE: dashboard?.totalPrice || 0, TARGET: dashboard.salesRepTarget || 0 })
-            setTargetValue(Number(dashboard.salesRepTarget ));
+            let tempValue = (dashboard?.totalPrice / dashboard.salesRepTarget * 100) <= 100 ? dashboard?.totalPrice / dashboard.salesRepTarget * 100 : 100;
+            setValue(tempValue)
+            setNeedle_data([
+              { name: "A", value: parseInt(tempValue), color: "#16BC4E" },
+              { name: "B", value: parseInt(tempValue > 0 ? 100 - tempValue : 100), color: "#C7C7C7" },
+            ])
+            setTargetValue(Number(dashboard.salesRepTarget));
             setAchievedSales(Number(dashboard?.totalPrice));
             if (dashboard.rawPerformance) {
               setAccountPerformance({ isLoaded: true, data: dashboard.rawPerformance })
@@ -421,12 +426,6 @@ function Dashboard({ dashboardData }) {
         console.error({ error });
       });
   };
-  useEffect(() => {
-    setNeedle_data([
-      { name: "A", value: parseInt(targetValue> 0 ? targetValue : achievedSales), color: "#16BC4E" },
-      { name: "B", value: parseInt(targetValue>0 ? targetValue - achievedSales > 0 ? targetValue - achievedSales || 0 : 0 : targetValue), color: "#C7C7C7" },
-    ]);
-  }, [targetValue, achievedSales, Monthlydataa]);
   let lowPerformanceArray = accountPerformance?.data?.slice(0).reverse().map((ele) => ele);
 
   const changeMonthHandler = (value) => {
@@ -449,15 +448,19 @@ function Dashboard({ dashboardData }) {
   const cy = 200;
   const iR = 50;
   const oR = 100;
-  const value = parseInt(targetValue);
+  const [value, setValue] = useState((box.REVENUE / box.TARGET * 100) <= 100 ? box.REVENUE / box.TARGET * 100 : 100)
   const needle = (value, data, cx, cy, iR, oR, color) => {
     let total = 0;
-    needle_data.forEach((v) => {
-      total += v.value;
-    });
-    let ang = 180.0 * (1 - value / total);
-    if(value == 0 &&value < total){
-      ang = 0;
+    // needle_data.forEach((v) => {
+    //   total += v.value;
+    // });
+    // let ang = 180.0 * (1 - value / total);
+    // if(value == 0 &&value < total){
+    //   ang = 0;
+    // }
+    let ang = 180 - ((value / 100) * 180);
+    if (value == 0) {
+      ang = 180;
     }
     const length = (iR + 2.4 * oR) / 3;
     const sin = Math.sin(-RADIAN * ang);
@@ -572,16 +575,16 @@ function Dashboard({ dashboardData }) {
                                 {Monthlydataa.data?.map((e) => {
                                   // console.log("e.....", e);
                                   totalTargetForMTDSalesRep = Number(e?.target || 0) + Number(totalTargetForMTDSalesRep);
-                                  totalAmountForMTDSalesRep = Number(e.sale||0) + Number(totalAmountForMTDSalesRep);
-                                  totalDiffForMTDSalesRep = Number(e?.diff ||0) + Number(totalDiffForMTDSalesRep);
+                                  totalAmountForMTDSalesRep = Number(e.sale || 0) + Number(totalAmountForMTDSalesRep);
+                                  totalDiffForMTDSalesRep = Number(e?.diff || 0) + Number(totalDiffForMTDSalesRep);
                                   return (
                                     <tr key={e}>
                                       <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.name }) }} style={{ cursor: 'pointer' }}>
                                         <UserIcon /> {e.name}
                                       </td>
                                       <td className={Styles.tabletd}>${formatNumber(e?.target || 0)}</td>
-                                      <td className={Styles.tabletd}>${formatNumber(e.sale||0)}</td>
-                                      <td className={Styles.tabletd}>${formatNumber(e?.diff ||0)}</td>
+                                      <td className={Styles.tabletd}>${formatNumber(e.sale || 0)}</td>
+                                      <td className={Styles.tabletd}>${formatNumber(e?.diff || 0)}</td>
                                     </tr>
                                   );
                                 })}
@@ -639,8 +642,8 @@ function Dashboard({ dashboardData }) {
                               <tbody>
                                 {Yearlydataa.data?.map((e, index) => {
                                   totalTargetForYTDSalesRep = Number(e?.target || 0) + Number(totalTargetForYTDSalesRep);
-                                  totalAmountForYTDSalesRep = Number(e.sale||0) + Number(totalAmountForYTDSalesRep);
-                                  totalDiffForYTDSalesRep = Number(e?.diff ||0) + Number(totalDiffForYTDSalesRep);
+                                  totalAmountForYTDSalesRep = Number(e.sale || 0) + Number(totalAmountForYTDSalesRep);
+                                  totalDiffForYTDSalesRep = Number(e?.diff || 0) + Number(totalDiffForYTDSalesRep);
 
                                   return (
                                     <tr key={e}>
@@ -708,7 +711,7 @@ function Dashboard({ dashboardData }) {
                               <>
                                 {brandData.data?.map((e, i) => {
                                   totalTargetForMTDGoalBrand = Number(e?.target || 0) + Number(totalTargetForMTDGoalBrand);
-                                  totalAmountForMTDGoalBrand = Number(e.sale||0) + Number(totalAmountForMTDGoalBrand);
+                                  totalAmountForMTDGoalBrand = Number(e.sale || 0) + Number(totalAmountForMTDGoalBrand);
                                   totalDiffForMTDGoalBrand = Number((Number(e.target - e.sale || 0)).toFixed(0)) + Number(totalDiffForMTDGoalBrand);
                                   // console.log({e,i});
                                   return (
@@ -907,36 +910,30 @@ function Dashboard({ dashboardData }) {
             </div>
             <div className="col-lg-5">
               <p className={Styles.Tabletext}>Your Sales Performance Score in 2024</p>
-              {false ? (
+              {isLoading ? (
                 <Loading />
               ) : (
                 <>
-                  {targetValue && achievedSales && Monthlydataa ? (
-                    <>
-                      <div className={Styles.donuttop1}>
-                        <div className="container">
-                          <p className={`text-end ${Styles.Tabletxt}`}>
-                            Your Target: <span className={Styles.Tabletext_head}>{formatNumber(targetValue) || 0}</span>
-                          </p>
-                          <p className={`text-end ${Styles.Tabletxt1}`}>
-                            Achieved Sales: <span className={Styles.Tabletext_head}>{formatNumber(achievedSales) || 0}</span>
-                          </p>
-                          <div className={Styles.donutbox}>
-                            <PieChart width={400} height={400}>
-                              <Pie dataKey="value" startAngle={180} endAngle={0} data={needle_data} cx={cx} cy={cy} innerRadius={iR} outerRadius={oR} fill="#8884d8" stroke="none">
-                                {needle_data.map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={entry.color} />
-                                ))}
-                              </Pie>
-                              {needle(value, needle_data, cx, cy, iR, oR, "#000000")}
-                            </PieChart>
-                          </div>
-                        </div>
+                  <div className={Styles.donuttop1}>
+                    <div className="container">
+                      <p className={`text-end ${Styles.Tabletxt}`}>
+                        Your Target: <span className={Styles.Tabletext_head}>{formatNumber(targetValue) || 0}</span>
+                      </p>
+                      <p className={`text-end ${Styles.Tabletxt1}`}>
+                        Achieved Sales: <span className={Styles.Tabletext_head}>{formatNumber(achievedSales) || 0}</span>
+                      </p>
+                      <div className={Styles.donutbox}>
+                        <PieChart width={400} height={400}>
+                          <Pie dataKey="value" startAngle={180} endAngle={0} data={needle_data} cx={cx} cy={cy} innerRadius={iR} outerRadius={oR} fill="#8884d8" stroke="none">
+                            {needle_data.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          {needle(value, needle_data, cx, cy, iR, oR, "#000000")}
+                        </PieChart>
                       </div>
-                    </>
-                  ) : (
-                    ""
-                  )}
+                    </div>
+                  </div>
                 </>
               )}
             </div>
