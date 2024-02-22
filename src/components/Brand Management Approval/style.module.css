@@ -188,7 +188,7 @@ text-align: start !important;
   letter-spacing: 1.6px;
 }
 .labelAmountDiv{
-  border-radius: 8px;
+border-radius: 8px;
 border: 1px solid #D5D9D9;
 margin-top: 10px;
 margin-bottom: 10px;
@@ -247,7 +247,7 @@ align-items: center;
 }
 
 .selectDiv select{
- transition: height 0.4s ease;;
+ transition: height 0.4s ease;
  transition: all 0.4s ease;
 }
 
