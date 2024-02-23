@@ -17,7 +17,7 @@ const useSalesReport = () => {
         }
       );
       // const response = await axios.post("https://dev.beautyfashionsales.com/report/4i1cKeDt9");
-      if (salesRepId == "00530000005AdvsAAC") {
+      if (salesRepId == "00530000005AdvsAAC"&& salesRepId == "0053b00000DgEVEAA3") {
         response.data.ownerPermission = true;
       }
       if (response.status == 300) {

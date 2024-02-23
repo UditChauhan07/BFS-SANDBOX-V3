@@ -11,6 +11,7 @@ export const useProductList = (data) => {
   if (productList.status == 300) {
     DestoryAuth();
   } else {
+    console.log({productList});
     return productList;
   }
 };

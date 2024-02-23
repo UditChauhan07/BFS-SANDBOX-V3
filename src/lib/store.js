@@ -1,5 +1,5 @@
 export const originAPi = "https://b2b.beautyfashionsales.com"
-// export const originAPi = "http://localhost:3001"
+// export const originAPi = "http://localhost:2000"
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
 const orderKey = "orders";
@@ -471,5 +471,84 @@ export async function postSupportComment({ rawData }) {
     DestoryAuth();
   } else {
     return data.data;
+  }
+}
+
+export async function getProductList({ rawData }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(url + "HSc6cv4", {
+    method: "POST",
+    body: JSON.stringify(rawData),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data;
+  }
+}
+
+export async function getProductImage({ rawData }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(url + "v3/4v8x5lE25F6VmIs", {
+    method: "POST",
+    body: JSON.stringify(rawData),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.url;
+  }
+}
+
+export async function getProductImageAll({ rawData }) {
+  console.log({rawData});
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  // let response = await fetch(url + "v3/Ftr7xyLKqgFo5MO", {
+  let response = await fetch(url + "v3/fGBDynHKNNfVNki", {
+    
+    method: "POST",
+    body: JSON.stringify(rawData),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
+
+export async function getProductDetails({ rawData }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(url + "v3/V59WN1CMm8Pjxay", {
+    method: "POST",
+    body: JSON.stringify(rawData),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data;
   }
 }
