@@ -121,6 +121,7 @@ const BrandManagementModal = ({ onClose, recordType }) => {
         console.log(error);
       });
   };
+  console.log({attachment:formData.attachment});
   return (
     <>
       {reasonChangeModalOpen ? (
@@ -280,7 +281,7 @@ const BrandManagementModal = ({ onClose, recordType }) => {
                           return { ...prev, attachment: e.target.files[0] };
                         });
                       }}
-                      value={formData.attachment}
+                      // value={formData.attachment}
                     />
                     <span className={`${Styles.label} position-absolute top-[30px] right-[20px]`}>
                       <UploadFileIcon />

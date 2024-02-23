@@ -30,6 +30,7 @@ import CustomerServiceForm from "./pages/CustomerServiceForm";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TargetReport from "./reports/targetReport";
+import ProductDetails from "./pages/productDetails";
 function App() {
   // const Redirect = ({ href }) => {
   //   window.location.href = href;
@@ -55,6 +56,7 @@ function App() {
             <Route path="/my-retailers" element={<MyRetailersPage />}></Route>
             <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/product" element={<Product/>}></Route>
+            <Route path="/product/:name" element={<ProductDetails/>}></Route>
             <Route path="/my-bag" element={<MyBag />}></Route>
             <Route path="/brand" element={<BrandsPage />}></Route>
             {/*  */}

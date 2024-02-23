@@ -11,7 +11,7 @@ import { FilterItem } from "../FilterItem";
 import FilterSearch from "../FilterSearch";
 import ModalPage from "../Modal UI";
 import { useBag } from "../../context/BagContext";
-import { fetchBeg } from "../../lib/store";
+import { fetchBeg, getProductImage, getProductImageAll, getProductList } from "../../lib/store";
 import Styles from "../Modal UI/Styles.module.css";
 import { BackArrow } from "../../lib/svg";
 import AppLayout from "../AppLayout";
@@ -41,13 +41,8 @@ function Product() {
   const [alert, setAlert] = useState(0);
   const [testerInBag, setTesterInBag] = useState(false);
   const [orderFormModal, setOrderFromModal] = useState(false);
-  const { data, isLoading } = useProductList({
-    key: user?.data.access_token,
-    Sales_Rep__c: user?.data.Sales_Rep__c,
-    Manufacturer: localStorage.getItem("ManufacturerId__c"),
-    AccountId__c: localStorage.getItem("AccountId__c"),
-  });
-  const brandName = data?.data?.records?.[0]?.ManufacturerName__c;
+  const [productList, setProductlist] = useState({ isLoading: false, data: [], discount: {} });
+  const brandName = productList?.data?.[0]?.ManufacturerName__c;
 
   const groupProductDataByCategory = (productData) => {
     const groupedData = groupBy(productData || [], "Category__c");
@@ -67,8 +62,7 @@ function Product() {
     return groupedData;
   };
 
-  const formattedData = useMemo(() => groupProductDataByCategory(data?.data?.records), [data?.data?.records]);
-
+  const formattedData = useMemo(() => groupProductDataByCategory(productList.data), [productList.data]);
   const formattedFilterData = useMemo(() => {
     let finalFilteredProducts = { ...formattedData };
 
@@ -134,11 +128,50 @@ function Product() {
 
     return finalFilteredProducts;
   }, [formattedData, categoryFilters, productTypeFilter, sortBy, searchBy]);
-
+  const [productImage, setProductImage] = useState({});
   useEffect(() => {
     if (!(localStorage.getItem("ManufacturerId__c") && localStorage.getItem("AccountId__c"))) {
       setRedirect(true);
     }
+    let rawData = {
+      key: user?.data.access_token,
+      Sales_Rep__c: user?.data.Sales_Rep__c,
+      Manufacturer: localStorage.getItem("ManufacturerId__c"),
+      AccountId__c: localStorage.getItem("AccountId__c"),
+    }
+    getProductList({ rawData }).then((productRes) => {
+      let productData = productRes.data.records || []
+      let discount = productRes.discount;
+      setProductlist({ data: productData, isLoading: true, discount })
+
+      //version 1
+      // productData.map(product => {
+      //   let productCode = product?.ProductCode
+      //   getProductImage({ rawData: { code: productCode } }).then((res) => {
+      //     setProductImage((prev) => ({
+      //       ...prev,
+      //       [productCode]: res
+      //     }));
+      //   }).catch((err) => {
+      //     console.log({ err });
+      //   })
+      // })
+
+      // version 2
+      // let productCode = "";
+      // productData.map((product,index) => {
+      //   productCode += `'${product?.ProductCode}'`
+      //   if(productData.length-1 != index) productCode += ', ';
+      // })
+      // getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
+      //   // console.log({res});
+      //   // setProductImage(res);
+      // }).catch((err) => {
+      //   console.log({ err });
+      // })
+    }).catch((errPro) => {
+      console.log({ errPro });
+    })
   }, []);
   const redirecting = () => {
     setTimeout(() => {
@@ -154,14 +187,14 @@ function Product() {
       Object.values(begValue.orderList).map((product) => {
         let productPriceStr = product.product.salesPrice;
         let productQuantity = product.quantity;
-        let productPrice = parseInt(productPriceStr||0);
+        let productPrice = parseInt(productPriceStr || 0);
         bagPrice += productPrice * productQuantity;
       });
       setAlert(0);
-      if (data.discount.MinOrderAmount > bagPrice) {
+      if (productList.discount.MinOrderAmount > bagPrice) {
         setAlert(1);
       } else {
-        if (testerInBag && data.discount.testerproductLimit > bagPrice) {
+        if (testerInBag && productList.discount.testerproductLimit > bagPrice) {
           setAlert(2);
         } else {
           navigate("/my-bag");
@@ -178,8 +211,8 @@ function Product() {
   }, []);
   const csvData = () => {
     let finalData = [];
-    if (data?.data?.records?.length) {
-      data?.data?.records?.map((ele) => {
+    if (productList.data) {
+      productList.data.map((ele) => {
         let temp = {};
         temp["Title"] = ele.Name;
         temp["Product Code"] = ele.ProductCode;
@@ -198,7 +231,6 @@ function Product() {
     const data = new Blob([excelBuffer], { type: fileType });
     FileSaver.saveAs(data, `Order Form ${new Date()}` + fileExtension);
   };
-
   return (
     <>
       {redirect ? (
@@ -289,27 +321,27 @@ function Product() {
               open
               content={
                 <>
-                  <div style={{ maxWidth: "100%" ,minWidth:'700px'}}>
-                    <h1 className={`fs-5 ${Styles.ModalHeader} d-flex justify-content-between mb-3`}>Upload Order Form  
-                    <CSVLink
+                  <div style={{ maxWidth: "100%", minWidth: '700px' }}>
+                    <h1 className={`fs-5 ${Styles.ModalHeader} d-flex justify-content-between mb-3`}>Upload Order Form
+                      <CSVLink
                         data={csvData()}
                         filename={`Order Form ${new Date()}.csv`}
                         className={`${Styles.modalButton} d-flex justify-content-center align-items-center gap-1`}
                         style={{ width: "max-content", padding: "0px 6px" }}
                       >
-                        <MdOutlineDownload size={16}/>
+                        <MdOutlineDownload size={16} />
                         Order Form Template
                       </CSVLink></h1>
                     <div className={`${Styles.ModalContent} mt-2`}>
                       <SpreadsheetUploader
-                        rawData={data || {}}
+                        rawData={productList || {}}
                         orderData={{ accountName: localStorage.getItem("Account"), accountId: localStorage.getItem("AccountId__c"), brandId: localStorage.getItem("ManufacturerId__c") }}
                         btnClassName={Styles.modalButton}
                         setOrderFromModal={setOrderFromModal}
                       />
                     </div>
                     <div className="d-flex justify-content-center">
-                     
+
                     </div>
                   </div>
                 </>
@@ -322,7 +354,7 @@ function Product() {
           <AppLayout
             filterNodes={
               <>
-              {isLoading?null:<> <FilterItem
+                {!productList.isLoading ? null : <> <FilterItem
                   label="Sort by"
                   name="Sort-by"
                   value={sortBy}
@@ -340,43 +372,43 @@ function Product() {
                     setSortBy(value);
                   }}
                 />
-                <FilterItem
-                  label="Product type"
-                  name="Product-type"
-                  value={productTypeFilter}
-                  options={[
-                    {
-                      label: "Wholesale",
-                      value: "Wholesale",
-                    },
-                    {
-                      label: "PREORDER",
-                      value: "Pre-order",
-                    },
-                  ]}
-                  onChange={(value) => {
-                    setProductTypeFilter(value);
-                  }}
-                />
-                <FilterSearch onChange={(e) => setSearchBy(e.target.value)} value={searchBy} placeholder={"Enter Product name,UPC & SKU"} minWidth="260px" />
-                <button
-                  className="border px-2.5 py-1 leading-tight tracking-[1.2px] uppercase"
-                  onClick={() => {
-                    setSortBy("Price: High To Low");
-                    setSearchBy("");
-                    setProductTypeFilter("Wholesale");
-                  }}
-                >
-                  CLEAR ALL
-                </button>
-                <button className="border px-2.5 py-1 leading-tight uppercase tracking-[1.2px]" onClick={() => setOrderFromModal(true)}>
-                  Upload Order Form
-                </button></>}
-               
+                  <FilterItem
+                    label="Product type"
+                    name="Product-type"
+                    value={productTypeFilter}
+                    options={[
+                      {
+                        label: "Wholesale",
+                        value: "Wholesale",
+                      },
+                      {
+                        label: "PREORDER",
+                        value: "Pre-order",
+                      },
+                    ]}
+                    onChange={(value) => {
+                      setProductTypeFilter(value);
+                    }}
+                  />
+                  <FilterSearch onChange={(e) => setSearchBy(e.target.value)} value={searchBy} placeholder={"Enter Product name,UPC & SKU"} minWidth="260px" />
+                  <button
+                    className="border px-2.5 py-1 leading-tight tracking-[1.2px] uppercase"
+                    onClick={() => {
+                      setSortBy("Price: High To Low");
+                      setSearchBy("");
+                      setProductTypeFilter("Wholesale");
+                    }}
+                  >
+                    CLEAR ALL
+                  </button>
+                  <button className="border px-2.5 py-1 leading-tight uppercase tracking-[1.2px]" onClick={() => setOrderFromModal(true)}>
+                    Upload Order Form
+                  </button></>}
+
               </>
             }
           >
-            {isLoading ? (
+            {!productList.isLoading ? (
               <Loading height={"70vh"} />
             ) : (
               <div>
@@ -402,7 +434,7 @@ function Product() {
                     <div className="row">
                       <div className="col-lg-3 col-md-4 col-sm-12">
                         <FilterPage
-                          data={data}
+                          data={productList}
                           formattedData={formattedData}
                           setCategoryFilters={setCategoryFilters}
                           categoryFilters={categoryFilters}
@@ -421,7 +453,7 @@ function Product() {
                             border: "1px dashed black",
                           }}
                         >
-                          <Accordion data={data} formattedData={formattedFilterData}></Accordion>
+                          <Accordion data={productList} formattedData={formattedFilterData} productImage={productImage}></Accordion>
                         </div>
                         <div className={`${styles.TotalSide} `}>
                           <h4>Total Number of Products : {orderQuantity}</h4>
