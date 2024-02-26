@@ -158,17 +158,16 @@ function Product() {
       // })
 
       // version 2
-      // let productCode = "";
-      // productData.map((product,index) => {
-      //   productCode += `'${product?.ProductCode}'`
-      //   if(productData.length-1 != index) productCode += ', ';
-      // })
-      // getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
-      //   // console.log({res});
-      //   // setProductImage(res);
-      // }).catch((err) => {
-      //   console.log({ err });
-      // })
+      let productCode = "";
+      productData.map((product,index) => {
+        productCode += `'${product?.ProductCode}'`
+        if(productData.length-1 != index) productCode += ', ';
+      })
+      getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
+        setProductImage(res);
+      }).catch((err) => {
+        console.log({ err });
+      })
     }).catch((errPro) => {
       console.log({ errPro });
     })

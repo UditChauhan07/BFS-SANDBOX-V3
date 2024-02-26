@@ -53,7 +53,7 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
   };
 
   const sendProductIdHandler = ({ productId,productName }) => {
-    // navigate('/product/'+productName.replaceAll(" ","-").replaceAll("=","-"), { state: { productId } });
+    navigate('/product/'+productName.replaceAll(" ","-").replaceAll("=","-"), { state: { productId } });
   }
   return (
     <>
