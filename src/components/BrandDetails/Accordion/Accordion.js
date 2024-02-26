@@ -17,7 +17,6 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
 
   const onQuantityChange = (product, quantity, salesPrice = null, discount = null) => {
     product.salesPrice = salesPrice;
-    console.log({ product, salesPrice });
     if (Object.values(orders).length) {
       if (
         Object.values(orders)[0]?.manufacturer?.name === localStorage.getItem("manufacturer") &&
