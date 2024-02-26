@@ -3,7 +3,6 @@ import styles from "./styles.module.css";
 import Accordion from "./Accordion/Accordion";
 import FilterPage from "./Accordion/FilterPage";
 import { MdOutlineDownload } from "react-icons/md";
-import { useProductList } from "../../api/useProductList";
 import { useAuth } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import Loading from "../Loading";
@@ -11,7 +10,7 @@ import { FilterItem } from "../FilterItem";
 import FilterSearch from "../FilterSearch";
 import ModalPage from "../Modal UI";
 import { useBag } from "../../context/BagContext";
-import { fetchBeg, getProductImage, getProductImageAll, getProductList } from "../../lib/store";
+import { GetAuthData, fetchBeg, getProductImageAll, getProductList } from "../../lib/store";
 import Styles from "../Modal UI/Styles.module.css";
 import { BackArrow } from "../../lib/svg";
 import AppLayout from "../AppLayout";
@@ -133,9 +132,10 @@ function Product() {
     if (!(localStorage.getItem("ManufacturerId__c") && localStorage.getItem("AccountId__c"))) {
       setRedirect(true);
     }
+    GetAuthData().then((user)=>{
     let rawData = {
-      key: user?.data.access_token,
-      Sales_Rep__c: user?.data.Sales_Rep__c,
+      key: user.access_token,
+      Sales_Rep__c: user?.Sales_Rep__c,
       Manufacturer: localStorage.getItem("ManufacturerId__c"),
       AccountId__c: localStorage.getItem("AccountId__c"),
     }
@@ -170,6 +170,9 @@ function Product() {
       })
     }).catch((errPro) => {
       console.log({ errPro });
+    })
+        }).catch((err)=>{
+      console.log({err});
     })
   }, []);
   const redirecting = () => {
