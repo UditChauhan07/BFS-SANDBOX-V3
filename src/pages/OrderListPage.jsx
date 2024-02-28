@@ -96,7 +96,6 @@ const OrderListPage = () => {
           month: filterValue.month,
         })
           .then((order) => {
-            // console.log({order});
             let sorting = sortingList(order);
             setOrders(sorting);
             setLoaded(true);

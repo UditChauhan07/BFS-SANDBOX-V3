@@ -6,6 +6,9 @@ import QuantitySelector from "./QuantitySelector";
 import ModalPage from "../../Modal UI";
 import { useBag } from "../../../context/BagContext";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../Loading";
+import LoaderV2 from "../../loader/v2";
+import ProductDetails from "../../../pages/productDetails";
 
 const Accordion = ({ data, formattedData,productImage=[] }) => {
   const navigate = useNavigate();
@@ -14,6 +17,7 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
   const [replaceCartProduct, setReplaceCartProduct] = useState({});
   const [showName, setShowName] = useState(false);
   const [limitInput, setLimitInput] = useState("");
+  const [ productDetailId, setProductDetailId] = useState(null)
 
   const onQuantityChange = (product, quantity, salesPrice = null, discount = null) => {
     product.salesPrice = salesPrice;
@@ -52,7 +56,8 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
   };
 
   const sendProductIdHandler = ({ productId,productName }) => {
-    navigate('/product/'+productName.replaceAll(" ","-").replaceAll("=","-"), { state: { productId } });
+    // navigate('/product/'+productName.replaceAll(" ","-").replaceAll("=","-"), { state: { productId } });
+    setProductDetailId(productId)
   }
   return (
     <>
@@ -126,7 +131,15 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
                           return (
                             <tr className={`${styles.ControlTR} w-full `} key={indexed}>
                               <td className={styles.ControlStyle}>
-                                {productImage[value.ProductCode]?<img src={productImage[value.ProductCode]?.ContentDownloadUrl??productImage[value.ProductCode]} alt="img" width={35} />:<img src={Img1} alt="img" />}
+                                {
+                                  !productImage.isLoaded?<LoaderV2/>:
+                                  productImage.images?.[value?.ProductCode] ?
+                                  productImage.images[value?.ProductCode]?.ContentDownloadUrl?
+                                  <img src={productImage.images[value?.ProductCode]?.ContentDownloadUrl} alt="img" width={35} />
+                                  :<img src={productImage.images[value?.ProductCode]} alt="img"  width={35}/>
+                                  :<img src={Img1} alt="img" />
+                                }
+                                {/* {!productImage.isLoaded?<LoaderV2/>:productImage.images[value.ProductCode]?<img src={productImage.images[value.ProductCode]?.ContentDownloadUrl?productImage.images[value.ProductCode]?.ContentDownloadUrl:productImage.images[value.ProductCode]} alt="img" width={35} />:<img src={Img1} alt="img" />} */}
                               </td>
                               <td className="text-capitalize" style={{ fontSize: '13px',cursor:'pointer' }} onMouseEnter={() => setShowName({ index: indexed, type: true })}
                                 onMouseLeave={() => setShowName({ index: indexed })} onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})}>
@@ -176,6 +189,7 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
           </table>
         </div>
       </div>
+      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId}/>
     </>
   );
 };
