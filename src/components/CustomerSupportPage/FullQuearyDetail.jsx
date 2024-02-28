@@ -7,7 +7,7 @@ import ModalPage from '../Modal UI';
 const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ];
-function FullQuearyDetail({ data }) {
+function FullQuearyDetail({ data, setRest }) {
     const [orderStatus, setorderStatus] = useState({ status: false, message: "" })
     const date = new Date(data.Date_Opened__c);
     const [comment, setComment] = useState('');
@@ -33,7 +33,9 @@ function FullQuearyDetail({ data }) {
                 }
                 postSupportComment({ rawData }).then((response) => {
                     if (response?.success) {
-                        window.location.reload()
+                        // window.location.reload()
+                        setComment('');
+                        setRest(true);
                     } else {
                         if (response.length) {
                             setorderStatus({ status: true, message: response[0].message })
@@ -95,7 +97,9 @@ function FullQuearyDetail({ data }) {
                             <h6>Activity</h6>
                             <div className={Detail.HeightGiven}>
                                 {data.CaseComments && data.CaseComments.records.length > 0 && <>
-                                    {data.CaseComments.records.map((activity, index) => {
+                                    {data.CaseComments.records.sort(
+                                        (objA, objB) => new Date(objA.CreatedDate) - new Date(objB.CreatedDate),
+                                    ).map((activity, index) => {
                                         const itemDate = new Date(activity.CreatedDate);
                                         let desc = activity?.CommentBody.split("Wrote:\n");
                                         console.log({ desc });
