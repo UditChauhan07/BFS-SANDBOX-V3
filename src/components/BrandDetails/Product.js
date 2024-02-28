@@ -137,9 +137,9 @@ function Product() {
       data[localStorage.getItem("ManufacturerId__c")] = {};
     }
     if (data[localStorage.getItem("ManufacturerId__c")]) {
-      if(Object.values(data[localStorage.getItem("ManufacturerId__c")]).length>0){
+      if (Object.values(data[localStorage.getItem("ManufacturerId__c")]).length > 0) {
         setProductImage({ isLoaded: true, images: data[localStorage.getItem("ManufacturerId__c")] })
-      }else{
+      } else {
         setProductImage({ isLoaded: false, images: {} })
       }
     }
@@ -178,7 +178,7 @@ function Product() {
           if (productData.length - 1 != index) productCode += ', ';
         })
         getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
-          if(res){
+          if (res) {
             if (data[localStorage.getItem("ManufacturerId__c")]) {
               data[localStorage.getItem("ManufacturerId__c")] = { ...data[localStorage.getItem("ManufacturerId__c")], ...res }
             } else {
@@ -186,7 +186,7 @@ function Product() {
             }
             ShareDrive(data)
             setProductImage({ isLoaded: true, images: res });
-          }else{
+          } else {
             setProductImage({ isLoaded: true, images: {} });
           }
         }).catch((err) => {
