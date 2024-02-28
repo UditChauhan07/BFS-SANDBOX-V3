@@ -4,11 +4,13 @@ import Styles from "./Styles.module.css";
 import Img1 from "./Images/Eye1.png";
 import QuantitySelector from "../BrandDetails/Accordion/QuantitySelector";
 import { useNavigate } from "react-router-dom";
-import { GetAuthData, OrderPlaced, POGenerator, fetchBeg } from "../../lib/store";
+import { GetAuthData, OrderPlaced, POGenerator, ShareDrive, fetchBeg, getProductImageAll } from "../../lib/store";
 import { useBag } from "../../context/BagContext";
 import OrderLoader from "../loader";
 import ModalPage from "../Modal UI";
 import StylesModal from "../Modal UI/Styles.module.css";
+import LoaderV2 from "../loader/v2";
+import ProductDetails from "../../pages/productDetails";
 
 function MyBagFinal() {
   const navigate = useNavigate();
@@ -22,6 +24,7 @@ function MyBagFinal() {
   const [PONumberFilled, setPONumberFilled] = useState(true);
   const [clearConfim, setClearConfim] = useState(false)
   const [orderStatus, setorderStatus] = useState({ status: false, message: "" })
+  const [ productDetailId, setProductDetailId] = useState(null)
 
   useEffect(() => {
     if (bagValue?.Account?.id && bagValue?.Manufacturer?.id && Object.values(bagValue?.orderList)?.length > 0) {
@@ -29,11 +32,57 @@ function MyBagFinal() {
     }
   }, []);
   let total = 0;
+  const [productImage, setProductImage] = useState({ isLoaded: false, images: {} });
   useEffect(() => {
+    let data = ShareDrive();
+    if (!data) {
+      data = {};
+    }
+    if (bagValue) {
+      if (bagValue.Manufacturer) {
+        if (bagValue.Manufacturer.id) {
+          if (!data[bagValue.Manufacturer.id]) {
+            data[bagValue.Manufacturer.id] = {};
+          }
+          if (Object.values(data[bagValue.Manufacturer.id]).length > 0) {
+            console.log({aaas:Object.values(data[bagValue.Manufacturer.id]).length});
+            setProductImage({ isLoaded: true, images: data[bagValue.Manufacturer.id] })
+          } else {
+            setProductImage({ isLoaded: false, images: {} })
+          }
+        }
+      }
+      if (bagValue.orderList) {
+        if (bagValue.orderList.length > 0) {
+          let productCode = "";
+          bagValue.orderList.map((element, index) => {
+            productCode += `'${element.product?.ProductCode}'`
+            if (bagValue.orderList.length - 1 != index) productCode += ', ';
+          })
+          getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
+            if (res) {
+              console.log({res});
+              if (data[bagValue.Manufacturer.id]) {
+                data[bagValue.Manufacturer.id] = { ...data[bagValue.Manufacturer.id], ...res }
+              } else {
+                data[bagValue.Manufacturer.id] = res
+              }
+              ShareDrive(data)
+              setProductImage({ isLoaded: true, images: res });
+            } else {
+              setProductImage({ isLoaded: true, images: {} });
+            }
+          }).catch((err) => {
+            console.log({ err });
+          })
+        }
+      }
+    }
     if (bagValue?.Account?.id && bagValue?.Manufacturer?.id && Object.values(bagValue?.orderList)?.length > 0 && total > 0) {
       setButtonActive(true);
     }
   }, [total, bagValue]);
+
   const onPriceChangeHander = (product, price = '0') => {
     if (price == '') price = 0;
     setOrderProductPrice(product, price).then((res) => {
@@ -78,7 +127,7 @@ function MyBagFinal() {
             ShippingZip: bagValue?.Account?.address?.postalCode,
             list,
             key: user.x_access_token,
-            shippingMethod:bagValue.Account.shippingMethod
+            shippingMethod: bagValue.Account.shippingMethod
           };
           OrderPlaced({ order: begToOrder })
             .then((response) => {
@@ -245,11 +294,18 @@ function MyBagFinal() {
                             return (
                               <div className={Styles.Mainbox}>
                                 <div className={Styles.Mainbox1M}>
-                                  <div className={Styles.Mainbox2}>
-                                    <img src={Img1} alt="" />
+                                  <div className={Styles.Mainbox2} style={{cursor:'pointer'}}>
+                                    {
+                                      !productImage.isLoaded ? <LoaderV2 /> :
+                                        productImage.images?.[ele.product?.ProductCode] ?
+                                          productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl ?
+                                            <img src={productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl} alt="img" width={25} onClick={()=>{setProductDetailId(ele?.product?.Id)}}/>
+                                            : <img src={productImage.images[ele.product?.ProductCode]} alt="img" width={25} onClick={()=>{setProductDetailId(ele?.product?.Id)}}/>
+                                          : <img src={Img1} alt="img" onClick={()=>{setProductDetailId(ele?.product?.Id)}}/>
+                                    }
                                   </div>
                                   <div className={Styles.Mainbox3}>
-                                    <h2>{ele.product?.Name}</h2>
+                                    <h2 onClick={()=>{setProductDetailId(ele?.product?.Id)}} style={{cursor:'pointer'}}>{ele.product?.Name}</h2>
                                     <p>
                                       <span className={Styles.Span1}>
                                         {ele.product?.usdRetail__c.includes("$") ? `$${(+ele.product?.usdRetail__c.substring(1)).toFixed(2)}` : `$${Number(ele.product?.usdRetail__c).toFixed(2)}`}
@@ -372,16 +428,18 @@ function MyBagFinal() {
                       >
                         ${Number(total).toFixed(2)} PLACE ORDER
                       </button>
-                      <p className={`${Styles.ClearBag}`} style={{ textAlign: 'center', cursor: 'pointer' }} 
-                      onClick={() => { 
-                        if(Object.keys(orders).length){
-                          if(clearConfim.length){
-                            orderPlaceHandler()
-                          }else{
-                            setClearConfim(true) }}
-                          }}
-                          disabled={!buttonActive}
-                       >Clear Bag</p>
+                      <p className={`${Styles.ClearBag}`} style={{ textAlign: 'center', cursor: 'pointer' }}
+                        onClick={() => {
+                          if (Object.keys(orders).length) {
+                            if (clearConfim.length) {
+                              orderPlaceHandler()
+                            } else {
+                              setClearConfim(true)
+                            }
+                          }
+                        }}
+                        disabled={!buttonActive}
+                      >Clear Bag</p>
                       {/* {Number(total) ? null : window.location.reload()} */}
                     </div>
                   </div>
@@ -391,6 +449,7 @@ function MyBagFinal() {
           </div>
         </div>
       </section>
+      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId}/>
     </div>
   );
 }

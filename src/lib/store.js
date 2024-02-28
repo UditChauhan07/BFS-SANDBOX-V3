@@ -9,7 +9,22 @@ const brandKey = "Account";
 const accountKey = "manufacturer";
 const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
+const shareKey = "R7Mmw2nG41y6MqI";
 // export const originAPi = "https://dev.beautyfashionsales.com"
+
+export function ShareDrive (data, remove = false){
+  if(remove){
+    localStorage.removeItem(shareKey);
+    return true;
+  }
+  if(data){
+    localStorage.setItem(shareKey, JSON.stringify(data))
+    return true;
+  }else{
+    let strData = localStorage.getItem(shareKey);
+    return JSON.parse(strData);
+  }
+}
 
 export async function AuthCheck() {
   if (JSON.parse(localStorage.getItem("Api Data"))?.data) {

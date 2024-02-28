@@ -5,8 +5,10 @@ import Img1 from "./Images/Eye1.png";
 import axios from "axios";
 import Loading from "../../Loading";
 import { useNavigate } from "react-router-dom";
-import { getOrderDetailsBasedId, getOrderDetailsInvoice, originAPi, supportShare } from "../../../lib/store";
+import { ShareDrive, getOrderDetailsBasedId, getOrderDetailsInvoice, getProductImageAll, originAPi, supportShare } from "../../../lib/store";
 import { MdOutlineDownload } from "react-icons/md";
+import LoaderV2 from "../../loader/v2";
+import ProductDetails from "../../../pages/productDetails";
 
 function MyBagFinal() {
   const [OrderData, setOrderData] = useState([]);
@@ -16,6 +18,8 @@ function MyBagFinal() {
 
   const OrderId = JSON.parse(localStorage.getItem("OpportunityId"));
   const Key = JSON.parse(localStorage.getItem("Api Data"));
+  const [productImage, setProductImage] = useState({ isLoaded: false, images: {} });
+  const [ productDetailId, setProductDetailId] = useState(null)
   useEffect(() => {
     // let rawData = {key:Key.data.access_token,id:OrderId}
     // getOrderDetailsBasedId({rawData}).then((res)=>{
@@ -35,16 +39,52 @@ function MyBagFinal() {
   BodyContent.append("key", Key.data.access_token);
   BodyContent.append("opportunity_id", OrderId);
   getOrderDetailsInvoice({ rawData: { key: Key.data.access_token, id: OrderId } }).then((response) => {
-    console.log({ response });
+    // console.log({ response });
   }).catch((error) => {
     console.error({ error });
   })
   const getOrderDetails = async () => {
+    let data = ShareDrive();
+    if (!data) {
+      data = {};
+    }
     const response = await axios.post(
       `${originAPi}/beauty/0DS68FOD7s`,
       BodyContent,
       headersList
     );
+    if (response.data.data?.ManufacturerId__c) {
+      if (!data[response.data.data?.ManufacturerId__c]) {
+        data[response.data.data?.ManufacturerId__c] = {};
+      }
+      if (Object.values(data[response.data.data?.ManufacturerId__c]).length > 0) {
+        setProductImage({ isLoaded: true, images: data[response.data.data?.ManufacturerId__c] })
+      } else {
+        setProductImage({ isLoaded: false, images: {} })
+      }
+    }
+    if (response.data.data.OpportunityLineItems.length > 0) {
+      let productCode = "";
+      response.data.data.OpportunityLineItems?.map((element, index) => {
+        productCode += `'${element?.ProductCode}'`
+        if (response.data.data.OpportunityLineItems.length - 1 != index) productCode += ', ';
+      })
+      getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
+        if (res) {
+          if (data[response.data.data?.ManufacturerId__c]) {
+            data[response.data.data?.ManufacturerId__c] = { ...data[response.data.data?.ManufacturerId__c], ...res }
+          } else {
+            data[response.data.data?.ManufacturerId__c] = res
+          }
+          ShareDrive(data)
+          setProductImage({ isLoaded: true, images: res });
+        } else {
+          setProductImage({ isLoaded: true, images: {} });
+        }
+      }).catch((err) => {
+        console.log({ err });
+      })
+    }
     setOrderData(response.data.data);
     setIsLoading(true);
   };
@@ -129,11 +169,18 @@ function MyBagFinal() {
                               return (
                                 <div className={Styles.Mainbox}>
                                   <div className={Styles.Mainbox1M}>
-                                    <div className={Styles.Mainbox2}>
-                                      <img src={Img1} alt="" />
+                                    <div className={Styles.Mainbox2} style={{cursor:'pointer'}}>
+                                      {
+                                        !productImage.isLoaded ? <LoaderV2 /> :
+                                          productImage.images?.[item.ProductCode] ?
+                                            productImage.images[item.ProductCode]?.ContentDownloadUrl ?
+                                              <img src={productImage.images[item.ProductCode]?.ContentDownloadUrl} alt="img" width={25} onClick={()=>{setProductDetailId(item?.Product2Id)}}/>
+                                              : <img src={productImage.images[item.ProductCode]} alt="img" width={25} onClick={()=>{setProductDetailId(item?.Product2Id)}}/>
+                                            : <img src={Img1} alt="img" onClick={()=>{setProductDetailId(item?.Product2Id)}}/>
+                                      }
                                     </div>
                                     <div className={Styles.Mainbox3}>
-                                      <h2>{item.Name.split(OrderData.Name)}</h2>
+                                      <h2 onClick={()=>{setProductDetailId(item?.Product2Id)}} style={{cursor:'pointer'}}>{item.Name.split(OrderData.Name)}</h2>
                                       <p>
                                         <span className={Styles.Span1}>
                                           ${Number(item.ListPrice).toFixed(2)}
@@ -205,7 +252,7 @@ function MyBagFinal() {
                           {OrderData.Order_Number__c}
                         </p>
                       </div></>}
-                      {OrderData.Tracking__c && <>
+                    {OrderData.Tracking__c && <>
                       <h2>Tracking Number</h2>
                       <div className={Styles.ShipAdress}>
                         <p>
@@ -227,7 +274,7 @@ function MyBagFinal() {
                   {true && (
                     <div className={Styles.ShipBut}>
                       <button className="py-1 d-flex justify-content-center" onClick={() => invoiceHandler()}>
-                      <span style={{margin:'auto 0'}}><MdOutlineDownload size={16}/></span>&nbsp;INVOICE
+                        <span style={{ margin: 'auto 0' }}><MdOutlineDownload size={16} /></span>&nbsp;INVOICE
                       </button>
                     </div>
                   )}
@@ -237,6 +284,7 @@ function MyBagFinal() {
           </div>
         </div>
       </section>
+      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false}/>
     </div>
   );
 }
