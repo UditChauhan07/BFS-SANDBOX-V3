@@ -10,7 +10,7 @@ import { FilterItem } from "../FilterItem";
 import FilterSearch from "../FilterSearch";
 import ModalPage from "../Modal UI";
 import { useBag } from "../../context/BagContext";
-import { GetAuthData, fetchBeg, getProductImageAll, getProductList } from "../../lib/store";
+import { GetAuthData, ShareDrive, fetchBeg, getProductImageAll, getProductList } from "../../lib/store";
 import Styles from "../Modal UI/Styles.module.css";
 import { BackArrow } from "../../lib/svg";
 import AppLayout from "../AppLayout";
@@ -127,54 +127,79 @@ function Product() {
 
     return finalFilteredProducts;
   }, [formattedData, categoryFilters, productTypeFilter, sortBy, searchBy]);
-  const [productImage, setProductImage] = useState({});
+  const [productImage, setProductImage] = useState({ isLoaded: true, images: {} });
   useEffect(() => {
+    let data = ShareDrive();
+    if (!data) {
+      data = {};
+    }
+    if (!data[localStorage.getItem("ManufacturerId__c")]) {
+      data[localStorage.getItem("ManufacturerId__c")] = {};
+    }
+    if (data[localStorage.getItem("ManufacturerId__c")]) {
+      if(Object.values(data[localStorage.getItem("ManufacturerId__c")]).length>0){
+        setProductImage({ isLoaded: true, images: data[localStorage.getItem("ManufacturerId__c")] })
+      }else{
+        setProductImage({ isLoaded: false, images: {} })
+      }
+    }
     if (!(localStorage.getItem("ManufacturerId__c") && localStorage.getItem("AccountId__c"))) {
       setRedirect(true);
     }
-    GetAuthData().then((user)=>{
-    let rawData = {
-      key: user.access_token,
-      Sales_Rep__c: user?.Sales_Rep__c,
-      Manufacturer: localStorage.getItem("ManufacturerId__c"),
-      AccountId__c: localStorage.getItem("AccountId__c"),
-    }
-    getProductList({ rawData }).then((productRes) => {
-      let productData = productRes.data.records || []
-      let discount = productRes.discount;
-      setProductlist({ data: productData, isLoading: true, discount })
+    GetAuthData().then((user) => {
+      let rawData = {
+        key: user.access_token,
+        Sales_Rep__c: user?.Sales_Rep__c,
+        Manufacturer: localStorage.getItem("ManufacturerId__c"),
+        AccountId__c: localStorage.getItem("AccountId__c"),
+      }
+      getProductList({ rawData }).then((productRes) => {
+        let productData = productRes.data.records || []
+        let discount = productRes.discount;
+        setProductlist({ data: productData, isLoading: true, discount })
 
-      //version 1
-      // productData.map(product => {
-      //   let productCode = product?.ProductCode
-      //   getProductImage({ rawData: { code: productCode } }).then((res) => {
-      //     setProductImage((prev) => ({
-      //       ...prev,
-      //       [productCode]: res
-      //     }));
-      //   }).catch((err) => {
-      //     console.log({ err });
-      //   })
-      // })
+        //version 1
+        // productData.map(product => {
+        //   let productCode = product?.ProductCode
+        //   getProductImage({ rawData: { code: productCode } }).then((res) => {
+        //     setProductImage((prev) => ({
+        //       ...prev,
+        //       [productCode]: res
+        //     }));
+        //   }).catch((err) => {
+        //     console.log({ err });
+        //   })
+        // })
 
-      // version 2
-      let productCode = "";
-      productData.map((product,index) => {
-        productCode += `'${product?.ProductCode}'`
-        if(productData.length-1 != index) productCode += ', ';
+        // version 2
+        let productCode = "";
+        productData.map((product, index) => {
+          productCode += `'${product?.ProductCode}'`
+          if (productData.length - 1 != index) productCode += ', ';
+        })
+        getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
+          if(res){
+            if (data[localStorage.getItem("ManufacturerId__c")]) {
+              data[localStorage.getItem("ManufacturerId__c")] = { ...data[localStorage.getItem("ManufacturerId__c")], ...res }
+            } else {
+              data[localStorage.getItem("ManufacturerId__c")] = res
+            }
+            ShareDrive(data)
+            setProductImage({ isLoaded: true, images: res });
+          }else{
+            setProductImage({ isLoaded: true, images: {} });
+          }
+        }).catch((err) => {
+          console.log({ err });
+        })
+      }).catch((errPro) => {
+        console.log({ errPro });
       })
-      getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
-        setProductImage(res);
-      }).catch((err) => {
-        console.log({ err });
-      })
-    }).catch((errPro) => {
-      console.log({ errPro });
-    })
-        }).catch((err)=>{
-      console.log({err});
+    }).catch((err) => {
+      console.log({ err });
     })
   }, []);
+
   const redirecting = () => {
     setTimeout(() => {
       navigate("/my-retailers");
