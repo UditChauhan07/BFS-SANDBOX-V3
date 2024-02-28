@@ -5,13 +5,10 @@ import CollapsibleRow from "../../CollapsibleRow";
 import QuantitySelector from "./QuantitySelector";
 import ModalPage from "../../Modal UI";
 import { useBag } from "../../../context/BagContext";
-import { useNavigate } from "react-router-dom";
-import Loading from "../../Loading";
 import LoaderV2 from "../../loader/v2";
 import ProductDetails from "../../../pages/productDetails";
 
 const Accordion = ({ data, formattedData,productImage=[] }) => {
-  const navigate = useNavigate();
   const { orders, setOrders, setOrderQuantity, addOrder, setOrderProductPrice } = useBag();
   const [replaceCartModalOpen, setReplaceCartModalOpen] = useState(false);
   const [replaceCartProduct, setReplaceCartProduct] = useState({});
@@ -130,14 +127,14 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
                           }
                           return (
                             <tr className={`${styles.ControlTR} w-full `} key={indexed}>
-                              <td className={styles.ControlStyle}>
+                              <td className={styles.ControlStyle} style={{cursor:'pointer'}}>
                                 {
                                   !productImage.isLoaded?<LoaderV2/>:
                                   productImage.images?.[value?.ProductCode] ?
                                   productImage.images[value?.ProductCode]?.ContentDownloadUrl?
-                                  <img src={productImage.images[value?.ProductCode]?.ContentDownloadUrl} alt="img" width={35} />
-                                  :<img src={productImage.images[value?.ProductCode]} alt="img"  width={35}/>
-                                  :<img src={Img1} alt="img" />
+                                  <img src={productImage.images[value?.ProductCode]?.ContentDownloadUrl} alt="img" width={35} onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})} />
+                                  :<img src={productImage.images[value?.ProductCode]} alt="img"  width={35} onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})}/>
+                                  :<img src={Img1} alt="img" onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})} />
                                 }
                                 {/* {!productImage.isLoaded?<LoaderV2/>:productImage.images[value.ProductCode]?<img src={productImage.images[value.ProductCode]?.ContentDownloadUrl?productImage.images[value.ProductCode]?.ContentDownloadUrl:productImage.images[value.ProductCode]} alt="img" width={35} />:<img src={Img1} alt="img" />} */}
                               </td>
