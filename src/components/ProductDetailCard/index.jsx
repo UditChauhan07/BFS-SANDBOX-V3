@@ -43,7 +43,7 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
 
                         {orders[product?.data?.Id] ?
                             <>
-                                <p>$<input type="number" value={inputPrice} placeholder={Number(inputPrice).toFixed(2)}
+                                <p>$<input type="number" className={Styles.priceInputHolder} value={inputPrice} placeholder={Number(inputPrice).toFixed(2)}
                                     onChange={(e) => { onPriceChangeHander(product?.data, e.target.value < 10 ? e.target.value.replace("0", "").slice(0, 4) : e.target.value.slice(0, 4) || 0) }} id="limit_input" minLength={0} maxLength={4}
                                     name="limit_input" /></p>
                                 <div className="d-flex">
