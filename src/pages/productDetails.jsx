@@ -8,21 +8,21 @@ import ModalPage from "../components/Modal UI";
 import ProductDetailCard from "../components/ProductDetailCard";
 import { CloseButton } from "../lib/svg";
 
-const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true }) => {
+const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountId=null }) => {
     const { orders, setOrders, setOrderQuantity, addOrder, setOrderProductPrice } = useBag();
     const [product, setProduct] = useState({ isLoaded: false, data: [], discount: {} });
     const [replaceCartModalOpen, setReplaceCartModalOpen] = useState(false);
     const [replaceCartProduct, setReplaceCartProduct] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(true)
 
-
     useEffect(() => {
         if (productId) {
             setIsModalOpen(true)
             setProduct({ isLoaded: false, data: [], discount: {} })
             GetAuthData().then((user) => {
-                let rawData = { productId: productId, key: user.x_access_token, salesRepId: user?.Sales_Rep__c, accountId: localStorage.getItem("AccountId__c") }
+                let rawData = { productId: productId, key: user.x_access_token, salesRepId: user?.Sales_Rep__c, accountId: AccountId||localStorage.getItem("AccountId__c") }
                 getProductDetails({ rawData }).then((productRes) => {
+                    console.log({productRes,rawData});
                     setProduct({ isLoaded: true, data: productRes.data, discount: productRes.discount })
                 }).catch((proErr) => {
                     console.log({ proErr });
@@ -43,7 +43,7 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true }) => {
         if (Object.values(orders).length) {
             if (
                 Object.values(orders)[0]?.manufacturer?.name === localStorage.getItem("manufacturer") &&
-                Object.values(orders)[0].account.name === localStorage.getItem("Account") &&
+                Object.values(orders)[0].account.name === AccountId||localStorage.getItem("Account") &&
                 Object.values(orders)[0].productType === (element.Category__c === "PREORDER" ? "pre-order" : "wholesale")
             ) {
                 orderSetting(element, quantity);
