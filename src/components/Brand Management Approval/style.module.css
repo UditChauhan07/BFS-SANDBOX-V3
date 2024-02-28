@@ -155,7 +155,12 @@ text-align: start !important;
   grid-template-columns: repeat(3, auto);
   gap: 20px;
 }
-
+.chooseFile{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 500px;
+}
 .option {
   max-width: 50ch;
   overflow: hidden;
