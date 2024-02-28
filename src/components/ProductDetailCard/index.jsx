@@ -29,7 +29,7 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
                 <div className="col-4">
                     {product?.data?.imgSrc.length > 0 ? <Slider data={product?.data?.imgSrc} /> : <Slider data={fakeProductSlider} />}
                 </div>
-                <div className="col-8 ml-4">
+                <div className="col-8 ml-4 product-card-element-holder" >
                     <h2>{product?.data?.Name}</h2>
                     <p><b>By</b>, {product?.data?.ManufacturerName__c}</p>
                     <p>Code Number: {product?.data?.ProductCode},</p>
