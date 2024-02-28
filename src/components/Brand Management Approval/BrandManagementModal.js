@@ -275,7 +275,7 @@ const BrandManagementModal = ({ onClose, recordType }) => {
                     <input
                       id="chooseFile"
                       type="file"
-                      className={`position-absolute top-[40px] left-[20px] w-[100%]`}
+                      className={`${Styles.chooseFile} position-absolute top-[40px] left-[20px] w-[100%]`}
                       onChange={(e) => {
                         setFormData((prev) => {
                           return { ...prev, attachment: e.target.files[1] };
