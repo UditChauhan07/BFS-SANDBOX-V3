@@ -3,39 +3,23 @@ import styles from "./table.module.css";
 import { Link } from "react-router-dom";
 import Loading from "../Loading";
 const NewnessReportTable = ({ newnessData, dataDisplay }) => {
-  // console.log(newnessData);
   const handleTableDataDisplay = (value) => {
     if (dataDisplay === "price") return `$${Number(value).toFixed(2)}`;
     else return value;
   };
   let length = 0;
   function convertDateStringToDate(dateString) {
-    if(dateString){
-
-      const formats = [
-        "DD-MM-YYYY",
-        "DD/MM/YYYY",
-      ];
-  
-      for (const format of formats) {
-        const [day, month, year] = dateString.split(/[-/]/);
-        
+    if (dateString) {
+        const [year, month, day] = dateString.split(/[-/]/);
         if (day && month && year) {
-          let parsedDate = null;
-          if(month<=12){
-            parsedDate = new Date(`${month}/${day}/${year}`);
-          }else{
-            parsedDate = new Date(`${day}/${month}/${year}`);
-          }
-          
+          let parsedDate = new Date(`${month}/${day}/${year}`);
           if (!isNaN(parsedDate.getTime())) {
             const options = { day: 'numeric', month: 'short', year: 'numeric' };
             let launchDateFormattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(parsedDate));
             return launchDateFormattedDate;
           }
         }
-      }   
-      throw new Error("Invalid date string");
+      // throw new Error("Invalid date string");
     }
   }
   return (
@@ -58,14 +42,20 @@ const NewnessReportTable = ({ newnessData, dataDisplay }) => {
                     {newnessData?.header?.map((ele, index) => {
                       length = ele?.name?.length * 9.5;
                       let launchDateFormattedDate = null;
-                      if (ele.launchDate !== "N/A") {
-                        launchDateFormattedDate = convertDateStringToDate(ele.launchDate);
+                      if (!ele.launchDate || ele.launchDate == null || ele.launchDate == '') {
+                        launchDateFormattedDate = 'N/A';
+                      }
+                      else if (ele.launchDate !== "N/A") {
+                        launchDateFormattedDate = convertDateStringToDate(ele?.launchDate??null);
                       } else {
                         launchDateFormattedDate = ele.launchDate
                       }
                       let shipDateFormattedDate = null;
-                      if (ele.shipDate !== "N/A") {
-                        shipDateFormattedDate = convertDateStringToDate(ele.shipDate);
+                      if (!ele.shipDate || ele.shipDate == null || ele.shipDate == '') {
+                        shipDateFormattedDate = 'N/A';
+                      }
+                      else if (ele.shipDate !== "N/A") {
+                        shipDateFormattedDate = convertDateStringToDate(ele?.shipDate??null);
                       } else {
                         shipDateFormattedDate = ele.shipDate
                       }
