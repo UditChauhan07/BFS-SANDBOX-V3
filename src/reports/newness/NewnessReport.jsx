@@ -38,61 +38,62 @@ const NewnessReport = () => {
   const [newnessData, setNewnessData] = useState({});
   const [loading, setLoading] = useState(false);
   // if (manufacturers?.status !== 200) {
-  //   // DestoryAuth();
-  // }
-  const resetFilter = async () => {
-    setLoading(true);
-    setFilter(initialValues);
-    const result = await originalApiData.fetchNewnessApiData(initialValues);
-    setNewnessData(result);
-    setLoading(false);
-  };
-  const PriceDisplay = (value) => {
-    return `$${Number(value).toFixed(2)}`;
-  };
-  const csvData = () => {
-    let finalData = [];
-    if (newnessData?.AccountList?.length) {
-      newnessData?.AccountList?.map((ele) => {
-        let temp = {};
-        temp["Account_Name"] = ele.AccountName__c;
-        temp["Account_Owner_Name"] = ele.OwnerName;
-        temp["Account_Status"] = ele.Active_Closed__c;
-        temp["Sales_Rep"] = ele.Sales_Rep_Name__c;
-        temp["ManufacturerName__c"] = ele.ManufacturerName__c;
-        newnessData?.header?.map((item) => {
-          temp[`${item.name} Price`] = PriceDisplay(ele[item.name]?.price);
-          temp[`${item.name} Quantity`] = ele[item.name]?.qty;
+    //   // DestoryAuth();
+    // }
+    const resetFilter = async () => {
+      setLoading(true);
+      setFilter(initialValues);
+      const result = await originalApiData.fetchNewnessApiData(initialValues);
+      setNewnessData(result);
+      setLoading(false);
+    };
+    const PriceDisplay = (value) => {
+      return `$${Number(value).toFixed(2)}`;
+    };
+    const csvData = () => {
+      let finalData = [];
+      if (newnessData?.AccountList?.length) {
+        newnessData?.AccountList?.map((ele) => {
+          let temp = {};
+          temp["Account_Name"] = ele.AccountName__c;
+          temp["Account_Owner_Name"] = ele.OwnerName;
+          temp["Account_Status"] = ele.Active_Closed__c;
+          temp["Sales_Rep"] = ele.Sales_Rep_Name__c;
+          temp["ManufacturerName__c"] = ele.ManufacturerName__c;
+          newnessData?.header?.map((item) => {
+            temp[`${item.name} Price`] = PriceDisplay(ele[item.name]?.price);
+            temp[`${item.name} Quantity`] = ele[item.name]?.qty;
+          });
+          finalData.push(temp);
         });
-        finalData.push(temp);
-      });
-    }
-    return finalData;
-  };
-
-  const handleExportToExcel = () => {
-    setExportToExcelState(true);
-  };
-  const exportToExcel = () => {
-    setExportToExcelState(false);
-    const ws = XLSX.utils.json_to_sheet(csvData());
-    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    const data = new Blob([excelBuffer], { type: fileType });
-    FileSaver.saveAs(data, `Newness Report ${new Date().toDateString()}` + fileExtension);
-  };
-  useEffect(() => {
-    const userData = localStorage.getItem("Name");
-    if (!userData) {
-      navigate("/");
-    }
-  }, []);
-  useEffect(() => {
-    sendApiCall();
-  }, []);
-  const sendApiCall = async () => {
-    setLoading(true);
-    const result = await originalApiData.fetchNewnessApiData(filter);
+      }
+      return finalData;
+    };
+    
+    const handleExportToExcel = () => {
+      setExportToExcelState(true);
+    };
+    const exportToExcel = () => {
+      setExportToExcelState(false);
+      const ws = XLSX.utils.json_to_sheet(csvData());
+      const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const data = new Blob([excelBuffer], { type: fileType });
+      FileSaver.saveAs(data, `Newness Report ${new Date().toDateString()}` + fileExtension);
+    };
+    useEffect(() => {
+      const userData = localStorage.getItem("Name");
+      if (!userData) {
+        navigate("/");
+      }
+    }, []);
+    useEffect(() => {
+      sendApiCall();
+    }, []);
+    const sendApiCall = async () => {
+      setLoading(true);
+      const result = await originalApiData.fetchNewnessApiData(filter);
+      console.log({result});
     setFilter((prev) => ({
       ...prev,
       dataDisplay: dataDisplayHandler,
