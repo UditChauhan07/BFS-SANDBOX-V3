@@ -1,6 +1,4 @@
 import React from "react";
-
-import Layout from "../components/Layout/Layout";
 import AppLayout from "../components/AppLayout";
 
 const TopProducts = () => {
@@ -13,7 +11,6 @@ const TopProducts = () => {
           </p>
         </div>
       </div>
-      {/* <OrderStatusFormSection /> */}
     </AppLayout>
   );
 };
