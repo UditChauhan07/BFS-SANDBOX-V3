@@ -567,3 +567,22 @@ export async function getProductDetails({ rawData }) {
     return data;
   }
 }
+
+export async function topProduct({ rawData }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(url + "v3/dC0mhTDnL9l0mK1", {
+    method: "POST",
+    body: JSON.stringify(rawData),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data;
+  }
+}

@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AppLayout from "../components/AppLayout";
+import { topProduct } from "../lib/store";
 
 const TopProducts = () => {
+  useEffect(()=>{
+    topProduct().then((products)=>{
+      console.log({products});
+    }).catch((err)=>{
+      console.log({err});
+    })
+  },[])
   return (
     <AppLayout>
       <div className="row d-flex flex-column justify-content-around align-items-center lg:min-h-[300px] xl:min-h-[400px]">
