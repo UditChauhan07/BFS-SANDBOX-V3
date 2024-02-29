@@ -4,11 +4,11 @@ import { topProduct } from "../lib/store";
 
 const TopProducts = () => {
   useEffect(()=>{
-    topProduct().then((products)=>{
-      console.log({products});
-    }).catch((err)=>{
-      console.log({err});
-    })
+    // topProduct().then((products)=>{
+    //   console.log({products});
+    // }).catch((err)=>{
+    //   console.log({err});
+    // })
   },[])
   return (
     <AppLayout>

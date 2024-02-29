@@ -161,7 +161,7 @@ export async function OrderPlaced({ order }) {
     localStorage.removeItem(brandKey);
     localStorage.removeItem(accountKey);
     let lastCount = localStorage.getItem(POCount) || 1;
-    localStorage.setItem(POCount, parseInt(lastCount + 1));
+    localStorage.setItem(POCount, parseInt(+lastCount + 1));
     return data.order;
   } else if (data.status == 300) {
     DestoryAuth();
@@ -568,7 +568,7 @@ export async function getProductDetails({ rawData }) {
   }
 }
 
-export async function topProduct({ rawData }) {
+export async function topProduct() {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -576,7 +576,6 @@ export async function topProduct({ rawData }) {
 
   let response = await fetch(url + "v3/dC0mhTDnL9l0mK1", {
     method: "POST",
-    body: JSON.stringify(rawData),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
