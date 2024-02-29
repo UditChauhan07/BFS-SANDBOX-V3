@@ -6,7 +6,6 @@ import { useManufacturer } from "../api/useManufacturer";
 import Loading from "../components/Loading";
 import { useNavigate } from "react-router";
 import Layout from "../components/Layout/Layout";
-
 import Page from "./page.module.css";
 import AppLayout from "../components/AppLayout";
 
@@ -37,7 +36,7 @@ const defaultImage = "default.jpg";
 
 const BrandsPage = () => {
   const { data: manufacturers, isLoading, error } = useManufacturer();
-  const [highestRetailers, setHighestRetailers] = useState(true);
+  // const [highestRetailers, setHighestRetailers] = useState(true);
   const [searchBy, setSearchBy] = useState("");
   const [sortBy, setSortBy] = useState("");
 
@@ -59,7 +58,7 @@ const BrandsPage = () => {
         value.Name?.toLowerCase().includes(searchBy?.toLowerCase())
       );
     }
-    if (highestRetailers) {
+    if (sortBy) {
       newValues = newValues?.sort((a, b) => b.Accounds - a.Accounds);
     } else {
       newValues = newValues?.sort((a, b) => a.Accounds - b.Accounds);
@@ -72,7 +71,7 @@ const BrandsPage = () => {
       }
     }
     return newValues;
-  }, [highestRetailers, searchBy, manufacturers, sortBy]);
+  }, [ searchBy, manufacturers, sortBy]);
   return (
     <>
       <AppLayout
@@ -91,12 +90,20 @@ const BrandsPage = () => {
                   label: "Z-A",
                   value: "z-a",
                 },
+                {
+                  label: "Highest Retailers",
+                  value: true,
+                },
+                {
+                  label: "Lowest Retailers",
+                  value: false,
+                },
               ]}
               onChange={(value) => {
                 setSortBy(value);
               }}
             />
-            <FilterItem
+            {/* <FilterItem
               minWidth="220px"
               label="Lowest Retailers"
               name="Lowest-Retailers"
@@ -112,7 +119,7 @@ const BrandsPage = () => {
                 },
               ]}
               onChange={(value) => setHighestRetailers(value)}
-            />
+            /> */}
             <FilterSearch
               onChange={(e) => setSearchBy(e.target.value)}
               value={searchBy}
@@ -122,7 +129,7 @@ const BrandsPage = () => {
             <button
               className="border px-2.5 py-1 leading-tight"
               onClick={() => {
-                setHighestRetailers(true);
+                // setHighestRetailers(true);
                 setSearchBy("");
                 setSortBy("");
               }}
