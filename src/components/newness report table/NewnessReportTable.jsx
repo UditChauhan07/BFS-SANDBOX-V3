@@ -10,31 +10,33 @@ const NewnessReportTable = ({ newnessData, dataDisplay }) => {
   };
   let length = 0;
   function convertDateStringToDate(dateString) {
-    const formats = [
-      "DD-MM-YYYY",
-      "DD/MM/YYYY",
-    ];
+    if(dateString){
+
+      const formats = [
+        "DD-MM-YYYY",
+        "DD/MM/YYYY",
+      ];
   
-    for (const format of formats) {
-      const [day, month, year] = dateString.split(/[-/]/);
-  
-      if (day && month && year) {
-        let parsedDate = null;
-        if(month<=12){
-          parsedDate = new Date(`${month}/${day}/${year}`);
-        }else{
-          parsedDate = new Date(`${day}/${month}/${year}`);
+      for (const format of formats) {
+        const [day, month, year] = dateString.split(/[-/]/);
+        
+        if (day && month && year) {
+          let parsedDate = null;
+          if(month<=12){
+            parsedDate = new Date(`${month}/${day}/${year}`);
+          }else{
+            parsedDate = new Date(`${day}/${month}/${year}`);
+          }
+          
+          if (!isNaN(parsedDate.getTime())) {
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
+            let launchDateFormattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(parsedDate));
+            return launchDateFormattedDate;
+          }
         }
-  
-        if (!isNaN(parsedDate.getTime())) {
-          const options = { day: 'numeric', month: 'short', year: 'numeric' };
-          let launchDateFormattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(parsedDate));
-          return launchDateFormattedDate;
-        }
-      }
+      }   
+      throw new Error("Invalid date string");
     }
-  
-    // throw new Error("Invalid date string");
   }
   return (
     <>
