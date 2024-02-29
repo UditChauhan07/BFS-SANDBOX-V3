@@ -9,6 +9,33 @@ const NewnessReportTable = ({ newnessData, dataDisplay }) => {
     else return value;
   };
   let length = 0;
+  function convertDateStringToDate(dateString) {
+    const formats = [
+      "DD-MM-YYYY",
+      "DD/MM/YYYY",
+    ];
+  
+    for (const format of formats) {
+      const [day, month, year] = dateString.split(/[-/]/);
+  
+      if (day && month && year) {
+        let parsedDate = null;
+        if(month<=12){
+          parsedDate = new Date(`${month}/${day}/${year}`);
+        }else{
+          parsedDate = new Date(`${day}/${month}/${year}`);
+        }
+  
+        if (!isNaN(parsedDate.getTime())) {
+          const options = { day: 'numeric', month: 'short', year: 'numeric' };
+          let launchDateFormattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(parsedDate));
+          return launchDateFormattedDate;
+        }
+      }
+    }
+  
+    // throw new Error("Invalid date string");
+  }
   return (
     <>
       {newnessData?.status === 200 ? (
@@ -27,15 +54,27 @@ const NewnessReportTable = ({ newnessData, dataDisplay }) => {
                     <th className={`${styles.th} ${styles.stickyThirdColumnHeading1}`}>Sales Rep</th>
                     <th className={`${styles.month} ${styles.stickyMonth}`}>Account Status</th>
                     {newnessData?.header?.map((ele, index) => {
-                      length = ele?.name?.length > 30 ? (ele?.name?.length >= 38 ? ele?.name?.length * 6.5 : ele?.name?.length * 7) : ele?.name?.length * 7.5;
+                      length = ele?.name?.length * 9.5;
+                      let launchDateFormattedDate = null;
+                      if (ele.launchDate !== "N/A") {
+                        launchDateFormattedDate = convertDateStringToDate(ele.launchDate);
+                      } else {
+                        launchDateFormattedDate = ele.launchDate
+                      }
+                      let shipDateFormattedDate = null;
+                      if (ele.shipDate !== "N/A") {
+                        shipDateFormattedDate = convertDateStringToDate(ele.shipDate);
+                      } else {
+                        shipDateFormattedDate = ele.shipDate
+                      }
                       return (
                         // ele?.length >= 45 ? ele?.length * 6 : ele?.length * 6
                         <>
                           <th key={index} className={`${styles.month} ${styles.stickyMonth}`} style={{ minWidth: `${length}px` }}>
-                            <p className="m-0" style={{height:"34px"}}>{ele.name}</p>
-                            <p className={`${styles.dateDisplay}`}>On Counter Date: {ele.launchDate !== "N/A" ? new Date(ele.launchDate).toUTCString()?.slice(4, 16) : "N/A"}</p>
+                            <p className="m-0" style={{ height: "34px" }}>{ele.name}</p>
+                            <p className={`${styles.dateDisplay}`}>On Counter Date: {launchDateFormattedDate}</p>
                             <p className={`${styles.dateDisplay} mt-1`} style={{ backgroundColor: "#eaffee", color: "#3c9a4e" }}>
-                              Shipment Date: {ele.shipDate !== "N/A" ? new Date(ele.shipDate).toUTCString()?.slice(4, 16) : "N/A"}
+                              Shipment Date:{shipDateFormattedDate}
                             </p>
                           </th>
                         </>

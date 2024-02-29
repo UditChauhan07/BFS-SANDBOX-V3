@@ -13,7 +13,6 @@ import ProductDetails from "../../../pages/productDetails";
 function MyBagFinal() {
   const [OrderData, setOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
   const navigate = useNavigate();
 
   const OrderId = JSON.parse(localStorage.getItem("OpportunityId"));
@@ -284,7 +283,7 @@ function MyBagFinal() {
           </div>
         </div>
       </section>
-      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false}/>
+      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false} AccountId={OrderData.AccountId}/>
     </div>
   );
 }
