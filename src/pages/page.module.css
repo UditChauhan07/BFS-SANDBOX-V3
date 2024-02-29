@@ -4,10 +4,13 @@ background: #FFF;
 } */
 
 .widthGivenBrandDetailPage{
-   display: grid;
+  width: 100%;
+    display: grid;
     grid-template-columns: repeat(4, auto);
-    gap: 20px;
+    grid-template-columns:24% 24% 24% 24%;
+    gap: 15px;
     margin: auto;
+    /* display: flex; */
   }
 
   .HoverArrow svg{
