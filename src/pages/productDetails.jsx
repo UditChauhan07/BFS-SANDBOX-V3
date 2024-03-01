@@ -8,7 +8,7 @@ import ModalPage from "../components/Modal UI";
 import ProductDetailCard from "../components/ProductDetailCard";
 import { CloseButton } from "../lib/svg";
 
-const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountId=null }) => {
+const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountId=null,ManufacturerId=null }) => {
     const { orders, setOrders, setOrderQuantity, addOrder, setOrderProductPrice } = useBag();
     const [product, setProduct] = useState({ isLoaded: false, data: [], discount: {} });
     const [replaceCartModalOpen, setReplaceCartModalOpen] = useState(false);
@@ -20,9 +20,8 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountI
             setIsModalOpen(true)
             setProduct({ isLoaded: false, data: [], discount: {} })
             GetAuthData().then((user) => {
-                let rawData = { productId: productId, key: user.x_access_token, salesRepId: user?.Sales_Rep__c, accountId: AccountId||localStorage.getItem("AccountId__c") }
+                let rawData = { productId: productId, key: user.x_access_token, salesRepId: user?.Sales_Rep__c, accountId: AccountId }
                 getProductDetails({ rawData }).then((productRes) => {
-                    console.log({productRes,rawData});
                     setProduct({ isLoaded: true, data: productRes.data, discount: productRes.discount })
                 }).catch((proErr) => {
                     console.log({ proErr });
@@ -42,8 +41,8 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountI
         element.salesPrice = salesPrice;
         if (Object.values(orders).length) {
             if (
-                Object.values(orders)[0]?.manufacturer?.name === localStorage.getItem("manufacturer") &&
-                Object.values(orders)[0].account.name === AccountId||localStorage.getItem("Account") &&
+                Object.values(orders)[0]?.manufacturer?.id === ManufacturerId &&
+                Object.values(orders)[0].account.id === AccountId &&
                 Object.values(orders)[0].productType === (element.Category__c === "PREORDER" ? "pre-order" : "wholesale")
             ) {
                 orderSetting(element, quantity);
@@ -113,7 +112,7 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountI
                             />
                         ) : null}
                         {!product?.isLoaded ? <Loading /> :
-                            <ProductDetailCard product={product} orders={orders} onQuantityChange={onQuantityChange} onPriceChangeHander={onPriceChangeHander} isAddtoCart={isAddtoCart}/>}
+                            <ProductDetailCard product={product} orders={orders} onQuantityChange={onQuantityChange} onPriceChangeHander={onPriceChangeHander} isAddtoCart={isAddtoCart} AccountId={AccountId}/>}
                     </div>
                 }
                 onClose={() => {

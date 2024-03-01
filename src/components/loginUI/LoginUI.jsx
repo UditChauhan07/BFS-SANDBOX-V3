@@ -137,7 +137,7 @@ const LoginUI = () => {
 
             <div className={styles.PolicyA}>
               <p>
-                By signing in or clicking "Login", you agree to our <span>Terms of Service </span> Please also read our<span> Privacy Policy </span>
+                By signing in or clicking "Login", you agree to our <a href="https://beautyfashionsales.com/terms-and-services">Terms of Service </a> Please also read our<a href="https://beautyfashionsales.com/privacy-policy"> Privacy Policy </a>
               </p>
             </div>
           </div>
