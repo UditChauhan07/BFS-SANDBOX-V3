@@ -23,7 +23,9 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 25px;
+    min-width: 25px;
+    width: max-content;
+    padding: 2px;
     height: 25px;
     background: #6a6a6a;
     color: #fff;
@@ -32,6 +34,7 @@
     font-family: Montserrat-500;
     font-size: 18px;
     line-height: 32px;
+    border:1px solid #6a6a6a;
     border-radius: 5px;
 }
 .imgHolder {
