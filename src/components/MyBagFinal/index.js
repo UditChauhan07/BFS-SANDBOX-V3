@@ -449,7 +449,7 @@ function MyBagFinal() {
           </div>
         </div>
       </section>
-      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId}/>
+      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} AccountId={bagValue?.Account.id} ManufacturerId={bagValue?.Manufacturer?.id}/>
     </div>
   );
 }

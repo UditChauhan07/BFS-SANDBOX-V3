@@ -22,6 +22,20 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
     Nov: 0,
     Dec: 0,
   };
+  function convertDateStringToDate(dateString) {
+    if (dateString) {
+      const [year, month, day] = dateString.split(/[-/]/);
+      if (day && month && year) {
+        let parsedDate = new Date(`${month}/${day}/${year}`);
+        if (!isNaN(parsedDate.getTime())) {
+          const options = { day: 'numeric', month: 'short', year: 'numeric' };
+          let launchDateFormattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(parsedDate));
+          return launchDateFormattedDate;
+        }
+      }
+      // throw new Error("Invalid date string");
+    }
+  }
   return (
     <>
       {salesData.length ? (
@@ -51,6 +65,9 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
                   >
                     Sales Rep
                   </th>
+                  <th className={`${styles.month} ${styles.stickyMonth}`} style={{ maxWidth: "200px" }}>Account Type</th>
+                  <th className={`${styles.month} ${styles.stickyMonth}`} style={{ maxWidth: "200px" }}>Date Open</th>
+                  <th className={`${styles.month} ${styles.stickyMonth}`}>Status</th>
                   {(currentYear == year) ? month >= 0 && <th className={`${styles.month} ${styles.stickyMonth}`}>
                     Jan
                   </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
@@ -113,13 +130,13 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
                   </th>}
                   <th
                     className={`${styles.th} ${styles.stickySecondLastColumnHeading}`}
-                    style={{ minWidth: "200px" }}
+                    style={{ maxWidth: "100px" }}
                   >
                     Total Order
                   </th>
                   <th
                     className={`${styles.th} ${styles.stickyLastColumnHeading}`}
-                    style={{ minWidth: "200px" }}
+                    style={{ maxWidth: "150px" }}
                   >
                     Total Amount
                   </th>
@@ -160,6 +177,21 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
                           {item?.AccountRepo ??
                             JSON.parse(localStorage.getItem("Api Data")).data
                               .Name}
+                        </td>
+                        <td
+                          className={`${styles.td}`} style={{ maxWidth: "200px" }}
+                        >
+                          {item?.AccountType ?? '---'}
+                        </td>
+                        <td
+                          className={`${styles.td}`} style={{ maxWidth: "200px" }}
+                        >
+                          {convertDateStringToDate(item?.DateOpen)}
+                        </td>
+                        <td
+                          className={`${styles.td}`}
+                        >
+                          {item?.Status ?? '---'}
                         </td>
                         {(currentYear == year) ? month >= 0 && <td className={`${styles.td}`}>
                           ${Number(item.Jan.amount).toFixed(2)}
@@ -222,7 +254,7 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
                           ${Number(item.Dec.amount).toFixed(2)}
                         </td>}
                         <td
-                          className={`${styles.td} ${styles.stickySecondLastColumn}`}
+                          className={`${styles.td} ${styles.stickySecondLastColumn}`} style={{ maxWidth: "100px" }}
                         >
                           {item?.totalOrders}
                         </td>
@@ -244,6 +276,9 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
                   >
                     TOTAL
                   </td>
+                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}></td>
+                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}></td>
+                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}></td>
                   {(currentYear == year) ? month >= 0 && <td
                     className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
                   >

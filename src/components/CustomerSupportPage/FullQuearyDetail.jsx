@@ -101,15 +101,14 @@ function FullQuearyDetail({ data, setRest }) {
                                         (objA, objB) => new Date(objA.CreatedDate) - new Date(objB.CreatedDate),
                                     ).map((activity, index) => {
                                         const itemDate = new Date(activity.CreatedDate);
-                                        let desc = activity?.CommentBody.split("Wrote:\n");
-                                        console.log({ desc });
+                                        let desc = activity?.CommentBody?.split("Wrote:\n");
                                         return (<div className={Detail.ActivityBox}>
                                             <div className={`${Detail.ActivityProfile} ${activity?.CreatedById != data.salesRepId && Detail.ActiDark}`}>
                                                 <h6>{getStrCode(activity?.CreatedByname)}</h6>
                                             </div>
                                             <div className={Detail.ActivityContentImform}>
                                                 <h2>{activity?.CreatedByname}</h2>
-                                                {desc.length > 1 ? <><p>{desc[0]} Wrote:</p>
+                                                {desc?.length > 1 ? <><p>{desc[0]} Wrote:</p>
                                                     <p className={Detail.Para2} dangerouslySetInnerHTML={{ __html: desc[1] }} /></> : <p className={Detail.Para2} dangerouslySetInnerHTML={{ __html: activity?.CommentBody }} />}
                                             </div>
                                             <div className={Detail.ActivityDate}>

@@ -10,6 +10,7 @@ const accountKey = "manufacturer";
 const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
+export const admins = ["00530000005AdvsAAC","0053b00000DgEVEAA3"]
 // export const originAPi = "https://dev.beautyfashionsales.com"
 
 export function ShareDrive (data, remove = false){
@@ -568,7 +569,7 @@ export async function getProductDetails({ rawData }) {
   }
 }
 
-export async function topProduct() {
+export async function topProduct({month,manufacturerId}) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -576,6 +577,7 @@ export async function topProduct() {
 
   let response = await fetch(url + "v3/dC0mhTDnL9l0mK1", {
     method: "POST",
+    body: JSON.stringify({month,manufacturerId}),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
