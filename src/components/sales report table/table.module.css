@@ -91,12 +91,12 @@
 }
 .stickySecondLastColumn {
   position: sticky;
-  right: 150px;
+  right: 100px;
   z-index: 2;
 }
 .stickySecondLastColumnHeading {
   position: sticky;
-  right: 150px;
+  right: 100px;
   top: 0%;
   z-index: 5;
   min-width: 150px !important;
