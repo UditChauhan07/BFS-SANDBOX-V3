@@ -86,6 +86,9 @@ const SalesReport = () => {
       ele.Orders.map((item) => ({
         ManufacturerName__c: ele.ManufacturerName__c,
         AccountName: item.Name,
+        AccountType: item.AccountType,
+        DateOpen: item.DateOpen,
+        Status: item.Status,
         AccountRepo: item?.AccountRepo ??
         JSON.parse(localStorage.getItem("Api Data")).data
           .Name,
@@ -148,7 +151,7 @@ const SalesReport = () => {
     const result = await salesReportApi.salesReportData({ yearFor });
     let salesListName = [];
     let salesList = [];
-    result.data.data.map((manu) => {
+    result?.data?.data?.map((manu) => {
       if (manu.Orders.length) {
         manu.Orders.map((item) => {
           if (!salesListName.includes(item.AccountRepo)) {
@@ -162,7 +165,7 @@ const SalesReport = () => {
       }
     });
     setSalesRepList(salesList);
-    setSalesReportData(result.data.data);
+    setSalesReportData(result?.data?.data);
     setOwnerPermission(result.data.ownerPermission);
     setIsLoading(false);
   };

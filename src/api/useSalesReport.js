@@ -1,12 +1,12 @@
 import axios from "axios";
-import { DestoryAuth, originAPi } from "../lib/store";
+import { DestoryAuth, admins, originAPi } from "../lib/store";
 
 const useSalesReport = () => {
   return {
     salesReportData: async ({ yearFor }) => {
       let salesRepId = JSON.parse(localStorage.getItem("Api Data")).data.Sales_Rep__c;
       let reportUrl = originAPi+"/9kJs2I6Bn/i0IT68Q8&0";
-      if (salesRepId == "00530000005AdvsAAC") {
+      if (admins.includes(salesRepId)) {
         reportUrl = originAPi+"/report/4i1cKeDt9"
       }
       const response = await axios.post(
@@ -17,7 +17,7 @@ const useSalesReport = () => {
         }
       );
       // const response = await axios.post("https://dev.beautyfashionsales.com/report/4i1cKeDt9");
-      if (salesRepId == "00530000005AdvsAAC"&& salesRepId == "0053b00000DgEVEAA3") {
+      if (admins.includes(salesRepId)) {
         response.data.ownerPermission = true;
       }
       if (response.status == 300) {

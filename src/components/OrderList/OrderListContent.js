@@ -5,10 +5,14 @@ import Orderstatus from "./OrderStatus/Orderstatus";
 import { Link } from "react-router-dom";
 import { GetAuthData, supportShare } from "../../lib/store";
 import { useNavigate } from "react-router-dom";
+import ProductDetails from "../../pages/productDetails";
 function OrderListContent({ data }) {
   const navigate = useNavigate();
   const [Viewmore, setviewmore] = useState(false);
   const [modalData, setModalData] = useState({});
+  const [ productDetailId, setProductDetailId] = useState(null)
+  const [accountId,setAccountId] = useState();
+  const [manufacturerId,setManufacturerId] = useState();
   const currentDate = new Date();
   const months = [
     "January",
@@ -144,7 +148,7 @@ function OrderListContent({ data }) {
                             .map((ele, index) => {
                               return (
                                 <>
-                                  <li key={index}>
+                                  <li key={index} onClick={()=>{setProductDetailId(ele.Product2Id);setAccountId(item.AccountId);setManufacturerId(item.ManufacturerId__c)}} style={{cursor:'pointer'}}>
                                     {Viewmore
                                       ? ele.Name.split(item.AccountName)[1]
                                       : ele.Name.split(item.AccountName)
@@ -261,6 +265,7 @@ function OrderListContent({ data }) {
           No data found
         </div>
       )}
+      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} AccountId={accountId} ManufacturerId={manufacturerId}/>
     </>
   );
 }
