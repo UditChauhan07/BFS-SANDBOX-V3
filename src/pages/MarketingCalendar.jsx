@@ -130,7 +130,7 @@ const MarketingCalendar = () => {
           brand: "Diptyque",
           date: "TBD",
           OCDDate: "16/JAN/2024",
-          image: "/assets/images/Smoothing2s1.png",
+          image: "/assets/images/Smoothing21.png",
           name: "Valentine’s Duo",
           size: "190 g",
           description: "A delicate, scented declaration of love incorporating elements of tenderness and passion, flowers and leaves.",

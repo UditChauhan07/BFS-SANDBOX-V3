@@ -11,7 +11,6 @@ import Logout from "./components/Logout";
 import MyRetailersPage from "./pages/MyRetailersPage";
 import { UserProvider } from "./context/UserContext";
 import BrandsPage from "./pages/BrandsPage";
-
 import CustomerCare from "./pages/CustomerCare";
 import AboutUs from "./pages/AboutUs";
 import EducationCenter from "./pages/EducationCenter";
