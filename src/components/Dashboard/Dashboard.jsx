@@ -276,7 +276,7 @@ function Dashboard({ dashboardData }) {
   useEffect(() => {
     if (localStorage.getItem("Name")) {
       // getDataHandler();
-      getDataHandler({ month: 2, year: 2024 });
+      getDataHandler({ month: currentMonth, year: currentYear });
     } else {
       navigate("/");
     }
