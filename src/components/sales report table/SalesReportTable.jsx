@@ -65,9 +65,9 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
                   >
                     Sales Rep
                   </th>
-                  <th className={`${styles.month} ${styles.stickyMonth}`} style={{ maxWidth: "200px" }}>Account Type</th>
+                  {/* <th className={`${styles.month} ${styles.stickyMonth}`} style={{ maxWidth: "200px" }}>Account Type</th>
                   <th className={`${styles.month} ${styles.stickyMonth}`} style={{ maxWidth: "200px" }}>Date Open</th>
-                  <th className={`${styles.month} ${styles.stickyMonth}`}>Status</th>
+                  <th className={`${styles.month} ${styles.stickyMonth}`}>Status</th> */}
                   {(currentYear == year) ? month >= 0 && <th className={`${styles.month} ${styles.stickyMonth}`}>
                     Jan
                   </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
@@ -178,7 +178,7 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
                             JSON.parse(localStorage.getItem("Api Data")).data
                               .Name}
                         </td>
-                        <td
+                        {/* <td
                           className={`${styles.td}`} style={{ maxWidth: "200px" }}
                         >
                           {item?.AccountType ?? '---'}
@@ -192,7 +192,7 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
                           className={`${styles.td}`}
                         >
                           {item?.Status ?? '---'}
-                        </td>
+                        </td> */}
                         {(currentYear == year) ? month >= 0 && <td className={`${styles.td}`}>
                           ${Number(item.Jan.amount).toFixed(2)}
                         </td> : <td className={`${styles.td}`}>
@@ -276,9 +276,9 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
                   >
                     TOTAL
                   </td>
+                  {/* <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}></td>
                   <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}></td>
-                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}></td>
-                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}></td>
+                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}></td> */}
                   {(currentYear == year) ? month >= 0 && <td
                     className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
                   >
