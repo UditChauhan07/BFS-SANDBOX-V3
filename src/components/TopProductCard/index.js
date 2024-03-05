@@ -15,7 +15,7 @@ const TopProductCard = ({ data,productImages,to=null }) => {
                 {data.map((product) => {
                     let listPrice = Number(product?.usdRetail__c?.replace('$', '').replace(',', '')||0);
                     return (<div className={Styles.cardElement}>
-                        <div className={Styles.salesHolder}>{product.Sales}</div>
+                        {/* <div className={Styles.salesHolder}>{product.Sales}</div> */}
                         {productImages?.isLoaded ? <img className={Styles.imgHolder} onClick={() => { setProductDetailId(product.Id) }} src={productImages?.images?.[product.ProductCode]?.ContentDownloadUrl ?? '/assets/images/makeup1.png'} /> : <LoaderV2 />}
                         <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
                         <p className={Styles.titleHolder} onClick={() => { setProductDetailId(product.Id) }}>{product?.Name.substring(0, 20)}...</p>
