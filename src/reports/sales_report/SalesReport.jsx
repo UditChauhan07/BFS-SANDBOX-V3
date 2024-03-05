@@ -179,11 +179,11 @@ const SalesReport = () => {
     }
   }, []);
   const sendApiCall = () => {
-    setManufacturerFilter(null);
-    setHighestOrders(true);
-    getSalesData(yearFor);
-    setSearchBy("");
-    setSearchBySalesRep("");
+    // setManufacturerFilter(null);
+    // setHighestOrders(true);
+    // getSalesData(yearFor);
+    // setSearchBy("");
+    // setSearchBySalesRep("");
     getSalesData(yearFor);
   };
 
