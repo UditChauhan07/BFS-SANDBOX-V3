@@ -4,10 +4,12 @@ import LoaderV2 from "./../loader/v2";
 import Styles from "./NewArrivals.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
+import ModalPage from "../Modal UI";
+import StylesModal from "../Modal UI/Styles.module.css";
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-function NewArrivalsPage({ productList, brand, month, isLoaded }) {
+function NewArrivalsPage({ productList, brand, month, isLoaded,to=null }) {
   const [products, setProducts] = useState(productList);
-
+  const [modalShow, setModalShow] = useState(false);
   const [productDetailId, setProductDetailId] = useState();
 
   const [isEmpty, setIsEmpty] = useState(false);
@@ -60,6 +62,32 @@ function NewArrivalsPage({ productList, brand, month, isLoaded }) {
 
   return (
     <>
+    {modalShow ? (
+        <ModalPage
+          open
+          content={
+            <>
+              <div style={{ maxWidth: "309px" }}>
+                <h1 className={`fs-5 ${StylesModal.ModalHeader}`}>Cart</h1>
+                <p className={` ${StylesModal.ModalContent}`}>This Product Available soon. Please check back later.</p>
+                <div className="d-flex justify-content-center">
+                  <button
+                    className={`${StylesModal.modalButton}`}
+                    onClick={() => {
+                      setModalShow(false);
+                    }}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </>
+          }
+          onClose={() => {
+            setModalShow(false);
+          }}
+        />
+      ) : null}
      <section>
         <div>
           <div className={Styles.dGrid}>
@@ -76,7 +104,8 @@ function NewArrivalsPage({ productList, brand, month, isLoaded }) {
                         <p className={Styles.brandHolder}>{product?.brand}</p>
                         <p className={Styles.titleHolder} onClick={() => { setProductDetailId(product.Id) }}>{product?.name?.substring(0, 15)}...</p>
                         <p className={Styles.priceHolder}>$ -- . --</p>
-                        <Link className={Styles.linkHolder}><p className={Styles.btnHolder}>add to Cart</p></Link>
+                        {to ?
+                              <Link className={Styles.linkHolder}><p className={Styles.btnHolder}>add to Cart <small className={Styles.soonHolder}>coming soon</small></p></Link> : <div onClick={() => setModalShow(true)} className={Styles.linkHolder}><p className={Styles.btnHolder}>add to Cart <small className={Styles.soonHolder}>coming soon</small></p></div>}
                       </div>
                     );
             
