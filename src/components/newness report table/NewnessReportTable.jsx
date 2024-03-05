@@ -66,7 +66,7 @@ const NewnessReportTable = ({ newnessData, dataDisplay }) => {
                             <p className="m-0" style={{ height: "34px" }}>{ele.name}</p>
                             <p className={`${styles.dateDisplay}`}>Launch Date: {launchDateFormattedDate}</p>
                             <p className={`${styles.dateDisplay} mt-1`} style={{ backgroundColor: "#eaffee", color: "#3c9a4e" }}>
-                              Shipment Date:{shipDateFormattedDate}
+                              Shipment Date: {shipDateFormattedDate}
                             </p>
                           </th>
                         </>
