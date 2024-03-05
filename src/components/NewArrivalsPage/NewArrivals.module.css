@@ -48,7 +48,13 @@ text-align: center;
     font-weight: bold;
 }
 .linkHolder{
+    cursor: pointer;
 }
+.soonHolder {
+    font-size: 6.5px;
+    letter-spacing: 0.5px;
+    text-align: end;
+  }
 .btnHolder{
     background-color: #000;
     color: #fff; 
