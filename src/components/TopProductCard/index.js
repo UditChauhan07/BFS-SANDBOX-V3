@@ -13,12 +13,13 @@ const TopProductCard = ({ data,productImages,to=null }) => {
         <div>
             <div className={Styles.dGrid}>
                 {data.map((product) => {
+                    let listPrice = Number(product?.usdRetail__c?.replace('$', '').replace(',', '')||0);
                     return (<div className={Styles.cardElement}>
                         <div className={Styles.salesHolder}>{product.Sales}</div>
                         {productImages?.isLoaded ? <img className={Styles.imgHolder} onClick={() => { setProductDetailId(product.Id) }} src={productImages?.images?.[product.ProductCode]?.ContentDownloadUrl ?? '/assets/images/makeup1.png'} /> : <LoaderV2 />}
                         <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
                         <p className={Styles.titleHolder} onClick={() => { setProductDetailId(product.Id) }}>{product?.Name.substring(0, 20)}...</p>
-                        <p className={Styles.priceHolder}>{product?.usdRetail__c}</p>
+                        <p className={Styles.priceHolder}>$&nbsp;{listPrice.toFixed(2)}</p>
                         {to &&<Link to={to} className={Styles.linkHolder}><p className={Styles.btnHolder}>add to Cart</p></Link>}
                     </div>)
                 })}
