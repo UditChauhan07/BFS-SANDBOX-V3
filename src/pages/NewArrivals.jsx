@@ -846,10 +846,15 @@ const NewArrivals = () => {
     { value: "DEC", label: "DEC" },
     { value: "TBD", label: "TBD" },
   ];
-  // useEffect(()=>{
-  //   const currentMonthIndex = new Date().getMonth()+1;
-  //   setMonth(months[currentMonthIndex].value);
-  // })
+  useEffect(()=>{
+    HendleClear()
+  },[])
+  const HendleClear =()=>{
+    const currentMonthIndex =new Date().getMonth()+1
+    setMonth(months[currentMonthIndex].value);
+    setBrand(null)
+    // setIsEmpty(null)
+  }
   return (
     <AppLayout
     filterNodes={
@@ -876,10 +881,7 @@ const NewArrivals = () => {
         />
         <button
           className="border px-2.5 py-1 leading-tight"
-          onClick={() => {
-            setBrand("");
-            setMonth(null);
-          }}
+          onClick={HendleClear}
         >
           CLEAR ALL
         </button>
