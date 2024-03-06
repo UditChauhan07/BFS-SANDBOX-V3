@@ -1,10 +1,11 @@
-import React,{useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import AppLayout from "../components/AppLayout";
 import NewArrivalsPage from "../components/NewArrivalsPage/NewArrivalsPage";
 import { FilterItem } from "../components/FilterItem";
+import Product from "../components/BrandDetails/Product";
+
 const NewArrivals = () => {
-  const [brand, setBrand] = useState(null);
   const [productList, setProductList] = useState([
     {
       month: "Jan",
@@ -846,51 +847,50 @@ const NewArrivals = () => {
     { value: "DEC", label: "DEC" },
     { value: "TBD", label: "TBD" },
   ];
-  useEffect(()=>{
-    HendleClear()
-  },[])
-  const HendleClear =()=>{
-    const currentMonthIndex =new Date().getMonth()+1
+  const [loaded, setLoaded] = useState(false);
+  const [brand, setBrand] = useState();
+
+  // ..............
+
+  useEffect(() => {
+    HendleClear();
+  }, []);
+  const HendleClear = () => {
+    const currentMonthIndex = new Date().getMonth() + 1;
     setMonth(months[currentMonthIndex].value);
-    setBrand(null)
-    // setIsEmpty(null)
-  }
+    setBrand(null);
+  };
   return (
     <AppLayout
-    filterNodes={
-      <>
-        <FilterItem
-          minWidth="220px"
-          label="All Brand"
-          name="All-Brand"
-          value={brand}
-          options={brands}
-          onChange={(value) => {
-            setBrand(value);
-          }}
-        />
-        <FilterItem
-          minWidth="220px"
-          label="JAN-DEC"
-          name="JAN-DEC"
-          value={month}
-          options={months}
-          onChange={(value) => {
-            setMonth(value);
-          }}
-        />
-        <button
-          className="border px-2.5 py-1 leading-tight"
-          onClick={HendleClear}
-        >
-          CLEAR ALL
-        </button>
-       
-      </>
-    }
+      filterNodes={
+        <>
+          <FilterItem
+            minWidth="220px"
+            label="All Brand"
+            name="All-Brand"
+            value={brand}
+            options={brands}
+            onChange={(value) => {
+              setBrand(value);
+            }}
+          />
+          <FilterItem
+            minWidth="220px"
+            label="JAN-DEC"
+            name="JAN-DEC"
+            value={month}
+            options={months}
+            onChange={(value) => {
+              setMonth(value);
+            }}
+          />
+          <button className="border px-2.5 py-1 leading-tight" onClick={HendleClear}>
+            CLEAR ALL
+          </button>
+        </>
+      }
     >
-       <NewArrivalsPage brand={brand} month={month} productList={productList} />
-     
+      <NewArrivalsPage brand={brand} month={month} productList={productList} />
     </AppLayout>
   );
 };
