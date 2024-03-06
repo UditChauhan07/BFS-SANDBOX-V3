@@ -29,6 +29,12 @@
   letter-spacing: 2px;
   margin: 0;
 }
+.breakHolder{
+  width: 2px;
+  height: 100%;
+  background: #fff;
+  margin: 0 1rem 0 0;
+}
 
 .inorderflex button {
   color: #fff;

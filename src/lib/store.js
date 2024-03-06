@@ -241,7 +241,7 @@ export async function getTargetReportAll({ user, year, preOrder }) {
     let tried = false;
     let bodyContent = new FormData();
     bodyContent.append("key", user.x_access_token);
-    if (user.Sales_Rep__c != "00530000005AdvsAAC" && user.Sales_Rep__c != "0053b00000DgEVEAA3") {
+    if(!admins.includes(user.Sales_Rep__c)){
       bodyContent.append("SalesRepId", user.Sales_Rep__c);
     }
     if (year) {
@@ -251,7 +251,7 @@ export async function getTargetReportAll({ user, year, preOrder }) {
       bodyContent.append('preorder', preOrder);
     }
 
-    let response = await fetch(url + "/target/4Tu6do95AxLM3Cl", {
+    let response = await fetch(url + "target/4Tu6do95AxLM3Cl", {
       method: "POST",
       body: bodyContent,
       headers: headersList,
@@ -261,7 +261,7 @@ export async function getTargetReportAll({ user, year, preOrder }) {
       DestoryAuth();
     } else {
       let rawRes = { ownerPermission: false, list: data.data }
-      if (user.Sales_Rep__c == "00530000005AdvsAAC" || user.Sales_Rep__c == "0053b00000DgEVEAA3") {
+      if(admins.includes(user.Sales_Rep__c)){
         rawRes.ownerPermission = true;
       }
       return rawRes;
@@ -578,6 +578,25 @@ export async function topProduct({month,manufacturerId}) {
   let response = await fetch(url + "v3/dC0mhTDnL9l0mK1", {
     method: "POST",
     body: JSON.stringify({month,manufacturerId}),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data;
+  }
+}
+
+export async function getSalesRepList({key}) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(url + "v3/1FnQ4K9DItMBZ1D", {
+    method: "POST",
+    body: JSON.stringify({key}),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());

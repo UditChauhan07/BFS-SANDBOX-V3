@@ -29,6 +29,8 @@ const TargetReport = () => {
     const [searchSaleBy, setSearchSaleBy] = useState("");
     const [salesRepList, setSalesRepList] = useState([]);
     const [exportToExcelState, setExportToExcelState] = useState(false);
+    // let brandcount = {}
+    // let sum = 0;
     useEffect(() => {
         GetAuthData().then((user) => {
             getTargetReportAll({ user, year, preOrder }).then((targetRes) => {
@@ -170,8 +172,8 @@ const TargetReport = () => {
         const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
         const data = new Blob([excelBuffer], { type: fileType });
         let title = target.ownerPermission ? `${searchSaleBy ? searchSaleBy + "`s" : "All"} Target Report` : 'Target Report'
-        if(manufacturerFilter){
-            title += " for " +getManufactureName(manufacturerFilter)
+        if (manufacturerFilter) {
+            title += " for " + getManufactureName(manufacturerFilter)
         }
         title += ` ${new Date().toDateString()}`;
         FileSaver.saveAs(data, title + fileExtension);
@@ -337,7 +339,7 @@ const TargetReport = () => {
                     <div>
                         <h2>
                             {target.ownerPermission ? `${searchSaleBy ? searchSaleBy + "`s" : "All"} Sales Report` : "Your Target Report"}
-                            {manufacturerFilter && " for " +getManufactureName(manufacturerFilter)}
+                            {manufacturerFilter && " for " + getManufactureName(manufacturerFilter)}
                         </h2>
                     </div>
                     <div>
@@ -448,6 +450,10 @@ const TargetReport = () => {
                             </thead>
                             <tbody>
                                 {filteredTargetData.map((element, index) => {
+                                    // if (!brandcount[element.ManufacturerName]) {
+                                    //     brandcount[element.ManufacturerName] = 0
+                                    // }
+                                    // brandcount[element.ManufacturerName] += Number(element.January.target)
                                     monthTotalAmount.Jan.target += Number(element.January.target);
                                     monthTotalAmount.Jan.sale += Number(element.January.sale);
                                     monthTotalAmount.Jan.diff += Number(element.January.diff);
@@ -772,7 +778,28 @@ const TargetReport = () => {
                             </tfoot>
                         </table>
                     </div>
-                </div>        </section>}
+                </div>
+                {/* {false && <table className="table" style={{ maxWidth: '400px' }}>
+                    <thead>
+                        <tr>
+                            <th>Brand</th>
+                            <th>Sum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Object.keys(brandcount).map((element) => {
+                            sum += brandcount[element]
+                            return (<tr><td>{element}</td><td>{brandcount[element]}</td></tr>)
+                        })}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Total</td>
+                            <td>{sum}</td>
+                        </tr>
+                    </tfoot>
+                </table>} */}
+            </section>}
     </AppLayout>)
 }
 export default TargetReport

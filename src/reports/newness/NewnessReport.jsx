@@ -37,11 +37,13 @@ const NewnessReport = () => {
   const { data: manufacturers, isLoading, error } = useManufacturer();
   const [newnessData, setNewnessData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [status,setstatus] = useState(1)
   // if (manufacturers?.status !== 200) {
   //   // DestoryAuth();
   // }
   const resetFilter = async () => {
     setLoading(true);
+    setstatus(1)
     setFilter(initialValues);
     const result = await originalApiData.fetchNewnessApiData(initialValues);
     setNewnessData(result);
@@ -132,7 +134,6 @@ const NewnessReport = () => {
   };
   const exportToExcel = () => {
     let temp = csvDataV2();
-    console.log({temp});
     // return;
     var ws = XLSX.utils.json_to_sheet(csvData(true));
     var ws2 = XLSX.utils.json_to_sheet(csvData());
@@ -163,11 +164,17 @@ const NewnessReport = () => {
   const sendApiCall = async () => {
     setLoading(true);
     const result = await originalApiData.fetchNewnessApiData(filter);
+    let short = result.AccountList.filter(item => status == 1?item.Active_Closed__c !== "Closed Account":item)
     setFilter((prev) => ({
       ...prev,
       dataDisplay: dataDisplayHandler,
     }));
-    setNewnessData(result);
+    let temp = {
+      status:result.status,
+      header:result.header,
+      AccountList:short,
+    }
+    setNewnessData(temp);
     setLoading(false);
   };
   return (
@@ -206,6 +213,25 @@ const NewnessReport = () => {
               //   dataDisplay: value,
               // }));
               setDataDisplayHandler(value)
+            }}
+          />
+          <FilterItem
+            label="Status"
+            name="Status"
+            value={status}
+            // value={filter.dataDisplay}
+            options={[
+              {
+                label: "Active Account",
+                value: 1,
+              },
+              {
+                label: "All Account",
+                value: 2,
+              },
+            ]}
+            onChange={(value) => {
+              setstatus(value)
             }}
           />
           {/* First Calender Filter-- from date */}
