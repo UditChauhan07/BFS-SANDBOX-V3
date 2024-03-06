@@ -19,12 +19,12 @@
   .filter-container {
     @apply w-full h-[50px] bg-[#000] text-white flex justify-center items-center uppercase text-[12px] font-[500] tracking-[1.2px];
     font-family: "Montserrat-500";
-    gap: 60px;
-
+    gap: 50px;
+    
     @media(max-width:768.98px){
       display: none;
-
+      
+    }
   }
-}
 }
 
