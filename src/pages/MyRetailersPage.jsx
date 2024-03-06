@@ -7,6 +7,7 @@ import FilterSearch from "../components/FilterSearch";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
 import AppLayout from "../components/AppLayout";
+import { GetAuthData, getSalesRepList } from "../lib/store";
 
 const MyRetailersPage = () => {
   const { data: manufacturers } = useManufacturer();
@@ -26,9 +27,18 @@ const MyRetailersPage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const userData = localStorage.getItem("Name");
-    if (!userData) {
-      navigate("/");
-    }
+    GetAuthData().then((user)=>{
+      if (!user) {
+        navigate("/");
+      }
+      getSalesRepList({key:user.x_access_token}).then((repRes)=>{
+        console.log({repRes});
+      }).catch((repErr)=>{
+        console.log({repErr});
+      })
+    }).catch((err)=>{
+      console.log({err});
+    })
   }, []);
 
   return (
