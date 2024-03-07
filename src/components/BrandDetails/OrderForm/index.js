@@ -20,7 +20,6 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
     let totalQty = 0;
     let errorCount = data.reduce((accumulator, item) => {
       let productDetails = getProductData(item["Product Code"] || item["ProductCode"] || null);
-
       if (item?.Quantity) {
         let error = !item?.Quantity || !Number.isInteger(item?.Quantity) || item?.Quantity < (productDetails.Min_Order_QTY__c || 0) || !productDetails?.Name ||(productDetails.Min_Order_QTY__c>0 && item?.Quantity % productDetails.Min_Order_QTY__c !== 0);
         return accumulator + (error ? 1 : 0);
@@ -29,7 +28,6 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
       }
       return accumulator;
     }, 0);
-    console.log({errorCount});
     if (totalQty == data.length) {
       setErrorOnList(totalQty);
     } else {
@@ -79,19 +77,19 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
         ? (+retailerPirce.substring(1) - (discount?.testerMargin / 100) * +retailerPirce.substring(1)).toFixed(2)
         : (+retailerPirce - (discount?.testerMargin / 100) * +retailerPirce).toFixed(2);
       found.salesPrice = salesPrice;
-      found.discount = discount?.testerMargin;
+      // found.discount = discount?.testerMargin;
     } else if (found.Category__c === "Samples") {
       let salesPrice = retailerPirce.includes("$")
         ? (+retailerPirce.substring(1) - (discount?.sample / 100) * +retailerPirce.substring(1)).toFixed(2)
         : (+retailerPirce - (discount?.sample / 100) * +retailerPirce).toFixed(2);
       found.salesPrice = salesPrice;
-      found.discount = discount?.sample;
+      // found.discount = discount?.sample;
     } else {
       let salesPrice = retailerPirce.includes("$")
         ? (+retailerPirce.substring(1) - (discount?.margin / 100) * +retailerPirce.substring(1)).toFixed(2)
         : (+retailerPirce - (discount?.margin / 100) * +retailerPirce).toFixed(2);
       found.salesPrice = salesPrice;
-      found.discount = discount?.margin;
+      // found.discount = discount?.margin;
     }
     return found;
   };

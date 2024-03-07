@@ -4,6 +4,7 @@ import AppLayout from "../components/AppLayout";
 import NewArrivalsPage from "../components/NewArrivalsPage/NewArrivalsPage";
 import { FilterItem } from "../components/FilterItem";
 import Product from "../components/BrandDetails/Product";
+import { CloseButton } from "../lib/svg";
 
 const NewArrivals = () => {
   const [productList, setProductList] = useState([
@@ -884,8 +885,9 @@ const NewArrivals = () => {
               setMonth(value);
             }}
           />
-          <button className="border px-2.5 py-1 leading-tight" onClick={HendleClear}>
-            CLEAR ALL
+          <button className="border px-2 py-1 leading-tight d-grid" onClick={HendleClear}>
+          <CloseButton crossFill={'#fff'} height={20} width={20} />
+          <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
           </button>
         </>
       }

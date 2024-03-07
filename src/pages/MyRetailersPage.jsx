@@ -82,7 +82,7 @@ const MyRetailersPage = () => {
             minWidth={"167px"}
           />
           <button
-            className="border px-2.5 py-1 leading-tight"
+            className="border px-2.5 py-1 leading-tight d-grid"
             onClick={() => {
               setSortBy(null);
               setManufacturerFilter(null);
@@ -90,6 +90,7 @@ const MyRetailersPage = () => {
             }}
           >
             <CloseButton crossFill={'#fff'} height={20} width={20} />
+            <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
           </button>
         </>
       }
