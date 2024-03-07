@@ -2,6 +2,7 @@ import React from "react";
 import { FilterItem } from "../FilterItem";
 import { useManufacturer } from "../../api/useManufacturer";
 import FilterSearch from "../FilterSearch";
+import { CloseButton } from "../../lib/svg";
 
 const Filters = ({ value, onChange, resetFilter }) => {
   const { data: manufacturerData } = useManufacturer();
@@ -55,7 +56,7 @@ const Filters = ({ value, onChange, resetFilter }) => {
         className="border px-2.5 py-1 leading-tight"
         onClick={resetFilter}
       >
-        CLEAR ALL
+        <CloseButton crossFill={'#fff'} height={20} width={20} />
       </button>
     </>
   );

@@ -6,6 +6,7 @@ import TopProductCard from "../components/TopProductCard";
 import { FilterItem } from "../components/FilterItem";
 import FilterSearch from "../components/FilterSearch";
 import { useManufacturer } from "../api/useManufacturer";
+import { CloseButton } from "../lib/svg";
 let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
 const TopProducts = () => {
@@ -147,7 +148,7 @@ const TopProducts = () => {
         className="border px-2.5 py-1 leading-tight"
         onClick={() => { btnHandler({manufacturerId:"a0O3b00000p4F4HEAU",month:monthIndex + 1}); }}
       >
-        CLEAR ALL
+        <CloseButton crossFill={'#fff'} height={20} width={20} />
       </button>
     </>
     }>
