@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 import Layout from "../components/Layout/Layout";
 import Page from "./page.module.css";
 import AppLayout from "../components/AppLayout";
+import { CloseButton } from "../lib/svg";
 
 const brandsImageMap = {
   Diptyque: "Diptyque.png",
@@ -134,7 +135,7 @@ const BrandsPage = () => {
                 setSortBy("");
               }}
             >
-              CLEAR ALL
+              <CloseButton crossFill={'#fff'} height={20} width={20} />
             </button>
           </>
         }

@@ -1,7 +1,7 @@
 import React from "react";
 const FilterSearch = ({ onChange, value, placeholder, minWidth,name="input1" }) => {
   return (
-    <div className="flex">
+    <div className="flex align-self-center">
       <input
         placeholder={placeholder}
         className="bg-transparent placeholder:uppercase placeholder:text-white placeholder:underline placeholder:underline-offset-2 focus:outline-none leading-tight placeholder:font-[Montserrat-500] font-[Montserrat-500] placeholder:tracking-[1.2px]"

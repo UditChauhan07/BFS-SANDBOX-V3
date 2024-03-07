@@ -9,6 +9,7 @@ import Layout from "../components/Layout/Layout";
 import { useManufacturer } from "../api/useManufacturer";
 import { useRetailersData } from "../api/useRetailersData";
 import AppLayout from "../components/AppLayout";
+import { CloseButton } from "../lib/svg";
 
 let PageSize = 10;
 const CustomerSupport = () => {
@@ -89,7 +90,7 @@ const CustomerSupport = () => {
               setSearchBy("");
             }}
           >
-            CLEAR ALL
+            <CloseButton crossFill={'#fff'} height={20} width={20} />
           </button>
         </>
       }

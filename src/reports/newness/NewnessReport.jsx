@@ -12,6 +12,7 @@ import FilterDate from "../../components/FilterDate";
 import { MdOutlineDownload } from "react-icons/md";
 import ModalPage from "../../components/Modal UI";
 import styles from "../../components/Modal UI/Styles.module.css";
+import { CloseButton, SearchIcon } from "../../lib/svg";
 
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
@@ -260,10 +261,10 @@ const NewnessReport = () => {
           />
           <div className="d-flex gap-1 ">
             <button className="border px-0.5 py-1 leading-tight  " onClick={sendApiCall}>
-              APPLY
+            <SearchIcon fill="#fff" width={20} height={20}/>
             </button>
             <button className="border px-0.5 py-1 leading-tight " onClick={resetFilter}>
-              CLEAR ALL
+            <CloseButton crossFill={'#fff'} height={20} width={20}/>
             </button>
           </div>
           <button className="border px-0.5 py-1 leading-tight flex justify-center align-center me-1 " onClick={handleExportToExcel}>
