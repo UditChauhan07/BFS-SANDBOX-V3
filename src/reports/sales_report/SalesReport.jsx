@@ -159,7 +159,8 @@ const SalesReport = () => {
         salesListName.push(manu.ManufacturerId__c);
         manufacturerList.push({
           label: manu.ManufacturerName__c,
-          value: manu.ManufacturerId__c,
+          value: manu.ManufacturerName__c,
+          // value: manu.ManufacturerId__c,
         });
       }
       if (manu.Orders.length) {
@@ -227,9 +228,8 @@ const SalesReport = () => {
             </button>
           </div>
           <div className="d-flex justify-content-around col-1"></div>
-          <div className="d-flex justify-content-around col-1"></div>
           <div className="d-flex justify-content-around col-1"><hr className={Styles.breakHolder} /></div>
-          <div className="d-flex justify-content-end gap-4 col-6">
+          <div className="d-flex justify-content-end gap-4 col-7">
             {ownerPermission && <FilterItem minWidth="220px" label="All Sales Rep" name="AllSalesRep" value={searchBySalesRep} options={salesRepList} onChange={(value) => setSearchBySalesRep(value)} />}
             <FilterItem
               minWidth="220px"
