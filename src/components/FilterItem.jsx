@@ -15,9 +15,9 @@ export const FilterItem = ({ label, options, onChange, minWidth, value,name='dro
     document.getElementById(name)?.addEventListener("mouseleave", onMouseLeave);
   },[])
   return (
-    <div className={`relative filterItem ${Page.FilterNoneClass} `} id={name}>
+    <div className={`relative filterItem ${Page.FilterNoneClass} d-flex align-self-center`} id={name}>
       <div
-        className="flex justify-center items-center gap-1 leading-tight cursor-pointer select-none "
+        className="flex justify-center items-center gap-1 leading-tight cursor-pointer select-none"
         onClick={() => {
           setIsOpen((prev) => !prev);
         }}
