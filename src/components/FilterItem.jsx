@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Page from "../pages/page.module.css";
 
-export const FilterItem = ({ label, options, onChange, minWidth, value,name='drop-down1' }) => {
+export const FilterItem = ({ label, options, onChange, minWidth, value,name='drop-down1',containNullValue=false }) => {
   const [isOpen, setIsOpen] = useState(false);
   useEffect(()=>{
     const onMouseEnter = () => {
@@ -22,7 +22,7 @@ export const FilterItem = ({ label, options, onChange, minWidth, value,name='dro
           setIsOpen((prev) => !prev);
         }}
       >
-        {value ? options?.find((option) => option.value === value)?.label : label}
+        {value||containNullValue ? options?.find((option) => option.value === value)?.label : label}
         <img src={"/assets/images/downArrowWhite.svg"} alt="img" />
       </div>
       {isOpen ? (

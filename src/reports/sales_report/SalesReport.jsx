@@ -14,6 +14,7 @@ import Styles from "./index.module.css";
 import { MdOutlineDownload } from "react-icons/md";
 import ModalPage from "../../components/Modal UI";
 import styles from "../../components/Modal UI/Styles.module.css";
+import { CloseButton, SearchIcon } from "../../lib/svg";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
 
@@ -221,7 +222,7 @@ const SalesReport = () => {
               options={yearList}
               onChange={(value) => setYearFor(value)}
             />
-            <button onClick={() => sendApiCall()} className="border px-2.5 py-1 leading-tight flex justify-center align-center gap-1">Search</button>
+            <button onClick={() => sendApiCall()} className="border px-2.5 py-1 leading-tight flex justify-center align-center gap-1"> <SearchIcon fill="#fff" width={20} height={20}/></button>
             <hr className={Styles.breakHolder}/>
           </div>
           <div className="d-flex justify-content-around col-10">
@@ -258,7 +259,7 @@ const SalesReport = () => {
             <FilterSearch onChange={(e) => setSearchBy(e.target.value)} value={searchBy} placeholder={"Search by account"} minWidth={"167px"} />
             <div className="d-flex gap-3">
               <button className="border px-2.5 py-1 leading-tight" onClick={resetFilter}>
-                CLEAR ALL
+                <CloseButton crossFill={'#fff'} height={20} width={20}/>
               </button>
             </div>
             <button className="border px-2.5 py-1 leading-tight flex justify-center align-center gap-1" onClick={handleExportToExcel}>

@@ -8,6 +8,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
 import AppLayout from "../components/AppLayout";
 import { GetAuthData, getSalesRepList } from "../lib/store";
+import { CloseButton } from "../lib/svg";
 
 const MyRetailersPage = () => {
   const { data: manufacturers } = useManufacturer();
@@ -88,7 +89,7 @@ const MyRetailersPage = () => {
               setSearchBy("");
             }}
           >
-            CLEAR ALL
+            <CloseButton crossFill={'#fff'} height={20} width={20} />
           </button>
         </>
       }

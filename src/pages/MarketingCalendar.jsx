@@ -6,6 +6,7 @@ import html2pdf from "html2pdf.js";
 import { MdOutlineDownload } from "react-icons/md";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import { CloseButton } from "../lib/svg";
 const fileExtension = ".xlsx";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 
@@ -967,7 +968,7 @@ const MarketingCalendar = () => {
               setMonth(null);
             }}
           >
-            CLEAR ALL
+            <CloseButton crossFill={'#fff'} height={20} width={20} />
           </button>
           <div
             className="dropdown dropdown-toggle border px-2.5 py-1 leading-tight d-flex"
