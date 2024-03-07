@@ -281,7 +281,7 @@ const TargetReport = () => {
     ]
     return (<AppLayout filterNodes={
         <div className="d-flex justify-content-between m-auto" style={{ width: '99%' }}>
-            <div className="d-flex justify-content-between col-3">
+            <div className="d-flex justify-content-start col-3 gap-4">
                 <FilterItem
                     minWidth="200px"
                     label="Status"
@@ -300,11 +300,14 @@ const TargetReport = () => {
                     name="yearStatus"
                     containNullValue
                 />
-                <button onClick={() => sendApiCall()} className="border px-2.5 py-1 leading-tight flex justify-center align-center gap-1"> <SearchIcon fill="#fff" width={20} height={20}/></button>
+                <button onClick={() => sendApiCall()} className="border px-2 d-grid py-1 leading-tight flex justify-center align-center gap-1">
+                    <SearchIcon fill="#fff" width={20} height={20} />
+                    <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>search</small>
+                </button>
             </div>
             <div className="d-flex justify-content-around col-1"></div>
             <div className="d-flex justify-content-around col-2"><hr className={Styles.breakHolder} /></div>
-            <div className="d-flex justify-content-between col-6">
+            <div className="d-flex justify-content-end col-6 gap-4">
                 {target.ownerPermission &&
                     <FilterItem
                         minWidth="220px"
@@ -330,12 +333,13 @@ const TargetReport = () => {
                     onChange={(value) => setManufacturerFilter(value)}
                 />
                 <div className="d-flex gap-3">
-                    <button className="border px-2.5 py-1 leading-tight" onClick={resetFilter}>
+                    <button className="border px-2 d-grid py-1 leading-tight" onClick={resetFilter}>
                         <CloseButton crossFill={'#fff'} height={20} width={20} />
+                        <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
                     </button>
-                    <button className="border px-2.5 py-1 leading-tight flex justify-center align-center gap-1" onClick={handleExportToExcel}>
-                        EXPORT
-                        <MdOutlineDownload size={16} />
+                    <button className="border px-2 d-grid py-1 leading-tight" onClick={handleExportToExcel}>
+                        <MdOutlineDownload size={16} className="m-auto" />
+                        <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>export</small>
                     </button>
                 </div>
 

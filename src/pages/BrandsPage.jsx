@@ -128,7 +128,7 @@ const BrandsPage = () => {
               minWidth={"155px"}
             />
             <button
-              className="border px-2.5 py-1 leading-tight"
+              className="border px-2 py-1 leading-tight d-grid"
               onClick={() => {
                 // setHighestRetailers(true);
                 setSearchBy("");
@@ -136,6 +136,7 @@ const BrandsPage = () => {
               }}
             >
               <CloseButton crossFill={'#fff'} height={20} width={20} />
+              <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
             </button>
           </>
         }

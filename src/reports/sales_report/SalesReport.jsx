@@ -19,7 +19,7 @@ const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sh
 const fileExtension = ".xlsx";
 
 const SalesReport = () => {
-  const [manufacturers,setManufacturers]= useState([]);
+  const [manufacturers, setManufacturers] = useState([]);
   const [yearFor, setYearFor] = useState(2024);
   const salesReportApi = useSalesReport();
   const [isLoading, setIsLoading] = useState(false);
@@ -155,7 +155,7 @@ const SalesReport = () => {
     let manuIds = [];
     let manufacturerList = [];
     result?.data?.data?.map((manu) => {
-      if(!manuIds.includes(manu.ManufacturerId__c)){
+      if (!manuIds.includes(manu.ManufacturerId__c)) {
         salesListName.push(manu.ManufacturerId__c);
         manufacturerList.push({
           label: manu.ManufacturerName__c,
@@ -213,8 +213,8 @@ const SalesReport = () => {
   return (
     <AppLayout
       filterNodes={
-        <div className="d-flex justify-content-between m-auto" style={{width:'99%'}}>
-          <div className="d-flex justify-content-around col-2">
+        <div className="d-flex justify-content-between m-auto" style={{ width: '99%' }}>
+          <div className="d-flex justify-content-start gap-4 col-3">
             <FilterItem
               label="year"
               name="Year"
@@ -222,20 +222,21 @@ const SalesReport = () => {
               options={yearList}
               onChange={(value) => setYearFor(value)}
             />
-            <button onClick={() => sendApiCall()} className="border px-2.5 py-1 leading-tight flex justify-center align-center gap-1"> <SearchIcon fill="#fff" width={20} height={20}/></button>
-            <hr className={Styles.breakHolder}/>
+            <button onClick={() => sendApiCall()} className="border px-2 py-1 leading-tight d-grid"> <SearchIcon fill="#fff" width={20} height={20} />
+              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>search</small>
+            </button>
           </div>
-          <div className="d-flex justify-content-around col-10">
+          <div className="d-flex justify-content-around col-1"></div>
+          <div className="d-flex justify-content-around col-1"></div>
+          <div className="d-flex justify-content-around col-1"><hr className={Styles.breakHolder} /></div>
+          <div className="d-flex justify-content-end gap-4 col-6">
             {ownerPermission && <FilterItem minWidth="220px" label="All Sales Rep" name="AllSalesRep" value={searchBySalesRep} options={salesRepList} onChange={(value) => setSearchBySalesRep(value)} />}
             <FilterItem
               minWidth="220px"
               label="All Manufacturers"
               name="AllManufacturers1"
               value={manufacturerFilter}
-              options={manufacturers?.data?.map((manufacturer) => ({
-                label: manufacturer.Name,
-                value: manufacturer.Name,
-              }))}
+              options={manufacturers}
               onChange={(value) => setManufacturerFilter(value)}
             />
             <FilterItem
@@ -258,13 +259,15 @@ const SalesReport = () => {
             {/* First Calender Filter-- start date */}
             <FilterSearch onChange={(e) => setSearchBy(e.target.value)} value={searchBy} placeholder={"Search by account"} minWidth={"167px"} />
             <div className="d-flex gap-3">
-              <button className="border px-2.5 py-1 leading-tight" onClick={resetFilter}>
-                <CloseButton crossFill={'#fff'} height={20} width={20}/>
+              <button className="border px-2 py-1 leading-tight d-grid" onClick={resetFilter}>
+                <CloseButton crossFill={'#fff'} height={20} width={20} />
+                <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
               </button>
             </div>
-            <button className="border px-2.5 py-1 leading-tight flex justify-center align-center gap-1" onClick={handleExportToExcel}>
-              EXPORT
-              <MdOutlineDownload size={16} />
+            <button className="border px-2 py-1 leading-tight d-grid" onClick={handleExportToExcel}>
+
+              <MdOutlineDownload size={16} className="m-auto" />
+              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>EXPORT</small>
             </button>
           </div>
         </div>

@@ -871,7 +871,7 @@ const MarketingCalendar = () => {
 
     html2pdf().set(opt).from(element).save();
   };
-  
+
 
   const generateXLSX = () => {
     const newValues = productList?.map((months) => {
@@ -962,22 +962,24 @@ const MarketingCalendar = () => {
             }}
           />
           <button
-            className="border px-2.5 py-1 leading-tight"
+            className="border px-2 py-1 leading-tight d-grid"
             onClick={() => {
               setBrand("");
               setMonth(null);
             }}
           >
             <CloseButton crossFill={'#fff'} height={20} width={20} />
+            <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
           </button>
           <div
-            className="dropdown dropdown-toggle border px-2.5 py-1 leading-tight d-flex"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
+            className="dropdown dropdown-toggle border px-2 py-1 leading-tight d-flex"
           >
-            <MdOutlineDownload size={16} />
-            &nbsp;Download
+            <div className=" d-grid" role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <MdOutlineDownload size={16} className="m-auto" />
+              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Download</small>
+            </div>
             <ul className="dropdown-menu">
               <li>
                 <div className="dropdown-item text-start" onClick={() => generatePdf()}>
