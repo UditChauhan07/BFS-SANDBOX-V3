@@ -137,9 +137,8 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
         });
         if (productCount) {
           // navigate("/my-bag");
-          let currentUrl = window.location.href;
-          let urlSplit = currentUrl.split("/product");
-          let url = urlSplit[0] + "/my-bag";
+          let currentUrl = window.location.origin;
+          let url = currentUrl + "/my-bag";
           window.location.href = url
         } else {
           alert("Product list not found");
