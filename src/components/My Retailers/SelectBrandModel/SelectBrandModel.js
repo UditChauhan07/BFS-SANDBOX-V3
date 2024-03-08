@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import Styles from "./style.module.css";
 import { useNavigate } from "react-router-dom";
 import { CloseButton } from "../../../lib/svg";
+import { salesRepIdKey } from "../../../lib/store";
 
-const SelectBrandModel = ({ brands, onClose }) => {
+const SelectBrandModel = ({ brands,selectedSalesRepId, onClose }) => {
   // const [selectedBrandAccountId, setSelectedBrandAccountId] = useState();
   const [selectedBrandManufacturer, setSelectedBrandManufacturer] = useState(false);
   // const [modalOpen, setModalOpen] = useState(false);
@@ -33,6 +34,7 @@ const SelectBrandModel = ({ brands, onClose }) => {
                       setSelectedBrandManufacturer(true);
                       localStorage.setItem("manufacturer", brand.ManufacturerName__c|| brand.Name);
                       localStorage.setItem("ManufacturerId__c", brand.ManufacturerId__c||  brand.Id);
+                      localStorage.setItem(salesRepIdKey, selectedSalesRepId);
                       localStorage.setItem("shippingMethod", JSON.stringify({number:brand.Shipping_Account_Number__c,method:brand.Shipping_Method__c}));
                       navigate(`/product`);
                     }}

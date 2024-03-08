@@ -10,7 +10,8 @@ const accountKey = "manufacturer";
 const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
-export const admins = ["00530000005AdvsAAC","0053b00000DgEVEAA3"] //,"0053b00000CwOnLAAV"
+export const salesRepIdKey = "BzQIEAjzCEHmlXc";
+export const admins = ["00530000005AdvsAAC","0053b00000DgEVEAA3"] //,"0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
 // export const originAPi = "https://dev.beautyfashionsales.com"
 
 export function ShareDrive (data, remove = false){
@@ -344,14 +345,14 @@ export async function getDashboardata({ user }) {
   }
 }
 
-export async function getSupportList({ user }) {
+export async function getSupportList({ key,salesRepId }) {
   let headersList = {
     Accept: "*/*",
   };
   // console.log({user});
   let bodyContent = new FormData();
-  bodyContent.append("key", user.x_access_token);
-  bodyContent.append("salesRepId", user.Sales_Rep__c);
+  bodyContent.append("key", key);
+  bodyContent.append("salesRepId", salesRepId);
 
   let response = await fetch(url + "v3/TDIztRiHo6Juf3I", {
     method: "POST",
@@ -578,6 +579,41 @@ export async function topProduct({month,manufacturerId}) {
   let response = await fetch(url + "v3/dC0mhTDnL9l0mK1", {
     method: "POST",
     body: JSON.stringify({month,manufacturerId}),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data;
+  }
+}
+export async function getBrandList({key,userId}) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+    key,userId
+  };
+  let response = await fetch(url + "v3/yRNGIO", {
+    method: "POST",
+    // body: JSON.stringify({key,userid:userId}),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data;
+  }
+}
+export async function getRetailerList({key,userId}) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+  let response = await fetch(url + "v3/JbUxci", {
+    method: "POST",
+    body: JSON.stringify({key,userid:userId}),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());

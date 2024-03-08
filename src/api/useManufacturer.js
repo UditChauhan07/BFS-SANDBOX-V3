@@ -1,4 +1,4 @@
-import { DestoryAuth, originAPi } from "../lib/store";
+import { originAPi } from "../lib/store";
 import { useFetch } from "./useFetch";
 
 export const useManufacturer = () => {
@@ -8,8 +8,5 @@ export const useManufacturer = () => {
       method: "POST",
     }
   );
-  if(manufacturers.status==300){
-    DestoryAuth();
-  }
   return manufacturers;
 };

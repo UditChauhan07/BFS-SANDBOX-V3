@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import MyRetailerCard from "./MyRetailerCard";
 import Loading from "../Loading";
 
-const MyRetailers = ({ pageData, filterBy, sortBy, searchBy, isLoading }) => {
+const MyRetailers = ({ pageData, filterBy, sortBy, searchBy, isLoading,selectedSalesRepId }) => {
   const navigate = useNavigate();
   // console.log("pageData",pageData);
   useEffect(() => {
@@ -36,7 +36,7 @@ const MyRetailers = ({ pageData, filterBy, sortBy, searchBy, isLoading }) => {
           <section>
             <div className="grid px-0 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {filteredPageData?.map((data) => {
-                return <MyRetailerCard key={data.Name} accountId={data.Id} placeName={data.City} title={data.Name} brands={data?.data} address={data.ShippingAddress} />;
+                return <MyRetailerCard key={data.Name} accountId={data.Id} placeName={data.City} title={data.Name} brands={data?.data} address={data.ShippingAddress} selectedSalesRepId={selectedSalesRepId}/>;
               })}
             </div>
           </section>
