@@ -146,7 +146,7 @@ const OrderListPage = () => {
               name="salesRep"
               value={selectedSalesRepId}
               options={salesRepList.map((salesRep) => ({
-                label: salesRep.Id == userData.Sales_Rep__c ? 'My Orders' : salesRep.Name,
+                label: salesRep.Id == userData.Sales_Rep__c ? 'My Orders ('+salesRep.Name+')' : salesRep.Name,
                 value: salesRep.Id,
               }))}
               onChange={(value) => orderListBasedOnRepHandler(value)}

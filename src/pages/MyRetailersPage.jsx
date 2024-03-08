@@ -67,14 +67,14 @@ const MyRetailersPage = () => {
     <AppLayout
       filterNodes={
         <>
-        {(admins.includes(userData.Sales_Rep__c),salesRepList.length>0)&&
+        {(admins.includes(userData?.Sales_Rep__c),salesRepList?.length>0)&&
         <FilterItem
         minWidth="220px"
         label="salesRep"
         name="salesRep"
         value={selectedSalesRepId}
         options={salesRepList.map((salesRep) => ({
-          label: salesRep.Id ==userData.Sales_Rep__c?'My Retailers':salesRep.Name,
+          label: salesRep.Id ==userData.Sales_Rep__c?'My Retailers ('+salesRep.Name+')':salesRep.Name,
           value: salesRep.Id,
         }))}
         onChange={(value) => salesRepHandler(value)}
