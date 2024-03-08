@@ -3,6 +3,7 @@ import ProductDetails from "../../pages/productDetails";
 import LoaderV2 from "./../loader/v2";
 import Styles from "./NewArrivals.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Pagination from "../Pagination/Pagination";
 import { Link } from "react-router-dom";
 import ModalPage from "../Modal UI";
 import StylesModal from "../Modal UI/Styles.module.css";
@@ -13,6 +14,24 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
   const [productDetailId, setProductDetailId] = useState();
 
   const [isEmpty, setIsEmpty] = useState(false);
+  // ...............
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filterData, setFilterData] = useState([]);
+  let PageSize = 10;
+  const [pagination, setpagination] = useState([]);
+
+  useEffect(() => {
+    if (!filterData || filterData.length === 1) {
+      console.error("Product list is empty or undefined.");
+      return;
+    }
+ const startIndex = (currentPage - 1) * PageSize;
+    const endIndex = currentPage * PageSize;
+const newValues = filterData?.flatMap((month) => month?.content).slice(startIndex, endIndex);
+setpagination([{content: newValues }]);
+    console.log(newValues);
+  }, [filterData, PageSize, currentPage]);
+  // ............
   useEffect(() => {
     let temp = true;
     products.map((month) => {
@@ -25,7 +44,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
     });
   }, [brand]);
 
-  const [filterData, setFilterData] = useState();
+  
   useEffect(() => {
     if (!month) {
       setFilterData(products);
@@ -83,7 +102,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
         <div>
           <div className={Styles.dGrid}>
             {!isEmpty ? (
-              filterData?.map((month, index) => {
+              pagination?.map((month, index) => {
                 if (month.content.length) {
                   return month.content.map((product) => {
                     if (!brand || brand == product.brand) {
@@ -127,6 +146,13 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
         </div>
         <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} />
       </section>
+      <Pagination
+        className="pagination-bar"
+        currentPage={currentPage || 0}
+        totalCount={filterData?.flatMap((month) => month?.content)?.length || 0}
+        pageSize={PageSize || 0}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
     </>
   );
 }
