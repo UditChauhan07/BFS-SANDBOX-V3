@@ -608,12 +608,12 @@ export async function getBrandList({key,userId}) {
 }
 export async function getRetailerList({key,userId}) {
   let headersList = {
-    Accept: "*/*",
+    Accept: "*/*",key,userId,
     "Content-Type": "application/json",
   };
   let response = await fetch(url + "v3/JbUxci", {
     method: "POST",
-    body: JSON.stringify({key,userid:userId}),
+    // body: JSON.stringify({key,userid:userId}),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());

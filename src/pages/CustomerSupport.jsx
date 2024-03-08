@@ -5,9 +5,6 @@ import FilterSearch from "../components/FilterSearch";
 import { DestoryAuth, GetAuthData, admins, getBrandList, getRetailerList, getSalesRepList, getSupportList } from "../lib/store";
 import Loading from "../components/Loading";
 import Pagination from "../components/Pagination/Pagination";
-import Layout from "../components/Layout/Layout";
-import { useManufacturer } from "../api/useManufacturer";
-import { useRetailersData } from "../api/useRetailersData";
 import AppLayout from "../components/AppLayout";
 import { CloseButton } from "../lib/svg";
 
@@ -19,8 +16,6 @@ const CustomerSupport = () => {
   const [searchBy, setSearchBy] = useState("");
   const [manufacturerFilter, setManufacturerFilter] = useState(null);
   const [retailerFilter, setRetailerFilter] = useState(null);
-  const { data: manufacturers } = useManufacturer();
-  const { data: retailerData } = useRetailersData();
   const [brandList, setbrandList] = useState([])
   const [retailerList, setRetailerList] = useState([])
   const [userData, setUserData] = useState({});
@@ -86,20 +81,20 @@ const CustomerSupport = () => {
     <AppLayout
       filterNodes={
         <>
-          {(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
+          {(admins.includes(userData?.Sales_Rep__c), salesRepList?.length > 0) &&
             <FilterItem
               minWidth="220px"
               label="salesRep"
               name="salesRep"
               value={selectedSalesRepId}
               options={salesRepList.map((salesRep) => ({
-                label: salesRep.Id == userData.Sales_Rep__c ? 'My Supports' : salesRep.Name,
+                label: salesRep.Id == userData.Sales_Rep__c ? 'My Supports ('+salesRep.Name+')' : salesRep.Name,
                 value: salesRep.Id,
               }))}
               onChange={(value) => supportBasedOnSalesRep(value)}
             />
           }
-          {retailerList.length > 0 &&
+          {retailerList?.length > 0 &&
             <FilterItem
               minWidth="220px"
               label="Retailer"
@@ -111,7 +106,7 @@ const CustomerSupport = () => {
               }))}
               onChange={(value) => setRetailerFilter(value)}
             />}
-          {brandList.length > 0 &&
+          {brandList?.length > 0 &&
             <FilterItem
               minWidth="220px"
               label="Manufacturer"
