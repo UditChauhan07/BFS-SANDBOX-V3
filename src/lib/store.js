@@ -162,7 +162,7 @@ export async function OrderPlaced({ order }) {
     localStorage.removeItem(brandKey);
     localStorage.removeItem(accountKey);
     let lastCount = localStorage.getItem(POCount) || 1;
-    localStorage.setItem(POCount, parseInt(lastCount + 1));
+    localStorage.setItem(POCount, parseInt(+lastCount + 1));
     return data.order;
   } else if (data.status == 300) {
     DestoryAuth();
