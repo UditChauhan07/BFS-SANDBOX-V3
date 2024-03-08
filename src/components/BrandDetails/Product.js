@@ -10,7 +10,7 @@ import { FilterItem } from "../FilterItem";
 import FilterSearch from "../FilterSearch";
 import ModalPage from "../Modal UI";
 import { useBag } from "../../context/BagContext";
-import { GetAuthData, ShareDrive, fetchBeg, getProductImageAll, getProductList } from "../../lib/store";
+import { GetAuthData, ShareDrive, fetchBeg, getProductImageAll, getProductList, salesRepIdKey } from "../../lib/store";
 import Styles from "../Modal UI/Styles.module.css";
 import { BackArrow, CloseButton } from "../../lib/svg";
 import AppLayout from "../AppLayout";
@@ -149,7 +149,7 @@ function Product() {
     GetAuthData().then((user) => {
       let rawData = {
         key: user.access_token,
-        Sales_Rep__c: user?.Sales_Rep__c,
+        Sales_Rep__c: localStorage.getItem(salesRepIdKey)??user?.Sales_Rep__c,
         Manufacturer: localStorage.getItem("ManufacturerId__c"),
         AccountId__c: localStorage.getItem("AccountId__c"),
       }

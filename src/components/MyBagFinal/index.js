@@ -4,7 +4,7 @@ import Styles from "./Styles.module.css";
 import Img1 from "./Images/Eye1.png";
 import QuantitySelector from "../BrandDetails/Accordion/QuantitySelector";
 import { useNavigate } from "react-router-dom";
-import { GetAuthData, OrderPlaced, POGenerator, ShareDrive, fetchBeg, getProductImageAll } from "../../lib/store";
+import { GetAuthData, OrderPlaced, POGenerator, ShareDrive, admins, fetchBeg, getProductImageAll, getSalesRepList, salesRepIdKey } from "../../lib/store";
 import { useBag } from "../../context/BagContext";
 import OrderLoader from "../loader";
 import ModalPage from "../Modal UI";
@@ -24,7 +24,9 @@ function MyBagFinal() {
   const [PONumberFilled, setPONumberFilled] = useState(true);
   const [clearConfim, setClearConfim] = useState(false)
   const [orderStatus, setorderStatus] = useState({ status: false, message: "" })
-  const [ productDetailId, setProductDetailId] = useState(null)
+  const [productDetailId, setProductDetailId] = useState(null)
+  const [userData, setUserData] = useState(null)
+  const [salesRepData,setSalesRepData] = useState({Name:null,Id:null})
 
   useEffect(() => {
     if (bagValue?.Account?.id && bagValue?.Manufacturer?.id && Object.values(bagValue?.orderList)?.length > 0) {
@@ -38,6 +40,13 @@ function MyBagFinal() {
     if (!data) {
       data = {};
     }
+    GetAuthData().then((user)=>{
+      setUserData(user);
+      getSalesRepList({key:user.x_access_token}).then((repList)=>{
+        let repData = repList.data.filter(item => item.Id === localStorage.getItem(salesRepIdKey))
+        setSalesRepData(repData?.[0]||{})
+      }).catch((e)=>console.log({e}))
+    }).catch((e)=>console.log({e}))
     if (bagValue) {
       if (bagValue.Manufacturer) {
         if (bagValue.Manufacturer.id) {
@@ -45,7 +54,7 @@ function MyBagFinal() {
             data[bagValue.Manufacturer.id] = {};
           }
           if (Object.values(data[bagValue.Manufacturer.id]).length > 0) {
-            console.log({aaas:Object.values(data[bagValue.Manufacturer.id]).length});
+            console.log({ aaas: Object.values(data[bagValue.Manufacturer.id]).length });
             setProductImage({ isLoaded: true, images: data[bagValue.Manufacturer.id] })
           } else {
             setProductImage({ isLoaded: false, images: {} })
@@ -61,7 +70,7 @@ function MyBagFinal() {
           })
           getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
             if (res) {
-              console.log({res});
+              console.log({ res });
               if (data[bagValue.Manufacturer.id]) {
                 data[bagValue.Manufacturer.id] = { ...data[bagValue.Manufacturer.id], ...res }
               } else {
@@ -97,6 +106,7 @@ function MyBagFinal() {
     let fetchBag = fetchBeg();
     GetAuthData()
       .then((user) => {
+        let SalesRepId = localStorage.getItem(salesRepIdKey) ?? user.Sales_Rep__c;
         if (fetchBag) {
           let list = [];
           let orderType = "Wholesale Numbers";
@@ -119,7 +129,7 @@ function MyBagFinal() {
             ManufacturerId__c: fetchBag?.Manufacturer?.id,
             PONumber: PONumber,
             desc: orderDesc,
-            SalesRepId: user.Sales_Rep__c,
+            SalesRepId,
             Type: orderType,
             ShippingCity: fetchBag?.Account?.address?.city,
             ShippingStreet: fetchBag?.Account?.address?.street,
@@ -295,18 +305,18 @@ function MyBagFinal() {
                             return (
                               <div className={Styles.Mainbox}>
                                 <div className={Styles.Mainbox1M}>
-                                  <div className={Styles.Mainbox2} style={{cursor:'pointer'}}>
+                                  <div className={Styles.Mainbox2} style={{ cursor: 'pointer' }}>
                                     {
                                       !productImage.isLoaded ? <LoaderV2 /> :
                                         productImage.images?.[ele.product?.ProductCode] ?
                                           productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl ?
-                                            <img src={productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl} alt="img" width={25} onClick={()=>{setProductDetailId(ele?.product?.Id)}}/>
-                                            : <img src={productImage.images[ele.product?.ProductCode]} alt="img" width={25} onClick={()=>{setProductDetailId(ele?.product?.Id)}}/>
-                                          : <img src={Img1} alt="img" onClick={()=>{setProductDetailId(ele?.product?.Id)}}/>
+                                            <img src={productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl} alt="img" width={25} onClick={() => { setProductDetailId(ele?.product?.Id) }} />
+                                            : <img src={productImage.images[ele.product?.ProductCode]} alt="img" width={25} onClick={() => { setProductDetailId(ele?.product?.Id) }} />
+                                          : <img src={Img1} alt="img" onClick={() => { setProductDetailId(ele?.product?.Id) }} />
                                     }
                                   </div>
                                   <div className={Styles.Mainbox3}>
-                                    <h2 onClick={()=>{setProductDetailId(ele?.product?.Id)}} style={{cursor:'pointer'}}>{ele.product?.Name}</h2>
+                                    <h2 onClick={() => { setProductDetailId(ele?.product?.Id) }} style={{ cursor: 'pointer' }}>{ele.product?.Name}</h2>
                                     <p>
                                       <span className={Styles.Span1}>
                                         {ele.product?.usdRetail__c.includes("$") ? `$${(+ele.product?.usdRetail__c.substring(1)).toFixed(2)}` : `$${Number(ele.product?.usdRetail__c).toFixed(2)}`}
@@ -383,11 +393,16 @@ function MyBagFinal() {
                         <p>No Shipping Address</p>
                       )}
                     </div>
-
+                    {(admins.includes(userData?.Sales_Rep__c)&&salesRepData?.Id &&buttonActive)&&<>
+                    <h2>Order For</h2>
+                    <div className={Styles.ShipAdress}>
+                      {userData?.Sales_Rep__c == salesRepData?.Id ?'Me':salesRepData?.Name}
+                    </div>
                     <div className={Styles.ShipAdress2}>
                       {/* <label>NOTE</label> */}
                       <textarea onKeyUp={(e) => setOrderDesc(e.target.value)} placeholder="NOTE" className="placeholder:font-[Arial-500] text-[14px] tracking-[1.12px] " />
                     </div>
+                    </>}
                     {!PONumberFilled ? (
                       <ModalPage
                         open
@@ -450,7 +465,7 @@ function MyBagFinal() {
           </div>
         </div>
       </section>
-      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} AccountId={bagValue?.Account.id} ManufacturerId={bagValue?.Manufacturer?.id}/>
+      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} AccountId={bagValue?.Account.id} ManufacturerId={bagValue?.Manufacturer?.id} />
     </div>
   );
 }

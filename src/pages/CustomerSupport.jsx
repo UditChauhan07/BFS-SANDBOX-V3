@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CustomerSupportPage from "../components/CustomerSupportPage/CustomerSupportPage";
 import { FilterItem } from "../components/FilterItem";
 import FilterSearch from "../components/FilterSearch";
-import { DestoryAuth, GetAuthData, getSupportList } from "../lib/store";
+import { DestoryAuth, GetAuthData, admins, getBrandList, getRetailerList, getSalesRepList, getSupportList } from "../lib/store";
 import Loading from "../components/Loading";
 import Pagination from "../components/Pagination/Pagination";
 import Layout from "../components/Layout/Layout";
@@ -21,60 +21,108 @@ const CustomerSupport = () => {
   const [retailerFilter, setRetailerFilter] = useState(null);
   const { data: manufacturers } = useManufacturer();
   const { data: retailerData } = useRetailersData();
+  const [brandList, setbrandList] = useState([])
+  const [retailerList, setRetailerList] = useState([])
+  const [userData, setUserData] = useState({});
+  const [salesRepList, setSalesRepList] = useState([])
+  const [selectedSalesRepId, setSelectedSalesRepId] = useState();
   useEffect(() => {
     GetAuthData()
       .then((user) => {
         if (user) {
-          getSupportList({ user })
-            .then((supports) => {
-              if (supports) {
-                setSupportList(supports);
-              }
-              setLoaded(true);
+          setUserData(user)
+          if (!selectedSalesRepId) setSelectedSalesRepId(user.Sales_Rep__c)
+          supportHandler({ key: user.x_access_token, salesRepId: selectedSalesRepId ?? user.Sales_Rep__c })
+          reatilerHandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c })
+          brandhandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c })
+          if (admins.includes(user.Sales_Rep__c)) {
+            getSalesRepList({ key: user.x_access_token }).then((repRes) => {
+              setSalesRepList(repRes.data)
+            }).catch((repErr) => {
+              console.log({ repErr });
             })
-            .catch((error) => {
-              console.error({ error });
-            });
+          }
         } else {
           DestoryAuth()
-            .then((res) => {
-              console.log({ res });
-            })
-            .catch((err1) => {
-              console.error({ err1 });
-            });
         }
       })
       .catch((err) => {
         console.error(err);
       });
   }, []);
+  const reatilerHandler = ({ key, userId }) => {
+    getRetailerList({ key, userId }).then((retailerRes) => {
+      setRetailerList(retailerRes.data)
+    }).catch((retailerErr) => console.log({ retailerErr }))
+  }
+  const brandhandler = ({ key, userId }) => {
+    getBrandList({ key, userId }).then((brandRes) => {
+      setbrandList(brandRes.data)
+    }).catch((brandErr) => console.log({ brandErr }))
+  }
+  const supportHandler = ({ key, salesRepId }) => {
+    getSupportList({ key, salesRepId })
+      .then((supports) => {
+        setSupportList(supports);
+        setLoaded(true);
+      })
+      .catch((error) => {
+        console.error({ error });
+      });
+  }
+  const supportBasedOnSalesRep = (value) => {
+    setSelectedSalesRepId(value)
+    setSupportList([])
+    setRetailerList([])
+    setbrandList([])
+    setLoaded(false)
+    setRetailerFilter(null)
+    setManufacturerFilter(null)
+    supportHandler({ key: userData.x_access_token, salesRepId: value })
+    brandhandler({ key: userData.x_access_token, userId: value })
+    reatilerHandler({ key: userData.x_access_token, userId: value })
+  }
   return (
     <AppLayout
       filterNodes={
         <>
-          <FilterItem
-            minWidth="220px"
-            label="Retailer"
-            name="Retailer"
-            value={retailerFilter}
-            options={retailerData?.data?.map((retailer) => ({
-              label: retailer.Name,
-              value: retailer.Id,
-            }))}
-            onChange={(value) => setRetailerFilter(value)}
-          />
-          <FilterItem
-            minWidth="220px"
-            label="Manufacturer"
-            name="Manufacturer"
-            value={manufacturerFilter}
-            options={manufacturers?.data?.map((manufacturer) => ({
-              label: manufacturer.Name,
-              value: manufacturer.Id,
-            }))}
-            onChange={(value) => setManufacturerFilter(value)}
-          />
+          {(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
+            <FilterItem
+              minWidth="220px"
+              label="salesRep"
+              name="salesRep"
+              value={selectedSalesRepId}
+              options={salesRepList.map((salesRep) => ({
+                label: salesRep.Id == userData.Sales_Rep__c ? 'My Supports' : salesRep.Name,
+                value: salesRep.Id,
+              }))}
+              onChange={(value) => supportBasedOnSalesRep(value)}
+            />
+          }
+          {retailerList.length > 0 &&
+            <FilterItem
+              minWidth="220px"
+              label="Retailer"
+              name="Retailer"
+              value={retailerFilter}
+              options={retailerList.map((retailer) => ({
+                label: retailer.Name,
+                value: retailer.Id,
+              }))}
+              onChange={(value) => setRetailerFilter(value)}
+            />}
+          {brandList.length > 0 &&
+            <FilterItem
+              minWidth="220px"
+              label="Manufacturer"
+              name="Manufacturer"
+              value={manufacturerFilter}
+              options={brandList.map((manufacturer) => ({
+                label: manufacturer.Name,
+                value: manufacturer.Id,
+              }))}
+              onChange={(value) => setManufacturerFilter(value)}
+            />}
           <FilterSearch
             onChange={(e) => setSearchBy(e.target.value)}
             value={searchBy}
@@ -85,13 +133,21 @@ const CustomerSupport = () => {
           <button
             className="border px-2 py-1 leading-tight d-grid"
             onClick={() => {
+              setSearchBy("");
               setManufacturerFilter(null);
               setRetailerFilter(null);
-              setSearchBy("");
+              setSupportList([]);
+              setLoaded(false);
+              setRetailerList([]);
+              setbrandList([])
+              setSelectedSalesRepId(userData.Sales_Rep__c)
+              supportHandler({ key: userData.x_access_token, salesRepId: userData.Sales_Rep__c })
+              reatilerHandler({ key: userData.x_access_token, userId: userData.Sales_Rep__c })
+              brandhandler({ key: userData.x_access_token, userId: userData.Sales_Rep__c })
             }}
           >
             <CloseButton crossFill={'#fff'} height={20} width={20} />
-            <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
+            <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
           </button>
         </>
       }
