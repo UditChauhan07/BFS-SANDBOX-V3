@@ -22,7 +22,7 @@ function FullQuearyDetail({ data, setRest }) {
         return strTime;
     }
     const CommentPostHandler = () => {
-        if (comment != '') {
+        if (comment.trim() != '') {
             GetAuthData().then((user) => {
                 let rawData = {
                     key: user.x_access_token,
