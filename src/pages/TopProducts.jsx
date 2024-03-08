@@ -21,7 +21,7 @@ const TopProducts = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    btnHandler({manufacturerId:"a0O3b00000p4F4HEAU",month:monthIndex + 1});
+    btnHandler({manufacturerId:null,month:monthIndex + 1});
     let indexMonth = [];
     let helperArray = [];
     months.map((month, i) => {
@@ -145,7 +145,7 @@ const TopProducts = () => {
       </button> */}
       <button
         className="border px-2 py-1 leading-tight d-grid"
-        onClick={() => { btnHandler({manufacturerId:"a0O3b00000p4F4HEAU",month:monthIndex + 1}); }}
+        onClick={() => { btnHandler({manufacturerId:null,month:monthIndex + 1}); }}
       >
         <CloseButton crossFill={'#fff'} height={20} width={20} />
         <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>

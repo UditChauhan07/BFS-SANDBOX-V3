@@ -2,22 +2,26 @@ import React, { useEffect, useState } from "react";
 import MyRetailers from "../components/My Retailers/MyRetailers";
 import { FilterItem } from "../components/FilterItem";
 import { useManufacturer } from "../api/useManufacturer";
-import { useRetailersData } from "../api/useRetailersData";
 import FilterSearch from "../components/FilterSearch";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import Layout from "../components/Layout/Layout";
 import AppLayout from "../components/AppLayout";
-import { GetAuthData, getSalesRepList } from "../lib/store";
+import { DestoryAuth, GetAuthData, admins, getRetailerList, getSalesRepList } from "../lib/store";
 import { CloseButton } from "../lib/svg";
 
 const MyRetailersPage = () => {
   const { data: manufacturers } = useManufacturer();
+  if(manufacturers?.status==300){
+    DestoryAuth();
+  }
   const [searchParams] = useSearchParams();
   const manufacturerId = searchParams.get("manufacturerId");
-  const { data, isLoading } = useRetailersData();
+  const [retailerList,setRetailerList] =useState({data:[], isLoading:true})
   const [manufacturerFilter, setManufacturerFilter] = useState(manufacturerId);
   const [sortBy, setSortBy] = useState();
+  const [userData,setUserData] = useState({});
   const [searchBy, setSearchBy] = useState("");
+  const [salesRepList,setSalesRepList] = useState([])
+  const [selectedSalesRepId,setSelectedSalesRepId] = useState();
   useEffect(() => {
     if (!manufacturerId) {
       setManufacturerFilter(null);
@@ -25,27 +29,57 @@ const MyRetailersPage = () => {
       setManufacturerFilter(manufacturerId);
     }
   }, [manufacturerId]);
+
   const navigate = useNavigate();
   useEffect(() => {
-    const userData = localStorage.getItem("Name");
     GetAuthData().then((user)=>{
       if (!user) {
         navigate("/");
       }
-      getSalesRepList({key:user.x_access_token}).then((repRes)=>{
-        console.log({repRes});
-      }).catch((repErr)=>{
-        console.log({repErr});
-      })
+      getRetailerListHandler({key:user.x_access_token,userId:user.Sales_Rep__c})
+      setUserData(user);
+      setSelectedSalesRepId(user.Sales_Rep__c)
+      if(admins.includes(user.Sales_Rep__c)){
+        getSalesRepList({key:user.x_access_token}).then((repRes)=>{
+          setSalesRepList(repRes.data)
+        }).catch((repErr)=>{
+          console.log({repErr});
+        })
+      }
     }).catch((err)=>{
       console.log({err});
     })
   }, []);
 
+  const getRetailerListHandler = ({key,userId})=>{
+    setRetailerList({data:[], isLoading:true})
+    getRetailerList({key,userId}).then((retailerRes)=>{
+      setRetailerList({data:retailerRes?.data??[], isLoading:false})
+    }).catch(e=>console.error(e))
+  }
+
+  const salesRepHandler= (value)=>{
+    setSelectedSalesRepId(value)
+    getRetailerListHandler({key:userData.x_access_token,userId:value})
+  }
+
   return (
     <AppLayout
       filterNodes={
         <>
+        {(admins.includes(userData.Sales_Rep__c),salesRepList.length>0)&&
+        <FilterItem
+        minWidth="220px"
+        label="salesRep"
+        name="salesRep"
+        value={selectedSalesRepId}
+        options={salesRepList.map((salesRep) => ({
+          label: salesRep.Id ==userData.Sales_Rep__c?'My Retailers':salesRep.Name,
+          value: salesRep.Id,
+        }))}
+        onChange={(value) => salesRepHandler(value)}
+      />
+        }
           <FilterItem
             label="Sort by"
             value={sortBy}
@@ -87,6 +121,8 @@ const MyRetailersPage = () => {
               setSortBy(null);
               setManufacturerFilter(null);
               setSearchBy("");
+              setSelectedSalesRepId(userData.Sales_Rep__c);
+              getRetailerListHandler({key:userData.x_access_token,userId:userData.Sales_Rep__c})
             }}
           >
             <CloseButton crossFill={'#fff'} height={20} width={20} />
@@ -96,10 +132,11 @@ const MyRetailersPage = () => {
       }
     >
       <MyRetailers
-        pageData={data?.status ==200?data?.data:[]}
+        pageData={retailerList?.data||[]}
         sortBy={sortBy}
         searchBy={searchBy}
-        isLoading={isLoading}
+        isLoading={retailerList.isLoading}
+        selectedSalesRepId={selectedSalesRepId}
         filterBy={
           manufacturerFilter
             ? manufacturers?.data?.find(

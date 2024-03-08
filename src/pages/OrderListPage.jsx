@@ -3,10 +3,11 @@ import Filters from "../components/OrderList/Filters";
 import Styles from "../components/OrderList/style.module.css";
 
 import AppLayout from "../components/AppLayout";
-import { GetAuthData, getOrderList } from "../lib/store";
+import { GetAuthData, admins, getOrderList, getSalesRepList } from "../lib/store";
 import Loading from "../components/Loading";
 import Pagination from "../components/Pagination/Pagination";
 import OrderListContent from "../components/OrderList/OrderListContent";
+import { FilterItem } from "../components/FilterItem";
 
 let PageSize = 10;
 
@@ -16,6 +17,9 @@ const OrderListPage = () => {
   const [loaded, setLoaded] = useState(false);
   const [orders, setOrders] = useState([]);
   const [searchShipBy, setSearchShipBy] = useState();
+  const [userData, setUserData] = useState({});
+  const [salesRepList, setSalesRepList] = useState([])
+  const [selectedSalesRepId, setSelectedSalesRepId] = useState();
   const [filterValue, onFilterChange] = useState({
     month: "",
     manufacturer: null,
@@ -88,21 +92,16 @@ const OrderListPage = () => {
     setLoaded(false);
     GetAuthData()
       .then((response) => {
-        getOrderList({
-          user: {
-            key: response.x_access_token,
-            Sales_Rep__c: false ? "0051O00000CvAVTQA3"||"00530000005AdvsAAC" : response.Sales_Rep__c,
-          },
-          month: filterValue.month,
-        })
-          .then((order) => {
-            let sorting = sortingList(order);
-            setOrders(sorting);
-            setLoaded(true);
+        setUserData(response)
+        if (!selectedSalesRepId) setSelectedSalesRepId(response.Sales_Rep__c)
+        getOrderlIsthandler({ key: response.x_access_token, Sales_Rep__c: selectedSalesRepId ?? response.Sales_Rep__c })
+        if (admins.includes(response.Sales_Rep__c)) {
+          getSalesRepList({ key: response.x_access_token }).then((repRes) => {
+            setSalesRepList(repRes.data)
+          }).catch((repErr) => {
+            console.log({ repErr });
           })
-          .catch((error) => {
-            console.log({ error });
-          });
+        }
       })
       .catch((err) => {
         console.log({ err });
@@ -113,21 +112,60 @@ const OrderListPage = () => {
     setShipByText(searchShipBy);
   }, [searchShipBy]);
 
+  const getOrderlIsthandler = ({ key, Sales_Rep__c }) => {
+    getOrderList({
+      user: {
+        key,
+        Sales_Rep__c,
+      },
+      month: filterValue.month,
+    })
+      .then((order) => {
+        let sorting = sortingList(order);
+        setOrders(sorting);
+        setLoaded(true);
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  }
+  const orderListBasedOnRepHandler = (value) => {
+    setSelectedSalesRepId(value)
+    setLoaded(false)
+    setOrders([])
+    getOrderlIsthandler({ key: userData.x_access_token, Sales_Rep__c: value })
+  }
   return (
     <AppLayout
       filterNodes={
-        <Filters
-          onChange={handleFilterChange}
-          value={filterValue}
-          resetFilter={() => {
-            onFilterChange({
-              manufacturer: null,
-              month: "",
-              search: "",
-            });
-            setSearchShipBy("");
-          }}
-        />
+        <>
+          {(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
+            <FilterItem
+              minWidth="220px"
+              label="salesRep"
+              name="salesRep"
+              value={selectedSalesRepId}
+              options={salesRepList.map((salesRep) => ({
+                label: salesRep.Id == userData.Sales_Rep__c ? 'My Orders' : salesRep.Name,
+                value: salesRep.Id,
+              }))}
+              onChange={(value) => orderListBasedOnRepHandler(value)}
+            />
+          }
+          <Filters
+            onChange={handleFilterChange}
+            value={filterValue}
+            resetFilter={() => {
+              onFilterChange({
+                manufacturer: null,
+                month: "",
+                search: "",
+              });
+              setSearchShipBy("");
+              setSelectedSalesRepId(userData.Sales_Rep__c);
+            }}
+          />
+        </>
       }
     >
       {!loaded ? (

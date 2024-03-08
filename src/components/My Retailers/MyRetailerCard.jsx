@@ -15,11 +15,11 @@ const bgColors = {
   "ESTEE LAUDER": "esteeLauderBg",
 };
 
-const MyRetailerCard = ({ placeName, title, brands, accountId, address }) => {
+const MyRetailerCard = ({ placeName, title, brands, accountId, address,selectedSalesRepId }) => {
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <>
-      <ModalPage open={modalOpen} onClose={() => setModalOpen(false)} content={<SelectBrandModel brands={brands} onClose={() => setModalOpen(false)} />} />
+      <ModalPage open={modalOpen} onClose={() => setModalOpen(false)} content={<SelectBrandModel brands={brands} selectedSalesRepId={selectedSalesRepId} onClose={() => setModalOpen(false)} />} />
       <div
         className={`${Styles.Retailer} cursor-pointer flex`}
         onClick={() => {
