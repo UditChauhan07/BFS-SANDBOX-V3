@@ -59,20 +59,25 @@ const BrandsPage = () => {
         value.Name?.toLowerCase().includes(searchBy?.toLowerCase())
       );
     }
-    if (sortBy) {
-      newValues = newValues?.sort((a, b) => b.Accounds - a.Accounds);
-    } else {
-      newValues = newValues?.sort((a, b) => a.Accounds - b.Accounds);
-    }
-    if (sortBy) {
-      if (sortBy === "a-z") {
+    switch (sortBy) {
+      case "highest":
+        newValues = newValues?.sort((a, b) => b.Accounds - a.Accounds);
+        break;
+      case "lowest":
+        newValues = newValues?.sort((a, b) => a.Accounds - b.Accounds);
+        break;
+      case "a-z":
         newValues = newValues?.sort((a, b) => a.Name?.localeCompare(b.Name));
-      } else if (sortBy === "z-a") {
+        break;
+      case "z-a":
         newValues = newValues?.sort((a, b) => b.Name?.localeCompare(a.Name));
-      }
+        break;
+      default:
+        newValues = newValues?.sort((a, b) => b.Accounds - a.Accounds);
     }
     return newValues;
-  }, [ searchBy, manufacturers, sortBy]);
+  }, 
+  [ searchBy, manufacturers, sortBy]);
   return (
     <>
       <AppLayout
@@ -93,11 +98,11 @@ const BrandsPage = () => {
                 },
                 {
                   label: "Highest Retailers",
-                  value: true,
+                  value: "highest",
                 },
                 {
                   label: "Lowest Retailers",
-                  value: false,
+                  value: "lowest",
                 },
               ]}
               onChange={(value) => {

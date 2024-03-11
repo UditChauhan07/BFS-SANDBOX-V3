@@ -19,7 +19,7 @@ const BrandCard = ({ brand, image }) => {
           }}
         >
           <div className="flex flex-col justify-between h-full">
-            <div className="font-medium text-black text-[20px] tracking-[1.12px] leading-[20px] [font-family:'Arial-500'] text-ellipsis overflow-hidden whitespace-nowrap ">{brand.Name}</div>
+            <div className="font-medium text-black text-[20px] tracking-[1.12px] leading-[20px] [font-family:'Arial-500'] text-ellipsis overflow-hidden whitespace-nowrap" style={{ whiteSpace: 'pre-wrap'}}>{brand.Name}</div>
 
             <button
               className="flex items-center gap-2"
@@ -33,7 +33,7 @@ const BrandCard = ({ brand, image }) => {
             </button>
           </div>
           <div className="bg-black rounded-full w-[40px] h-[40px] flex justify-center items-center">
-            <div className="font-medium text-white text-[20px] whitespace-nowrap h-[40px] w-[40px] flex justify-center items-center  ">{brand?.Accounds}</div>
+            <div className="font-medium text-white text-[20px] whitespace-nowrap h-[40px] w-[40px] flex justify-center items-center" >{brand?.Accounds}</div>
           </div>
         </div>
       </div>
