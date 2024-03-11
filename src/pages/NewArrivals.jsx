@@ -833,7 +833,7 @@ const NewArrivals = () => {
   ];
   const [month, setMonth] = useState("");
   let months = [
-    { value: null, label: "All" },
+    // { value: null,  },
     { value: "JAN", label: "JAN" },
     { value: "FEB", label: "FEB" },
     { value: "MAR", label: "MAR" },
@@ -846,7 +846,7 @@ const NewArrivals = () => {
     { value: "OCT", label: "OCT" },
     { value: "NOV", label: "NOV" },
     { value: "DEC", label: "DEC" },
-    { value: "TBD", label: "TBD" },
+    // { value: "TBD", label: "TBD" },
   ];
   const [loaded, setLoaded] = useState(false);
   const [brand, setBrand] = useState();
@@ -857,7 +857,7 @@ const NewArrivals = () => {
     HendleClear();
   }, []);
   const HendleClear = () => {
-    const currentMonthIndex = new Date().getMonth() + 1;
+    const currentMonthIndex = new Date().getMonth() ;
     setMonth(months[currentMonthIndex].value);
     setBrand(null);
   };
