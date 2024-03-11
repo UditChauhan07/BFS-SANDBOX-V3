@@ -156,7 +156,7 @@ const SalesReport = () => {
     let manufacturerList = [];
     result?.data?.data?.map((manu) => {
       if (!manuIds.includes(manu.ManufacturerId__c)) {
-        salesListName.push(manu.ManufacturerId__c);
+        manuIds.push(manu.ManufacturerId__c);
         manufacturerList.push({
           label: manu.ManufacturerName__c,
           value: manu.ManufacturerName__c,
