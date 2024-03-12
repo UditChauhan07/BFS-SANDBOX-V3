@@ -42,8 +42,8 @@ function MyBagFinal() {
   function downloadFiles(invoices) {
     invoices.forEach(file => {
       const link = document.createElement("a");
-      link.href = file.VersionDataUrl;
-      link.download = file.VersionDataUrl;
+      link.href = `${file.VersionDataUrl}?oauth_token=${Key.data.access_token}`;
+      link.download = `${file.VersionDataUrl}?oauth_token=${Key.data.access_token}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
