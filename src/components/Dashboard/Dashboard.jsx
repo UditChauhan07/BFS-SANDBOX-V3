@@ -293,14 +293,16 @@ function Dashboard({ dashboardData }) {
     GetAuthData()
       .then((user) => {
         // user.Sales_Rep__c = "00530000005AdvsAAC";
-
         setSalesRepId(user.Sales_Rep__c);
         if (headers) {
           user.headers = headers;
         }
         getDashboardata({ user })
           .then((dashboard) => {
-            setBox({ RETAILERS: dashboard?.activeAccount || 0, GROWTH: 0, ORDERS: dashboard?.totalOrder || 0, REVENUE: dashboard?.totalPrice || 0, TARGET: dashboard.salesRepTarget || 0 })
+            let oldSalesAmount = dashboard?.oldSalesAmount||0;
+            let currentSalesAmount = dashboard.monthlySalesRepData?.[user.Sales_Rep__c]?.sale||0
+            let growth = parseInt(((currentSalesAmount-oldSalesAmount)/oldSalesAmount)*100)
+            setBox({ RETAILERS: dashboard?.activeAccount || 0, GROWTH: growth||0, ORDERS: dashboard?.totalOrder || 0, REVENUE: dashboard?.totalPrice || 0, TARGET: dashboard.salesRepTarget || 0 })
             let tempValue = (dashboard?.totalPrice / dashboard.salesRepTarget * 100) <= 100 ? dashboard?.totalPrice / dashboard.salesRepTarget * 100 : 100;
             setValue(tempValue)
             setNeedle_data([
