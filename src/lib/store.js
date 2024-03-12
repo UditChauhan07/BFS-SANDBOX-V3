@@ -311,7 +311,7 @@ export async function getOrderDetailsInvoice({ rawData }) {
   if (data.status == 300) {
     DestoryAuth();
   } else {
-    return data.data;
+    return {data:data.data,attachment:data.attachedmenetdata};
   }
 }
 
