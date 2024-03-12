@@ -62,6 +62,7 @@ function MyBagOrder(props) {
   return (
     <AppLayout filterNodes={
       orderDetail?.Id &&
+      <div className="d-flex justify-content-end mr-2">
         <div className="dropdown dropdown-toggle border px-2.5 py-1 leading-tight d-flex" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           <div className=" d-grid" role="button"
             data-bs-toggle="dropdown"
@@ -77,6 +78,7 @@ function MyBagOrder(props) {
               <div className="dropdown-item text-start" onClick={() => generateXLSX(orderDetail)}>&nbsp;XLSX</div>
             </li>
           </ul>
+        </div>
         </div>
   }>
       <div className="col-12">
