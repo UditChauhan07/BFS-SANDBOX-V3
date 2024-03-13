@@ -9,6 +9,7 @@ import { ShareDrive, getOrderDetailsBasedId, getOrderDetailsInvoice, getProductI
 import { MdOutlineDownload } from "react-icons/md";
 import LoaderV2 from "../../loader/v2";
 import ProductDetails from "../../../pages/productDetails";
+import "./Print.module.css"
 
 function MyBagFinal({setOrderDetail}) {
   const [OrderData, setOrderData] = useState([]);
@@ -198,7 +199,7 @@ function MyBagFinal({setOrderDetail}) {
                       Order Details ({OrderData?.OpportunityLineItems?.length})
                     </h3>
                     <div className={Styles.scrollP}>
-                      <div className={Styles.MainInner}>
+                      <div className={`${Styles.MainInner} MainInnerPrint`}>
                         <div className={Styles.Mainbox3}>
                           {OrderData.OpportunityLineItems?.length > 0 ? (
                             OrderData.OpportunityLineItems?.map((item) => {
