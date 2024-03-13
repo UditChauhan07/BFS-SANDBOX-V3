@@ -1,8 +1,0 @@
-@media print {
-    /* .MainInnerPrint{
-        height: unset !important;
-    } */
-    #orderDetailerContainer{
-        background-color: grey;
-    }
-}

@@ -11,7 +11,7 @@ const LogoHeader = () => {
     <>
       <div className={styles.laptopModeSticky}>
         <div className={` ${styles.laptopMode}`}>
-          <div className={styles.lapSetting}>
+          <div className={`${styles.lapSetting} d-none-print`}>
             <p className={`m-0  ${styles.language}`}>
               <Link to="/my-retailers" className={`linkStyle`}>
                 My Retailers
@@ -35,7 +35,7 @@ const LogoHeader = () => {
             </Link>
           </div>
           {/* my bag */}
-          <div className={styles.lapSetting}>
+          <div className={`${styles.lapSetting} d-none-print`}>
             <p className={`m-0 w-[100px]  ${styles.language} flex`}>
               <a href="#search" data-rr-ui-event-key="#search" className=" pr-0 nav-link active"><div className="search-container"><input className="search expandright" id="searchright" type="search" name="" placeholder="Search..." /><label className="button searchbutton" for="searchright"><span className="searchCode">Search...</span> <span className="mglass">
                 <SearchIcon />
