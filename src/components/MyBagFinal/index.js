@@ -409,11 +409,11 @@ const handleNameChange = (event) => {
                     <div className={Styles.ShipAdress}>
                       {userData?.Sales_Rep__c == salesRepData?.Id ?'Me':salesRepData?.Name}
                     </div>
+                    </>}
                     <div className={Styles.ShipAdress2}>
                       {/* <label>NOTE</label> */}
                       <textarea onKeyUp={(e) => setOrderDesc(e.target.value)} placeholder="NOTE" className="placeholder:font-[Arial-500] text-[14px] tracking-[1.12px] " />
                     </div>
-                    </>}
                     {!PONumberFilled ? (
                       <ModalPage
                         open
