@@ -18,12 +18,12 @@ function MyBagOrder(props) {
     const opt = {
       margin: 0.1,
       filename: filename + '.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 1 },
-      jsPDF: { unit: 'in', orientation: 'landscape' }
-      // html2canvas: { scale: 2 },
-      // jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-      // pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      image: { type: 'image/png', quality: 0.98 },
+      // html2canvas: { scale: 1 },
+      // jsPDF: { unit: 'in', orientation: 'landscape' }
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+      pagebreak: { mode: [ 'css'] }
     };
 
     html2pdf().set(opt).from(element).save();
@@ -36,9 +36,12 @@ function MyBagOrder(props) {
     let poDetail = { "": "PO Number", " ": data.PO_Number__c }
     let orderNumberDetail = { "": "Order Number", " ": data.Order_Number__c }
     let trackingumberDetail = { "": "Tracking Number", " ": data.Tracking__c }
+    let orderdateDetails = { "": "Order Date", " ": data.CreatedDate }
     finalData.push(accountDetails)
     finalData.push(brandDetail)
     finalData.push(poDetail)
+    finalData.push(orderdateDetails)
+    if (data?.Order_Number__c) finalData.push(orderNumberDetail)
     if (data?.Order_Number__c) finalData.push(orderNumberDetail)
     if (data?.Tracking__c) finalData.push(trackingumberDetail)
     let productHeaderDetail = { "": "Product Name", " ": "Product Qty", "  ": "Product Price" }
