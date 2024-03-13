@@ -20,18 +20,17 @@
     @apply w-full h-[50px] bg-[#000] text-white flex justify-center items-center uppercase text-[12px] font-[500] tracking-[1.2px];
     font-family: "Montserrat-500";
     gap: 50px;
-    
-    @media(max-width:768.98px){
+
+    @media (max-width: 768.98px) {
       display: none;
-      
     }
-    @media(max-width:1350.98px){
+    @media (max-width: 1350.98px) {
       gap: 30px;
     }
-    @media(max-width:1253.98px){
+    @media (max-width: 1253.98px) {
       gap: 20px;
     }
-      @media(max-width:1160.98px){
+    @media (max-width: 1160.98px) {
       height: auto;
       min-height: 50px;
     }
