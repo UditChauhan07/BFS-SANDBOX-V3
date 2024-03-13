@@ -208,29 +208,32 @@ function Product() {
   };
   const generateOrderHandler = () => {
     let begValue = fetchBeg();
-    if (begValue?.Account?.id && begValue?.Manufacturer?.id && Object.values(begValue.orderList).length > 0) {
-      let bagPrice = 0;
-      let bagTesterPrice = 0;
-      Object.values(begValue.orderList).map((product) => {
-        let productPriceStr = product.product.salesPrice;
-        let productQuantity = product.quantity;
-        let productPrice = parseInt(productPriceStr || 0);
-        bagPrice += productPrice * productQuantity;
-      });
-      setAlert(0);
-      if (productList.discount.MinOrderAmount > bagPrice) {
-        setAlert(1);
-      } else {
-        if (testerInBag && productList.discount.testerproductLimit > bagPrice) {
-          setAlert(2);
+    if(begValue.Account.id == localStorage.getItem("AccountId__c")&&begValue.Manufacturer.id == localStorage.getItem("ManufacturerId__c")){
+      if (begValue?.Account?.id && begValue?.Manufacturer?.id && Object.values(begValue.orderList).length > 0) {
+        let bagPrice = 0;
+        Object.values(begValue.orderList).map((product) => {
+          let productPriceStr = product.product.salesPrice;
+          let productQuantity = product.quantity;
+          let productPrice = parseInt(productPriceStr || 0);
+          bagPrice += productPrice * productQuantity;
+        });
+        setAlert(0);
+        if (productList.discount.MinOrderAmount > bagPrice) {
+          setAlert(1);
         } else {
-          navigate("/my-bag");
+          if (testerInBag && productList.discount.testerproductLimit > bagPrice) {
+            setAlert(2);
+          } else {
+            navigate("/my-bag");
+          }
         }
+        setEmptyBag(false);
+      } else {
+        setEmptyBag(true);
+        setAlert(0);
       }
-      setEmptyBag(false);
-    } else {
-      setEmptyBag(true);
-      setAlert(0);
+    }else{
+      navigate("/my-bag");
     }
   };
   useEffect(() => {

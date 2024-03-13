@@ -15,13 +15,19 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
   const fileInputRef = useRef(null);
   const [errorOnlist, setErrorOnList] = useState(0);
   const [openModal, setOpenModal] = useState(false);
+  const [orderType, setorderType] = useState("wholesale")
+  let orderTypeList = [
+    { value: "wholesale", label: "Whole Sales" },
+    { value: "preorder", label: "Pre-Order" },
+  ]
   const navigate = useNavigate();
   const CheckError = (data) => {
     let totalQty = 0;
     let errorCount = data.reduce((accumulator, item) => {
       let productDetails = getProductData(item["Product Code"] || item["ProductCode"] || null);
       if (item?.Quantity) {
-        let error = !item?.Quantity || !Number.isInteger(item?.Quantity) || item?.Quantity < (productDetails.Min_Order_QTY__c || 0) || !productDetails?.Name ||(productDetails.Min_Order_QTY__c>0 && item?.Quantity % productDetails.Min_Order_QTY__c !== 0);
+        let error = !item?.Quantity || !Number.isInteger(item?.Quantity) || item?.Quantity < (productDetails.Min_Order_QTY__c || 0) || !productDetails?.Name || (productDetails.Min_Order_QTY__c > 0 && item?.Quantity % productDetails.Min_Order_QTY__c !== 0);
+        orderType == "preorder" ? (error == false) ? error = productDetails?.Category__c?.toLowerCase() != orderType.toLowerCase() : error = error : (error == false) ? error = productDetails?.Category__c?.toLowerCase() == "preorder" : error = error
         return accumulator + (error ? 1 : 0);
       } else {
         totalQty += 1;
@@ -71,7 +77,7 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
     if (!productCode) return {};
     let found = productList.find((item) => item.ProductCode == productCode);
     if (!found) return {};
-    let retailerPirce = found.usdRetail__c.trim().replace('$','').replace(',','')
+    let retailerPirce = found.usdRetail__c.trim().replace('$', '').replace(',', '')
     if (found?.Category__c === "TESTER") {
       let salesPrice = retailerPirce.includes("$")
         ? (+retailerPirce.substring(1) - (discount?.testerMargin / 100) * +retailerPirce.substring(1)).toFixed(2)
@@ -95,70 +101,73 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
   };
   const submitForm = () => {
     setOrders({});
-    GetAuthData()
-      .then((user) => {
-        let orderList = [];
-        let orderType = "Wholesale Number";
-        let productCount = 0;
-        data.map((element) => {
-          if (element.Quantity && Number.isInteger(element?.Quantity)) {
-            let product = getProductData(element["Product Code"] || element["ProductCode"]);
-            if (product?.Id && element?.Quantity >= (product.Min_Order_QTY__c || 0) && (!product.Min_Order_QTY__c ||element?.Quantity % product.Min_Order_QTY__c === 0)) {
-              productCount++;
-              if (product.Category__c == "PREORDER") orderType = "Pre Order";
-              let item = {};
-              let discountAmount = discount?.margin;
-              if (product.Category__c === "TESTER") {
-                let salesPrice = product.usdRetail__c.includes("$")
-                  ? (+product.usdRetail__c.substring(1) - (discount?.testerMargin / 100) * +product.usdRetail__c.substring(1)).toFixed(2)
-                  : (+product.usdRetail__c - (discount?.testerMargin / 100) * +product.usdRetail__c).toFixed(2);
-                item.price = salesPrice;
-                item.discount = discount?.testerMargin;
-                discountAmount = discount?.testerMargin;
-              } else if (product.Category__c === "Samples") {
-                let salesPrice = product.usdRetail__c.includes("$")
-                  ? (+product.usdRetail__c.substring(1) - (discount?.sample / 100) * +product.usdRetail__c.substring(1)).toFixed(2)
-                  : (+product.usdRetail__c - (discount?.sample / 100) * +product.usdRetail__c).toFixed(2);
-                item.price = salesPrice;
-                item.discount = discount?.sample;
-                discountAmount = discount?.sample;
-              } else {
-                let salesPrice = product.usdRetail__c.includes("$")
-                  ? (+product.usdRetail__c.substring(1) - (discount?.margin / 100) * +product.usdRetail__c.substring(1)).toFixed(2)
-                  : (+product.usdRetail__c - (discount?.margin / 100) * +product.usdRetail__c).toFixed(2);
-                item.price = salesPrice;
-                item.discount = discount?.margin;
-              }
-              item.ProductCode = element["Product Code"] || element["ProductCode"];
-              item.qty = element["Quantity"];
-              addOrder(product, element["Quantity"], discount);
+    let productCount = 0;
+    data.map((element) => {
+      if (element.Quantity && Number.isInteger(element?.Quantity)) {
+        let product = getProductData(element["Product Code"] || element["ProductCode"]);
+        if (orderType == "preorder" ? product?.Category__c?.toLowerCase() == "preorder" : product?.Category__c?.toLowerCase() != "preorder") {
+          if (product?.Id && element?.Quantity >= (product.Min_Order_QTY__c || 0) && (!product.Min_Order_QTY__c || element?.Quantity % product.Min_Order_QTY__c === 0)) {
+            productCount++;
+            let item = {};
+            let discountAmount = discount?.margin;
+            if (product.Category__c === "TESTER") {
+              let salesPrice = product.usdRetail__c.includes("$")
+                ? (+product.usdRetail__c.substring(1) - (discount?.testerMargin / 100) * +product.usdRetail__c.substring(1)).toFixed(2)
+                : (+product.usdRetail__c - (discount?.testerMargin / 100) * +product.usdRetail__c).toFixed(2);
+              item.price = salesPrice;
+              item.discount = discount?.testerMargin;
+              discountAmount = discount?.testerMargin;
+            } else if (product.Category__c === "Samples") {
+              let salesPrice = product.usdRetail__c.includes("$")
+                ? (+product.usdRetail__c.substring(1) - (discount?.sample / 100) * +product.usdRetail__c.substring(1)).toFixed(2)
+                : (+product.usdRetail__c - (discount?.sample / 100) * +product.usdRetail__c).toFixed(2);
+              item.price = salesPrice;
+              item.discount = discount?.sample;
+              discountAmount = discount?.sample;
+            } else {
+              let salesPrice = product.usdRetail__c.includes("$")
+                ? (+product.usdRetail__c.substring(1) - (discount?.margin / 100) * +product.usdRetail__c.substring(1)).toFixed(2)
+                : (+product.usdRetail__c - (discount?.margin / 100) * +product.usdRetail__c).toFixed(2);
+              item.price = salesPrice;
+              item.discount = discount?.margin;
             }
+            item.ProductCode = element["Product Code"] || element["ProductCode"];
+            item.qty = element["Quantity"];
+            addOrder(product, element["Quantity"], discount);
           }
-        });
-        if (productCount) {
-          // navigate("/my-bag");
-          let currentUrl = window.location.origin;
-          let url = currentUrl + "/my-bag";
-          window.location.href = url
-        } else {
-          alert("Product list not found");
         }
-      })
-      .catch((error) => {
-        console.error({ error });
-      });
+      }
+    });
+    if (productCount) {
+      let currentUrl = window.location.origin;
+      let url = currentUrl + "/my-bag";
+      window.location.href = url
+    } else {
+      alert("Product list not found");
+    }
   };
   useEffect(() => {
     if (errorOnlist > 0) {
       setOpenModal(true);
     }
-  }, [errorOnlist]);
+  }, [errorOnlist, orderType]);
   if (!showTable) {
     return (
       <div>
         {/* <input type="file" ref={fileInputRef} accept=".xlsx,.xls" onChange={handleFileChange} /> */}
         <form className="d-flex justify-content-between">
-          <input type="file" ref={fileInputRef} accept=".csv" onChange={handleFileChange} />
+          <div className="d-flex">
+            <div className="d-flex flex-column">
+              <label for="ordertTypeId" style={{ fontSize: '11px', textAlign: 'start' }}>Order Type</label>
+              <select id="ordertTypeId" onChange={(e) => { setorderType(e.target.value) }}>
+                {orderTypeList.map((element) => <option value={element.value} selected={element.value == orderType}>{element.label}</option>)}
+              </select>
+            </div>
+            <div className="d-flex flex-column ml-2">
+              <label for="orderFile" style={{ fontSize: '11px', textAlign: 'start' }}>File</label>
+              <input type="file" id="orderFile" ref={fileInputRef} accept=".csv" onChange={handleFileChange} />
+            </div>
+          </div>
           <input
             type="reset"
             value={"reset"}
@@ -237,6 +246,7 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
                   let productDetails = getProductData(item["Product Code"] || item['ProductCode'] || null);
                   if (item?.Quantity) {
                     let error = !item?.Quantity || !Number.isInteger(item?.Quantity) || item?.Quantity < (productDetails.Min_Order_QTY__c || 0) || !productDetails?.Name || productDetails.Min_Order_QTY__c ? item?.Quantity % productDetails.Min_Order_QTY__c !== 0 : false;
+                    orderType == "preorder" ? (error == false) ? error = productDetails?.Category__c?.toLowerCase() != orderType.toLowerCase() : error = error : (error == false) ? error = productDetails?.Category__c?.toLowerCase() == "preorder" : error = error
                     return (
                       <tr key={index}>
                         <td style={error ? { background: "red", color: "#fff" } : {}}>{productDetails?.Name || "---"}</td>
@@ -254,7 +264,7 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
                 })}
               </tbody>
             </table>
-            {console.log({errorOnlist})}
+            {console.log({ errorOnlist })}
             {errorOnlist && data.length > 0 && errorOnlist == data.length ? (
               <div className="flex flex-column justify-center items-center py-4 w-full lg:min-h-[300px] xl:min-h-[380px]">
                 <div>Products with zero quantity are uploaded! </div>
