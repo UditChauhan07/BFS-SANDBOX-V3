@@ -9,9 +9,8 @@ import { ShareDrive, getOrderDetailsBasedId, getOrderDetailsInvoice, getProductI
 import { MdOutlineDownload } from "react-icons/md";
 import LoaderV2 from "../../loader/v2";
 import ProductDetails from "../../../pages/productDetails";
-import "./Print.module.css"
 
-function MyBagFinal({setOrderDetail}) {
+function MyBagFinal({ setOrderDetail }) {
   const [OrderData, setOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -158,13 +157,23 @@ function MyBagFinal({setOrderDetail}) {
 
   return (
     <div>
+      <style>
+        {`@media print {
+  .MainInnerPrint {
+    height: unset;
+  }
+  .filter-container,.d-none-print {
+    display: none;
+  }
+}`}
+      </style>
       <section>
         <div className=" mt-4">
           <div id="orderDetailerContainer">
             <div className={Styles.MyBagFinalTop}>
               <div className={Styles.MyBagFinalRight}>
                 <svg
-                data-html2canvas-ignore
+                  data-html2canvas-ignore
                   xmlns="http://www.w3.org/2000/svg"
                   style={{ cursor: "pointer" }}
                   width="24"
@@ -172,6 +181,7 @@ function MyBagFinal({setOrderDetail}) {
                   viewBox="0 0 24 16"
                   fill="none"
                   onClick={handleback}
+                  className="d-none-print"
                 >
                   <path
                     d="M8.94284 2.27615C9.46349 1.75544 9.46349 0.911229 8.94284 0.390521C8.42213 -0.130174 7.57792 -0.130174 7.05721 0.390521L2.3911 5.05666C2.39092 5.05684 2.39128 5.05648 2.3911 5.05666L0.390558 7.05721C0.153385 7.29442 0.024252 7.59868 0.00313201 7.90895C-0.00281464 7.99562 -0.000321319 8.08295 0.010852 8.17002C0.0431986 8.42308 0.148118 8.66868 0.325638 8.87322C0.348651 8.89975 0.372651 8.92535 0.397585 8.94989L7.05721 15.6095C7.57792 16.1302 8.42213 16.1302 8.94284 15.6095C9.46349 15.0888 9.46349 14.2446 8.94284 13.7239L4.55231 9.33335H22.6667C23.4031 9.33335 24 8.73642 24 8.00002C24 7.26362 23.4031 6.66668 22.6667 6.66668H4.55231L8.94284 2.27615Z"
