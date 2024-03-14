@@ -20,54 +20,6 @@ import { UserIcon } from "../../lib/svg";
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const monthList = [
   {
-    name: "January - 2023",
-    value: "2023|1",
-  },
-  {
-    name: "February - 2023",
-    value: "2023|2",
-  },
-  {
-    name: "March - 2023",
-    value: "2023|3",
-  },
-  {
-    name: "April - 2023",
-    value: "2023|4",
-  },
-  {
-    name: "May - 2023",
-    value: "2023|5",
-  },
-  {
-    name: "June - 2023",
-    value: "2023|6",
-  },
-  {
-    name: "July - 2023",
-    value: "2023|7",
-  },
-  {
-    name: "August - 2023",
-    value: "2023|8",
-  },
-  {
-    name: "September - 2023",
-    value: "2023|9",
-  },
-  {
-    name: "October - 2023",
-    value: "2023|10",
-  },
-  {
-    name: "November - 2023",
-    value: "2023|11",
-  },
-  {
-    name: "December - 2023",
-    value: "2023|12",
-  },
-  {
     name: "January - 2024",
     value: "2024|1",
   },
@@ -292,17 +244,16 @@ function Dashboard({ dashboardData }) {
     // setIsLoaded(true);
     GetAuthData()
       .then((user) => {
-        // user.Sales_Rep__c = "00530000005AdvsAAC";
         setSalesRepId(user.Sales_Rep__c);
         if (headers) {
           user.headers = headers;
         }
         getDashboardata({ user })
           .then((dashboard) => {
-            let oldSalesAmount = dashboard?.oldSalesAmount||0;
-            let currentSalesAmount = dashboard.monthlySalesRepData?.[user.Sales_Rep__c]?.sale||0
-            let growth = parseInt(((currentSalesAmount-oldSalesAmount)/oldSalesAmount)*100)
-            setBox({ RETAILERS: dashboard?.activeAccount || 0, GROWTH: growth||0, ORDERS: dashboard?.totalOrder || 0, REVENUE: dashboard?.totalPrice || 0, TARGET: dashboard.salesRepTarget || 0 })
+            let oldSalesAmount = dashboard?.oldSalesAmount || 0;
+            let currentSalesAmount = dashboard.monthlySalesRepData?.[user.Sales_Rep__c]?.sale || 0
+            let growth = parseInt(((currentSalesAmount - oldSalesAmount) / oldSalesAmount) * 100)
+            setBox({ RETAILERS: dashboard?.activeAccount || 0, GROWTH: growth || 0, ORDERS: dashboard?.totalOrder || 0, REVENUE: dashboard?.totalPrice || 0, TARGET: dashboard.salesRepTarget || 0 })
             let tempValue = (dashboard?.totalPrice / dashboard.salesRepTarget * 100) <= 100 ? dashboard?.totalPrice / dashboard.salesRepTarget * 100 : 100;
             setValue(tempValue)
             setNeedle_data([
@@ -551,7 +502,7 @@ function Dashboard({ dashboardData }) {
         <div className="row mt-4 justify-between">
           <div className="col-lg-6 my-2">
             <div className={Styles.DashboardWidth}>
-              <p className={Styles.Tabletext}>Month till date(MTD): Sales By Rep</p>
+              <p className={Styles.Tabletext}>Month to date(MTD): Sales By Rep</p>
               <div className={Styles.goaltable}>
                 <div className="">
                   <div className={Styles.table_scroll}>
@@ -574,17 +525,19 @@ function Dashboard({ dashboardData }) {
                             <tbody>
                               {Monthlydataa.data?.map((e) => {
                                 // console.log("e.....", e);
-                                totalTargetForMTDSalesRep = Number(e?.target || 0) + Number(totalTargetForMTDSalesRep);
+                                totalTargetForMTDSalesRep = Number(e?.total || 0) + Number(totalTargetForMTDSalesRep);
                                 totalAmountForMTDSalesRep = Number(e.sale || 0) + Number(totalAmountForMTDSalesRep);
                                 totalDiffForMTDSalesRep = Number(e?.diff || 0) + Number(totalDiffForMTDSalesRep);
+                                let targetDiff = e.total - e.target
                                 return (
                                   <tr key={e}>
                                     <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.name }) }} style={{ cursor: 'pointer' }}>
                                       <UserIcon /> {e.name}
                                     </td>
-                                    <td className={Styles.tabletd}>${formatNumber(e?.target || 0)}</td>
+                                    <td className={Styles.tabletd}>${formatNumber(e?.total || 0)} {targetDiff && e.target ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.target)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.target)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null}</td>
                                     <td className={Styles.tabletd}>${formatNumber(e.sale || 0)}</td>
-                                    <td className={Styles.tabletd}>${formatNumber(e?.diff || 0)}</td>
+                                    {/* <td className={Styles.tabletd}>${formatNumber(e?.diff || 0)}</td> */}
+                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${e.total < e.sale ? '+' + formatNumber(e.sale - e.total || 0) : formatNumber(e.total - e.sale || 0)}</span><span className={e.total < e.sale ? Styles.matchHolder : Styles.shortHolder}>{e.total < e.sale ? 'MATCH' : 'SHORT'}</span></td>
                                   </tr>
                                 );
                               })}
@@ -619,7 +572,7 @@ function Dashboard({ dashboardData }) {
           {/* Yearly SALESBYREP */}
           <div className="col-lg-6 my-2">
             <div className={Styles.DashboardWidth}>
-              <p className={Styles.Tabletext}>Year till date(YTD): Sales By Rep</p>
+              <p className={Styles.Tabletext}>Year to date(YTD): Sales By Rep</p>
               <div className={Styles.goaltable}>
                 <div className="">
                   <div className={Styles.table_scroll}>
@@ -641,18 +594,19 @@ function Dashboard({ dashboardData }) {
                           {Yearlydataa.data ? (
                             <tbody>
                               {Yearlydataa.data?.map((e, index) => {
-                                totalTargetForYTDSalesRep = Number(e?.target || 0) + Number(totalTargetForYTDSalesRep);
+                                totalTargetForYTDSalesRep = Number(e?.total || 0) + Number(totalTargetForYTDSalesRep);
                                 totalAmountForYTDSalesRep = Number(e.sale || 0) + Number(totalAmountForYTDSalesRep);
                                 totalDiffForYTDSalesRep = Number(e?.diff || 0) + Number(totalDiffForYTDSalesRep);
-
+                                let targetDiff = e.total - e.target
                                 return (
                                   <tr key={e}>
                                     <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.name }) }} style={{ cursor: 'pointer' }}>
                                       <UserIcon /> {e.name}
                                     </td>
-                                    <td className={Styles.tabletd}>${formatNumber(e.target)}</td>
+                                    <td className={Styles.tabletd}>${formatNumber(e?.total || 0)} {targetDiff && e.target ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.target)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.target)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null}</td>
                                     <td className={Styles.tabletd}>${formatNumber(e.sale)}</td>
-                                    <td className={Styles.tabletd}>${formatNumber(e.diff)}</td>
+                                    {/* <td className={Styles.tabletd}>${formatNumber(e.diff)}</td> */}
+                                    <td className={`${Styles.tabletd} ${Styles.flex}`}>${e.total < e.sale ? '+' + formatNumber(e.sale - e.total || 0) : formatNumber(e.total - e.sale || 0)}<span className={e.total < e.sale ? Styles.matchHolder : Styles.shortHolder}>{e.total < e.sale ? 'MATCH' : 'SHORT'}</span></td>
                                   </tr>
                                 );
                               })}
@@ -689,7 +643,7 @@ function Dashboard({ dashboardData }) {
           {/* monthly data goal by brand*/}
           <div className="col-lg-6 col-sm-12 my-2">
             <div className={Styles.DashboardWidth}>
-              <p className={Styles.Tabletext}>Month till date(MTD): Goal by Brand</p>
+              <p className={Styles.Tabletext}>Month to date(MTD): Goal by Brand</p>
               <div className={Styles.goaltable}>
                 <div className={Styles.table_scroll}>
                   <table className="table table-borderless ">
@@ -710,17 +664,18 @@ function Dashboard({ dashboardData }) {
                           {brandData.data.length ? (
                             <>
                               {brandData.data?.map((e, i) => {
-                                totalTargetForMTDGoalBrand = Number(e?.target || 0) + Number(totalTargetForMTDGoalBrand);
+                                totalTargetForMTDGoalBrand = Number(e?.total || 0) + Number(totalTargetForMTDGoalBrand);
                                 totalAmountForMTDGoalBrand = Number(e.sale || 0) + Number(totalAmountForMTDGoalBrand);
-                                totalDiffForMTDGoalBrand = Number((Number(e.target - e.sale || 0)).toFixed(0)) + Number(totalDiffForMTDGoalBrand);
+                                totalDiffForMTDGoalBrand = Number((Number(e.total - e.sale || 0)).toFixed(0)) + Number(totalDiffForMTDGoalBrand);
                                 // console.log({e,i});
+                                let targetDiff = e.total - e.target
                                 return (
                                   <tr key={e}>
                                     <td className={` ps-3 ${Styles.tabletd}`} onClick={() => { sendDataTargetHandler({ manufacturerId: e.id }) }} style={{ cursor: 'pointer' }}>{e.name}</td>
                                     {/* <td className={Styles.tabletd}>{e.totalOrder}</td> */}
-                                    <td className={Styles.tabletd}>${formatNumber(e.target)}</td>
+                                    <td className={Styles.tabletd}>${formatNumber(e?.total || 0)} {targetDiff && e.target ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.target)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.target)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null}</td>
                                     <td className={Styles.tabletd}>${formatNumber(e.sale)}</td>
-                                    <td className={Styles.tabletd}>${formatNumber(e.target - e.sale || 0)}</td>
+                                    <td className={`${Styles.tabletd} ${Styles.flex}`}>${e.total < e.sale ? '+' + formatNumber(e.sale - e.total || 0) : formatNumber(e.total - e.sale || 0)}<span className={e.total < e.sale ? Styles.matchHolder : Styles.shortHolder}>{e.total < e.sale ? 'MATCH' : 'SHORT'}</span></td>
                                   </tr>
                                 );
                               })}
@@ -942,60 +897,60 @@ function Dashboard({ dashboardData }) {
         <div className="row mt-2 g-4">
           <div className="col-lg-3 col-md-6 col-sm-6">
             <div className={Styles.dashbottom}>
-              {!isLoading?<ContentLoader/>
-              :<>
-              <div className={`text-center  ${Styles.active}`}>
-                <img src={img1} alt="" className={`text-center ${Styles.iconactive}`} />
-              </div>
-              <div className="">
-                <p className={`text-end ${Styles.activetext}`}>ACTIVE RETAILERS</p>
-                <h1 className={`text-end ${Styles.activetext1}`}>{box.RETAILERS}</h1>
-              </div>
-              </>}
+              {!isLoading ? <ContentLoader />
+                : <>
+                  <div className={`text-center  ${Styles.active}`}>
+                    <img src={img1} alt="" className={`text-center ${Styles.iconactive}`} />
+                  </div>
+                  <div className="">
+                    <p className={`text-end ${Styles.activetext}`}>ACTIVE RETAILERS</p>
+                    <h1 className={`text-end ${Styles.activetext1}`}>{box.RETAILERS}</h1>
+                  </div>
+                </>}
             </div>
           </div>
           <div className="col-lg-3 col-md-6 col-sm-6">
             <div className={Styles.dashbottom}>
-            {!isLoading?<ContentLoader/>
-              :<>
-              <div className={`text-center  ${Styles.active}`}>
-                <img src={img2} alt="" className={`text-center ${Styles.iconactive}`} />
-              </div>
-              <div className="">
-                <p className={`text-end ${Styles.activetext}`}>GROWTH 2023 VS 2024</p>
-                <h1 className={`text-end ${Styles.activetext1}`}>
-                  {box.GROWTH}<span>%</span>
-                </h1>
-              </div>
-              </>}
+              {!isLoading ? <ContentLoader />
+                : <>
+                  <div className={`text-center  ${Styles.active}`}>
+                    <img src={img2} alt="" className={`text-center ${Styles.iconactive}`} />
+                  </div>
+                  <div className="">
+                    <p className={`text-end ${Styles.activetext}`}>GROWTH 2023 VS 2024</p>
+                    <h1 className={`text-end ${Styles.activetext1}`}>
+                      {box.GROWTH}<span>%</span>
+                    </h1>
+                  </div>
+                </>}
             </div>
           </div>
           <div className="col-lg-3 col-md-6 col-sm-6">
             <div className={Styles.dashbottom}>
-            {!isLoading?<ContentLoader/>
-              :<>
-              <div className={`text-center  ${Styles.active}`}>
-                <img src={img3} alt="" className={`text-center ${Styles.iconactive3}`} />
-              </div>
-              <div className="">
-                <p className={`text-end ${Styles.activetext}`}>TOTAL NO. OF ORDERS</p>
-                <h1 className={`text-end ${Styles.activetext1}`}>{box.ORDERS >= 1000 ? Number((Number(box.ORDERS) / 1000).toFixed(0)) + 'K' : box.ORDERS}</h1>
-              </div>
-              </>}
+              {!isLoading ? <ContentLoader />
+                : <>
+                  <div className={`text-center  ${Styles.active}`}>
+                    <img src={img3} alt="" className={`text-center ${Styles.iconactive3}`} />
+                  </div>
+                  <div className="">
+                    <p className={`text-end ${Styles.activetext}`}>TOTAL NO. OF ORDERS</p>
+                    <h1 className={`text-end ${Styles.activetext1}`}>{box.ORDERS >= 1000 ? Number((Number(box.ORDERS) / 1000).toFixed(0)) + 'K' : box.ORDERS}</h1>
+                  </div>
+                </>}
             </div>
           </div>
           <div className="col-lg-3 col-md-6 col-sm-6">
             <div className={Styles.dashbottom}>
-            {!isLoading?<ContentLoader/>
-              :<>
-              <div className={`text-center  ${Styles.active}`}>
-                <img src={img4} alt="" className={`text-center ${Styles.iconactive4}`} />
-              </div>
-              <div className="">
-                <p className={`text-end ${Styles.activetext}`}>REVENUE</p>
-                <h1 className={`text-end ${Styles.activetext1}`}>${formatNumber(box.REVENUE)}</h1>
-              </div>
-              </>}
+              {!isLoading ? <ContentLoader />
+                : <>
+                  <div className={`text-center  ${Styles.active}`}>
+                    <img src={img4} alt="" className={`text-center ${Styles.iconactive4}`} />
+                  </div>
+                  <div className="">
+                    <p className={`text-end ${Styles.activetext}`}>REVENUE</p>
+                    <h1 className={`text-end ${Styles.activetext1}`}>${formatNumber(box.REVENUE)}</h1>
+                  </div>
+                </>}
             </div>
           </div>
         </div>

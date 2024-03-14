@@ -23,7 +23,47 @@
   line-height: 32px;
   letter-spacing: 1.12px;
 }
-
+.flex {
+  display: flex;
+  flex-direction: column;
+}
+.shortHolder {
+  font-size: 8px;
+  border-radius: 5px;
+  font-weight: bolder;
+  background: red;
+  color: #fff;
+  text-transform: uppercase;
+  line-height: 8px;
+  text-align: center;
+  padding: 2px;
+  width: fit-content;
+  border: 1px solid red;
+  letter-spacing: 1px;
+  margin-left: 15%;
+}
+.calHolder {
+  letter-spacing: 1px;
+  font-size: 9px;
+  line-height: 9px;
+  padding: 0;
+  margin: 0;
+}
+.matchHolder {
+  font-weight: bolder;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  font-size: 8px;
+  background: green;
+  color: #fff;
+  text-transform: uppercase;
+  line-height: 8px;
+  text-align: center;
+  padding: 2px;
+  width: fit-content;
+  border: 1px solid green;
+  margin-left: 15%;
+}
 .Tabletext_head {
   color: #000;
   font-family: Arial;
@@ -57,7 +97,7 @@
   top: 0rem;
   font-size: 20px;
 }
-.stickyBottom{
+.stickyBottom {
   position: sticky;
   bottom: 0rem;
 }
