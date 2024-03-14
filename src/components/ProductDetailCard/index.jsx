@@ -32,10 +32,10 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
                 <div className="col-8 ml-4 product-card-element-holder" >
                     <h2 style={{ textAlign: 'start' }}>{product?.data?.Name}</h2>
                     <p style={{ textAlign: 'start' }}><b>By</b>, {product?.data?.ManufacturerName__c}</p>
-                    <p style={{ textAlign: 'start' }}>Code Number: {product?.data?.ProductCode},</p>
-                    <p style={{ textAlign: 'start' }}>UPC Number: {product?.data?.ProductUPC__c},</p>
+                    <p style={{ textAlign: 'start' }}>Product Code: {product?.data?.ProductCode},</p>
+                    <p style={{ textAlign: 'start' }}>Product UPC: {product?.data?.ProductUPC__c},</p>
                     {product?.data?.Description && <p style={{ textAlign: 'start' }}>{product?.data?.Description}</p>}
-                    <p style={{ textAlign: 'start' }}>Min Qty to buy: {product?.data?.Min_Order_QTY__c}</p>
+                    <p style={{ textAlign: 'start' }}>Min Order QTY: {product?.data?.Min_Order_QTY__c}</p>
                     {product?.discount ? <p style={{ textAlign: 'start' }}><span className={Styles.crossed}>{product?.data?.usdRetail__c}</span>&nbsp;${salesPrice}</p> : <p style={{ textAlign: 'start' }}>{product?.data?.usdRetail__c}</p>}
                     {product?.data?.Category__c && <p style={{ textAlign: 'start' }}>Category: {product?.data?.Category__c}</p>}
                     {product.data?.Collection__c && <p style={{ textAlign: 'start' }}>Collection: {product.data?.Collection__c}</p>}
@@ -58,30 +58,32 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
                     </>}
                 </div>
             </div>
-            {product.data?.Full_Product_Description__c && <p style={{ textAlign: 'start' }}>Product Full Description: {product.data?.Full_Product_Description__c}</p>}
-            {product.data?.Desired_Result__c && <div dangerouslySetInnerHTML={{ __html: `Product Desired Result: ${product.data?.Desired_Result__c}` }} />}
-            {product.data?.Key_Ingredients__c && <p style={{ textAlign: 'start' }}>Product Basic Ingredients List: {product.data?.Key_Ingredients__c}</p>}
-            {product.data?.Full_Ingredients_List__c && <p style={{ textAlign: 'start' }}>Product Full Ingredients List: {product.data?.Full_Ingredients_List__c}</p>}
-            {product.data?.Size_Volume_Weight__c && <p style={{ textAlign: 'start' }}>Product Weight: {product.data?.Size_Volume_Weight__c}</p>}
-            {product.data?.Skin_Tone__c && <p style={{ textAlign: 'start' }}>Product Tone: {product.data?.Skin_Tone__c}</p>}
-            {product.data?.Skin_Type__c && <p style={{ textAlign: 'start' }}>Product Type: {product.data?.Skin_Type__c}</p>}
-            {product.data?.Travel_or_Full_Size__c && <p style={{ textAlign: 'start' }}>Product Size: {product.data?.Travel_or_Full_Size__c}</p>}
-            {product?.data?.Newness_Alias__c && <p style={{ textAlign: 'start' }}>Product Newness Name: {product?.data?.Newness_Alias__c},</p>}
-            <p style={{ textAlign: 'start' }}>Product Season: {product?.data?.Season__c},</p>
-            <p style={{ textAlign: 'start' }}>Product Create Date: {new Date(product?.data?.CreatedDate).toDateString()}</p>
-            <p style={{ textAlign: 'start' }}>Product Launch Date: {product?.data?.Launch_Date__c}</p>
-            <p style={{ textAlign: 'start' }}>Product Ship Date: {product?.data?.Ship_Date__c}</p>
+            {(product.data?.Full_Product_Description__c && product.data?.Full_Product_Description__c != "N/A") && <p style={{ textAlign: 'start' }}>Full Product Description: {product.data?.Full_Product_Description__c}</p>}
+            {(product.data?.Desired_Result__c && product.data?.Desired_Result__c != "N/A") && <div dangerouslySetInnerHTML={{ __html: `Desired Result: ${product.data?.Desired_Result__c}` }} />}
+            {(product.data?.Key_Ingredients__c && product.data?.Key_Ingredients__c != "N/A") && <p style={{ textAlign: 'start' }}>Key Ingredients: {product.data?.Key_Ingredients__c}</p>}
+            {(product.data?.Full_Ingredients_List__c && product.data?.Full_Ingredients_List__c != "N/A") && <p style={{ textAlign: 'start' }}>Full Ingredients List: {product.data?.Full_Ingredients_List__c}</p>}
+            {(product.data?.Size_Volume_Weight__c && product.data?.Size_Volume_Weight__c != "N/A") && <p style={{ textAlign: 'start' }}>Size (Volume/Weight): {product.data?.Size_Volume_Weight__c}</p>}
+            {(product.data?.Skin_Tone__c && product.data?.Skin_Tone__c != "N/A") && <p style={{ textAlign: 'start' }}>Skin Tone: {product.data?.Skin_Tone__c}</p>}
+            {(product.data?.Skin_Type__c && product.data?.Skin_Type__c != "N/A") && <p style={{ textAlign: 'start' }}>Skin Type: {product.data?.Skin_Type__c}</p>}
+            {(product.data?.Travel_or_Full_Size__c && product.data?.Travel_or_Full_Size__c != "N/A") && <p style={{ textAlign: 'start' }}>Product Size: {product.data?.Travel_or_Full_Size__c}</p>}
+            {(product?.data?.Newness_Alias__c && product.data?.Newness_Alias__c != "N/A") && <p style={{ textAlign: 'start' }}>Product Newness Name: {product?.data?.Newness_Alias__c},</p>}
+            {(product?.data?.Newness_Start_Date__c && product.data?.Newness_Start_Date__c != "N/A") && <p style={{ textAlign: 'start' }}>Product Newness Start Date: {product?.data?.Newness_Start_Date__c},</p>}
+            {(product?.data?.Newness_Report_End_Date__c && product.data?.Newness_Report_End_Date__c != "N/A") && <p style={{ textAlign: 'start' }}>Product Newness End Date: {product?.data?.Newness_Report_End_Date__c},</p>}
+            {(product?.data?.Season__c && product.data?.Season__c != "N/A") && <p style={{ textAlign: 'start' }}>Season: {product?.data?.Season__c},</p>}
+            {(product?.data?.CreatedDate && product.data?.CreatedDate != "N/A") && <p style={{ textAlign: 'start' }}>Create Date: {new Date(product?.data?.CreatedDate).toDateString()}</p>}
+            {(product?.data?.Launch_Date__c && product.data?.Launch_Date__c != "N/A") && <p style={{ textAlign: 'start' }}>Launch Date: {product?.data?.Launch_Date__c}</p>}
+            {(product?.data?.Ship_Date__c && product.data?.Ship_Date__c != "N/A") && <p style={{ textAlign: 'start' }}>Ship Date: {product?.data?.Ship_Date__c}</p>}
             {/* <p style={{ textAlign: 'start' }}>Product Edit Date: {new Date(product?.data?.LastModifiedDate).toDateString()},</p> */}
-            {(product.data?.Point_of_difference_1__c || product.data?.Point_of_difference_2__c || product.data?.Point_of_difference_3__c) && <p style={{ textAlign: 'start' }}>Point of Difference: <ol>
-                {product.data?.Point_of_difference_1__c && <li>{product.data?.Point_of_difference_1__c}</li>}
-                {product.data?.Point_of_difference_2__c && <li>{product.data?.Point_of_difference_2__c}</li>}
-                {product.data?.Point_of_difference_3__c && <li>{product.data?.Point_of_difference_3__c}</li>}
+            {(product.data?.Point_of_difference_1__c || product.data?.Point_of_difference_2__c || product.data?.Point_of_difference_3__c) && <p style={{ textAlign: 'start' }}><ol>
+                {product.data?.Point_of_difference_1__c && <li>Point of difference #1: {product.data?.Point_of_difference_1__c}</li>}
+                {product.data?.Point_of_difference_2__c && <li>Point of difference #2: {product.data?.Point_of_difference_2__c}</li>}
+                {product.data?.Point_of_difference_3__c && <li>Point of difference #3: {product.data?.Point_of_difference_3__c}</li>}
             </ol></p>}
-            {product.data?.Usage_and_Application_Tips__c && <p style={{ textAlign: 'start' }}>Usages Tups: {product.data?.Usage_and_Application_Tips__c}
+            {product.data?.Usage_and_Application_Tips__c && <p style={{ textAlign: 'start' }}>{product.data?.Usage_and_Application_Tips__c}
                 <ol>
-                    {product.data?.Use_it_with_Option_1__c && <li>{product.data?.Use_it_with_Option_1__c}</li>}
-                    {product.data?.Use_it_with_Option_2__c && <li>{product.data?.Use_it_with_Option_2__c}</li>}
-                    {product.data?.Use_it_with_Option_3__c && <li>{product.data?.Use_it_with_Option_3__c}</li>}
+                    {product.data?.Use_it_with_Option_1__c && <li>Use it with (Option #1): {product.data?.Use_it_with_Option_1__c}</li>}
+                    {product.data?.Use_it_with_Option_2__c && <li>Use it with (Option #2): {product.data?.Use_it_with_Option_2__c}</li>}
+                    {product.data?.Use_it_with_Option_3__c && <li>Use it with (Option #3): {product.data?.Use_it_with_Option_3__c}</li>}
                 </ol>
             </p>}
         </div>
