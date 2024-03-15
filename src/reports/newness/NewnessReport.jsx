@@ -260,7 +260,7 @@ const NewnessReport = () => {
             minWidth="95px"
           />
           <div className="d-flex gap-1 ">
-            <button className="border px-2 py-1 leading-tight  d-grid" onClick={sendApiCall}>
+            <button className="border px-2 py-1 leading-tight  d-grid ms-3" onClick={sendApiCall}>
             <SearchIcon fill="#fff" width={20} height={20}/>
             <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>search</small>
             </button>
