@@ -28,9 +28,8 @@ function MyBagFinal() {
   const [userData, setUserData] = useState(null)
   const [salesRepData,setSalesRepData] = useState({Name:null,Id:null})
   const [limitInput, setLimitInput] = useState("");
-
 const handleNameChange = (event) => {
-    const limit = 20;
+    const limit = 10;
     setLimitInput(event.target.value.slice(0, limit));
   };
   // .............

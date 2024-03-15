@@ -50,9 +50,9 @@ export function POGenerator() {
   let AcCode = getStrCode(beg?.Account?.name);
   let MaCode = getStrCode(beg?.Manufacturer?.name);
 
-  let orderCount = padNumber(count);
-  if (beg?.orderList?.[0]?.productType === "pre-order") return `PRE-${AcCode + MaCode}${currentDate + currentMonth}-${orderCount}`;
-  else return `${AcCode + MaCode}${currentDate + currentMonth}-${orderCount}`;
+  let orderCount = padNumber(count,true);
+  if (beg?.orderList?.[0]?.productType === "pre-order") return `PRE-${AcCode + MaCode}${currentDate + currentMonth}${orderCount}`;
+  else return `${AcCode + MaCode}${currentDate + currentMonth}${orderCount}`;
 }
 
 export function getStrCode(str) {
