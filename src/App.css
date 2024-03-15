@@ -365,6 +365,7 @@ input#searchright {
   line-height: 32px; /* 266.667% */
   letter-spacing: 1.2px;
   text-transform: uppercase;
+  margin-left: 35px;
 }
 .css-1jqq78o-placeholder,.css-qbdosj-Input,.css-1jqq78o-placeholder{
   color: black !important;
