@@ -48,7 +48,7 @@ const Slider = ({ data }) => {
           showArrows
           showIndicators={true}
           showStatus={false}
-          showThumbs={false}
+          // showThumbs={false}
         >
           {data?.length &&
             data.map((e,i) => {
