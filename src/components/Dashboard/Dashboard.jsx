@@ -761,7 +761,7 @@ function Dashboard({ dashboardData }) {
         </div>
 
         <div className="my-5">
-          <div className={`row mt-1 justify-between ${Styles.topPerform2}`}>
+          {((accountPerformance.data.length > 0 && accountPerformance?.isLoaded) || !accountPerformance?.isLoaded) && <div className={`row mt-1 justify-between ${Styles.topPerform2}`}>
             <div className={`col-lg-6 col-sm-12 ${Styles.top_perform1}`}>
               <p className={Styles.Tabletext}>Top Performing Accounts</p>
               <div className="row">
@@ -844,7 +844,7 @@ function Dashboard({ dashboardData }) {
                 )}
               </div>
             </div>
-          </div>
+          </div>}
         </div>
 
         <div className="row my-3">

@@ -642,3 +642,21 @@ export async function getSalesRepList({key}) {
     return data;
   }
 }
+
+export async function getSessionStatus({key,salesRepId}) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+  let response = await fetch(url + "v3/XbgheAKvG5EtkXs", {
+    method: "POST",
+    body: JSON.stringify({key,salesRepId}),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data;
+  }
+}
