@@ -26,7 +26,7 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
     return (
         <div className="container mt-4 product-card-element">
             <div className="d-flex">
-                <div className="col-4">
+                <div className={`${Styles.productimage} col-4`}>
                     {product?.data?.imgSrc.length > 0 ? <Slider data={product?.data?.imgSrc} /> : <Slider data={fakeProductSlider} />}
                 </div>
                 <div className="col-8 ml-4 product-card-element-holder" >
@@ -40,21 +40,23 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
                     {product?.data?.Category__c && <p style={{ textAlign: 'start' }}>Category: {product?.data?.Category__c}</p>}
                     {product.data?.Collection__c && <p style={{ textAlign: 'start' }}>Collection: {product.data?.Collection__c}</p>}
                     {(isAddtoCart && product?.discount) && <>
-
+                    <div className="d-flex gap-4">
+                        <QuantitySelector min={product?.data?.Min_Order_QTY__c || 0} value={orders[product?.data?.Id]?.quantity} onChange={(quantity) => {
+                                        onQuantityChange(product?.data, quantity, inputPrice || parseFloat(salesPrice), discount);
+                                    }} />
                         {orders[product?.data?.Id] ?
                             <>
-                                <p style={{ textAlign: 'start' }}>$<input type="number" className={Styles.priceInputHolder} value={inputPrice} placeholder={Number(inputPrice).toFixed(2)}
+                      <p style={{ textAlign: 'start' }}>$<input type="number" className={Styles.priceInputHolder} value={inputPrice} placeholder={Number(inputPrice).toFixed(2)}
                                     onChange={(e) => { onPriceChangeHander(product?.data, e.target.value < 10 ? e.target.value.replace("0", "").slice(0, 4) : e.target.value.slice(0, 4) || 0) }} id="limit_input" minLength={0} maxLength={4}
                                     name="limit_input" /></p>
                                 <div className="d-flex">
-                                    <QuantitySelector min={product?.data?.Min_Order_QTY__c || 0} value={orders[product?.data?.Id]?.quantity} onChange={(quantity) => {
-                                        onQuantityChange(product?.data, quantity, inputPrice || parseFloat(salesPrice), discount);
-                                    }} />
+                                    
                                     <button className="ml-4" onClick={() => onQuantityChange(product?.data, 0, inputPrice || parseFloat(salesPrice), discount)}><DeleteIcon fill="red" /></button>
                                 </div>
                                 <p className="mt-2" style={{ textAlign: 'start' }}>Total: <b>{inputPrice * orders[product?.data?.Id]?.quantity}</b></p>
                             </> :
                             <button className={Styles.button} onClick={() => onQuantityChange(product?.data, product?.data?.Min_Order_QTY__c || 1, inputPrice || parseFloat(salesPrice), discount)}>Add to cart</button>}
+                            </div>
                     </>}
                 </div>
             </div>
