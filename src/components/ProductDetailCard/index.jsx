@@ -2,6 +2,7 @@ import Styles from "./Styles.module.css";
 import { DeleteIcon } from "../../lib/svg";
 import QuantitySelector from "../BrandDetails/Accordion/QuantitySelector";
 import Slider from "../../utilities/Slider";
+
 import { Link } from "react-router-dom";
 const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuantityChange = null, isAddtoCart, AccountId }) => {
     if (!product) {
@@ -91,6 +92,72 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
                 </ol>
             </p>}
         </div>
-    )
-}
+      </div>
+      <hr></hr>
+      {product.data?.Full_Product_Description__c && product.data?.Full_Product_Description__c != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989"  }}><b style={{color:"black"}}>Full Product Description:</b> {product.data?.Full_Product_Description__c}</p>
+      )}
+      {product.data?.Desired_Result__c && product.data?.Desired_Result__c != "N/A" && (
+        <div style={{ textAlign: "start",color:"#898989" }}  dangerouslySetInnerHTML={{ __html: `Desired Result:${product.data?.Desired_Result__c}` }} />
+      )} 
+      {product.data?.Key_Ingredients__c && product.data?.Key_Ingredients__c != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989" }}><b style={{color:"black"}}>Key Ingredients:</b> {product.data?.Key_Ingredients__c}</p>
+      )}
+      {product.data?.Full_Ingredients_List__c && product.data?.Full_Ingredients_List__c != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989"  }}><b style={{color:"black"}}>Full Ingredients List:</b> {product.data?.Full_Ingredients_List__c}</p>
+      )}
+      {product.data?.Size_Volume_Weight__c && product.data?.Size_Volume_Weight__c != "N/A" && (
+        <p style={{ textAlign: "start" ,color:"#898989" }}><b style={{color:"black"}}>Size (Volume/Weight):</b> {product.data?.Size_Volume_Weight__c}</p>
+      )}
+      {product.data?.Skin_Tone__c && product.data?.Skin_Tone__c != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989"  }}><b style={{color:"black"}}>Skin Tone:</b> {product.data?.Skin_Tone__c}</p>
+      )}
+      {product.data?.Skin_Type__c && product.data?.Skin_Type__c != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989" }}><b style={{color:"black"}}>Skin Type:</b> {product.data?.Skin_Type__c}</p>
+      )}
+      {product.data?.Travel_or_Full_Size__c && product.data?.Travel_or_Full_Size__c != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989"  }}><b style={{color:"black"}}>Product Size:</b> {product.data?.Travel_or_Full_Size__c}</p>
+      )}
+      {product?.data?.Newness_Alias__c && product.data?.Newness_Alias__c != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989"  }}><b style={{color:"black"}}>Product Newness Name:</b> {product?.data?.Newness_Alias__c},</p>
+      )}
+      {product?.data?.Newness_Start_Date__c && product.data?.Newness_Start_Date__c != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989"  }}><b style={{color:"black"}}>Product Newness Start Date:</b> {product?.data?.Newness_Start_Date__c},</p>
+      )}
+      {product?.data?.Newness_Report_End_Date__c && product.data?.Newness_Report_End_Date__c != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989"  }}><b style={{color:"black"}}>Product Newness End Date:</b>{product?.data?.Newness_Report_End_Date__c} ,</p>
+      )}
+      {product?.data?.Season__c && product.data?.Season__c != "N/A" && <p style={{ textAlign: "start" }}>Season: {product?.data?.Season__c},</p>}
+      {product?.data?.CreatedDate && product.data?.CreatedDate != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989"  }}><b style={{color:"black"}}>Create Date:</b> {new Date(product?.data?.CreatedDate).toDateString()}</p>
+      )}
+      {product?.data?.Launch_Date__c && product.data?.Launch_Date__c != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989"  }}><b style={{color:"black"}}>Launch Date:</b> {product?.data?.Launch_Date__c}</p>
+      )}
+      {product?.data?.Ship_Date__c && product.data?.Ship_Date__c != "N/A" && (
+        <p style={{ textAlign: "start",color:"#898989"  }}><b style={{color:"black"}}>Ship Date:</b> {product?.data?.Ship_Date__c}</p>
+      )}
+      {/* <p style={{ textAlign: 'start' }}>Product Edit Date: {new Date(product?.data?.LastModifiedDate).toDateString()},</p> */}
+      {(product.data?.Point_of_difference_1__c || product.data?.Point_of_difference_2__c || product.data?.Point_of_difference_3__c) && (
+        <p style={{ textAlign: "start",color:"#898989"  }}>
+          <ol>
+            {product.data?.Point_of_difference_1__c && <li>Point of difference #1: {product.data?.Point_of_difference_1__c}</li>}
+            {product.data?.Point_of_difference_2__c && <li>Point of difference #2: {product.data?.Point_of_difference_2__c}</li>}
+            {product.data?.Point_of_difference_3__c && <li>Point of difference #3: {product.data?.Point_of_difference_3__c}</li>}
+          </ol>
+        </p>
+      )}
+      {product.data?.Usage_and_Application_Tips__c && (
+        <p style={{ textAlign: "start", color:"#898989"}}>
+          {product.data?.Usage_and_Application_Tips__c}
+          <ol>
+            {product.data?.Use_it_with_Option_1__c && <li>Use it with (Option #1): {product.data?.Use_it_with_Option_1__c}</li>}
+            {product.data?.Use_it_with_Option_2__c && <li>Use it with (Option #2): {product.data?.Use_it_with_Option_2__c}</li>}
+            {product.data?.Use_it_with_Option_3__c && <li>Use it with (Option #3): {product.data?.Use_it_with_Option_3__c}</li>}
+          </ol>
+        </p>
+      )}
+    </div>
+  );
+};
 export default ProductDetailCard;
