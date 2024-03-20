@@ -26,7 +26,7 @@ const TargetReport = () => {
     const [searchBy, setSearchBy] = useState("");
     let currentDate = new Date();
     const [year, setYear] = useState(currentDate.getFullYear());
-    const [preOrder, setPreOrder] = useState(true);
+    const [preOrder, setPreOrder] = useState(false);
     const [searchSaleBy, setSearchSaleBy] = useState("");
     const [salesRepList, setSalesRepList] = useState([]);
     const [exportToExcelState, setExportToExcelState] = useState(false);
