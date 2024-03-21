@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppLayout from "../components/AppLayout";
 import LaunchCalendar from "../components/LaunchCalendar/LaunchCalendar";
 import { FilterItem } from "../components/FilterItem";
@@ -7,6 +7,7 @@ import { MdOutlineDownload } from "react-icons/md";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { CloseButton } from "../lib/svg";
+import { GetAuthData, getMarketingCalendar } from "../lib/store";
 const fileExtension = ".xlsx";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 
@@ -836,6 +837,15 @@ const MarketingCalendar = () => {
     { value: "Re-Nutriv", label: "Re-Nutriv" },
     { value: "Victoria Beckham Beauty", label: "Victoria Beckham Beauty" },
   ];
+
+  // useEffect(()=>{
+  //   GetAuthData().then((user)=>{
+  //     console.log({user});
+  //     getMarketingCalendar({key:user.x_access_token}).then((productRes)=>{
+  //       console.log({productRes});
+  //     }).catch((e)=>console.log({e}))
+  //   }).catch((e)=>console.log({e}))
+  // },[])
   const [month, setMonth] = useState("");
   let months = [
     { value: null, label: "All" },
