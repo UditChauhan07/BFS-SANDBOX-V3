@@ -8,7 +8,7 @@ import ModalPage from "../components/Modal UI";
 import ProductDetailCard from "../components/ProductDetailCard";
 import { CloseButton } from "../lib/svg";
 
-const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountId=null,ManufacturerId=null }) => {
+const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountId=null,ManufacturerId=null,toRedirect="/my-retailers" }) => {
     const { orders, setOrders, setOrderQuantity, addOrder, setOrderProductPrice } = useBag();
     const [product, setProduct] = useState({ isLoaded: false, data: [], discount: {} });
     const [replaceCartModalOpen, setReplaceCartModalOpen] = useState(false);
@@ -32,6 +32,7 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountI
         }
     }, [productId])
     if (!productId) return null;
+
 
     const orderSetting = (element, quantity) => {
         setReplaceCartModalOpen(false);
@@ -112,7 +113,7 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountI
                             />
                         ) : null}
                         {!product?.isLoaded ? <Loading /> :
-                            <ProductDetailCard product={product} orders={orders} onQuantityChange={onQuantityChange} onPriceChangeHander={onPriceChangeHander} isAddtoCart={isAddtoCart} AccountId={AccountId}/>}
+                            <ProductDetailCard product={product} orders={orders} onQuantityChange={onQuantityChange} onPriceChangeHander={onPriceChangeHander} isAddtoCart={isAddtoCart} AccountId={AccountId} toRedirect={toRedirect}/>}
                     </div>
                 }
                 onClose={() => {
