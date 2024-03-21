@@ -660,3 +660,21 @@ export async function getSessionStatus({key,salesRepId}) {
     return data;
   }
 }
+export async function getMarketingCalendar({key,manufacturerId}) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(url + "v3/eVC3IaiEEz3x7ym", {
+    method: "POST",
+    body: JSON.stringify({key,manufacturerId}),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data;
+  }
+}
