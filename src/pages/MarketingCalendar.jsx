@@ -8,13 +8,15 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { CloseButton } from "../lib/svg";
 import { GetAuthData, getMarketingCalendar } from "../lib/store";
+import LoaderV2 from "../components/loader/v2";
+import Loading from "../components/Loading";
 const fileExtension = ".xlsx";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 
 const MarketingCalendar = () => {
   const [brand, setBrand] = useState(null);
-  const [isLoaded,setIsloaed] = useState(false);
-  const [productList1, setProductList1]  = useState([]);
+  const [isLoaded, setIsloaed] = useState(false);
+  const [productList1, setProductList1] = useState([]);
   const [productList, setProductList] = useState([
     {
       month: "Jan",
@@ -840,15 +842,15 @@ const MarketingCalendar = () => {
     { value: "Victoria Beckham Beauty", label: "Victoria Beckham Beauty" },
   ];
 
-  // useEffect(()=>{
-  //   GetAuthData().then((user)=>{
-  //     getMarketingCalendar({key:user.x_access_token}).then((productRes)=>{
-  //       console.log({productRes});
+  // useEffect(() => {
+  //   GetAuthData().then((user) => {
+  //     getMarketingCalendar({ key: user.x_access_token }).then((productRes) => {
+  //       console.log({ productRes });
   //       setProductList(productRes)
   //       setIsloaed(true)
-  //     }).catch((err)=>console.log({err}))
-  //   }).catch((e)=>console.log({e}))
-  // },[isLoaded])
+  //     }).catch((err) => console.log({ err }))
+  //   }).catch((e) => console.log({ e }))
+  // }, [isLoaded])
   const [month, setMonth] = useState("");
   let months = [
     { value: null, label: "All" },
@@ -949,7 +951,6 @@ const MarketingCalendar = () => {
     }
     FileSaver.saveAs(data, `${filename} ${new Date()}` + fileExtension);
   };
-
   return (
     <AppLayout
       filterNodes={
@@ -1009,7 +1010,8 @@ const MarketingCalendar = () => {
         </>
       }
     >
-      <LaunchCalendar brand={brand} month={month} productList={productList} />
+      {isLoaded ||true ? <LaunchCalendar brand={brand} month={month} productList={productList} /> : <Loading />}
+
     </AppLayout>
   );
 };
