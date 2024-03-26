@@ -840,10 +840,9 @@ const MarketingCalendar = () => {
 
   // useEffect(()=>{
   //   GetAuthData().then((user)=>{
-  //     console.log({user});
   //     getMarketingCalendar({key:user.x_access_token}).then((productRes)=>{
   //       console.log({productRes});
-  //     }).catch((e)=>console.log({e}))
+  //     }).catch((err)=>console.log({err}))
   //   }).catch((e)=>console.log({e}))
   // },[])
   const [month, setMonth] = useState("");
