@@ -13,7 +13,7 @@ const TopProductCard = ({ data, productImages, to = null }) => {
       <div>
         <div className={Styles.dGrid}>
           {data.map((product) => {
-            let listPrice = Number(product?.usdRetail__c?.replace("$", "").replace(",", "") || 0);
+            let listPrice = Number(product?.usdRetail__c?.replace("$", "").replace("-", "").replace(",", "") || 0);
             return (
               <div className={Styles.cardElement}>
                 <div className={Styles.salesHolder}>
