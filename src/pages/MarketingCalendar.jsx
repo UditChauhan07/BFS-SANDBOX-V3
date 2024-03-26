@@ -13,6 +13,8 @@ const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sh
 
 const MarketingCalendar = () => {
   const [brand, setBrand] = useState(null);
+  const [isLoaded,setIsloaed] = useState(false);
+  const [productList1, setProductList1]  = useState([]);
   const [productList, setProductList] = useState([
     {
       month: "Jan",
@@ -842,9 +844,11 @@ const MarketingCalendar = () => {
   //   GetAuthData().then((user)=>{
   //     getMarketingCalendar({key:user.x_access_token}).then((productRes)=>{
   //       console.log({productRes});
+  //       setProductList(productRes)
+  //       setIsloaed(true)
   //     }).catch((err)=>console.log({err}))
   //   }).catch((e)=>console.log({e}))
-  // },[])
+  // },[isLoaded])
   const [month, setMonth] = useState("");
   let months = [
     { value: null, label: "All" },

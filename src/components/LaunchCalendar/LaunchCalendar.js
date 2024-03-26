@@ -18,7 +18,6 @@ function LaunchCalendar({ productList, brand, month }) {
     });
   }, [brand]);
 
-
   const [filterData, setFilterData] = useState()
   useEffect(() => {
     if (!month) {
@@ -54,6 +53,7 @@ function LaunchCalendar({ productList, brand, month }) {
     setFilterData(newValues);
   }, [month,brand]);
 
+  console.log({filterData});
 
   //   if(!ShipDate){
   // setFilterData(products)
@@ -91,7 +91,8 @@ function LaunchCalendar({ productList, brand, month }) {
                       <li key={index}>
                         <span className={`timelineHolder0${(index % 3) + 1}`}>{month.month}</span>
                         {month.content.map((product, productIndex) => {
-                          if (!brand || brand == product.brand){
+                          console.log("booo");
+                          if (!brand || brand == product.brand|| brand == product.ManufacturerName__c){
                           return (
                             <>
                               <div className="timeline-content" key={productIndex}>
