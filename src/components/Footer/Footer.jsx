@@ -15,20 +15,20 @@ const Footer = () => {
         <div className="mt-3">
           <p className={`m-0 ${footerStyle.heading}`}>BFSG</p>
           <p className={`m-0 ${footerStyle.subheadings}`}>
-            {/* <Link to="/about-us" className="linkStyle"> */}
+            <Link to="/comingSoonPage" className="linkStyle">
               About Us
-            {/* </Link> */}
+            </Link>
           </p>
           <p className={`m-0 ${footerStyle.subheadings}`}>
-            {/* <Link to="/customer-care" className="linkStyle"> */}
+            <Link to="/comingSoonPage" className="linkStyle">
               Customer Care
-            {/* </Link> */}
+            </Link>
           </p>
           <p className={`m-0 ${footerStyle.subheadings}`}>Careers</p>
           <p className={`m-0 ${footerStyle.subheadings}`}>
-          {/* <Link to="/wholesale-inquiry" className="linkStyle"> */}
+          <Link to="/comingSoonPage" className="linkStyle">
           Wholesale Enquires
-            {/* </Link> */}
+            </Link>
           
             </p>
           {/* <p className={`m-0 ${footerStyle.subheadings}`}>What our retailers are saying</p> */}
@@ -40,8 +40,8 @@ const Footer = () => {
           <div className="d-flex justify-content-end ">
         <div className="mt-3  ">
           <p className={`m-0 ${footerStyle.heading}`}>Join US</p>
-          <p className={`m-0 ${footerStyle.subheadings}`}>Instagram</p>
-          <p className={`m-0 ${footerStyle.subheadings}`}>Linkedin</p>
+          <Link to="/InstagramPage"><p className={`m-0 ${footerStyle.subheadings}`}>Instagram</p></Link>
+         <Link to="/comingSoonPage"><p className={`m-0 ${footerStyle.subheadings}`}>Linkedin</p></Link> 
         </div>
         </div>
         </div>
@@ -67,7 +67,7 @@ const Footer = () => {
           <div className="d-flex justify-content-end ">
         <div className="mt-3  ">
           <p className={`m-0 ${footerStyle.heading}`}>Join US</p>
-     <p className={`m-0 ${footerStyle.subheadings}`}>Instagram</p>
+    <Link to="/InstagramPage"><p className={`m-0 ${footerStyle.subheadings}`} style={{color:"black"}}>Instagram</p></Link> 
        
           <p className={`m-0 ${footerStyle.subheadings}`}>Linkedin</p>
         </div>
