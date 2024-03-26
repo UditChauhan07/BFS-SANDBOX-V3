@@ -15,7 +15,7 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
   const fileInputRef = useRef(null);
   const [errorOnlist, setErrorOnList] = useState(0);
   const [openModal, setOpenModal] = useState(false);
-  const [alert, setAlert] = useState(0);
+  const [alert, setAlert] = useState('-');
   const [orderType, setorderType] = useState("wholesale")
   let orderTypeList = [
     { value: "wholesale", label: "Whole Sales" },
@@ -127,11 +127,11 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
         }
       }
     })
-    setAlert(0);
-    if (rawData.discount.MinOrderAmount > bagPrice) {
+    setAlert('-');
+    if (rawData.discount.MinOrderAmount >= bagPrice) {
       setAlert(bagPrice);
     } else {
-      setAlert(0);
+      setAlert('-');
       let productCount = 0;
       data.map((element) => {
         if (element.Quantity && Number.isInteger(element?.Quantity)) {
@@ -187,7 +187,7 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
   if (!showTable) {
     return (
       <div>
-        {alert> 0 && (
+        {alert != '-' && (
           <ModalPage
             open
             content={
@@ -197,14 +197,14 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
                   <p className={` ${Styles.ModalContent}`}>Please Select Products of Minimum Order Amount</p>
                   <p className={` ${Styles.ModalContent}`}>Selected Order Amount ${alert.toFixed(2)}</p>
                   <div className="d-flex justify-content-center">
-                    <button className={`${Styles.modalButton}`} onClick={() => setAlert(0)}>
+                    <button className={`${Styles.modalButton}`} onClick={() => setAlert('-')}>
                       OK
                     </button>
                   </div>
                 </div>
               </>
             }
-            onClose={() => setAlert(0)}
+            onClose={() => setAlert('-')}
           />
         )}
         {/* <input type="file" ref={fileInputRef} accept=".xlsx,.xls" onChange={handleFileChange} /> */}
