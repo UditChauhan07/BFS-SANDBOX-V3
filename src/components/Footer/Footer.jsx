@@ -67,7 +67,8 @@ const Footer = () => {
           <div className="d-flex justify-content-end ">
         <div className="mt-3  ">
           <p className={`m-0 ${footerStyle.heading}`}>Join US</p>
-          <p className={`m-0 ${footerStyle.subheadings}`}>Instagram</p>
+     <p className={`m-0 ${footerStyle.subheadings}`}>Instagram</p>
+       
           <p className={`m-0 ${footerStyle.subheadings}`}>Linkedin</p>
         </div>
         </div>
