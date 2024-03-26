@@ -29,7 +29,8 @@ import CustomerServiceForm from "./pages/CustomerServiceForm";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TargetReport from "./reports/targetReport";
-
+import InstagramPage from "./components/Footer/InstagramPage/InstagramPage"
+import ComingSoonPage from "./components/Footer/ComingSoonPage/ComingSoonPage"
 
 function App() {
   // const Redirect = ({ href }) => {
@@ -85,7 +86,9 @@ function App() {
             <Route path="/orderDetails" element={<MyBagOrder />}></Route>
             <Route path="/orderStatusForm" element={<OrderStatusForm />}></Route>
             <Route path="/customerService" element={<CustomerServiceForm />}></Route>
-         
+            <Route path ="/InstagramPage" element={<InstagramPage/>}/>
+        
+         <Route path="/comingSoonPage" element={<ComingSoonPage/>}/>
             {/* 1234 */}
           </Routes>
         </BrowserRouter>
