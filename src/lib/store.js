@@ -675,6 +675,6 @@ export async function getMarketingCalendar({key,manufacturerId}) {
   if (data.status == 300) {
     DestoryAuth();
   } else {
-    return data;
+    return data?.data;
   }
 }
