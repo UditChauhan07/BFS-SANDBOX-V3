@@ -24,7 +24,13 @@ const Footer = () => {
               Customer Care
             </Link>
           </p>
-          <p className={`m-0 ${footerStyle.subheadings}`}>Careers</p>
+          
+          <p className={`m-0 ${footerStyle.subheadings}`}>
+          <Link to="/comingSoonPage" className="linkStyle">
+            Careers
+            </Link>
+            </p>
+      
           <p className={`m-0 ${footerStyle.subheadings}`}>
           <Link to="/comingSoonPage" className="linkStyle">
           Wholesale Enquires
@@ -40,8 +46,8 @@ const Footer = () => {
           <div className="d-flex justify-content-end ">
         <div className="mt-3  ">
           <p className={`m-0 ${footerStyle.heading}`}>Join US</p>
-          <Link to="/InstagramPage"><p className={`m-0 ${footerStyle.subheadings}`}>Instagram</p></Link>
-         <Link to="/comingSoonPage"><p className={`m-0 ${footerStyle.subheadings}`}>Linkedin</p></Link> 
+          <p className={`m-0 ${footerStyle.subheadings}`}><Link to="/InstagramPage">Instagram</Link></p>
+          <p className={`m-0 ${footerStyle.subheadings}`}><Link to="/comingSoonPage">Linkdin</Link></p>
         </div>
         </div>
         </div>
