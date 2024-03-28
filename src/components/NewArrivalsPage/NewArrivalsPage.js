@@ -103,7 +103,7 @@ setpagination([{content: newValues }]);
         <div>
           <div className={Styles.dGrid}>
           { allOrdersEmpty ? (
-                   <div className={`${Styles.NodataContent} flex justify-center items-center py-4 w-full lg:min-h-[300px] xl:min-h-[380px]`}>No data found</div>
+                   <div className={`${Styles.NodataContent} `}>No data found</div>
                   ) : 
               pagination?.map((month, index) => {
                 if (month.content.length) {
