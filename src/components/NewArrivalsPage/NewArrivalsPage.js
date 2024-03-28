@@ -17,9 +17,10 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
   // ...............
   const [currentPage, setCurrentPage] = useState(1);
   const [filterData, setFilterData] = useState([]);
+
   let PageSize = 10;
   const [pagination, setpagination] = useState([]);
-
+  const allOrdersEmpty = pagination.every(item => item.content.length <= 0);
   useEffect(() => {
     if (!filterData || filterData.length === 1) {
       console.error("Product list is empty or undefined.");
@@ -101,7 +102,9 @@ setpagination([{content: newValues }]);
       <section>
         <div>
           <div className={Styles.dGrid}>
-            {!isEmpty ? (
+          { allOrdersEmpty ? (
+                   <div className={`${Styles.NodataContent} flex justify-center items-center py-4 w-full lg:min-h-[300px] xl:min-h-[380px]`}>No data found</div>
+                  ) : 
               pagination?.map((month, index) => {
                 if (month.content.length) {
                   return month.content.map((product) => {
@@ -139,9 +142,7 @@ setpagination([{content: newValues }]);
                   });
                 }
               })
-            ) : (
-              <div>No data found</div>
-            )}
+           }
           </div>
         </div>
         <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} />
