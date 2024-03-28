@@ -7,6 +7,7 @@ import ProductDetails from "../../pages/productDetails";
 
 const TopProductCard = ({ data, productImages, to = null }) => {
   const [productDetailId, setProductDetailId] = useState(null);
+  
   useEffect(() => {}, [productDetailId, productImages]);
   return (
     <section>
