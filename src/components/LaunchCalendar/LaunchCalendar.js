@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 function LaunchCalendar1({ productList, brand, month }) {
   const products = productList;
-  
+
   const [isEmpty, setIsEmpty] = useState(false);
   useEffect(() => {
     let temp = true;
@@ -18,10 +18,11 @@ function LaunchCalendar1({ productList, brand, month }) {
     });
   }, [brand]);
 
-  const [filterData, setFilterData] = useState()
+  const [filterData, setFilterData] = useState();
+  const allOrdersEmpty = filterData?.every((item) => item.content.length <= 0);
   useEffect(() => {
-    if (!month || month == '') {
-      setFilterData(products)
+    if (!month || month == "") {
+      setFilterData(products);
     }
     const newValues = products?.map((months) => {
       const filterData = months.content?.filter((item) => {
@@ -30,10 +31,10 @@ function LaunchCalendar1({ productList, brand, month }) {
         if (month) {
           if (brand) {
             if (brand == item.brand) {
-              return item.date.toLowerCase().includes(month.toLowerCase())
+              return item.date.toLowerCase().includes(month.toLowerCase());
             }
           } else {
-            return item.date.toLowerCase().includes(month.toLowerCase())
+            return item.date.toLowerCase().includes(month.toLowerCase());
           }
           // return match.includes(month.toUpperCase() )
         } else {
@@ -51,8 +52,7 @@ function LaunchCalendar1({ productList, brand, month }) {
       return { ...months, content: filterData };
     });
     setFilterData(newValues);
-  }, [month,brand]);
-
+  }, [month, brand]);
 
   //   if(!ShipDate){
   // setFilterData(products)
@@ -83,7 +83,9 @@ function LaunchCalendar1({ productList, brand, month }) {
         <div className="row">
           <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 ">
             <ul className="timeline mt-4 mr-4" id="CalenerContainer">
-              {!isEmpty ? (
+              {allOrdersEmpty ? (
+                <div className="NodataContent">No data found</div>
+              ) : (
                 filterData?.map((month, index) => {
                   if (month.content.length) {
                     return (
@@ -91,48 +93,46 @@ function LaunchCalendar1({ productList, brand, month }) {
                         <span className={`timelineHolder0${(index % 3) + 1}`}>{month.month}</span>
                         {month.content.map((product, productIndex) => {
                           console.log("booo");
-                          if (!brand || brand == product.brand|| brand == product.ManufacturerName__c){
-                          return (
-                            <>
-                              <div className="timeline-content" key={productIndex}>
-                                <div className="ProductInfo">
-                                  <div className="BothDateTopFlex">
-                                    <div className="ShipDate">
-                                      <span>Ship Date</span>
-                                      <div className={`DateCurrent0${(index % 3) + 1}`}>{product.Ship_Date__c}</div>
-                                    </div>
-                                    <div className="ShipDate EDate">
-                                      <span>OCD</span>
-                                      <div className="DateEod">{product.Launch_Date__c}</div>
-                                    </div>
-                                  </div>
-                                  <div className="d-flex mt-2">
-                                    <div className="m-auto ProductImg">
-                                      <img src={product.image} alt={product.Name} />
-                                    </div>
-                                    <div className="LaunchProductDetail">
-                                      <h3>{product.name}</h3>
-                                      <div className="size">
-                                        Size <span className="ProductQty">{product.Size_Volume_Weight__c}</span>
+                          if (!brand || brand == product.brand || brand == product.ManufacturerName__c) {
+                            return (
+                              <>
+                                <div className="timeline-content" key={productIndex}>
+                                  <div className="ProductInfo">
+                                    <div className="BothDateTopFlex">
+                                      <div className="ShipDate">
+                                        <span>Ship Date</span>
+                                        <div className={`DateCurrent0${(index % 3) + 1}`}>{product.Ship_Date__c}</div>
                                       </div>
-                                      <p>{product.Description}</p>
+                                      <div className="ShipDate EDate">
+                                        <span>OCD</span>
+                                        <div className="DateEod">{product.Launch_Date__c}</div>
+                                      </div>
+                                    </div>
+                                    <div className="d-flex mt-2">
+                                      <div className="m-auto ProductImg">
+                                        <img src={product.image} alt={product.Name} />
+                                      </div>
+                                      <div className="LaunchProductDetail">
+                                        <h3>{product.name}</h3>
+                                        <div className="size">
+                                          Size <span className="ProductQty">{product.Size_Volume_Weight__c}</span>
+                                        </div>
+                                        <p>{product.Description}</p>
+                                      </div>
                                     </div>
                                   </div>
+                                  <div className="launchBrand">
+                                    <img className="img-fluid" src={product.brandLogo} alt={`${product.name} logo`} />
+                                  </div>
                                 </div>
-                                <div className="launchBrand">
-                                  <img className="img-fluid" src={product.brandLogo} alt={`${product.name} logo`} />
-                                </div>
-                              </div>
-                            </>
-                          );
+                              </>
+                            );
                           }
                         })}
                       </li>
-                    )
+                    );
                   }
                 })
-              ) : (
-                <div>No data found</div>
               )}
             </ul>
           </div>
@@ -159,7 +159,7 @@ function LaunchCalendar1({ productList, brand, month }) {
 }
 function LaunchCalendar({ productList, brand, month }) {
   const [products, setProducts] = useState(productList);
-  
+
   const [isEmpty, setIsEmpty] = useState(false);
   useEffect(() => {
     let temp = true;
@@ -173,10 +173,11 @@ function LaunchCalendar({ productList, brand, month }) {
     });
   }, [brand]);
 
-  const [filterData, setFilterData] = useState()
+  const [filterData, setFilterData] = useState();
+  const allOrdersEmpty = filterData?.every((item) => item.content.length <= 0);
   useEffect(() => {
     if (!month) {
-      setFilterData(products)
+      setFilterData(products);
     }
     const newValues = products?.map((months) => {
       const filterData = months.content?.filter((item) => {
@@ -185,10 +186,10 @@ function LaunchCalendar({ productList, brand, month }) {
         if (month) {
           if (brand) {
             if (brand == item.brand) {
-              return item.date.toLowerCase().includes(month.toLowerCase())
+              return item.date.toLowerCase().includes(month.toLowerCase());
             }
           } else {
-            return item.date.toLowerCase().includes(month.toLowerCase())
+            return item.date.toLowerCase().includes(month.toLowerCase());
           }
           // return match.includes(month.toUpperCase() )
         } else {
@@ -206,9 +207,9 @@ function LaunchCalendar({ productList, brand, month }) {
       return { ...months, content: filterData };
     });
     setFilterData(newValues);
-  }, [month,brand]);
+  }, [month, brand]);
 
-  console.log({filterData});
+  console.log({ filterData });
 
   //   if(!ShipDate){
   // setFilterData(products)
@@ -239,7 +240,9 @@ function LaunchCalendar({ productList, brand, month }) {
         <div className="row">
           <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 ">
             <ul className="timeline mt-4 mr-4" id="CalenerContainer">
-              {!isEmpty ? (
+            { allOrdersEmpty ? (
+                   <div className="NodataContent">No data found</div>
+                  ) : 
                 filterData?.map((month, index) => {
                   if (month.content.length) {
                     return (
@@ -247,49 +250,47 @@ function LaunchCalendar({ productList, brand, month }) {
                         <span className={`timelineHolder0${(index % 3) + 1}`}>{month.month}</span>
                         {month.content.map((product, productIndex) => {
                           console.log("booo");
-                          if (!brand || brand == product.brand|| brand == product.ManufacturerName__c){
-                          return (
-                            <>
-                              <div className="timeline-content" key={productIndex}>
-                                <div className="ProductInfo">
-                                  <div className="BothDateTopFlex">
-                                    <div className="ShipDate">
-                                      <span>Ship Date</span>
-                                      <div className={`DateCurrent0${(index % 3) + 1}`}>{product.date}</div>
-                                    </div>
-                                    <div className="ShipDate EDate">
-                                      <span>OCD</span>
-                                      <div className="DateEod">{product.OCDDate}</div>
-                                    </div>
-                                  </div>
-                                  <div className="d-flex mt-2">
-                                    <div className="m-auto ProductImg">
-                                      <img src={product.image} alt={product.name} />
-                                    </div>
-                                    <div className="LaunchProductDetail">
-                                      <h3>{product.name}</h3>
-                                      <div className="size">
-                                        Size <span className="ProductQty">{product.size}</span>
+                          if (!brand || brand == product.brand || brand == product.ManufacturerName__c) {
+                            return (
+                              <>
+                                <div className="timeline-content" key={productIndex}>
+                                  <div className="ProductInfo">
+                                    <div className="BothDateTopFlex">
+                                      <div className="ShipDate">
+                                        <span>Ship Date</span>
+                                        <div className={`DateCurrent0${(index % 3) + 1}`}>{product.date}</div>
                                       </div>
-                                      <p>{product.description}</p>
+                                      <div className="ShipDate EDate">
+                                        <span>OCD</span>
+                                        <div className="DateEod">{product.OCDDate}</div>
+                                      </div>
+                                    </div>
+                                    <div className="d-flex mt-2">
+                                      <div className="m-auto ProductImg">
+                                        <img src={product.image} alt={product.name} />
+                                      </div>
+                                      <div className="LaunchProductDetail">
+                                        <h3>{product.name}</h3>
+                                        <div className="size">
+                                          Size <span className="ProductQty">{product.size}</span>
+                                        </div>
+                                        <p>{product.description}</p>
+                                      </div>
                                     </div>
                                   </div>
+                                  <div className="launchBrand">
+                                    <img className="img-fluid" src={product.brandLogo} alt={`${product.name} logo`} />
+                                  </div>
                                 </div>
-                                <div className="launchBrand">
-                                  <img className="img-fluid" src={product.brandLogo} alt={`${product.name} logo`} />
-                                </div>
-                              </div>
-                            </>
-                          );
+                              </>
+                            );
                           }
                         })}
                       </li>
-                    )
+                    );
                   }
                 })
-              ) : (
-                <div>No data found</div>
-              )}
+            }
             </ul>
           </div>
 
