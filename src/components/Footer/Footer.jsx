@@ -15,24 +15,24 @@ const Footer = () => {
         <div className="mt-3">
           <p className={`m-0 ${footerStyle.heading}`}>BFSG</p>
           <p className={`m-0 ${footerStyle.subheadings}`}>
-            <Link to="/comingSoonPage" className="linkStyle">
+            <Link to="/about-us" className="linkStyle">
               About Us
             </Link>
           </p>
           <p className={`m-0 ${footerStyle.subheadings}`}>
-            <Link to="/comingSoonPage" className="linkStyle">
+            <Link to="/customer-care" className="linkStyle">
               Customer Care
             </Link>
           </p>
           
           <p className={`m-0 ${footerStyle.subheadings}`}>
-          <Link to="/comingSoonPage" className="linkStyle">
+          <Link to="/careers" className="linkStyle">
             Careers
             </Link>
             </p>
       
           <p className={`m-0 ${footerStyle.subheadings}`}>
-          <Link to="/comingSoonPage" className="linkStyle">
+          <Link to="/wholesale-inquiry" className="linkStyle">
           Wholesale Enquires
             </Link>
           
@@ -46,8 +46,8 @@ const Footer = () => {
           <div className="d-flex justify-content-end ">
         <div className="mt-3  ">
           <p className={`m-0 ${footerStyle.heading}`}>Join US</p>
-          <p className={`m-0 ${footerStyle.subheadings}`}><Link to="/InstagramPage">Instagram</Link></p>
-          <p className={`m-0 ${footerStyle.subheadings}`}><Link to="/comingSoonPage">Linkdin</Link></p>
+          <p className={`m-0 ${footerStyle.subheadings}`}>Instagram</p>
+          <p className={`m-0 ${footerStyle.subheadings}`}>Linkdin</p>
         </div>
         </div>
         </div>
@@ -72,10 +72,10 @@ const Footer = () => {
         <div className={`col-lg-3 col-md-3 col-sm-6 ${footerStyle.joinWebUs}`}>
           <div className="d-flex justify-content-end ">
         <div className="mt-3  ">
-          <p className={`m-0 ${footerStyle.heading}`}>Join US</p>
-    <Link to="/InstagramPage"><p className={`m-0 ${footerStyle.subheadings}`} style={{color:"black"}}>Instagram</p></Link> 
+        <Link to="/join-us" > <p className={`m-0 ${footerStyle.heading} linkStyle`}>Join US</p></Link>
+    <Link to="/instagram"><p className={`m-0 ${footerStyle.subheadings} linkStyle`}>Instagram</p></Link> 
        
-          <p className={`m-0 ${footerStyle.subheadings}`}>Linkedin</p>
+    <Link to="/linkdin"><p className={`m-0 ${footerStyle.subheadings} linkStyle`}>Linkedin</p></Link>
         </div>
         </div>
         </div>
