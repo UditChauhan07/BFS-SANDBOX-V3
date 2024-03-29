@@ -24,7 +24,7 @@
     right: 0;
     min-width: 25px;
     padding: 2px;
-    width: 35px;
+    width: 42px;
 }
 @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .salesIcon { animation: rotate 4s linear infinite; }
 .imgHolder {
