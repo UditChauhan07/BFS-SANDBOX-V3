@@ -1,12 +1,12 @@
 import React from "react";
 import styles from "./table.module.css";
 import Loading from "../Loading";
-const SalesReportTable = ({ salesData, year,ownerPermission }) => {
-  const allOrdersEmpty = salesData.every(item => item.Orders.length <= 0);
+const SalesReportTable = ({ salesData, year, ownerPermission }) => {
+  const allOrdersEmpty = salesData.every((item) => item.Orders.length <= 0);
   const d = new Date();
   let month = d.getMonth();
   let currentYear = d.getFullYear();
-  if(!year) year =currentYear
+  if (!year) year = currentYear;
   let totalOrder = 0,
     totalOrderPrice = 0;
   let monthTotalAmount = {
@@ -29,8 +29,8 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
       if (day && month && year) {
         let parsedDate = new Date(`${month}/${day}/${year}`);
         if (!isNaN(parsedDate.getTime())) {
-          const options = { day: 'numeric', month: 'short', year: 'numeric' };
-          let launchDateFormattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(parsedDate));
+          const options = { day: "numeric", month: "short", year: "numeric" };
+          let launchDateFormattedDate = new Intl.DateTimeFormat("en-US", options).format(new Date(parsedDate));
           return launchDateFormattedDate;
         }
       }
@@ -41,372 +41,342 @@ const SalesReportTable = ({ salesData, year,ownerPermission }) => {
     <>
       {salesData.length ? (
         <div className={`d-flex p-3 ${styles.tableBoundary} mb-5`}>
-          <div
-            className=""
-            style={{ maxHeight: "73vh", minHeight: "40vh", overflow: "auto",width:'100%' }}
-          >
-            <table id="salesReportTable" className="table table-responsive" style={{minHeight:"600px"}}>
+          <div className="" style={{ maxHeight: "73vh", minHeight: "40vh", overflow: "auto", width: "100%" }}>
+            <table id="salesReportTable" className="table table-responsive" style={{ minHeight: "600px" }}>
               <thead>
                 <tr>
-                  <th
-                    className={`${styles.th} ${styles.stickyFirstColumnHeading} `}
-                    style={{ minWidth: "170px" }}
-                  >
+                  <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "170px" }}>
                     Manufacturer
                   </th>
-                  <th
-                    className={`${styles.th} ${styles.stickySecondColumnHeading}`}
-                    style={{ minWidth: "150px" }}
-                  >
+                  <th className={`${styles.th} ${styles.stickySecondColumnHeading}`} style={{ minWidth: "150px" }}>
                     Account
                   </th>
-                  <th
-                    className={`${styles.th} ${styles.stickyThirdColumnHeading}`}
-                    style={{ minWidth: "200px" }}
-                  >
+                  <th className={`${styles.th} ${styles.stickyThirdColumnHeading}`} style={{ minWidth: "200px" }}>
                     Sales Rep
                   </th>
-                  <th className={`${styles.month} ${styles.stickyMonth}`} style={{ maxWidth: "200px" }}>Account Type</th>
-                  <th className={`${styles.month} ${styles.stickyMonth}`} style={{ minWidth: "150px" }}>Date Open</th>
+                  <th className={`${styles.month} ${styles.stickyMonth}`} style={{ maxWidth: "200px" }}>
+                    Account Type
+                  </th>
+                  <th className={`${styles.month} ${styles.stickyMonth}`} style={{ minWidth: "150px" }}>
+                    Date Open
+                  </th>
                   <th className={`${styles.month} ${styles.stickyMonth}`}>Status</th>
-                  {(currentYear == year) ? month >= 0 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Jan
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Jan
-                  </th>}
-                  {(currentYear == year) ? month >= 1 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Feb
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Feb
-                  </th>}
-                  {(currentYear == year) ? month >= 2 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Mar
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Mar
-                  </th>}
-                  {(currentYear == year) ? month >= 3 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Apr
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Apr
-                  </th>}
-                  {(currentYear == year) ? month >= 4 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    May
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    May
-                  </th>}
-                  {(currentYear == year) ? month >= 5 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Jun
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Jun
-                  </th>}
-                  {(currentYear == year) ? month >= 6 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Jul
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Jul
-                  </th>}
-                  {(currentYear == year) ? month >= 7 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Aug
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Aug
-                  </th>}
-                  {(currentYear == year) ? month >= 8 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Sep
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Sep
-                  </th>}
-                  {(currentYear == year) ? month >= 9 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Oct
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Oct
-                  </th>}
-                  {(currentYear == year) ? month >= 10 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Nov
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Nov
-                  </th>}
-                  {(currentYear == year) ? month >= 11 && <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Dec
-                  </th> : <th className={`${styles.month} ${styles.stickyMonth}`}>
-                    Dec
-                  </th>}
-                  <th
-                    className={`${styles.th} ${styles.stickySecondLastColumnHeading}`}
-                    style={{ maxWidth: "100px" }}
-                  >
+                  {currentYear == year ? (
+                    month >= 0 && <th className={`${styles.month} ${styles.stickyMonth}`}>Jan</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>Jan</th>
+                  )}
+                  {currentYear == year ? (
+                    month >= 1 && <th className={`${styles.month} ${styles.stickyMonth}`}>Feb</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>Feb</th>
+                  )}
+                  {currentYear == year ? (
+                    month >= 2 && <th className={`${styles.month} ${styles.stickyMonth}`}>Mar</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>Mar</th>
+                  )}
+                  {currentYear == year ? (
+                    month >= 3 && <th className={`${styles.month} ${styles.stickyMonth}`}>Apr</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>Apr</th>
+                  )}
+                  {currentYear == year ? (
+                    month >= 4 && <th className={`${styles.month} ${styles.stickyMonth}`}>May</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>May</th>
+                  )}
+                  {currentYear == year ? (
+                    month >= 5 && <th className={`${styles.month} ${styles.stickyMonth}`}>Jun</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>Jun</th>
+                  )}
+                  {currentYear == year ? (
+                    month >= 6 && <th className={`${styles.month} ${styles.stickyMonth}`}>Jul</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>Jul</th>
+                  )}
+                  {currentYear == year ? (
+                    month >= 7 && <th className={`${styles.month} ${styles.stickyMonth}`}>Aug</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>Aug</th>
+                  )}
+                  {currentYear == year ? (
+                    month >= 8 && <th className={`${styles.month} ${styles.stickyMonth}`}>Sep</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>Sep</th>
+                  )}
+                  {currentYear == year ? (
+                    month >= 9 && <th className={`${styles.month} ${styles.stickyMonth}`}>Oct</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>Oct</th>
+                  )}
+                  {currentYear == year ? (
+                    month >= 10 && <th className={`${styles.month} ${styles.stickyMonth}`}>Nov</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>Nov</th>
+                  )}
+                  {currentYear == year ? (
+                    month >= 11 && <th className={`${styles.month} ${styles.stickyMonth}`}>Dec</th>
+                  ) : (
+                    <th className={`${styles.month} ${styles.stickyMonth}`}>Dec</th>
+                  )}
+                  <th className={`${styles.th} ${styles.stickySecondLastColumnHeading}`} style={{ maxWidth: "100px" }}>
                     Total Order
                   </th>
-                  <th
-                    className={`${styles.th} ${styles.stickyLastColumnHeading}`}
-                    style={{ maxWidth: "150px" }}
-                  >
+                  <th className={`${styles.th} ${styles.stickyLastColumnHeading}`} style={{ maxWidth: "150px" }}>
                     Total Amount
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                {
-                  allOrdersEmpty ? (
-                    <div className={`${styles.NodataText} py-4 w-full lg:min-h-[300px] xl:min-h-[380px]`} key="no-data">
-                        <p >
-                          No data found
-                        </p>
-                    </div>
-                  ) : 
-                salesData.map((ele) => {
-                  return ele.Orders.map((item, index) => {
-                    totalOrder += Number(item.totalOrders);
-                    totalOrderPrice += Number(item.totalorderPrice);
-                    monthTotalAmount.Jan += Number(item.Jan.amount);
-                    monthTotalAmount.Feb += Number(item.Feb.amount);
-                    monthTotalAmount.Mar += Number(item.Mar.amount);
-                    monthTotalAmount.Apr += Number(item.Apr.amount);
-                    monthTotalAmount.May += Number(item.May.amount);
-                    monthTotalAmount.Jun += Number(item.Jun.amount);
-                    monthTotalAmount.Jul += Number(item.Jul.amount);
-                    monthTotalAmount.Aug += Number(item.Aug.amount);
-                    monthTotalAmount.Sep += Number(item.Sep.amount);
-                    monthTotalAmount.Oct += Number(item.Oct.amount);
-                    monthTotalAmount.Nov += Number(item.Nov.amount);
-                    monthTotalAmount.Dec += Number(item.Dec.amount);
-                    return (
-                      <tr key={index}>
-                        <td
-                          className={`${styles.td} ${styles.stickyFirstColumn}`}
-                        >
-                          {ele?.ManufacturerName__c}
-                        </td>
-                        <td
-                          className={`${styles.td} ${styles.stickySecondColumn}`}
-                        >
-                          {ownerPermission?item?.AccountName:item?.Name}
-                        </td>
-                        <td
-                          className={`${styles.td} ${styles.stickyThirdColumn}`}
-                        >
-                          {item?.AccountRepo ??
-                            JSON.parse(localStorage.getItem("Api Data")).data
-                              .Name}
-                        </td>
-                        <td
-                          className={`${styles.td}`} style={{ maxWidth: "200px" }}
-                        >
-                          {item?.AccountType ?? '---'}
-                        </td>
-                        <td
-                          className={`${styles.td}`} style={{ minWidth: "150px" }}
-                        >
-                          {convertDateStringToDate(item?.DateOpen)}
-                        </td>
-                        <td
-                          className={`${styles.td}`}
-                        >
-                          {item?.Status ?? '---'}
-                        </td>
-                        {(currentYear == year) ? month >= 0 && <td className={`${styles.td}`}>
-                          ${Number(item.Jan.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.Jan.amount).toFixed(2)}
-                        </td>}
-                        {(currentYear == year) ? month >= 1 && <td className={`${styles.td}`}>
-                          ${Number(item.Feb.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.Feb.amount).toFixed(2)}
-                        </td>}
-                        {(currentYear == year) ? month >= 2 && <td className={`${styles.td}`}>
-                          ${Number(item.Mar.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.Mar.amount).toFixed(2)}
-                        </td>}
-                        {(currentYear == year) ? month >= 3 && <td className={`${styles.td}`}>
-                          ${Number(item.Apr.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.Apr.amount).toFixed(2)}
-                        </td>}
-                        {(currentYear == year) ? month >= 4 && <td className={`${styles.td}`}>
-                          ${Number(item.May.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.May.amount).toFixed(2)}
-                        </td>}
-                        {(currentYear == year) ? month >= 5 && <td className={`${styles.td}`}>
-                          ${Number(item.Jun.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.Jun.amount).toFixed(2)}
-                        </td>}
-                        {(currentYear == year) ? month >= 6 && <td className={`${styles.td}`}>
-                          ${Number(item.Jul.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.Jul.amount).toFixed(2)}
-                        </td>}
-                        {(currentYear == year) ? month >= 7 && <td className={`${styles.td}`}>
-                          ${Number(item.Aug.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.Aug.amount).toFixed(2)}
-                        </td>}
-                        {(currentYear == year) ? month >= 8 && <td className={`${styles.td}`}>
-                          ${Number(item.Sep.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.Sep.amount).toFixed(2)}
-                        </td>}
-                        {(currentYear == year) ? month >= 9 && <td className={`${styles.td}`}>
-                          ${Number(item.Oct.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.Oct.amount).toFixed(2)}
-                        </td>}
-                        {(currentYear == year) ? month >= 10 && <td className={`${styles.td}`}>
-                          ${Number(item.Nov.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.Nov.amount).toFixed(2)}
-                        </td>}
-                        {(currentYear == year) ? month >= 11 && <td className={`${styles.td}`}>
-                          ${Number(item.Dec.amount).toFixed(2)}
-                        </td> : <td className={`${styles.td}`}>
-                          ${Number(item.Dec.amount).toFixed(2)}
-                        </td>}
-                        <td
-                          className={`${styles.td} ${styles.stickySecondLastColumn}`} style={{ maxWidth: "100px" }}
-                        >
-                          {item?.totalOrders}
-                        </td>
-                        <td
-                          className={`${styles.td} ${styles.stickyLastColumn}`}
-                        >
-                          ${Number(item?.totalorderPrice).toFixed(2)}
-                        </td>
-                      </tr>
-                    );
-                  });
-                })
-                }
-              </tbody>
+              {allOrdersEmpty ? (
+                <div className={`${styles.NodataText} flex justify-center items-center py-4 w-full lg:min-h-[300px] xl:min-h-[380px]`} key="no-data">
+                  <p>No data found</p>
+                </div>
+              ) : (
+                <tbody>
+                  {salesData.map((ele) => {
+                    return ele.Orders.map((item, index) => {
+                      totalOrder += Number(item.totalOrders);
+                      totalOrderPrice += Number(item.totalorderPrice);
+                      monthTotalAmount.Jan += Number(item.Jan.amount);
+                      monthTotalAmount.Feb += Number(item.Feb.amount);
+                      monthTotalAmount.Mar += Number(item.Mar.amount);
+                      monthTotalAmount.Apr += Number(item.Apr.amount);
+                      monthTotalAmount.May += Number(item.May.amount);
+                      monthTotalAmount.Jun += Number(item.Jun.amount);
+                      monthTotalAmount.Jul += Number(item.Jul.amount);
+                      monthTotalAmount.Aug += Number(item.Aug.amount);
+                      monthTotalAmount.Sep += Number(item.Sep.amount);
+                      monthTotalAmount.Oct += Number(item.Oct.amount);
+                      monthTotalAmount.Nov += Number(item.Nov.amount);
+                      monthTotalAmount.Dec += Number(item.Dec.amount);
+                      return (
+                        <tr key={index}>
+                          <td className={`${styles.td} ${styles.stickyFirstColumn}`}>{ele?.ManufacturerName__c}</td>
+                          <td className={`${styles.td} ${styles.stickySecondColumn}`}>{ownerPermission ? item?.AccountName : item?.Name}</td>
+                          <td className={`${styles.td} ${styles.stickyThirdColumn}`}>
+                            {item?.AccountRepo ?? JSON.parse(localStorage.getItem("Api Data")).data.Name}
+                          </td>
+                          <td className={`${styles.td}`} style={{ maxWidth: "200px" }}>
+                            {item?.AccountType ?? "---"}
+                          </td>
+                          <td className={`${styles.td}`} style={{ minWidth: "150px" }}>
+                            {convertDateStringToDate(item?.DateOpen)}
+                          </td>
+                          <td className={`${styles.td}`}>{item?.Status ?? "---"}</td>
+                          {currentYear == year ? (
+                            month >= 0 && <td className={`${styles.td}`}>${Number(item.Jan.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.Jan.amount).toFixed(2)}</td>
+                          )}
+                          {currentYear == year ? (
+                            month >= 1 && <td className={`${styles.td}`}>${Number(item.Feb.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.Feb.amount).toFixed(2)}</td>
+                          )}
+                          {currentYear == year ? (
+                            month >= 2 && <td className={`${styles.td}`}>${Number(item.Mar.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.Mar.amount).toFixed(2)}</td>
+                          )}
+                          {currentYear == year ? (
+                            month >= 3 && <td className={`${styles.td}`}>${Number(item.Apr.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.Apr.amount).toFixed(2)}</td>
+                          )}
+                          {currentYear == year ? (
+                            month >= 4 && <td className={`${styles.td}`}>${Number(item.May.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.May.amount).toFixed(2)}</td>
+                          )}
+                          {currentYear == year ? (
+                            month >= 5 && <td className={`${styles.td}`}>${Number(item.Jun.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.Jun.amount).toFixed(2)}</td>
+                          )}
+                          {currentYear == year ? (
+                            month >= 6 && <td className={`${styles.td}`}>${Number(item.Jul.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.Jul.amount).toFixed(2)}</td>
+                          )}
+                          {currentYear == year ? (
+                            month >= 7 && <td className={`${styles.td}`}>${Number(item.Aug.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.Aug.amount).toFixed(2)}</td>
+                          )}
+                          {currentYear == year ? (
+                            month >= 8 && <td className={`${styles.td}`}>${Number(item.Sep.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.Sep.amount).toFixed(2)}</td>
+                          )}
+                          {currentYear == year ? (
+                            month >= 9 && <td className={`${styles.td}`}>${Number(item.Oct.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.Oct.amount).toFixed(2)}</td>
+                          )}
+                          {currentYear == year ? (
+                            month >= 10 && <td className={`${styles.td}`}>${Number(item.Nov.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.Nov.amount).toFixed(2)}</td>
+                          )}
+                          {currentYear == year ? (
+                            month >= 11 && <td className={`${styles.td}`}>${Number(item.Dec.amount).toFixed(2)}</td>
+                          ) : (
+                            <td className={`${styles.td}`}>${Number(item.Dec.amount).toFixed(2)}</td>
+                          )}
+                          <td className={`${styles.td} ${styles.stickySecondLastColumn}`} style={{ maxWidth: "100px" }}>
+                            {item?.totalOrders}
+                          </td>
+                          <td className={`${styles.td} ${styles.stickyLastColumn}`}>${Number(item?.totalorderPrice).toFixed(2)}</td>
+                        </tr>
+                      );
+                    });
+                  })}
+                </tbody>
+              )}
               <tfoot>
                 <tr>
-                  <td
-                    className={`${styles.lastRow} ${styles.stickyFirstColumn} ${styles.stickyLastRow}`}
-                    colSpan={3}
-                  >
+                  <td className={`${styles.lastRow} ${styles.stickyFirstColumn} ${styles.stickyLastRow}`} colSpan={3}>
                     TOTAL
                   </td>
-                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`} style={{wordWrap:'break-word'}}></td>
-                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`} style={{wordWrap:'break-word'}}></td>
-                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`} style={{wordWrap:'break-word'}}></td>
-                  {(currentYear == year) ? month >= 0 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Jan).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Jan).toFixed(2)}
-                  </td>}
-                  {(currentYear == year) ? month >= 1 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Feb).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Feb).toFixed(2)}
-                  </td>}
-                  {(currentYear == year) ? month >= 2 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Mar).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Mar).toFixed(2)}
-                  </td>}
-                  {(currentYear == year) ? month >= 3 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Apr).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Apr).toFixed(2)}
-                  </td>}
-                  {(currentYear == year) ? month >= 4 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.May).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.May).toFixed(2)}
-                  </td>}
-                  {(currentYear == year) ? month >= 5 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Jun).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Jun).toFixed(2)}
-                  </td>}
-                  {(currentYear == year) ? month >= 6 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Jul).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Jul).toFixed(2)}
-                  </td>}
-                  {(currentYear == year) ? month >= 7 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Aug).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Aug).toFixed(2)}
-                  </td>}
-                  {(currentYear == year) ? month >= 8 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Sep).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Sep).toFixed(2)}
-                  </td>}
-                  {(currentYear == year) ? month >= 9 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Oct).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Oct).toFixed(2)}
-                  </td>}
-                  {(currentYear == year) ? month >= 10 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Nov).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Nov).toFixed(2)}
-                  </td>}
-                  {(currentYear == year) ? month >= 11 && <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Dec).toFixed(2)}
-                  </td> : <td
-                    className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}
-                  >
-                    ${Number(monthTotalAmount.Dec).toFixed(2)}
-                  </td>}
-                  <td
-                    className={`${styles.lastRow} ${styles.stickyLastRow} ${styles.stickySecondLastColumn}`}
-                  >
-                    {totalOrder}
-                  </td>
-                  <td
-                    className={`${styles.lastRow} ${styles.stickyLastRow} ${styles.stickyLastColumn}`}
-                  >
-                    ${Number(totalOrderPrice).toFixed(2)}
-                  </td>
+                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`} style={{ wordWrap: "break-word" }}></td>
+                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`} style={{ wordWrap: "break-word" }}></td>
+                  <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`} style={{ wordWrap: "break-word" }}></td>
+                  {currentYear == year ? (
+                    month >= 0 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.Jan).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.Jan).toFixed(2)}
+                    </td>
+                  )}
+                  {currentYear == year ? (
+                    month >= 1 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.Feb).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.Feb).toFixed(2)}
+                    </td>
+                  )}
+                  {currentYear == year ? (
+                    month >= 2 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.Mar).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.Mar).toFixed(2)}
+                    </td>
+                  )}
+                  {currentYear == year ? (
+                    month >= 3 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.Apr).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.Apr).toFixed(2)}
+                    </td>
+                  )}
+                  {currentYear == year ? (
+                    month >= 4 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.May).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.May).toFixed(2)}
+                    </td>
+                  )}
+                  {currentYear == year ? (
+                    month >= 5 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.Jun).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.Jun).toFixed(2)}
+                    </td>
+                  )}
+                  {currentYear == year ? (
+                    month >= 6 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.Jul).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.Jul).toFixed(2)}
+                    </td>
+                  )}
+                  {currentYear == year ? (
+                    month >= 7 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.Aug).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.Aug).toFixed(2)}
+                    </td>
+                  )}
+                  {currentYear == year ? (
+                    month >= 8 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.Sep).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.Sep).toFixed(2)}
+                    </td>
+                  )}
+                  {currentYear == year ? (
+                    month >= 9 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.Oct).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.Oct).toFixed(2)}
+                    </td>
+                  )}
+                  {currentYear == year ? (
+                    month >= 10 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.Nov).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.Nov).toFixed(2)}
+                    </td>
+                  )}
+                  {currentYear == year ? (
+                    month >= 11 && (
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                        ${Number(monthTotalAmount.Dec).toFixed(2)}
+                      </td>
+                    )
+                  ) : (
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      ${Number(monthTotalAmount.Dec).toFixed(2)}
+                    </td>
+                  )}
+                  <td className={`${styles.lastRow} ${styles.stickyLastRow} ${styles.stickySecondLastColumn}`}>{totalOrder}</td>
+                  <td className={`${styles.lastRow} ${styles.stickyLastRow} ${styles.stickyLastColumn}`}>${Number(totalOrderPrice).toFixed(2)}</td>
                 </tr>
               </tfoot>
             </table>

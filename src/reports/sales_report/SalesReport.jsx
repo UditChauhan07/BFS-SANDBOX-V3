@@ -393,13 +393,15 @@ const SalesReport = () => {
           </div>}
         </div>
       </div>
-      {filteredSalesReportData?.length && !isLoading ? (
+
+      {filteredSalesReportData?.length   && !isLoading ?(
         <SalesReportTable salesData={filteredSalesReportData} year={yearForTableSort} ownerPermission={ownerPermission} />
-      ) : salesReportData.length && !isLoading ? (
+      ) : filteredSalesReportData.length ===0 && !isLoading ? (
         <div className="flex justify-center items-center py-4 w-full lg:min-h-[300px] xl:min-h-[380px]">No data found</div>
       ) : (
         <Loading height={"70vh"} />
       )}
+      
     </AppLayout>
   );
 };
