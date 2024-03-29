@@ -55,7 +55,7 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
           )}
           {product?.data?.Description && (
     <p style={{ textAlign: 'start', color: "#898989" }}>
-        {product.data.Description.length > 100 ? (
+        {product.data.Description.length > 750 ? (
             isDescriptionExpanded ? (
                 product.data.Description
             ) : (
@@ -64,7 +64,7 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
         ) : (
             product.data.Description
         )}
-        {product.data.Description.length > 100 && (
+        {product.data.Description.length > 750 && (
             <button style={{ textDecoration: 'underline' }} onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}>
                 {isDescriptionExpanded ? 'Learn Less' : 'Learn More'}
             </button>

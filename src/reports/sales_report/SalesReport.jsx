@@ -62,23 +62,33 @@ const SalesReport = () => {
         };
       });
     }
+    // ..........
     if (highestOrders) {
-      filtered = filtered?.map((ele) => {
-        const Orders = ele.Orders.sort((a, b) => b.totalOrders - a.totalOrders);
-        return {
-          ...ele,
-          Orders,
-        };
+      filtered = filtered.sort((a, b) => {
+        // Sort by totalOrders in descending order
+        const totalOrdersDiff = b.Orders[0].totalOrders - a.Orders[0].totalOrders;
+        
+        if (totalOrdersDiff !== 0) {
+          return totalOrdersDiff;
+        }
+
+        // If totalOrders are equal, sort by totalorderPrice in descending order
+        return b.Orders[0].totalorderPrice - a.Orders[0].totalorderPrice;
       });
+
     } else {
-      filtered = filtered?.map((ele) => {
-        const Orders = ele.Orders.sort((a, b) => a.totalOrders - b.totalOrders);
-        return {
-          ...ele,
-          Orders,
-        };
+      filtered = filtered.sort((a, b) => {
+        // Sort by totalOrders in descending order
+        const totalOrdersDiff = a.Orders[0].totalOrders - b.Orders[0].totalOrders;
+        if (totalOrdersDiff !== 0) {
+          return totalOrdersDiff;
+        }
+
+        // If totalOrders are equal, sort by totalorderPrice in descending order
+        return b.Orders[0].totalorderPrice - a.Orders[0].totalorderPrice;
       });
     }
+    // ...........
     return filtered;
   }, [manufacturerFilter, salesReportData, highestOrders, searchBy, searchBySalesRep]);
 
@@ -171,9 +181,7 @@ const SalesReport = () => {
     return dataWithTotalRow;
   }, [filteredSalesReportData, manufacturerFilter]);
   
-
-
-  const handleExportToExcel = () => {
+ const handleExportToExcel = () => {
     setExportToExcelState(true);
   };
   const exportToExcel = () => {
