@@ -682,13 +682,13 @@ const TargetReport = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  {allOrdersEmpty ? (
+                {allOrdersEmpty ? (
                     <div className={`${styles.NodataText} py-4 w-full lg:min-h-[300px] xl:min-h-[380px]`} key="no-data">
                       <p>No data found</p>
                     </div>
                   ) : (
-                    filteredTargetData.map((element, index) => {
+                <tbody>
+                  {filteredTargetData.map((element, index) => {
                       // if (!brandcount[element.ManufacturerName]) {
                       //     brandcount[element.ManufacturerName] = 0
                       // }
@@ -790,9 +790,10 @@ const TargetReport = () => {
                           <td className={`${Styles.td} ${Styles.stickyLastColumn}`}>${Number(element.Total.diff).toFixed(2)}</td>
                         </tr>
                       );
-                    })
-                  )}
+                    })}
+                  
                 </tbody>
+                )}
                 <tfoot>
                   <tr>
                     <td className={`${Styles.lastRow} ${Styles.stickyFirstColumn} ${Styles.stickyLastRow}`} colSpan={3}>
