@@ -56,8 +56,7 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountI
             orderSetting(element, quantity);
         }
     };
-
-    const onPriceChangeHander = (element, price = '0') => {
+ const onPriceChangeHander = (element, price = '0') => {
         if (price == '') price = 0;
         setOrderProductPrice(element, price)
     }
