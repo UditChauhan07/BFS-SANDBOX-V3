@@ -347,7 +347,7 @@ const MarketingCalendar = () => {
 
         {
           brand: "Bumble and Bumble",
-          date: "15/FEb/2024",
+          date: "15/FEB/2024",
           OCDDate: "01/Mar/2024",
           image: "/assets/images/Smoothing9.png",
           name: "Bb. Curl Trial Kit ",

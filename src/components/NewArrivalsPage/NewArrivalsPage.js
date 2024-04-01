@@ -110,6 +110,8 @@ setpagination([{content: newValues }]);
                   return month.content.map((product) => {
                     if (!brand || brand == product.brand) {
                       return (
+                        <div className={`w-full last:mb-0 mb-4 ${Styles.HoverArrow}`}>
+                           <div className={`border-b-[0.5px] border-[#D0CFCF] flex flex-col gap-4 h-full  ${Styles.ImgHover1}`}>
                         <div className={Styles.cardElement}>
                           {/* {isLoaded ? <img className={Styles.imgHolder} onClick={() => { setProductDetailId(product.Id) }} src={product?.[product.ProductCode]?.ContentDownloadUrl ?? product.image} /> : <LoaderV2 />} */}
                           <img src={product.image} alt={product.name} />
@@ -136,6 +138,8 @@ setpagination([{content: newValues }]);
                               </p>
                             </div>
                           )}
+                        </div>
+                        </div>
                         </div>
                       );
                     }
