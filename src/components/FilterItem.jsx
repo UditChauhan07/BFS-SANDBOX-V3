@@ -28,7 +28,7 @@ export const FilterItem = ({ label, options, onChange, minWidth, value,name='dro
       {isOpen ? (
         <ul
           className="bg-white z-10 rounded-[5px] shadow-sm text-black absolute py-2 pr-2 flex flex-col  list-disc"
-          style={{ minWidth: minWidth || "120px", maxHeight: "450px", overflow: "auto", marginTop:"30px"}}
+          style={{ minWidth: minWidth || "120px", maxHeight: "450px", overflow: "auto", marginTop:"25px"}}
         >
           {options?.map((option, index) => (
             <li
