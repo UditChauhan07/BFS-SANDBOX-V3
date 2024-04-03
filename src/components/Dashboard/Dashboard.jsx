@@ -159,9 +159,7 @@ function Dashboard({ dashboardData }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [lineChart, setlineChart] = useState();
   const [dashboardRelatedData, setDashboardRelatedData] = useState({});
-
   const [brandData, setBrandData] = useState([]);
-
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [targetValue, setTargetValue] = useState();
