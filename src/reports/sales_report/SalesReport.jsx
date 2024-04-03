@@ -261,6 +261,7 @@ const SalesReport = () => {
     { value: 2016, label: 2016 },
     { value: 2015, label: 2015 },
   ]
+  
 
   return (
     <AppLayout
