@@ -422,7 +422,7 @@ const TargetReport = () => {
     { label: currentDate.getFullYear() - 1, value: currentDate.getFullYear() - 1 },
   ];
   const formentAcmount =(target,sale,diff,totalorderPrice,monthTotalAmount)=>{
-    return `${Number(target,sale,diff,totalorderPrice,monthTotalAmount).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
+    return `${Number(target,sale,diff,totalorderPrice,monthTotalAmount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
   }
   return (
     <AppLayout
