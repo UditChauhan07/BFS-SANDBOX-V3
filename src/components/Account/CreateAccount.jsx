@@ -57,7 +57,7 @@ function CreateAccountForm() {
       action.resetForm();
     }
   };
-
+  
   return (
     <>
       {redirect ? (
@@ -206,7 +206,8 @@ function CreateAccountForm() {
                         <div className={style.labelIN}>
                           <label htmlFor="name">Picture (Multiple)</label>
                           <br />
-                          <input className="w-95" type="file" />
+                          {/* <input type="file" class="form-control" name="image[]" placeholder="Upload Image" multiple="true"/> */}
+                          <input className="w-95" type="file" id="files" name="files" ></input>
                         </div>
                       </div>
                     </div>

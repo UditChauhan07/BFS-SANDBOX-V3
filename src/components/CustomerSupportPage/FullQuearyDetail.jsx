@@ -89,7 +89,7 @@ function FullQuearyDetail({ data, setRest }) {
                             <div className={Detail.LeftMainTopBox}>
                                 <p>
                                     <UserChecked />
-                                    <span>{data.Account.Name}</span>&nbsp; raised this on {date.getDate()}/{monthNames[date.getMonth()]}/{date.getFullYear()} {formatAMPM(date)}
+                                    <span>{data.Account.Name}</span>&nbsp; raised this on{date.getDate()}/{monthNames[date.getMonth()]}/{date.getFullYear()} {formatAMPM(date)}
                                 </p>
                             </div>
                             <p style={{ marginTop: "1rem" }}>{data.Description}</p>

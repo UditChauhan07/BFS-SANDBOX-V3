@@ -23,6 +23,9 @@
   justify-content: center;
   padding: 2rem;
 }
+.formContainer label{
+  margin-bottom: 10px;
+}
 .labelHolder {
   border-radius: 8px;
   border: 1px solid #d5d9d9;
@@ -93,7 +96,9 @@ font-weight: 400;
 line-height: normal;
 letter-spacing: 1.12px;
 }
-
+.contact{
+  margin-bottom: 20px;
+}
 @media (max-width: 769px) {
   .container {
     width: 80%;
