@@ -148,7 +148,7 @@ const OrderStatusFormSection = () => {
                 );
               })}
             </Field> */}
-              <Field name="contact.value" options={contactList.map((contact) => ({ label: contact.Name, value: contact.Id }))} component={SearchableSelect} />
+              <Field name="contact.value" className="contact" options={contactList.map((contact) => ({ label: contact.Name, value: contact.Id }))} component={SearchableSelect} />
             </label>
             <ErrorMessage component={TextError} name="contact" />
 
