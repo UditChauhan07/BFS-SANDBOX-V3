@@ -35,7 +35,7 @@ const ComparisonReportTable = ({ comparisonData }) => {
                           <>
                             <tr key={index}>
                               <td className={`${styles.td} ${styles.stickyFirstColumn}`}>{ele.AccountName}</td>
-                              <td className={`${styles.td}`}>{ele.Estee_Lauder_Number__c} </td>
+                              <td className={`${styles.td}`}>{ele.Estee_Lauder_Number__c??'---'} </td>
                               <td className={`${styles.td}`}>{ele.Sales_Rep__c}</td>
                               <td className={`${styles.td}`}>{ele.Status}</td>
                               <td className={`${styles.td}`}>${formentAcmount(Number(ele.retail_revenue__c).toFixed(2))}</td>
