@@ -21,6 +21,7 @@ const ComparisonReportTable = ({ comparisonData }) => {
                       Estee Lauder Number
                     </th>
                     <th className={`${styles.th} ${styles.stickyMonth}`}> Sales Rep</th>
+                    <th className={`${styles.th} ${styles.stickyMonth}`}> Status</th>
                     <th className={`${styles.th} ${styles.stickyMonth} `}>Retail Revenue</th>
                     <th className={`${styles.th} ${styles.stickyMonth} `}>Wholesale Amount</th>
                     <th className={`${styles.th} `}></th>
@@ -36,6 +37,7 @@ const ComparisonReportTable = ({ comparisonData }) => {
                               <td className={`${styles.td} ${styles.stickyFirstColumn}`}>{ele.AccountName}</td>
                               <td className={`${styles.td}`}>{ele.Estee_Lauder_Number__c} </td>
                               <td className={`${styles.td}`}>{ele.Sales_Rep__c}</td>
+                              <td className={`${styles.td}`}>{ele.Status}</td>
                               <td className={`${styles.td}`}>${formentAcmount(Number(ele.retail_revenue__c).toFixed(2))}</td>
                               <td className={`${styles.td}`}>${formentAcmount(Number(ele.Whole_Sales_Amount).toFixed(2))}</td>
                             </tr>
