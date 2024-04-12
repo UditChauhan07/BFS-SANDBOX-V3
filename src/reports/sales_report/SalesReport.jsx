@@ -25,6 +25,7 @@ const SalesReport = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [manufacturerFilter, setManufacturerFilter] = useState();
   const [highestOrders, setHighestOrders] = useState(true);
+  const [activeAccounts, setActiveAccounts] = useState("Active Account");
   const [salesReportData, setSalesReportData] = useState([]);
   const [ownerPermission, setOwnerPermission] = useState(false);
   const [searchBy, setSearchBy] = useState("");
@@ -80,9 +81,21 @@ const SalesReport = () => {
         };
       });
     }
+    // ...
+    if (activeAccounts === "Active Account") {
+      filtered = filtered?.filter((ele) => 
+     ele.Orders.some((item) => 
+item.Status === "Active Account" ));
+    }else if(activeAccounts === "All Account"){
+      filtered=filtered;
+        };
+      
+    
+    // ........
+
     // ...........
     return filtered;
-  }, [manufacturerFilter, salesReportData, highestOrders, searchBy, searchBySalesRep]);
+  }, [manufacturerFilter, salesReportData, highestOrders, searchBy, searchBySalesRep, activeAccounts]);
 
  
   // ................
@@ -187,13 +200,12 @@ const SalesReport = () => {
   const resetFilter = () => {
     setManufacturerFilter(null);
     setHighestOrders(true);
-    getSalesData(yearFor);
+    setActiveAccounts("Active Account"); 
     setYearFor(2024);
     setSearchBy("");
     setSearchBySalesRep("");
     setYearForTableSort(2024);
   };
-
   const navigate = useNavigate();
 
   const getSalesData = async (yearFor) => {
@@ -308,6 +320,26 @@ const SalesReport = () => {
               ]}
               onChange={(value) => setHighestOrders(value)}
             />
+            <FilterItem
+  minWidth="220px"
+  label="Status"
+  name="Status"
+  value={activeAccounts}
+  options={[
+    {
+      label: "Active Account",
+      value: "Active Account",
+    },
+    {
+      label: "All Account",
+      value: "All Account",
+    },
+  ]}
+  onChange={(value) => {
+    setActiveAccounts(value);
+  }}
+/>
+           
             {/* First Calender Filter-- start date */}
             <FilterSearch onChange={(e) => setSearchBy(e.target.value)} value={searchBy} placeholder={"Search by account"} minWidth={"167px"} />
             <div className="d-flex gap-3">

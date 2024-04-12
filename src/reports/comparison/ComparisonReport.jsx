@@ -22,12 +22,16 @@ const ComparisonReport = () => {
     ManufacturerId__c: "a0O3b00000p7zqKEAQ",
     month: date.getMonth() + 1,
     year: date.getFullYear(),
+    dataDisplay: "Active Account",
+
   };
   const { data: manufacturers } = useManufacturer();
+  const [dataDisplayHandler, setDataDisplayHandler] = useState('Active Account');
   const [filter, setFilter] = useState(initialValues);
   const originalApiData = useComparisonReport();
   const [apiData, setApiData] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const[status,setstatus]=useState(1)
 
   //csv Data
   let csvData = [];
@@ -37,6 +41,7 @@ const ComparisonReport = () => {
         AccountName: ele.AccountName,
         Estee_Lauder_Number__c: ele.Estee_Lauder_Number__c,
         Sales_Rep__c: ele.Sales_Rep__c,
+        Status:ele.Status,
         retail_revenue__c: `$${Number(ele.retail_revenue__c).toFixed(2)}`,
         Whole_Sales_Amount: `$${Number(ele.Whole_Sales_Amount).toFixed(2)}`,
       });
@@ -61,16 +66,37 @@ const ComparisonReport = () => {
     setIsLoading(true);
     const result = await originalApiData.fetchComparisonReportAPI(initialValues);
     setApiData(result);
-    setFilter(() => initialValues);
+    setFilter(initialValues); 
     setIsLoading(false);
+    setstatus(1);
   };
-  const sendApiCall = async () => {
-    setIsLoading(true);
-    const result = await originalApiData.fetchComparisonReportAPI(filter);
-    setApiData(result);
-    setIsLoading(false);
+  // const sendApiCall = async () => {
+  //   setIsLoading(true);
+  //   const result = await originalApiData.fetchComparisonReportAPI(filter);
+  //   setApiData(result);
+  //   setIsLoading(false);
+  // };
+// ..........
+const sendApiCall = async () => {
+  setIsLoading(true);
+  const result = await originalApiData.fetchComparisonReportAPI(filter);
+  let short = result.data.filter(item => status === 1 ? item.Status !== "In-Active" : item);
+  let temp = {
+    ...result,
+    data: short,
   };
+  setFilter(prev => ({
+    ...prev,
+    dataDisplay: status === 1 ? "Active Account" : "All Account",
+  }));
+  setApiData(temp);
+  
+  setIsLoading(false);
+};
+
+
   return (
+
     <AppLayout
       filterNodes={
         <>
@@ -93,7 +119,7 @@ const ComparisonReport = () => {
             options={apiData?.date?.monthList?.map((month) => ({
               label: month?.name,
               value: month.value,
-            }))}
+            })) || []} 
             onChange={(value) => setFilter((prev) => ({ ...prev, month: value }))}
           />
           <FilterItem
@@ -104,9 +130,27 @@ const ComparisonReport = () => {
             options={apiData?.date?.yearList?.map((year) => ({
               label: year?.name,
               value: year.value,
-            }))}
+            })) || []} 
             onChange={(value) => setFilter((prev) => ({ ...prev, year: value }))}
           />
+          <FilterItem
+  label={status === 1 ? "Active Account" : "All Account"} 
+  name="Status"
+  value={status}
+  options={[
+    {
+      label: "Active Account",
+      value: 1,
+    },
+    {
+      label: "All Account",
+      value: 2,
+    },
+  ]}
+  onChange={(value) => {
+    setstatus(value)
+  }}
+/>
           <div className="d-flex gap-3">
             <button className="border px-2 d-grid py-1 leading-tight" onClick={sendApiCall}>
             <SearchIcon fill="#fff" width={20} height={20}/>
