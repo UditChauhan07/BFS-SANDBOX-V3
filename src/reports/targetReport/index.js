@@ -23,6 +23,7 @@ const TargetReport = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [target, setTarget] = useState({ ownerPermission: false, list: [] });
   const [manufacturerFilter, setManufacturerFilter] = useState();
+  const [activeAccounts, setActiveAccounts] = useState("Active Account");
   const [searchBy, setSearchBy] = useState("");
   let currentDate = new Date();
   const [year, setYear] = useState(currentDate.getFullYear());
@@ -35,8 +36,10 @@ const TargetReport = () => {
   useEffect(() => {
     GetAuthData()
       .then((user) => {
+        console.log(user)
         getTargetReportAll({ user, year, preOrder })
           .then((targetRes) => {
+            console.log(targetRes)
             if (targetRes) {
               setIsLoaded(true);
             }
@@ -80,8 +83,9 @@ const TargetReport = () => {
         }
       });
     }
+   
     return filtered;
-  }, [manufacturerFilter, searchBy, searchSaleBy, isLoaded]);
+  }, [manufacturerFilter, searchBy, searchSaleBy,activeAccounts, isLoaded]);
   const resetFilter = () => {
     setManufacturerFilter(null);
     setSearchBy("");
@@ -389,8 +393,10 @@ const TargetReport = () => {
     setIsLoaded(false);
     GetAuthData()
       .then((user) => {
+        console.log(user)
         getTargetReportAll({ user, year, preOrder })
           .then((targetRes) => {
+          
             if (targetRes) {
               setIsLoaded(true);
             }
@@ -447,6 +453,25 @@ const TargetReport = () => {
               name="yearStatus"
               containNullValue
             />
+            <FilterItem
+            label="Status"
+            name="Status"
+            value={activeAccounts}
+            // value={filter.dataDisplay}
+            options={[
+              {
+                label: "Active Account",
+                value: "Active Account",
+              },
+              {
+                label: "All Account",
+                value:"All Account",
+              },
+            ]}
+            onChange={(value) => {
+              setActiveAccounts(value)
+            }}
+          />
             <button onClick={() => sendApiCall()} className="border px-2 d-grid py-1 leading-tight flex justify-center align-center gap-1">
               <SearchIcon fill="#fff" width={20} height={20} />
               <small style={{ fontSize: "6px", letterSpacing: "0.5px", textTransform: "uppercase" }}>search</small>
