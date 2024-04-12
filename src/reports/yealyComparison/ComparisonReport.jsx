@@ -34,8 +34,8 @@ const YearlyComparisonReport = () => {
   let csvData = [];
   let totalwholesale = 0;
   let totalretailer = 0;
-  if (apiData?.data?.length) {
-    apiData?.data?.map((ele) => {
+  if (apiData?.length) {
+    apiData?.map((ele) => {
       totalretailer+=ele.Jan.retail_revenue__c;
       totalwholesale+=ele.Jan.Whole_Sales_Amount;
       totalretailer+=ele.Feb.retail_revenue__c;
