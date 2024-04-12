@@ -678,3 +678,22 @@ export async function getMarketingCalendar({key,manufacturerId}) {
     return data?.data;
   }
 }
+
+export async function getYearlyComparison({year,ManufacturerId__c}) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/9kJs2I6Bn/Ox2KAg3U0e9l3Ht7lBG7", {
+    method: "POST",
+    body: JSON.stringify({year,ManufacturerId__c}),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data?.data;
+  }
+}

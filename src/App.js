@@ -34,6 +34,7 @@ import CustomerServiceForm from "./pages/CustomerServiceForm";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TargetReport from "./reports/targetReport";
+import YearlyComparisonReport from "./reports/yealyComparison/ComparisonReport";
 
 
 function App() {
@@ -52,6 +53,10 @@ function App() {
             <Route
               path="/comparison-report"
               element={<ComparisonReport />}
+            ></Route>
+            <Route
+              path="/comparison"
+              element={<YearlyComparisonReport />}
             ></Route>
             <Route path="/testing" element={<Testing />}></Route>
             <Route path="/top-products" element={<TopProducts />}></Route>
