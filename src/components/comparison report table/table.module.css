@@ -86,6 +86,29 @@
   left: 28%;
   z-index: 2;
 }
+.stickyLastColumn {
+  position: sticky;
+  right: 0%;
+  z-index: 2;
+}
+.stickyLastColumnHeading {
+  position: sticky;
+  right: 0%;
+  top: 0%;
+  z-index: 5;
+}
+.stickySecondLastColumn {
+  position: sticky;
+  right: 100px;
+  z-index: 2;
+}
+.stickySecondLastColumnHeading {
+  position: sticky;
+  right: 100px;
+  top: 0%;
+  z-index: 5;
+  min-width: 150px !important;
+}
 
 .stickyThirdColumnHeading1 {
   position: sticky;
