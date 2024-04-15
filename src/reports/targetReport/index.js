@@ -40,6 +40,7 @@ const TargetReport = () => {
         getTargetReportAll({ user, year, preOrder })
           .then((targetRes) => {
             console.log(targetRes)
+            console.log(targetRes)
             if (targetRes) {
               setIsLoaded(true);
             }
@@ -82,7 +83,25 @@ const TargetReport = () => {
           return item;
         }
       });
+  
+    if (activeAccounts === "Active Account") {
+      filtered = filtered?.filter((item) => 
+      {
+if(item.Status === "Active Account"){
+
+}else if(activeAccounts ==="All Account"){
+  return filtered;
+}
+      })
     }
+  }
+//     if (activeAccounts === "Active Account") {
+//       filtered = filtered?.filter((ele) => 
+//      ele.Orders?.some((item) => 
+// item.Status === "Active Account" ));
+//     }else if(activeAccounts === "All Account"){
+//       filtered=filtered;
+//         };
    
     return filtered;
   }, [manufacturerFilter, searchBy, searchSaleBy,activeAccounts, isLoaded]);
@@ -105,6 +124,7 @@ const TargetReport = () => {
           SalesRepName: target.SalesRepName,
           AccountName: target.AccountName,
           ManufacturerName: target.ManufacturerName,
+          Status:target.Status,
           JanuaryTarget: target.January.target,
           JanuarySale: target.January.sale,
           JanuaryDiff: target.January.diff,
@@ -170,6 +190,7 @@ const TargetReport = () => {
       SalesRepName: "TOTAL",
       AccountName: "",
       ManufacturerName: "",
+      Status:"",
       JanuaryTarget: 0,
       JanuarySale: 0,
       JanuaryDiff: 0,
@@ -453,25 +474,7 @@ const TargetReport = () => {
               name="yearStatus"
               containNullValue
             />
-            <FilterItem
-            label="Status"
-            name="Status"
-            value={activeAccounts}
-            // value={filter.dataDisplay}
-            options={[
-              {
-                label: "Active Account",
-                value: "Active Account",
-              },
-              {
-                label: "All Account",
-                value:"All Account",
-              },
-            ]}
-            onChange={(value) => {
-              setActiveAccounts(value)
-            }}
-          />
+            
             <button onClick={() => sendApiCall()} className="border px-2 d-grid py-1 leading-tight flex justify-center align-center gap-1">
               <SearchIcon fill="#fff" width={20} height={20} />
               <small style={{ fontSize: "6px", letterSpacing: "0.5px", textTransform: "uppercase" }}>search</small>
@@ -507,6 +510,25 @@ const TargetReport = () => {
               }))}
               onChange={(value) => setManufacturerFilter(value)}
             />
+            <FilterItem
+            label="Status"
+            name="Status"
+            value={activeAccounts}
+            // value={filter.dataDisplay}
+            options={[
+              {
+                label: "Active Account",
+                value: "Active Account",
+              },
+              {
+                label: "All Account",
+                value:"All Account",
+              },
+            ]}
+            onChange={(value) => {
+              setActiveAccounts(value)
+            }}
+          />
             <div className="d-flex gap-3">
               <button className="border px-2 d-grid py-1 leading-tight" onClick={resetFilter}>
                 <CloseButton crossFill={"#fff"} height={20} width={20} />
@@ -578,6 +600,9 @@ const TargetReport = () => {
                     </th>
                     <th className={`${Styles.th} ${Styles.stickyThirdColumnHeading}`} style={{ minWidth: "200px" }}>
                       Manufacturer
+                    </th>
+                    <th className={`${Styles.th} ${Styles.stickyThirdColumnHeading}`} style={{ minWidth: "200px" }}>
+                     Status
                     </th>
                     <th className={`${Styles.month} ${Styles.stickyMonth}`} style={{ minWidth: "125px" }}>
                       Jan Target
@@ -765,6 +790,7 @@ const TargetReport = () => {
                           <td className={`${Styles.td} ${Styles.stickyFirstColumn}`}>{element?.SalesRepName}</td>
                           <td className={`${Styles.td} ${Styles.stickySecondColumn}`}>{element?.AccountName}</td>
                           <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}>{element.ManufacturerName}</td>
+                          <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}>{element.Status}</td>
                           <td className={`${Styles.td}`}>${formentAcmount(element.January.target)}</td>
                           <td className={`${Styles.td}`}>${formentAcmount(element.January.sale)}</td>
                           <td className={`${Styles.td}`}>${formentAcmount(element.January.diff)}</td>
