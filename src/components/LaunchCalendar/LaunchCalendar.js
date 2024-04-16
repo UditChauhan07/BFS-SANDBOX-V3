@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import "./Style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-function LaunchCalendar1({ productList, brand, month }) {
+function LaunchCalendar({ productList, brand, month }) {
   const products = productList;
 
   const [isEmpty, setIsEmpty] = useState(false);
@@ -31,10 +31,10 @@ function LaunchCalendar1({ productList, brand, month }) {
         if (month) {
           if (brand) {
             if (brand == item.brand) {
-              return item.date.toLowerCase().includes(month.toLowerCase());
+              return monthNames[parseInt(item.Ship_Date__c.split("-")[1])-1].toLowerCase()==month.toLowerCase();
             }
           } else {
-            return item.date.toLowerCase().includes(month.toLowerCase());
+            return monthNames[parseInt(item.Ship_Date__c.split("-")[1])-1].toLowerCase()==month.toLowerCase();
           }
           // return match.includes(month.toUpperCase() )
         } else {
@@ -92,7 +92,6 @@ function LaunchCalendar1({ productList, brand, month }) {
                       <li key={index}>
                         <span className={`timelineHolder0${(index % 3) + 1}`}>{month.month}</span>
                         {month.content.map((product, productIndex) => {
-                          console.log("booo");
                           if (!brand || brand == product.brand || brand == product.ManufacturerName__c) {
                             return (
                               <>
@@ -101,19 +100,19 @@ function LaunchCalendar1({ productList, brand, month }) {
                                     <div className="BothDateTopFlex">
                                       <div className="ShipDate">
                                         <span>Ship Date</span>
-                                        <div className={`DateCurrent0${(index % 3) + 1}`}>{product.Ship_Date__c}</div>
+                                        <div className={`DateCurrent0${(index % 3) + 1}`}>{product.Ship_Date__c?(product.Ship_Date__c.split("-")[2] == 15?'TBD':product.Ship_Date__c.split("-")[2])+'/'+monthNames[parseInt(product.Ship_Date__c.split("-")[1])-1].toUpperCase()+'/'+product.Ship_Date__c.split("-")[0]:'NA'}</div>
                                       </div>
                                       <div className="ShipDate EDate">
                                         <span>OCD</span>
-                                        <div className="DateEod">{product.Launch_Date__c}</div>
+                                        <div className="DateEod">{product.Launch_Date__c?product.Launch_Date__c.split("-")[2]+'/'+monthNames[parseInt(product.Launch_Date__c.split("-")[1])-1].toUpperCase()+'/'+product.Launch_Date__c.split("-")[0]:'NA'}</div>
                                       </div>
                                     </div>
                                     <div className="d-flex mt-2">
                                       <div className="m-auto ProductImg">
-                                        <img src={product.image} alt={product.Name} />
+                                        <img src={product?.ProductImage} alt={product.Name} />
                                       </div>
                                       <div className="LaunchProductDetail">
-                                        <h3>{product.name}</h3>
+                                        <h3>{product.Name}</h3>
                                         <div className="size">
                                           Size <span className="ProductQty">{product.Size_Volume_Weight__c}</span>
                                         </div>
@@ -122,7 +121,7 @@ function LaunchCalendar1({ productList, brand, month }) {
                                     </div>
                                   </div>
                                   <div className="launchBrand">
-                                    <img className="img-fluid" src={product.brandLogo} alt={`${product.name} logo`} />
+                                    <img className="img-fluid" src={"\\assets\\images\\brandImage\\"+product.ManufacturerId__c+".png"} alt={`${product.name} logo`} />
                                   </div>
                                 </div>
                               </>
@@ -157,7 +156,7 @@ function LaunchCalendar1({ productList, brand, month }) {
     </div>
   );
 }
-function LaunchCalendar({ productList, brand, month }) {
+function LaunchCalendar1({ productList, brand, month }) {
   const [products, setProducts] = useState(productList);
 
   const [isEmpty, setIsEmpty] = useState(false);
