@@ -30,16 +30,24 @@ function LaunchCalendar({ productList, brand, month }) {
         // console.log(match)
         if (month) {
           if (brand) {
-            if (brand == item.brand) {
-              return monthNames[parseInt(item.Ship_Date__c.split("-")[1])-1].toLowerCase()==month.toLowerCase();
+            if (brand == item.ManufacturerName__c) {
+              if (month == "TBD") {
+                return parseInt(item.Ship_Date__c.split("-")[2]) == 15;
+              } else {
+                return monthNames[parseInt(item.Ship_Date__c.split("-")[1]) - 1].toLowerCase() == month.toLowerCase();
+              }
             }
           } else {
-            return monthNames[parseInt(item.Ship_Date__c.split("-")[1])-1].toLowerCase()==month.toLowerCase();
+            if (month == "TBD") {
+              return parseInt(item.Ship_Date__c.split("-")[2]) == 15;
+            } else {
+              return monthNames[parseInt(item.Ship_Date__c.split("-")[1]) - 1].toLowerCase() == month.toLowerCase();
+            }
           }
           // return match.includes(month.toUpperCase() )
         } else {
           if (brand) {
-            if (brand == item.brand) {
+            if (brand == item.ManufacturerName__c) {
               return true;
             }
           } else {
@@ -100,11 +108,11 @@ function LaunchCalendar({ productList, brand, month }) {
                                     <div className="BothDateTopFlex">
                                       <div className="ShipDate">
                                         <span>Ship Date</span>
-                                        <div className={`DateCurrent0${(index % 3) + 1}`}>{product.Ship_Date__c?(product.Ship_Date__c.split("-")[2] == 15?'TBD':product.Ship_Date__c.split("-")[2])+'/'+monthNames[parseInt(product.Ship_Date__c.split("-")[1])-1].toUpperCase()+'/'+product.Ship_Date__c.split("-")[0]:'NA'}</div>
+                                        <div className={`DateCurrent0${(index % 3) + 1}`}>{product.Ship_Date__c ? (product.Ship_Date__c.split("-")[2] == 15 ? 'TBD' : product.Ship_Date__c.split("-")[2]) + '/' + monthNames[parseInt(product.Ship_Date__c.split("-")[1]) - 1].toUpperCase() + '/' + product.Ship_Date__c.split("-")[0] : 'NA'}</div>
                                       </div>
                                       <div className="ShipDate EDate">
                                         <span>OCD</span>
-                                        <div className="DateEod">{product.Launch_Date__c?product.Launch_Date__c.split("-")[2]+'/'+monthNames[parseInt(product.Launch_Date__c.split("-")[1])-1].toUpperCase()+'/'+product.Launch_Date__c.split("-")[0]:'NA'}</div>
+                                        <div className="DateEod">{product.Launch_Date__c ? product.Launch_Date__c.split("-")[2] + '/' + monthNames[parseInt(product.Launch_Date__c.split("-")[1]) - 1].toUpperCase() + '/' + product.Launch_Date__c.split("-")[0] : 'NA'}</div>
                                       </div>
                                     </div>
                                     <div className="d-flex mt-2">
@@ -121,7 +129,7 @@ function LaunchCalendar({ productList, brand, month }) {
                                     </div>
                                   </div>
                                   <div className="launchBrand">
-                                    <img className="img-fluid" src={"\\assets\\images\\brandImage\\"+product.ManufacturerId__c+".png"} alt={`${product.name} logo`} />
+                                    <img className="img-fluid" src={"\\assets\\images\\brandImage\\" + product.ManufacturerId__c + ".png"} alt={`${product.name} logo`} />
                                   </div>
                                 </div>
                               </>
@@ -239,9 +247,9 @@ function LaunchCalendar1({ productList, brand, month }) {
         <div className="row">
           <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 ">
             <ul className="timeline mt-4 mr-4" id="CalenerContainer">
-            { allOrdersEmpty ? (
-                   <div className="NodataContent">No data found</div>
-                  ) : 
+              {allOrdersEmpty ? (
+                <div className="NodataContent">No data found</div>
+              ) :
                 filterData?.map((month, index) => {
                   if (month.content.length) {
                     return (
@@ -289,7 +297,7 @@ function LaunchCalendar1({ productList, brand, month }) {
                     );
                   }
                 })
-            }
+              }
             </ul>
           </div>
 
