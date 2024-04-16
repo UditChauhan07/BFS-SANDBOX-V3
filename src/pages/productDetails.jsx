@@ -22,6 +22,7 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountI
             GetAuthData().then((user) => {
                 let rawData = { productId: productId, key: user.x_access_token, salesRepId: user?.Sales_Rep__c, accountId: AccountId }
                 getProductDetails({ rawData }).then((productRes) => {
+                    console.log({productRes});
                     setProduct({ isLoaded: true, data: productRes.data, discount: productRes.discount })
                 }).catch((proErr) => {
                     console.log({ proErr });
