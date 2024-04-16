@@ -54,7 +54,7 @@ setpagination([{content: newValues }]);
         const filterData = months.content?.filter((item) => {
           if (month) {
             if (brand && brand !== "All") {
-              if (brand == item.brand) {
+              if (brand == item.ManufacturerName__c) {
                 return item.date.toLowerCase().includes(month.toLowerCase());
               }
             } else {
@@ -108,17 +108,17 @@ setpagination([{content: newValues }]);
               pagination?.map((month, index) => {
                 if (month.content.length) {
                   return month.content.map((product) => {
-                    if (!brand || brand == product.brand) {
+                    if (!brand || brand == product.ManufacturerName__c) {
                       return (
                         
                         <div className={Styles.cardElement}>
                           <div className={`last:mb-0 mb-4 ${Styles.HoverArrow}`}>
                            <div className={` border-[#D0CFCF] flex flex-col gap-4   ${Styles.ImgHover1}`}>
                           {/* {isLoaded ? <img className={Styles.imgHolder} onClick={() => { setProductDetailId(product.Id) }} src={product?.[product.ProductCode]?.ContentDownloadUrl ?? product.image} /> : <LoaderV2 />} */}
-                          <img src={product.image} alt={product.name} />
+                          <img src={product.ProductImage} alt={product.Name} />
                           </div>
                         </div>
-                          <p className={Styles.brandHolder}>{product?.brand}</p>
+                          <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
                          
                           <p
                             className={Styles.titleHolder}
@@ -126,7 +126,7 @@ setpagination([{content: newValues }]);
                               setProductDetailId(product.Id);
                             }}
                           >
-                            {product?.name?.substring(0, 15)}...
+                            {product?.Name?.substring(0, 15)}...
                           </p>
                           <p className={Styles.priceHolder}>$ -- . --</p>
                           {to ? (
