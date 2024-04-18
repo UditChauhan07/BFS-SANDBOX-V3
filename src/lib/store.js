@@ -1,4 +1,5 @@
 export const originAPi = "https://b2b.beautyfashionsales.com"
+// export const originAPi = "https://dev.beautyfashionsales.com"
 // export const originAPi = "http://localhost:2000"
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
@@ -251,7 +252,6 @@ export async function getTargetReportAll({ user, year, preOrder }) {
     if (preOrder) {
       bodyContent.append('preorder', preOrder);
     }
-
     let response = await fetch(url + "target/4Tu6do95AxLM3Cl", {
       method: "POST",
       body: bodyContent,
@@ -661,6 +661,7 @@ export async function getSessionStatus({key,salesRepId}) {
   }
 }
 export async function getMarketingCalendar({key,manufacturerId}) {
+  console.log({key});
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
