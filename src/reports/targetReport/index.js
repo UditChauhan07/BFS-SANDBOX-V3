@@ -83,28 +83,27 @@ const TargetReport = () => {
           return item;
         }
       });
-  
-    if (activeAccounts === "Active Account") {
-      filtered = filtered?.filter((item) => 
-      {
-if(item.Status === "Active Account"){
 
-}else if(activeAccounts ==="All Account"){
-  return filtered;
-}
-      })
+      if (activeAccounts === "Active Account") {
+        filtered = filtered?.filter((item) => {
+          if (item.Status === "Active Account") {
+
+          } else if (activeAccounts === "All Account") {
+            return filtered;
+          }
+        })
+      }
     }
-  }
-//     if (activeAccounts === "Active Account") {
-//       filtered = filtered?.filter((ele) => 
-//      ele.Orders?.some((item) => 
-// item.Status === "Active Account" ));
-//     }else if(activeAccounts === "All Account"){
-//       filtered=filtered;
-//         };
-   
+    //     if (activeAccounts === "Active Account") {
+    //       filtered = filtered?.filter((ele) => 
+    //      ele.Orders?.some((item) => 
+    // item.Status === "Active Account" ));
+    //     }else if(activeAccounts === "All Account"){
+    //       filtered=filtered;
+    //         };
+
     return filtered;
-  }, [manufacturerFilter, searchBy, searchSaleBy,activeAccounts, isLoaded]);
+  }, [manufacturerFilter, searchBy, searchSaleBy, activeAccounts, isLoaded]);
   const resetFilter = () => {
     setManufacturerFilter(null);
     setSearchBy("");
@@ -124,7 +123,7 @@ if(item.Status === "Active Account"){
           SalesRepName: target.SalesRepName,
           AccountName: target.AccountName,
           ManufacturerName: target.ManufacturerName,
-          Status:target.Status,
+          Status: target.Status,
           JanuaryTarget: target.January.target,
           JanuarySale: target.January.sale,
           JanuaryDiff: target.January.diff,
@@ -185,12 +184,12 @@ if(item.Status === "Active Account"){
   // .............
   const exportToExcel2 = () => {
     setExportToExcelState(false);
-    
+
     const totalRow = {
       SalesRepName: "TOTAL",
       AccountName: "",
       ManufacturerName: "",
-      Status:"",
+      Status: "",
       JanuaryTarget: 0,
       JanuarySale: 0,
       JanuaryDiff: 0,
@@ -239,12 +238,12 @@ if(item.Status === "Active Account"){
       DecemberSale: 0,
       DecemberDiff: 0,
 
-      
+
       TotalTarget: 0,
       TotalSale: 0,
       TotalDiff: 0,
     };
-  
+
     filteredTargetData.forEach(element => {
       totalRow.JanuaryTarget += parseFloat(element.January.target);
       totalRow.JanuarySale += parseFloat(element.January.sale);
@@ -261,7 +260,7 @@ if(item.Status === "Active Account"){
       totalRow.AprilTarget += parseFloat(element.April.target);
       totalRow.AprilSale += parseFloat(element.April.sale);
       totalRow.AprilDiff += parseFloat(element.April.diff);
-      
+
       totalRow.MayTarget += parseFloat(element.May.target);
       totalRow.MaySale += parseFloat(element.May.sale);
       totalRow.MayDiff += parseFloat(element.May.diff);
@@ -269,7 +268,7 @@ if(item.Status === "Active Account"){
       totalRow.JuneTarget += parseFloat(element.June.target);
       totalRow.JuneSale += parseFloat(element.June.sale);
       totalRow.JuneDiff += parseFloat(element.June.diff);
-      
+
       totalRow.JulyTarget += parseFloat(element.July.target);
       totalRow.JulySale += parseFloat(element.July.sale);
       totalRow.JulyDiff += parseFloat(element.July.diff);
@@ -277,7 +276,7 @@ if(item.Status === "Active Account"){
       totalRow.AugustTarget += parseFloat(element.August.target);
       totalRow.AugustSale += parseFloat(element.August.sale);
       totalRow.AugustDiff += parseFloat(element.August.diff);
-      
+
       totalRow.SeptemberTarget += parseFloat(element.September.target);
       totalRow.SeptemberSale += parseFloat(element.September.sale);
       totalRow.SeptemberDiff += parseFloat(element.September.diff);
@@ -294,26 +293,26 @@ if(item.Status === "Active Account"){
       totalRow.DecemberSale += parseFloat(element.December.sale);
       totalRow.DecemberDiff += parseFloat(element.December.diff);
 
-    
+
       // Repeat the same for other months and total columns
       // ...
       totalRow.TotalTarget += parseFloat(element.Total.target);
       totalRow.TotalSale += parseFloat(element.Total.sale);
       totalRow.TotalDiff += parseFloat(element.Total.diff);
     });
-  
-   const dataWithTotalRow = [...csvData(), totalRow];
-  const ws = XLSX.utils.json_to_sheet(dataWithTotalRow);
-  const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const data = new Blob([excelBuffer], { type: fileType });
-  
+
+    const dataWithTotalRow = [...csvData(), totalRow];
+    const ws = XLSX.utils.json_to_sheet(dataWithTotalRow);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+
     let title = target.ownerPermission ? `${searchSaleBy ? searchSaleBy + "`s" : "All"} Target Report` : "Target Report";
     if (manufacturerFilter) {
       title += " for " + getManufactureName(manufacturerFilter);
     }
     title += ` ${new Date().toDateString()}`;
-  
+
     FileSaver.saveAs(data, title + fileExtension);
   };
   // ...............
@@ -417,7 +416,7 @@ if(item.Status === "Active Account"){
         console.log(user)
         getTargetReportAll({ user, year, preOrder })
           .then((targetRes) => {
-          
+
             if (targetRes) {
               setIsLoaded(true);
             }
@@ -448,8 +447,8 @@ if(item.Status === "Active Account"){
     { label: currentDate.getFullYear(), value: currentDate.getFullYear() },
     { label: currentDate.getFullYear() - 1, value: currentDate.getFullYear() - 1 },
   ];
-  const formentAcmount =(target,sale,diff,totalorderPrice,monthTotalAmount)=>{
-    return `${Number(target,sale,diff,totalorderPrice,monthTotalAmount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
+  const formentAcmount = (target, sale, diff, totalorderPrice, monthTotalAmount) => {
+    return `${Number(target, sale, diff, totalorderPrice, monthTotalAmount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
   }
   return (
     <AppLayout
@@ -474,7 +473,7 @@ if(item.Status === "Active Account"){
               name="yearStatus"
               containNullValue
             />
-            
+
             <button onClick={() => sendApiCall()} className="border px-2 d-grid py-1 leading-tight flex justify-center align-center gap-1">
               <SearchIcon fill="#fff" width={20} height={20} />
               <small style={{ fontSize: "6px", letterSpacing: "0.5px", textTransform: "uppercase" }}>search</small>
@@ -511,24 +510,24 @@ if(item.Status === "Active Account"){
               onChange={(value) => setManufacturerFilter(value)}
             />
             <FilterItem
-            label="Status"
-            name="Status"
-            value={activeAccounts}
-            // value={filter.dataDisplay}
-            options={[
-              {
-                label: "Active Account",
-                value: "Active Account",
-              },
-              {
-                label: "All Account",
-                value:"All Account",
-              },
-            ]}
-            onChange={(value) => {
-              setActiveAccounts(value)
-            }}
-          />
+              label="Status"
+              name="Status"
+              value={activeAccounts}
+              // value={filter.dataDisplay}
+              options={[
+                {
+                  label: "Active Account",
+                  value: "Active Account",
+                },
+                {
+                  label: "All Account",
+                  value: "All Account",
+                },
+              ]}
+              onChange={(value) => {
+                setActiveAccounts(value)
+              }}
+            />
             <div className="d-flex gap-3">
               <button className="border px-2 d-grid py-1 leading-tight" onClick={resetFilter}>
                 <CloseButton crossFill={"#fff"} height={20} width={20} />
@@ -602,7 +601,10 @@ if(item.Status === "Active Account"){
                       Manufacturer
                     </th>
                     <th className={`${Styles.th} ${Styles.stickyThirdColumnHeading}`} style={{ minWidth: "200px" }}>
-                     Status
+                      Status
+                    </th>
+                    <th className={`${Styles.th} ${Styles.stickyThirdColumnHeading}`} style={{ minWidth: "200px" }}>
+                      Date Open
                     </th>
                     <th className={`${Styles.month} ${Styles.stickyMonth}`} style={{ minWidth: "125px" }}>
                       Jan Target
@@ -736,12 +738,12 @@ if(item.Status === "Active Account"){
                   </tr>
                 </thead>
                 {allOrdersEmpty ? (
-                    <div className={`${styles.NodataText} py-4 w-full lg:min-h-[300px] xl:min-h-[380px]`} key="no-data">
-                      <p>No data found</p>
-                    </div>
-                  ) : (
-                <tbody>
-                  {filteredTargetData.map((element, index) => {
+                  <div className={`${styles.NodataText} py-4 w-full lg:min-h-[300px] xl:min-h-[380px]`} key="no-data">
+                    <p>No data found</p>
+                  </div>
+                ) : (
+                  <tbody>
+                    {filteredTargetData.map((element, index) => {
                       // if (!brandcount[element.ManufacturerName]) {
                       //     brandcount[element.ManufacturerName] = 0
                       // }
@@ -791,6 +793,7 @@ if(item.Status === "Active Account"){
                           <td className={`${Styles.td} ${Styles.stickySecondColumn}`}>{element?.AccountName}</td>
                           <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}>{element.ManufacturerName}</td>
                           <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}>{element.Status}</td>
+                          <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}>{element?.DateOpen}</td>
                           <td className={`${Styles.td}`}>${formentAcmount(element.January.target)}</td>
                           <td className={`${Styles.td}`}>${formentAcmount(element.January.sale)}</td>
                           <td className={`${Styles.td}`}>${formentAcmount(element.January.diff)}</td>
@@ -845,13 +848,17 @@ if(item.Status === "Active Account"){
                         </tr>
                       );
                     })}
-                  
-                </tbody>
+
+                  </tbody>
                 )}
                 <tfoot>
                   <tr>
                     <td className={`${Styles.lastRow} ${Styles.stickyFirstColumn} ${Styles.stickyLastRow}`} colSpan={3}>
                       TOTAL
+                    </td>
+                    <td className={`${Styles.lastRow}  ${Styles.lastRowMonth}  ${Styles.stickyLastRow}`} >
+                    </td>                 
+                    <td className={`${Styles.lastRow}  ${Styles.lastRowMonth}  ${Styles.stickyLastRow}`}>
                     </td>
                     <td className={`${Styles.lastRow}  ${Styles.lastRowMonth}  ${Styles.stickyLastRow}`}>
                       ${formentAcmount(monthTotalAmount.Jan.target)}
