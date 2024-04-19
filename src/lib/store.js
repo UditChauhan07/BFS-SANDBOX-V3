@@ -699,3 +699,18 @@ export async function getYearlyComparison({year,ManufacturerId__c}) {
     return data?.data;
   }
 }
+
+export function DateConvert(dateString) {
+  if (dateString) {
+    const [year, month, day] = dateString.split(/[-/]/);
+    if (day && month && year) {
+      let parsedDate = new Date(`${month}/${day}/${year}`);
+      if (!isNaN(parsedDate.getTime())) {
+        const options = { day: "numeric", month: "short", year: "numeric" };
+        let launchDateFormattedDate = new Intl.DateTimeFormat("en-US", options).format(new Date(parsedDate));
+        return launchDateFormattedDate;
+      }
+    }
+    // throw new Error("Invalid date string");
+  }
+}

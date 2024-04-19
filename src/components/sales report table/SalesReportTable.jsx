@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./table.module.css";
 import Loading from "../Loading";
+import { DateConvert } from "../../lib/store";
 const SalesReportTable = ({ salesData, year, ownerPermission }) => {
   const allOrdersEmpty = salesData.every((item) => item.Orders.length <= 0);
   const d = new Date();
@@ -23,20 +24,6 @@ const SalesReportTable = ({ salesData, year, ownerPermission }) => {
     Nov: 0,
     Dec: 0,
   };
-  function convertDateStringToDate(dateString) {
-    if (dateString) {
-      const [year, month, day] = dateString.split(/[-/]/);
-      if (day && month && year) {
-        let parsedDate = new Date(`${month}/${day}/${year}`);
-        if (!isNaN(parsedDate.getTime())) {
-          const options = { day: "numeric", month: "short", year: "numeric" };
-          let launchDateFormattedDate = new Intl.DateTimeFormat("en-US", options).format(new Date(parsedDate));
-          return launchDateFormattedDate;
-        }
-      }
-      // throw new Error("Invalid date string");
-    }
-  }
   const formentAcmount =(amount,totalorderPrice,monthTotalAmount)=>{
     return `${Number(amount,totalorderPrice,monthTotalAmount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
   }
@@ -165,7 +152,7 @@ const SalesReportTable = ({ salesData, year, ownerPermission }) => {
                             {item?.AccountType ?? "---"}
                           </td>
                           <td className={`${styles.td}`} style={{ minWidth: "150px" }}>
-                            {convertDateStringToDate(item?.DateOpen)}
+                            {DateConvert(item?.DateOpen)}
                           </td>
                           <td className={`${styles.td}`}>{item?.Status ?? "---"}</td>
                           {currentYear == year ? (
