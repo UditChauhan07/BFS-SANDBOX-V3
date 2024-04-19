@@ -739,8 +739,8 @@ export const hexabrandText = {
   a0ORb0000000uwfMAA: "#8a5e1c",
   a0O3b00000p4F4HEAU: "#575757",
   a0ORb000000QzsfMAC: "#445840",
-  a0O1O00000XYBvkUAH: "#ed8cae",
-  a0O1O00000XYBvaUAH: "#133c64",
+  a0O1O00000XYBvkUAH: "#ffffff",
+  a0O1O00000XYBvaUAH: "#ffffff",
   a0ORb000000nDfFMAU:"#deb887",
   a0ORb000000nDIiMAM:"#deb887"
 };
