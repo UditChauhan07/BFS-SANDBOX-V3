@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Styles from "./Dashboard.module.css";
 import Chart from "react-apexcharts";
-import Loading from "../Loading";
 import img1 from "./Images/Active-1.png";
 import img2 from "./Images/Vector.png";
 import img3 from "./Images/Group.png";
 import img4 from "./Images/Group1.png";
-import img5 from "./Images/Rectangle 304.png";
 import { PieChart, Pie, Cell } from "recharts";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthCheck, GetAuthData, formatNumber, getDashboardata } from "../../lib/store";
+import { AuthCheck, GetAuthData, formatNumber, getDashboardata, hexabrand } from "../../lib/store";
 import { getRandomColors } from "../../lib/color";
 import ContentLoader from "react-content-loader";
 import SelectBrandModel from "../My Retailers/SelectBrandModel/SelectBrandModel";
@@ -68,76 +66,6 @@ const monthList = [
     value: "2024|12",
   },
 ];
-const dataa = {
-  series: [
-    {
-      name: "Diptyque",
-      data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
-    },
-    {
-      name: "Byredo",
-      data: [76, 85, 87, 98, 87, 97, 91, 74, 94],
-    },
-    {
-      name: "Bobbi Brown",
-      data: [16, 25, 37, 48, 57, 67, 73, 84, 94],
-    },
-    {
-      name: "By Terry",
-      data: [6, 15, 23, 35, 41, 53, 66, 74, 87],
-    },
-    {
-      name: "Revive",
-      data: [2, 12, 21, 30, 33, 42, 37, 41, 54],
-    },
-    {
-      name: "Kevyn Aucoin",
-      data: [71, 88, 83, 91, 82, 99, 61, 70, 98],
-    },
-    {
-      name: "Smashbox",
-      data: [10, 12, 14, 11, 16, 20, 24, 29, 32],
-    },
-  ],
-  options: {
-    chart: {
-      type: "area",
-    },
-    stroke: {
-      curve: "smooth",
-      width: 2,
-    },
-
-    dataLabels: {
-      enabled: true,
-    },
-    colors: getRandomColors(17),
-    fill: {
-      type: "gradient",
-      gradient: {
-        opacityFrom: 0,
-        opacityTo: 0,
-      },
-    },
-
-    xaxis: {
-      categories: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    },
-    yaxis: {
-      title: {
-        text: "$ (Dollar)",
-      },
-    },
-
-    tooltip: {
-      y: {
-        formatter: function (val) {
-          return "$" + Number(val).toFixed(2) + "";
-        },
-      },
-    },
-  },
-};
 
 function Dashboard({ dashboardData }) {
   const bgColors = {
@@ -151,6 +79,76 @@ function Dashboard({ dashboardData }) {
     "RMS Beauty": "RMSBeautyBg",
     "ESTEE LAUDER": "esteeLauderBg",
   };
+  const [dataa,setDataa] = useState({
+    series: [
+      {
+        name: "Diptyque",
+        data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
+      },
+      {
+        name: "Byredo",
+        data: [76, 85, 87, 98, 87, 97, 91, 74, 94],
+      },
+      {
+        name: "Bobbi Brown",
+        data: [16, 25, 37, 48, 57, 67, 73, 84, 94],
+      },
+      {
+        name: "By Terry",
+        data: [6, 15, 23, 35, 41, 53, 66, 74, 87],
+      },
+      {
+        name: "Revive",
+        data: [2, 12, 21, 30, 33, 42, 37, 41, 54],
+      },
+      {
+        name: "Kevyn Aucoin",
+        data: [71, 88, 83, 91, 82, 99, 61, 70, 98],
+      },
+      {
+        name: "Smashbox",
+        data: [10, 12, 14, 11, 16, 20, 24, 29, 32],
+      },
+    ],
+    options: {
+      chart: {
+        type: "area",
+      },
+      stroke: {
+        curve: "smooth",
+        width: 2,
+      },
+  
+      dataLabels: {
+        enabled: true,
+      },
+      colors: getRandomColors(17),
+      fill: {
+        type: "gradient",
+        gradient: {
+          opacityFrom: 0,
+          opacityTo: 0,
+        },
+      },
+  
+      xaxis: {
+        categories: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      },
+      yaxis: {
+        title: {
+          text: "$ (Dollar)",
+        },
+      },
+  
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return "$" + Number(val).toFixed(2) + "";
+          },
+        },
+      },
+    },
+  });
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
   const [selMonth, setSelMonth] = useState(`${currentYear}|${currentMonth}`);
@@ -293,6 +291,80 @@ function Dashboard({ dashboardData }) {
             }
             //ownManuFactureData
             if (dashboard?.monthlyManufactureData) {
+              let colorArray = [];
+              Object.values(dashboard?.monthlyManufactureData).map((value) => {
+                colorArray.push(hexabrand[value.id]);
+              })
+              setDataa({
+                series: [
+                  {
+                    name: "Diptyque",
+                    data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
+                  },
+                  {
+                    name: "Byredo",
+                    data: [76, 85, 87, 98, 87, 97, 91, 74, 94],
+                  },
+                  {
+                    name: "Bobbi Brown",
+                    data: [16, 25, 37, 48, 57, 67, 73, 84, 94],
+                  },
+                  {
+                    name: "By Terry",
+                    data: [6, 15, 23, 35, 41, 53, 66, 74, 87],
+                  },
+                  {
+                    name: "Revive",
+                    data: [2, 12, 21, 30, 33, 42, 37, 41, 54],
+                  },
+                  {
+                    name: "Kevyn Aucoin",
+                    data: [71, 88, 83, 91, 82, 99, 61, 70, 98],
+                  },
+                  {
+                    name: "Smashbox",
+                    data: [10, 12, 14, 11, 16, 20, 24, 29, 32],
+                  },
+                ],
+                options: {
+                  chart: {
+                    type: "area",
+                  },
+                  stroke: {
+                    curve: "smooth",
+                    width: 2,
+                  },
+              
+                  dataLabels: {
+                    enabled: true,
+                  },
+                  colors: colorArray,
+                  fill: {
+                    type: "gradient",
+                    gradient: {
+                      opacityFrom: 0,
+                      opacityTo: 0,
+                    },
+                  },
+              
+                  xaxis: {
+                    categories: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                  },
+                  yaxis: {
+                    title: {
+                      text: "$ (Dollar)",
+                    },
+                  },
+              
+                  tooltip: {
+                    y: {
+                      formatter: function (val) {
+                        return "$" + Number(val).toFixed(2) + "";
+                      },
+                    },
+                  },
+                },
+              })
               setSalesByBrandData({
                 series: Object.values(dashboard?.monthlyManufactureData).map((value) => {
                   return value?.own || 0;
@@ -341,7 +413,7 @@ function Dashboard({ dashboardData }) {
                       },
                     },
                   ],
-                  colors: getRandomColors(Object.values(dashboard?.monthlyManufactureData)?.length),
+                  colors: colorArray,
                
                   labels: Object.values(dashboard?.monthlyManufactureData).map((value) => {
                     return value?.name || 0;
