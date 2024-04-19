@@ -45,6 +45,14 @@ const MarketingCalendar = () => {
         console.log({ productRes });
         setProductList(productRes)
         setIsloaed(true)
+        setTimeout(() => {
+
+          var element = document.getElementById("Apr");
+          element.scrollIntoView();
+          element.scrollIntoView(false);
+          element.scrollIntoView({ block: "end" });
+          element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+        }, 2000);
       }).catch((err) => console.log({ err }))
     }).catch((e) => console.log({ e }))
   }, [isLoaded])
@@ -83,7 +91,7 @@ const MarketingCalendar = () => {
 
     html2pdf().set(opt).from(element).save();
   };
-// .............
+  // .............
 
 
   const generateXLSX = () => {
@@ -208,7 +216,7 @@ const MarketingCalendar = () => {
         </>
       }
     >
-       {/* {isLoading ? (
+      {/* {isLoading ? (
         <Loading height={"70vh"} />
     ) : (
       <LaunchCalendar brand={brand} month={month} productList={productList} />
