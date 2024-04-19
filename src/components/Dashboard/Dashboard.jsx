@@ -174,6 +174,7 @@ function Dashboard({ dashboardData }) {
   const [accountPerformance, setAccountPerformance] = useState({ isLoaded: false, data: [] });
   const [leadsbybrand, setleadsbtbrand] = useState({ isLoaded: false, data: [] });
   const [salesByBrandData, setSalesByBrandData] = useState({
+   
     series: [],
     options: {
       chart: {
@@ -206,6 +207,7 @@ function Dashboard({ dashboardData }) {
           },
         },
       },
+      
       responsive: [
         {
           breakpoint: 480,
@@ -220,6 +222,7 @@ function Dashboard({ dashboardData }) {
       labels: [],
     },
   });
+  console.log(salesByBrandData)
   const [manufacturerSalesYear, setManufacturerSalesYaer] = useState([]);
   // API INTEGRATION
 
@@ -338,7 +341,8 @@ function Dashboard({ dashboardData }) {
                       },
                     },
                   ],
-                  colors: getRandomColors(Object.values(dashboard?.monthlyManufactureData).length),
+                  colors: getRandomColors(Object.values(dashboard?.monthlyManufactureData)?.length),
+               
                   labels: Object.values(dashboard?.monthlyManufactureData).map((value) => {
                     return value?.name || 0;
                   }),
@@ -659,7 +663,7 @@ function Dashboard({ dashboardData }) {
                         <IsTableLoading />
                       ) : (
                         <>
-                          {brandData.data.length ? (
+                          {brandData.data?.length ? (
                             <>
                               {brandData.data?.map((e, i) => {
                                 totalTargetForMTDGoalBrand = Number(e?.total || 0) + Number(totalTargetForMTDGoalBrand);
@@ -717,7 +721,7 @@ function Dashboard({ dashboardData }) {
                       <IsTableLoading />
                     ) : (
                       <>
-                        {leadsbybrand.data.length ? (
+                        {leadsbybrand.data?.length ? (
                           <tbody className="position-relative">
                             {leadsbybrand.data.map((element) => {
                               totalRecieved += element.received;
@@ -759,7 +763,7 @@ function Dashboard({ dashboardData }) {
         </div>
 
         <div className="my-5">
-          {((accountPerformance.data.length > 0 && accountPerformance?.isLoaded) || !accountPerformance?.isLoaded) && <div className={`row mt-1 justify-between ${Styles.topPerform2}`}>
+          {((accountPerformance.data?.length > 0 && accountPerformance?.isLoaded) || !accountPerformance?.isLoaded) && <div className={`row mt-1 justify-between ${Styles.topPerform2}`}>
             <div className={`col-lg-6 col-sm-12 ${Styles.top_perform1}`}>
               <p className={Styles.Tabletext}>Top Performing Accounts</p>
               <div className="row">
@@ -856,6 +860,7 @@ function Dashboard({ dashboardData }) {
                 <ContentLoader />
               ) : (
                 <>
+               
                   <Chart options={salesByBrandData.options} series={salesByBrandData.series} type="donut" className={Styles.donutchart} width="90%" height="400px" />
                 </>
               )}
