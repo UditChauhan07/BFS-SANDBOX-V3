@@ -2,9 +2,9 @@ import React from "react";
 import Loading from "../Loading";
 import styles from "./table.module.css";
 const YearlyComparisonReportTable = ({ comparisonData }) => {
-  const formentAcmount = (amount, totalorderPrice, monthTotalAmount) => {
-    return `${Number(amount, totalorderPrice, monthTotalAmount).toFixed(2)}`;
-  };
+  const formentAcmount =(amount,totalorderPrice,monthTotalAmount)=>{
+    return `${Number(amount,totalorderPrice,monthTotalAmount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
+  }
   let totalwholesale = 0;
   let totalretailer = 0;
   let monthTotalAmount = {

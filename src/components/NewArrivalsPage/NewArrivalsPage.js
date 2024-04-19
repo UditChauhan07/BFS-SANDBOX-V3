@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useMemo } from "react";
 import ProductDetails from "../../pages/productDetails";
-import LoaderV2 from "./../loader/v2";
 import Styles from "./NewArrivals.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Pagination from "../Pagination/Pagination";
 import { Link } from "react-router-dom";
 import ModalPage from "../Modal UI";
 import StylesModal from "../Modal UI/Styles.module.css";
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
   const [products, setProducts] = useState(productList);
   const [modalShow, setModalShow] = useState(false);
@@ -115,7 +113,7 @@ setpagination([{content: newValues }]);
                           <div className={`last:mb-0 mb-4 ${Styles.HoverArrow}`}>
                            <div className={` border-[#D0CFCF] flex flex-col gap-4   ${Styles.ImgHover1}`}>
                           {/* {isLoaded ? <img className={Styles.imgHolder} onClick={() => { setProductDetailId(product.Id) }} src={product?.[product.ProductCode]?.ContentDownloadUrl ?? product.image} /> : <LoaderV2 />} */}
-                          <img src={product.ProductImage} alt={product.Name} />
+                          <img src={product.ProductImage?? "\\assets\\images\\dummy.png"} alt={product.Name} />
                           </div>
                         </div>
                           <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
@@ -152,7 +150,7 @@ setpagination([{content: newValues }]);
            }
           </div>
         </div>
-        <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} />
+        <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false}/>
       </section>
       <Pagination
         className="pagination-bar"

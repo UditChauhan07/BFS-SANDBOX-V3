@@ -8,7 +8,6 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { CloseButton } from "../lib/svg";
 import { GetAuthData, getMarketingCalendar } from "../lib/store";
-import LoaderV2 from "../components/loader/v2";
 import Loading from "../components/Loading";
 const fileExtension = ".xlsx";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";

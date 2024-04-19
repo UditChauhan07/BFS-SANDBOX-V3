@@ -1,4 +1,5 @@
-export const originAPi = "https://b2b.beautyfashionsales.com";
+export const originAPi = "https://b2b.beautyfashionsales.com"
+// export const originAPi = "https://dev.beautyfashionsales.com"
 // export const originAPi = "http://localhost:2000"
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
@@ -251,7 +252,6 @@ export async function getTargetReportAll({ user, year, preOrder }) {
     if (preOrder) {
       bodyContent.append("preorder", preOrder);
     }
-
     let response = await fetch(url + "target/4Tu6do95AxLM3Cl", {
       method: "POST",
       body: bodyContent,
@@ -662,6 +662,7 @@ export async function getSessionStatus({ key, salesRepId }) {
     return data;
   }
 }
+
 export async function getMarketingCalendar({ key, manufacturerId }) {
   let headersList = {
     Accept: "*/*",
@@ -701,6 +702,7 @@ export async function getYearlyComparison({ year, ManufacturerId__c }) {
   }
 }
 
+
 export const hexabrand = {
   a0O3b00000hym7GEAQ: "#38A3A5",
   a0O3b00000fQrZyEAK: "#9EC1DA",
@@ -720,22 +722,18 @@ export const hexabrand = {
   a0O1O00000XYBvaUAH: "#4B95DD",
 };
 
-export const hexabrandColour={
-  "Byredo": "#38A3A5",
- "Diptyque" : "#9EC1DA",
-  "RMS Beauty": "#f6b6ad",
-  "Revive": "#ffe3d5",
- "#fff9ed" : "#fff9ed",
-  "Smashbox": "#a6a0d4",
- "Victoria Beckham" : "#206BA1",
-  "Bobbi Brown": "#BEE6DC",
-  "Maison Margiela": "#A66C98",
-  "Estee Lauder": "#6D597A",
-  "Aramis": "#CBA188",
-  "ReNutriv": "#EFD6B1",
-  "Aerin": "#D9D9D9",
-  "Loccitane": "#B7C8B3",
-  "#6D243E": "#6D243E",
-  "By Terry": "#4B95DD",
-}
 
+export function DateConvert(dateString) {
+  if (dateString) {
+    const [year, month, day] = dateString.split(/[-/]/);
+    if (day && month && year) {
+      let parsedDate = new Date(`${month}/${day}/${year}`);
+      if (!isNaN(parsedDate.getTime())) {
+        const options = { day: "numeric", month: "short", year: "numeric" };
+        let launchDateFormattedDate = new Intl.DateTimeFormat("en-US", options).format(new Date(parsedDate));
+        return launchDateFormattedDate;
+      }
+    }
+    // throw new Error("Invalid date string");
+  }
+}
