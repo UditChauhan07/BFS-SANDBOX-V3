@@ -12,18 +12,18 @@ const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
 export const salesRepIdKey = "BzQIEAjzCEHmlXc";
-export const admins = ["00530000005AdvsAAC","0053b00000DgEVEAA3"] //,"0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
+export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3"]; //,"0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
 // export const originAPi = "https://dev.beautyfashionsales.com"
 
-export function ShareDrive (data, remove = false){
-  if(remove){
+export function ShareDrive(data, remove = false) {
+  if (remove) {
     localStorage.removeItem(shareKey);
     return true;
   }
-  if(data){
-    localStorage.setItem(shareKey, JSON.stringify(data))
+  if (data) {
+    localStorage.setItem(shareKey, JSON.stringify(data));
     return true;
-  }else{
+  } else {
     let strData = localStorage.getItem(shareKey);
     return JSON.parse(strData);
   }
@@ -51,7 +51,7 @@ export function POGenerator() {
   let AcCode = getStrCode(beg?.Account?.name);
   let MaCode = getStrCode(beg?.Manufacturer?.name);
 
-  let orderCount = padNumber(count,true);
+  let orderCount = padNumber(count, true);
   if (beg?.orderList?.[0]?.productType === "pre-order") return `PRE-${AcCode + MaCode}${currentDate + currentMonth}${orderCount}`;
   else return `${AcCode + MaCode}${currentDate + currentMonth}${orderCount}`;
 }
@@ -87,11 +87,11 @@ function padNumber(n, isTwoDigit) {
 
 export function formatNumber(num) {
   if (num >= 0 && num < 1000000) {
-    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + 'K';
+    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
   } else if (num >= 1000000) {
-    return (num / 1000000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + 'M';
-  }else if(num <0){
-    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + 'K';
+    return (num / 1000000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "M";
+  } else if (num < 0) {
+    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
   } else {
     return num;
   }
@@ -121,7 +121,7 @@ export function fetchBeg() {
       name: null,
       id: null,
       address: null,
-      shippingMethod:null
+      shippingMethod: null,
     },
     Manufacturer: {
       name: null,
@@ -169,9 +169,9 @@ export async function OrderPlaced({ order }) {
   } else if (data.status == 300) {
     DestoryAuth();
   } else {
-    if(data?.data){
-      return data.data
-    }else{
+    if (data?.data) {
+      return data.data;
+    } else {
       return false;
     }
   }
@@ -243,14 +243,14 @@ export async function getTargetReportAll({ user, year, preOrder }) {
     let tried = false;
     let bodyContent = new FormData();
     bodyContent.append("key", user.x_access_token);
-    if(!admins.includes(user.Sales_Rep__c)){
+    if (!admins.includes(user.Sales_Rep__c)) {
       bodyContent.append("SalesRepId", user.Sales_Rep__c);
     }
     if (year) {
-      bodyContent.append('year', year);
+      bodyContent.append("year", year);
     }
     if (preOrder) {
-      bodyContent.append('preorder', preOrder);
+      bodyContent.append("preorder", preOrder);
     }
     let response = await fetch(url + "target/4Tu6do95AxLM3Cl", {
       method: "POST",
@@ -261,14 +261,14 @@ export async function getTargetReportAll({ user, year, preOrder }) {
     if (data.status == 300) {
       DestoryAuth();
     } else {
-      let rawRes = { ownerPermission: false, list: data.data }
-      if(admins.includes(user.Sales_Rep__c)){
+      let rawRes = { ownerPermission: false, list: data.data };
+      if (admins.includes(user.Sales_Rep__c)) {
         rawRes.ownerPermission = true;
       }
       return rawRes;
     }
   } else {
-    return false
+    return false;
   }
 }
 export async function getOrderDetailsBasedId({ rawData }) {
@@ -311,7 +311,7 @@ export async function getOrderDetailsInvoice({ rawData }) {
   if (data.status == 300) {
     DestoryAuth();
   } else {
-    return {data:data.data,attachment:data.attachedmenetdata};
+    return { data: data.data, attachment: data.attachedmenetdata };
   }
 }
 
@@ -323,7 +323,7 @@ export async function getDashboardata({ user }) {
     headersList = {
       Accept: "*/*",
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
+      "Access-Control-Allow-Origin": "*",
     };
   }
 
@@ -345,7 +345,7 @@ export async function getDashboardata({ user }) {
   }
 }
 
-export async function getSupportList({ key,salesRepId }) {
+export async function getSupportList({ key, salesRepId }) {
   let headersList = {
     Accept: "*/*",
   };
@@ -427,7 +427,7 @@ export async function getAllAccount({ user }) {
   });
   let data = JSON.parse(await response.text());
   if (data.status == 300) {
-    DestoryAuth()
+    DestoryAuth();
   } else {
     return data.data;
   }
@@ -530,7 +530,7 @@ export async function getProductImage({ rawData }) {
 }
 
 export async function getProductImageAll({ rawData }) {
-  console.log({rawData});
+  console.log({ rawData });
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -538,7 +538,6 @@ export async function getProductImageAll({ rawData }) {
 
   // let response = await fetch(url + "v3/Ftr7xyLKqgFo5MO", {
   let response = await fetch(url + "v3/fGBDynHKNNfVNki", {
-    
     method: "POST",
     body: JSON.stringify(rawData),
     headers: headersList,
@@ -570,7 +569,7 @@ export async function getProductDetails({ rawData }) {
   }
 }
 
-export async function topProduct({month,manufacturerId}) {
+export async function topProduct({ month, manufacturerId }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -578,7 +577,7 @@ export async function topProduct({month,manufacturerId}) {
 
   let response = await fetch(url + "v3/dC0mhTDnL9l0mK1", {
     method: "POST",
-    body: JSON.stringify({month,manufacturerId}),
+    body: JSON.stringify({ month, manufacturerId }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -588,11 +587,12 @@ export async function topProduct({month,manufacturerId}) {
     return data;
   }
 }
-export async function getBrandList({key,userId}) {
+export async function getBrandList({ key, userId }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
-    key,userId
+    key,
+    userId,
   };
   let response = await fetch(url + "v3/yRNGIO", {
     method: "POST",
@@ -606,9 +606,11 @@ export async function getBrandList({key,userId}) {
     return data;
   }
 }
-export async function getRetailerList({key,userId}) {
+export async function getRetailerList({ key, userId }) {
   let headersList = {
-    Accept: "*/*",key,userId,
+    Accept: "*/*",
+    key,
+    userId,
     "Content-Type": "application/json",
   };
   let response = await fetch(url + "v3/JbUxci", {
@@ -624,7 +626,7 @@ export async function getRetailerList({key,userId}) {
   }
 }
 
-export async function getSalesRepList({key}) {
+export async function getSalesRepList({ key }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -632,7 +634,7 @@ export async function getSalesRepList({key}) {
 
   let response = await fetch(url + "v3/1FnQ4K9DItMBZ1D", {
     method: "POST",
-    body: JSON.stringify({key}),
+    body: JSON.stringify({ key }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -643,14 +645,14 @@ export async function getSalesRepList({key}) {
   }
 }
 
-export async function getSessionStatus({key,salesRepId}) {
+export async function getSessionStatus({ key, salesRepId }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
   };
   let response = await fetch(url + "v3/XbgheAKvG5EtkXs", {
     method: "POST",
-    body: JSON.stringify({key,salesRepId}),
+    body: JSON.stringify({ key, salesRepId }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -660,8 +662,8 @@ export async function getSessionStatus({key,salesRepId}) {
     return data;
   }
 }
-export async function getMarketingCalendar({key,manufacturerId}) {
-  console.log({key});
+
+export async function getMarketingCalendar({ key, manufacturerId }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -669,11 +671,11 @@ export async function getMarketingCalendar({key,manufacturerId}) {
 
   let response = await fetch(url + "v3/eVC3IaiEEz3x7ym", {
     method: "POST",
-    body: JSON.stringify({key,manufacturerId}),
+    body: JSON.stringify({ key, manufacturerId }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
-  console.log({data});
+  console.log({ data });
   if (data.status == 300) {
     DestoryAuth();
   } else {
@@ -681,7 +683,7 @@ export async function getMarketingCalendar({key,manufacturerId}) {
   }
 }
 
-export async function getYearlyComparison({year,ManufacturerId__c}) {
+export async function getYearlyComparison({ year, ManufacturerId__c }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -689,7 +691,7 @@ export async function getYearlyComparison({year,ManufacturerId__c}) {
 
   let response = await fetch(originAPi + "/9kJs2I6Bn/Ox2KAg3U0e9l3Ht7lBG7", {
     method: "POST",
-    body: JSON.stringify({year,ManufacturerId__c}),
+    body: JSON.stringify({ year, ManufacturerId__c }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -699,6 +701,27 @@ export async function getYearlyComparison({year,ManufacturerId__c}) {
     return data?.data;
   }
 }
+
+
+export const hexabrand = {
+  a0O3b00000hym7GEAQ: "#38A3A5",
+  a0O3b00000fQrZyEAK: "#9EC1DA",
+  a0O1O00000XYBvQUAX: "#f6b6ad",
+  a0O3b00000pY2vqEAC: "#ffe3d5",
+  a0O3b00000p80IJEAY: "#fff9ed",
+  a0O3b00000lCFmREAW: "#a6a0d4",
+  a0ORb000000BQ0nMAG: "#206BA1",
+  a0O3b00000p7zqKEAQ: "#BEE6DC",
+  a0O3b00000ffNzbEAE: "#A66C98",
+  a0O3b00000p4F4DEAU: "#6D597A",
+  a0O3b00000p4F4CEAU: "#CBA188",
+  a0ORb0000000uwfMAA: "#EFD6B1",
+  a0O3b00000p4F4HEAU: "#D9D9D9",
+  a0ORb000000QzsfMAC: "#B7C8B3",
+  a0O1O00000XYBvkUAH: "#6D243E",
+  a0O1O00000XYBvaUAH: "#4B95DD",
+};
+
 
 export function DateConvert(dateString) {
   if (dateString) {
