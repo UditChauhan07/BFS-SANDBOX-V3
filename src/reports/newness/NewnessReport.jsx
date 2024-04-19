@@ -5,7 +5,7 @@ import Loading from "../../components/Loading";
 import NewnessReportTable from "../../components/newness report table/NewnessReportTable";
 import { useNewnessReport } from "../../api/useNewnessReport";
 import { useManufacturer } from "../../api/useManufacturer";
-import * as FileSaver from "file-saver";
+import Styles from "./index.module.css";
 import * as XLSX from "xlsx";
 import { FilterItem } from "../../components/FilterItem";
 import FilterDate from "../../components/FilterDate";
@@ -300,6 +300,14 @@ const NewnessReport = () => {
           }}
         />
       )}
+      <div className={Styles.inorderflex}>
+        <div>
+          <h2>
+            Newness Report
+          </h2>
+        </div>
+        <div></div>
+      </div>
       {loading ? <Loading height={"70vh"} /> : <NewnessReportTable newnessData={newnessData} dataDisplay={filter.dataDisplay} />}
     </AppLayout>
   );

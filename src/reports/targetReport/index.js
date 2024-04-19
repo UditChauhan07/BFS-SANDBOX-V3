@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import AppLayout from "../../components/AppLayout";
 import Styles from "./index.module.css";
-import { GetAuthData, getTargetReportAll } from "../../lib/store";
+import { DateConvert, GetAuthData, getTargetReportAll } from "../../lib/store";
 import Loading from "../../components/Loading";
 import { useManufacturer } from "../../api/useManufacturer";
 import { FilterItem } from "../../components/FilterItem";
@@ -124,6 +124,7 @@ const TargetReport = () => {
           AccountName: target.AccountName,
           ManufacturerName: target.ManufacturerName,
           Status: target.Status,
+          DateOpen: target.DateOpen,
           JanuaryTarget: target.January.target,
           JanuarySale: target.January.sale,
           JanuaryDiff: target.January.diff,
@@ -579,7 +580,7 @@ const TargetReport = () => {
             <div className={Styles.inorderflex}>
               <div>
                 <h2>
-                  {target.ownerPermission ? `${searchSaleBy ? searchSaleBy + "`s" : "All"} Sales Report` : "Your Target Report"}
+                  {target.ownerPermission ? `${searchSaleBy ? searchSaleBy + "`s" : "All"} Target Report` : "Your Target Report"}
                   {manufacturerFilter && " for " + getManufactureName(manufacturerFilter)}
                 </h2>
               </div>
@@ -793,7 +794,7 @@ const TargetReport = () => {
                           <td className={`${Styles.td} ${Styles.stickySecondColumn}`}>{element?.AccountName}</td>
                           <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}>{element.ManufacturerName}</td>
                           <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}>{element.Status}</td>
-                          <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}>{element?.DateOpen}</td>
+                          <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}>{DateConvert(element?.DateOpen)}</td>
                           <td className={`${Styles.td}`}>${formentAcmount(element.January.target)}</td>
                           <td className={`${Styles.td}`}>${formentAcmount(element.January.sale)}</td>
                           <td className={`${Styles.td}`}>${formentAcmount(element.January.diff)}</td>
@@ -982,26 +983,6 @@ const TargetReport = () => {
               </table>
             </div>
           </div>
-          {/* {false && <table className="table" style={{ maxWidth: '400px' }}>
-                    <thead>
-                        <tr>
-                            <th>Brand</th>
-                            <th>Sum</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Object.keys(brandcount).map((element) => {
-                            sum += brandcount[element]
-                            return (<tr><td>{element}</td><td>{brandcount[element]}</td></tr>)
-                        })}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td>Total</td>
-                            <td>{sum}</td>
-                        </tr>
-                    </tfoot>
-                </table>} */}
         </section>
       )}
     </AppLayout>

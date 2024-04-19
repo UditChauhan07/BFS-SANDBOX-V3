@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useMemo } from "react";
 import "./Style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { hexabrand } from "../../lib/store";
+import ProductDetails from "../../pages/productDetails";
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 function LaunchCalendar({ productList, brand, month }) {
   const products = productList;
-
+  const [productDetailId, setProductDetailId] = useState();
   const [isEmpty, setIsEmpty] = useState(false);
   useEffect(() => {
+  
     let temp = true;
     products.map((month) => {
       month.content.map((item) => {
@@ -107,7 +110,8 @@ function LaunchCalendar({ productList, brand, month }) {
                                   <div className="ProductInfo">
                                     <div className="BothDateTopFlex">
                                       <div className="ShipDate">
-                                        <span>Ship Date</span>
+                                        <span >Ship Date</span>
+                                        {/* style={{color:hexabrand[product.ManufacturerId__c]}} */}
                                         <div className={`DateCurrent0${(index % 3) + 1}`}>{product.Ship_Date__c ? (product.Ship_Date__c.split("-")[2] == 15 ? 'TBD' : product.Ship_Date__c.split("-")[2]) + '/' + monthNames[parseInt(product.Ship_Date__c.split("-")[1]) - 1].toUpperCase() + '/' + product.Ship_Date__c.split("-")[0] : 'NA'}</div>
                                       </div>
                                       <div className="ShipDate EDate">
@@ -117,10 +121,14 @@ function LaunchCalendar({ productList, brand, month }) {
                                     </div>
                                     <div className="d-flex mt-2">
                                       <div className="m-auto ProductImg">
-                                        <img src={product?.ProductImage} alt={product.Name} />
+                                        <img src={product?.ProductImage ?? "\\assets\\images\\dummy.png"} alt={product.Name} onClick={() => {
+                                          setProductDetailId(product.Id);
+                                        }} style={{cursor:'pointer'}}/>
                                       </div>
                                       <div className="LaunchProductDetail">
-                                        <h3>{product.Name}</h3>
+                                        <h3 onClick={() => {
+                                          setProductDetailId(product.Id);
+                                        }} style={{cursor:'pointer'}}>{product.Name}</h3>
                                         <div className="size">
                                           Size <span className="ProductQty">{product.Size_Volume_Weight__c}</span>
                                         </div>
@@ -130,6 +138,7 @@ function LaunchCalendar({ productList, brand, month }) {
                                   </div>
                                   <div className="launchBrand">
                                     <img className="img-fluid" src={"\\assets\\images\\brandImage\\" + product.ManufacturerId__c + ".png"} alt={`${product.name} logo`} />
+                                    {/* {console.log(product.ManufacturerId__c)} */}
                                   </div>
                                 </div>
                               </>
@@ -161,6 +170,7 @@ function LaunchCalendar({ productList, brand, month }) {
           </div>
         </div>
       </div>
+      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false}/>
     </div>
   );
 }

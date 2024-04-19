@@ -11,6 +11,7 @@ import { MdOutlineDownload } from "react-icons/md";
 import ModalPage from "../../components/Modal UI";
 import styles from "../../components/Modal UI/Styles.module.css";
 import { CloseButton, SearchIcon } from "../../lib/svg";
+import Styles from "./index.module.css";
 
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
@@ -31,7 +32,7 @@ const ComparisonReport = () => {
   const originalApiData = useComparisonReport();
   const [apiData, setApiData] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const[status,setstatus]=useState(1)
+  const [status, setstatus] = useState(1)
 
   //csv Data
   let csvData = [];
@@ -41,7 +42,7 @@ const ComparisonReport = () => {
         AccountName: ele.AccountName,
         Estee_Lauder_Number__c: ele.Estee_Lauder_Number__c,
         Sales_Rep__c: ele.Sales_Rep__c,
-        Status:ele.Status,
+        Status: ele.Status,
         retail_revenue__c: `$${Number(ele.retail_revenue__c).toFixed(2)}`,
         Whole_Sales_Amount: `$${Number(ele.Whole_Sales_Amount).toFixed(2)}`,
       });
@@ -66,7 +67,7 @@ const ComparisonReport = () => {
     setIsLoading(true);
     const result = await originalApiData.fetchComparisonReportAPI(initialValues);
     setApiData(result);
-    setFilter(initialValues); 
+    setFilter(initialValues);
     setIsLoading(false);
     setstatus(1);
   };
@@ -76,23 +77,23 @@ const ComparisonReport = () => {
   //   setApiData(result);
   //   setIsLoading(false);
   // };
-// ..........
-const sendApiCall = async () => {
-  setIsLoading(true);
-  const result = await originalApiData.fetchComparisonReportAPI(filter);
-  let short = result.data.filter(item => status === 1 ? item.Status !== "In-Active" : item);
-  let temp = {
-    ...result,
-    data: short,
+  // ..........
+  const sendApiCall = async () => {
+    setIsLoading(true);
+    const result = await originalApiData.fetchComparisonReportAPI(filter);
+    let short = result.data.filter(item => status === 1 ? item.Status !== "In-Active" : item);
+    let temp = {
+      ...result,
+      data: short,
+    };
+    setFilter(prev => ({
+      ...prev,
+      dataDisplay: status === 1 ? "Active Account" : "All Account",
+    }));
+    setApiData(temp);
+
+    setIsLoading(false);
   };
-  setFilter(prev => ({
-    ...prev,
-    dataDisplay: status === 1 ? "Active Account" : "All Account",
-  }));
-  setApiData(temp);
-  
-  setIsLoading(false);
-};
 
 
   return (
@@ -119,7 +120,7 @@ const sendApiCall = async () => {
             options={apiData?.date?.monthList?.map((month) => ({
               label: month?.name,
               value: month.value,
-            })) || []} 
+            })) || []}
             onChange={(value) => setFilter((prev) => ({ ...prev, month: value }))}
           />
           <FilterItem
@@ -130,45 +131,45 @@ const sendApiCall = async () => {
             options={apiData?.date?.yearList?.map((year) => ({
               label: year?.name,
               value: year.value,
-            })) || []} 
+            })) || []}
             onChange={(value) => setFilter((prev) => ({ ...prev, year: value }))}
           />
           <FilterItem
-  label={status === 1 ? "Active Account" : "All Account"} 
-  name="Status"
-  value={status}
-  options={[
-    {
-      label: "Active Account",
-      value: 1,
-    },
-    {
-      label: "All Account",
-      value: 2,
-    },
-  ]}
-  onChange={(value) => {
-    setstatus(value)
-  }}
-/>
+            label={status === 1 ? "Active Account" : "All Account"}
+            name="Status"
+            value={status}
+            options={[
+              {
+                label: "Active Account",
+                value: 1,
+              },
+              {
+                label: "All Account",
+                value: 2,
+              },
+            ]}
+            onChange={(value) => {
+              setstatus(value)
+            }}
+          />
           <div className="d-flex gap-3">
             <button className="border px-2 d-grid py-1 leading-tight" onClick={sendApiCall}>
-            <SearchIcon fill="#fff" width={20} height={20}/>
-            <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>search</small>
+              <SearchIcon fill="#fff" width={20} height={20} />
+              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>search</small>
             </button>
             <button className="border px-2 d-grid py-1 leading-tight" onClick={resetFilter}>
-            <CloseButton crossFill={'#fff'} height={20} width={20}/>
-            <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
+              <CloseButton crossFill={'#fff'} height={20} width={20} />
+              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
             </button>
           </div>
           <button className="border px-2 d-grid py-1 leading-tight d-grid" onClick={handleExportToExcel}>
-          <MdOutlineDownload size={16} className="m-auto"/> 
-         <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>export</small>
+            <MdOutlineDownload size={16} className="m-auto" />
+            <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>export</small>
           </button>
         </>
       }
     >
-       {exportToExcelState && (
+      {exportToExcelState && (
         <ModalPage
           open
           content={
@@ -192,6 +193,14 @@ const sendApiCall = async () => {
           }}
         />
       )}
+      <div className={Styles.inorderflex}>
+        <div>
+          <h2>
+            Comparison Report
+          </h2>
+        </div>
+        <div></div>
+      </div>
       {!isLoading ? <ComparisonReportTable comparisonData={apiData} /> : <Loading height={"70vh"} />}
     </AppLayout>
   );
