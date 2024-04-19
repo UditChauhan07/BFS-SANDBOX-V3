@@ -724,6 +724,27 @@ export const hexabrand = {
   a0ORb000000nDIiMAM:"#deb887"
 };
 
+export const hexabrandText = {
+  a0O3b00000hym7GEAQ: "#ffffff",
+  a0O3b00000fQrZyEAK: "#2a516d",
+  a0O1O00000XYBvQUAX: "#972111",
+  a0O3b00000pY2vqEAC: "#bb3e00",
+  a0O3b00000p80IJEAY: "#c58300",
+  a0O3b00000lCFmREAW: "#352e66",
+  a0ORb000000BQ0nMAG: "#0d2b40",
+  a0O3b00000p7zqKEAQ: "#2f7967",
+  a0O3b00000ffNzbEAE: "#EEDD82",
+  a0O3b00000p4F4DEAU: "#ffffff",
+  a0O3b00000p4F4CEAU: "#5e3d29",
+  a0ORb0000000uwfMAA: "#8a5e1c",
+  a0O3b00000p4F4HEAU: "#575757",
+  a0ORb000000QzsfMAC: "#445840",
+  a0O1O00000XYBvkUAH: "#ed8cae",
+  a0O1O00000XYBvaUAH: "#133c64",
+  a0ORb000000nDfFMAU:"#deb887",
+  a0ORb000000nDIiMAM:"#deb887"
+};
+
 
 export function DateConvert(dateString) {
   if (dateString) {
