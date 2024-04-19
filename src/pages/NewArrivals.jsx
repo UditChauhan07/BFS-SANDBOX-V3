@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../components/Layout/Layout";
 import AppLayout from "../components/AppLayout";
 import Loading from "../components/Loading";
 import NewArrivalsPage from "../components/NewArrivalsPage/NewArrivalsPage";
 import { FilterItem } from "../components/FilterItem";
-import Product from "../components/BrandDetails/Product";
 import { CloseButton } from "../lib/svg";
 import { GetAuthData, getMarketingCalendar } from "../lib/store";
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

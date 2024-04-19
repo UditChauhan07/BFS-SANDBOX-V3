@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AppLayout from "../../components/AppLayout";
 import Loading from "../../components/Loading";
-import ComparisonReportTable from "../../components/comparison report table/ComparisonReportTable";
+import Styles from "./index.module.css";
 import { useComparisonReport } from "../../api/useComparisonReport";
 import { FilterItem } from "../../components/FilterItem";
 import { useManufacturer } from "../../api/useManufacturer";
@@ -63,8 +63,8 @@ const YearlyComparisonReport = () => {
     setIsLoading(false);
   };
 
- 
- 
+
+
   return (
     <AppLayout
       filterNodes={
@@ -139,6 +139,14 @@ const YearlyComparisonReport = () => {
           }}
         />
       )}
+      <div className={Styles.inorderflex}>
+        <div>
+          <h2>
+            Yearly Comparison Report
+          </h2>
+        </div>
+        <div></div>
+      </div>
       {!isLoading ? <YearlyComparisonReportTable comparisonData={apiData} /> : <Loading height={"70vh"} />}
     </AppLayout>
   );
@@ -304,7 +312,7 @@ export default YearlyComparisonReport;
 //             </button>
 //           </div>
 //           <button className="border px-2 d-grid py-1 leading-tight d-grid" onClick={handleExportToExcel}>
-//           <MdOutlineDownload size={16} className="m-auto"/> 
+//           <MdOutlineDownload size={16} className="m-auto"/>
 //          <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>export</small>
 //           </button>
 //         </>

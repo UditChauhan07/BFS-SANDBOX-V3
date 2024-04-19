@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useMemo } from "react";
 import "./Style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ProductDetails from "../../pages/productDetails";
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 function LaunchCalendar({ productList, brand, month }) {
   const products = productList;
-
+  const [productDetailId, setProductDetailId] = useState();
   const [isEmpty, setIsEmpty] = useState(false);
   useEffect(() => {
     let temp = true;
@@ -117,10 +118,14 @@ function LaunchCalendar({ productList, brand, month }) {
                                     </div>
                                     <div className="d-flex mt-2">
                                       <div className="m-auto ProductImg">
-                                        <img src={product?.ProductImage} alt={product.Name} />
+                                        <img src={product?.ProductImage ?? "\\assets\\images\\dummy.png"} alt={product.Name} onClick={() => {
+                                          setProductDetailId(product.Id);
+                                        }} style={{cursor:'pointer'}}/>
                                       </div>
                                       <div className="LaunchProductDetail">
-                                        <h3>{product.Name}</h3>
+                                        <h3 onClick={() => {
+                                          setProductDetailId(product.Id);
+                                        }} style={{cursor:'pointer'}}>{product.Name}</h3>
                                         <div className="size">
                                           Size <span className="ProductQty">{product.Size_Volume_Weight__c}</span>
                                         </div>
@@ -161,6 +166,7 @@ function LaunchCalendar({ productList, brand, month }) {
           </div>
         </div>
       </div>
+      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false}/>
     </div>
   );
 }
