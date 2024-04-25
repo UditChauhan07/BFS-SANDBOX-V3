@@ -266,7 +266,6 @@ function LaunchCalendar1({ productList, brand, month }) {
                       <li key={index}>
                         <span className={`timelineHolder0${(index % 3) + 1}`}>{month.month}</span>
                         {month.content.map((product, productIndex) => {
-                          console.log("booo");
                           if (!brand || brand == product.brand || brand == product.ManufacturerName__c) {
                             return (
                               <>
