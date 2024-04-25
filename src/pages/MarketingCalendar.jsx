@@ -129,13 +129,13 @@ const MarketingCalendar = () => {
         if (file) {
           const a = document.createElement('a');
           a.href = originAPi + "/download/" + file + "/1/index";
-          a.target = '_blank'
+          // a.target = '_blank'
           setPDFIsloaed(false);
           a.click();
         } else {
           const a = document.createElement('a');
           a.href = originAPi + "/download/blank.pdf/1/index";
-          a.target = '_blank'
+          // a.target = '_blank'
           setPDFIsloaed(false);
           a.click();
         }
