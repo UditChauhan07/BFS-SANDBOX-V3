@@ -12,6 +12,7 @@ const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sh
 function MyBagOrder(props) {
   const [orderDetail, setOrderDetail] = useState([]);
   const [isPDFLoaded, setPDFIsloaed] = useState(false);
+  const [pdfLoadingText, setPdfLoadingText] = useState(".");
   const generatePdf = () => {
     const element = document.getElementById('orderDetailerContainer'); // The HTML element you want to convert
     // element.style.padding = "10px"
@@ -33,6 +34,7 @@ function MyBagOrder(props) {
   const generatePdfServerSide = () => {
     if (orderDetail?.Id) {
       setPDFIsloaed(true);
+      LoadingEffect()
       GetAuthData().then((user) => {
         getOrderDetailsPdf({ key: user.x_access_token, opportunity_id: orderDetail?.Id }).then((file) => {
           if (file) {
@@ -56,6 +58,25 @@ function MyBagOrder(props) {
         console.log({ userErr });
       })
     }
+  }
+  const LoadingEffect = ()=>{
+    const intervalId = setInterval(() => {
+      if (pdfLoadingText.length > 6) {
+        setPdfLoadingText('.');
+      } else {
+        setPdfLoadingText(prev => prev + '.');
+      }
+      if (pdfLoadingText.length > 12) {
+        setPdfLoadingText('');
+      }
+    }, 1000);
+    const timeoutId = setTimeout(() => {
+      clearInterval(intervalId);
+    }, 10000);
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(intervalId);
+    };
   }
 
   const csvData = ({ data }) => {
@@ -121,7 +142,7 @@ function MyBagOrder(props) {
       </div>
     }>
       <div className="col-12">
-        {isPDFLoaded ? <p>generating PDF...</p> :
+        {isPDFLoaded ? <div className="d-flex" style={{ height: '50vh' }}><p className="m-auto">Generating Pdf..<span>{pdfLoadingText}</span></p></div> :
           <MyBagFinal setOrderDetail={setOrderDetail} />}
       </div>
     </AppLayout>
