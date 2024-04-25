@@ -19,7 +19,7 @@ const MarketingCalendar = () => {
   const [brand, setBrand] = useState(null);
   const [isLoaded, setIsloaed] = useState(false);
   const [isPDFLoaded, setPDFIsloaed] = useState(false);
-  const [productList1, setProductList1] = useState([]);
+  const [pdfLoadingText, setPdfLoadingText] = useState(".");
   const [productList, setProductList] = useState([]);
   let brands = [
     { value: null, label: "All" },
@@ -98,16 +98,37 @@ const MarketingCalendar = () => {
   };
   // .............
 
+  const LoadingEffect = ()=>{
+    const intervalId = setInterval(() => {
+      if (pdfLoadingText.length > 6) {
+        setPdfLoadingText('.');
+      } else {
+        setPdfLoadingText(prev => prev + '.');
+      }
+      if (pdfLoadingText.length > 12) {
+        setPdfLoadingText('');
+      }
+    }, 1000);
+    const timeoutId = setTimeout(() => {
+      clearInterval(intervalId);
+    }, 10000);
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(intervalId);
+    };
+  }
+
   const { data: manufacturers } = useManufacturer();
   const generatePdfServerSide = () => {
     setPDFIsloaed(true);
+    LoadingEffect();
     GetAuthData().then((user) => {
       let manufacturerId = null;
       manufacturers.data.filter(item => { if (item?.Name?.toLowerCase() == brand?.toLowerCase()) { manufacturerId = item.Id } })
       getMarketingCalendarPDF({ key: user.x_access_token, manufacturerId, month }).then((file) => {
         if (file) {
           const a = document.createElement('a');
-          a.href = originAPi + "/download/" + file +"/1/index";
+          a.href = originAPi + "/download/" + file + "/1/index";
           a.target = '_blank'
           setPDFIsloaed(false);
           a.click();
@@ -250,7 +271,7 @@ const MarketingCalendar = () => {
         </>
       }
     >
-      {isPDFLoaded ? <div>Generating Pdf ...</div> :
+      {isPDFLoaded ? <div className="d-flex" style={{ height: '50vh' }}><p className="m-auto">Generating Pdf..<span>{pdfLoadingText}</span></p></div> :
         isLoaded ? <LaunchCalendar brand={brand} month={month} productList={productList} /> : <Loading />}
 
     </AppLayout>
