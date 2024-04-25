@@ -51,6 +51,7 @@ function MyBagFinal({ setOrderDetail }) {
   }
 
   const getOrderDetails = async () => {
+    console.log({OrderId});
     let data = ShareDrive();
     if (!data) {
       data = {};
