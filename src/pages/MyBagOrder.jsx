@@ -40,14 +40,14 @@ function MyBagOrder(props) {
           if (file) {
             const a = document.createElement('a');
             a.href = originAPi + "/download/" + file + "/2/index";
-            a.target = '_blank'
+            // a.target = '_blank'
             console.log({ a });
             setPDFIsloaed(false);
             a.click();
           } else {
             const a = document.createElement('a');
             a.href = originAPi + "/download/blank.pdf/2/index";
-            a.target = '_blank'
+            // a.target = '_blank'
             setPDFIsloaed(false);
             a.click();
           }
