@@ -6,9 +6,11 @@ import html2pdf from "html2pdf.js";
 import { MdOutlineDownload } from "react-icons/md";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import { jsPDF } from "jspdf";
 import { CloseButton } from "../lib/svg";
-import { GetAuthData, getMarketingCalendar } from "../lib/store";
+import { GetAuthData, getMarketingCalendar, getMarketingCalendarPDF, originAPi } from "../lib/store";
 import Loading from "../components/Loading";
+import { useManufacturer } from "../api/useManufacturer";
 const fileExtension = ".xlsx";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 
@@ -16,26 +18,27 @@ const MarketingCalendar = () => {
   // const [isLoading, setIsLoading] = useState(true);
   const [brand, setBrand] = useState(null);
   const [isLoaded, setIsloaed] = useState(false);
+  const [isPDFLoaded, setPDFIsloaed] = useState(false);
   const [productList1, setProductList1] = useState([]);
   const [productList, setProductList] = useState([]);
   let brands = [
     { value: null, label: "All" },
-    { value: "Susanne Kaufmann", label: "Susanne Kaufmann" },
     { value: "AERIN", label: "AERIN" },
     { value: "ARAMIS", label: "ARAMIS" },
     { value: "Bobbi Brown", label: "Bobbi Brown" },
     { value: "Bumble and Bumble", label: "Bumble and Bumble" },
-    { value: "Byredo", label: "Byredo" },
     { value: "BY TERRY", label: "BY TERRY" },
+    { value: "Byredo", label: "Byredo" },
     { value: "Diptyque", label: "Diptyque" },
-    { value: "Kevyn Aucoin Cosmetics", label: "Kevyn Aucoin Cosmetics" },
     { value: "ESTEE LAUDER", label: "ESTEE LAUDER" },
+    { value: "Kevyn Aucoin Cosmetics", label: "Kevyn Aucoin Cosmetics" },
     { value: "L'Occitane", label: "L'Occitane" },
     { value: "Maison Margiela", label: "Maison Margiela" },
+    { value: "Miriam Quevedo", label: "Miriam Quevedo" },
+    { value: "Re-Nutriv", label: "Re-Nutriv" },
     { value: "ReVive", label: "ReVive" },
     { value: "RMS Beauty", label: "RMS Beauty" },
     { value: "Smashbox", label: "Smashbox" },
-    { value: "Re-Nutriv", label: "Re-Nutriv" },
     { value: "Victoria Beckham Beauty", label: "Victoria Beckham Beauty" },
   ];
 
@@ -48,10 +51,12 @@ const MarketingCalendar = () => {
         setTimeout(() => {
 
           var element = document.getElementById("Apr");
-          element.scrollIntoView();
-          element.scrollIntoView(false);
-          element.scrollIntoView({ block: "end" });
-          element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+          if (element) {
+            element.scrollIntoView();
+            element.scrollIntoView(false);
+            element.scrollIntoView({ block: "end" });
+            element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+          }
         }, 2000);
       }).catch((err) => console.log({ err }))
     }).catch((e) => console.log({ e }))
@@ -92,6 +97,34 @@ const MarketingCalendar = () => {
     html2pdf().set(opt).from(element).save();
   };
   // .............
+
+  const { data: manufacturers } = useManufacturer();
+  const generatePdfServerSide = () => {
+    setPDFIsloaed(true);
+    GetAuthData().then((user) => {
+      let manufacturerId = null;
+      manufacturers.data.filter(item => { if (item?.Name?.toLowerCase() == brand?.toLowerCase()) { manufacturerId = item.Id } })
+      getMarketingCalendarPDF({ key: user.x_access_token, manufacturerId, month }).then((file) => {
+        if (file) {
+          const a = document.createElement('a');
+          a.href = originAPi + "/download/" + file +"/1/index";
+          a.target = '_blank'
+          setPDFIsloaed(false);
+          a.click();
+        } else {
+          const a = document.createElement('a');
+          a.href = originAPi + "/download/blank.pdf/1/index";
+          a.target = '_blank'
+          setPDFIsloaed(false);
+          a.click();
+        }
+      }).catch((pdfErr) => {
+        console.log({ pdfErr });
+      })
+    }).catch((userErr) => {
+      console.log({ userErr });
+    })
+  }
 
 
   const generateXLSX = () => {
@@ -186,6 +219,7 @@ const MarketingCalendar = () => {
             onClick={() => {
               setBrand("");
               setMonth(null);
+              setPDFIsloaed(false);
             }}
           >
             <CloseButton crossFill={'#fff'} height={20} width={20} />
@@ -202,12 +236,12 @@ const MarketingCalendar = () => {
             </div>
             <ul className="dropdown-menu">
               <li>
-                <div className="dropdown-item text-start" onClick={() => generatePdf()}>
+                <div className="dropdown-item text-start" style={{ cursor: 'pointer' }} onClick={() => generatePdfServerSide()}>
                   &nbsp;Pdf
                 </div>
               </li>
               <li>
-                <div className="dropdown-item text-start" onClick={() => generateXLSX()}>
+                <div className="dropdown-item text-start" style={{ cursor: 'pointer' }} onClick={() => generateXLSX()}>
                   &nbsp;XLSX
                 </div>
               </li>
@@ -216,12 +250,8 @@ const MarketingCalendar = () => {
         </>
       }
     >
-      {/* {isLoading ? (
-        <Loading height={"70vh"} />
-    ) : (
-      <LaunchCalendar brand={brand} month={month} productList={productList} />
-      )} */}
-      {isLoaded ? <LaunchCalendar brand={brand} month={month} productList={productList} /> : <Loading />}
+      {isPDFLoaded ? <div>Generating Pdf ...</div> :
+        isLoaded ? <LaunchCalendar brand={brand} month={month} productList={productList} /> : <Loading />}
 
     </AppLayout>
   );

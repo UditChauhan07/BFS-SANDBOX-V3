@@ -702,6 +702,45 @@ export async function getYearlyComparison({ year, ManufacturerId__c }) {
   }
 }
 
+export async function getOrderDetailsPdf({ key, opportunity_id }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi+"/mIRX7B9FlQjmOaf/0DS68FOD7s", {
+    method: "POST",
+    body: JSON.stringify({ key, opportunity_id }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data?.file||false;
+  }
+}
+
+export async function getMarketingCalendarPDF({ key, manufacturerId,month }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi+"/mIRX7B9FlQjmOaf", {
+    method: "POST",
+    body: JSON.stringify({ key, manufacturerId,month }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  console.log({data});
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data?.file||false;
+  }
+}
+
 
 export const hexabrand = {
   a0O3b00000hym7GEAQ: "#38A3A5",

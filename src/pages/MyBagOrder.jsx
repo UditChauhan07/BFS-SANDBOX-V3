@@ -6,10 +6,12 @@ import { MdOutlineDownload } from "react-icons/md";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { SearchIcon } from "../lib/svg";
+import { GetAuthData, getOrderDetailsPdf, originAPi } from "../lib/store";
 const fileExtension = ".xlsx";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 function MyBagOrder(props) {
   const [orderDetail, setOrderDetail] = useState([]);
+  const [isPDFLoaded, setPDFIsloaed] = useState(false);
   const generatePdf = () => {
     const element = document.getElementById('orderDetailerContainer'); // The HTML element you want to convert
     // element.style.padding = "10px"
@@ -23,11 +25,38 @@ function MyBagOrder(props) {
       // jsPDF: { unit: 'in', orientation: 'landscape' }
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-      pagebreak: { mode: [ 'css'] }
+      pagebreak: { mode: ['css'] }
     };
 
     html2pdf().set(opt).from(element).save();
   };
+  const generatePdfServerSide = () => {
+    if (orderDetail?.Id) {
+      setPDFIsloaed(true);
+      GetAuthData().then((user) => {
+        getOrderDetailsPdf({ key: user.x_access_token, opportunity_id: orderDetail?.Id }).then((file) => {
+          if (file) {
+            const a = document.createElement('a');
+            a.href = originAPi + "/download/" + file + "/2/index";
+            a.target = '_blank'
+            console.log({ a });
+            setPDFIsloaed(false);
+            a.click();
+          } else {
+            const a = document.createElement('a');
+            a.href = originAPi + "/download/blank.pdf/2/index";
+            a.target = '_blank'
+            setPDFIsloaed(false);
+            a.click();
+          }
+        }).catch((pdfErr) => {
+          console.log({ pdfErr });
+        })
+      }).catch((userErr) => {
+        console.log({ userErr });
+      })
+    }
+  }
 
   const csvData = ({ data }) => {
     let finalData = [];
@@ -79,7 +108,7 @@ function MyBagOrder(props) {
           </div>
           <ul className="dropdown-menu">
             <li>
-              <div className="dropdown-item text-start" onClick={() => generatePdf()}>&nbsp;Pdf</div>
+              <div className="dropdown-item text-start" onClick={() => generatePdfServerSide()}>&nbsp;Pdf</div>
             </li>
             <li>
               <div className="dropdown-item text-start" onClick={() => generateXLSX(orderDetail)}>&nbsp;XLSX</div>
@@ -92,7 +121,8 @@ function MyBagOrder(props) {
       </div>
     }>
       <div className="col-12">
-        <MyBagFinal setOrderDetail={setOrderDetail} />
+        {isPDFLoaded ? <p>generating PDF...</p> :
+          <MyBagFinal setOrderDetail={setOrderDetail} />}
       </div>
     </AppLayout>
   );
