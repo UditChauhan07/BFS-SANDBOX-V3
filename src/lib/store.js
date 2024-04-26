@@ -759,8 +759,8 @@ export const hexabrand = {
   a0ORb000000QzsfMAC: "#B7C8B3",
   a0O1O00000XYBvkUAH: "#6D243E",
   a0O1O00000XYBvaUAH: "#4B95DD",
-  a0ORb000000nDfFMAU:"#deb887",
-  a0ORb000000nDIiMAM:"#deb887"
+  a0ORb000000nDfFMAU:"#073763",
+  a0ORb000000nDIiMAM:"#7f6000"
 };
 
 export const hexabrandText = {
