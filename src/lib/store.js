@@ -741,6 +741,46 @@ export async function getMarketingCalendarPDF({ key, manufacturerId,month }) {
   }
 }
 
+export async function getMarketingCalendarPDFV2({ key, manufacturerId,month }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi+"/mIRX7B9FlQjmOaf/VTOUZjSm8aIm1ve", {
+    method: "POST",
+    body: JSON.stringify({ key, manufacturerId,month }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  console.log({data});
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data?.file||false;
+  }
+}
+
+export async function getMarketingCalendarPDFV3({ key, manufacturerId,month }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi+"/mIRX7B9FlQjmOaf/ohSOBafoPQH0NQi", {
+    method: "POST",
+    body: JSON.stringify({ key, manufacturerId,month }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  console.log({data});
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data?.file||false;
+  }
+}
+
 
 export const hexabrand = {
   a0O3b00000hym7GEAQ: "#38A3A5",

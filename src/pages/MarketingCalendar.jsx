@@ -8,7 +8,7 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import { CloseButton } from "../lib/svg";
-import { GetAuthData, getMarketingCalendar, getMarketingCalendarPDF, originAPi } from "../lib/store";
+import { GetAuthData, getMarketingCalendar, getMarketingCalendarPDF, getMarketingCalendarPDFV2, getMarketingCalendarPDFV3, originAPi } from "../lib/store";
 import Loading from "../components/Loading";
 import { useManufacturer } from "../api/useManufacturer";
 const fileExtension = ".xlsx";
@@ -97,7 +97,7 @@ const MarketingCalendar = () => {
   };
   // .............
 
-  const LoadingEffect = ()=>{
+  const LoadingEffect = () => {
     const intervalId = setInterval(() => {
       if (pdfLoadingText.length > 6) {
         setPdfLoadingText('.');
@@ -118,29 +118,68 @@ const MarketingCalendar = () => {
   }
 
   const { data: manufacturers } = useManufacturer();
-  const generatePdfServerSide = () => {
+  const generatePdfServerSide = (version=0) => {
     setPDFIsloaed(true);
     LoadingEffect();
     GetAuthData().then((user) => {
       let manufacturerId = null;
       manufacturers.data.filter(item => { if (item?.Name?.toLowerCase() == brand?.toLowerCase()) { manufacturerId = item.Id } })
-      getMarketingCalendarPDF({ key: user.x_access_token, manufacturerId, month }).then((file) => {
-        if (file) {
-          const a = document.createElement('a');
-          a.href = originAPi + "/download/" + file + "/1/index";
-          // a.target = '_blank'
-          setPDFIsloaed(false);
-          a.click();
-        } else {
-          const a = document.createElement('a');
-          a.href = originAPi + "/download/blank.pdf/1/index";
-          // a.target = '_blank'
-          setPDFIsloaed(false);
-          a.click();
-        }
-      }).catch((pdfErr) => {
-        console.log({ pdfErr });
-      })
+      if (version == 1) {
+        getMarketingCalendarPDFV2({ key: user.x_access_token, manufacturerId, month }).then((file) => {
+          if (file) {
+            const a = document.createElement('a');
+            a.href = originAPi + "/download/" + file + "/1/index";
+            // a.target = '_blank'
+            setPDFIsloaed(false);
+            a.click();
+          } else {
+            const a = document.createElement('a');
+            a.href = originAPi + "/download/blank.pdf/1/index";
+            // a.target = '_blank'
+            setPDFIsloaed(false);
+            a.click();
+          }
+        }).catch((pdfErr) => {
+          console.log({ pdfErr });
+        })
+      }else if (version == 2) {
+        getMarketingCalendarPDFV3({ key: user.x_access_token, manufacturerId, month }).then((file) => {
+          if (file) {
+            const a = document.createElement('a');
+            a.href = originAPi + "/download/" + file + "/1/index";
+            // a.target = '_blank'
+            setPDFIsloaed(false);
+            a.click();
+          } else {
+            const a = document.createElement('a');
+            a.href = originAPi + "/download/blank.pdf/1/index";
+            // a.target = '_blank'
+            setPDFIsloaed(false);
+            a.click();
+          }
+        }).catch((pdfErr) => {
+          console.log({ pdfErr });
+        })
+      }
+       else {
+        getMarketingCalendarPDF({ key: user.x_access_token, manufacturerId, month }).then((file) => {
+          if (file) {
+            const a = document.createElement('a');
+            a.href = originAPi + "/download/" + file + "/1/index";
+            // a.target = '_blank'
+            setPDFIsloaed(false);
+            a.click();
+          } else {
+            const a = document.createElement('a');
+            a.href = originAPi + "/download/blank.pdf/1/index";
+            // a.target = '_blank'
+            setPDFIsloaed(false);
+            a.click();
+          }
+        }).catch((pdfErr) => {
+          console.log({ pdfErr });
+        })
+      }
     }).catch((userErr) => {
       console.log({ userErr });
     })
@@ -258,6 +297,16 @@ const MarketingCalendar = () => {
               <li>
                 <div className="dropdown-item text-start" style={{ cursor: 'pointer' }} onClick={() => generatePdfServerSide()}>
                   &nbsp;Pdf
+                </div>
+              </li>
+              <li>
+                <div className="dropdown-item text-start" style={{ cursor: 'pointer' }} onClick={() => generatePdfServerSide(1)}>
+                  &nbsp;PDF Quickview 1
+                </div>
+              </li>
+              <li>
+                <div className="dropdown-item text-start" style={{ cursor: 'pointer' }} onClick={() => generatePdfServerSide(2)}>
+                  &nbsp;PDF Quickview 2
                 </div>
               </li>
               <li>
