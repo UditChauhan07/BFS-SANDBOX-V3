@@ -24,10 +24,10 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
       console.error("Product list is empty or undefined.");
       return;
     }
- const startIndex = (currentPage - 1) * PageSize;
+    const startIndex = (currentPage - 1) * PageSize;
     const endIndex = currentPage * PageSize;
-const newValues = filterData?.flatMap((month) => month?.content).slice(startIndex, endIndex);
-setpagination([{content: newValues }]);
+    const newValues = filterData?.flatMap((month) => month?.content).slice(startIndex, endIndex);
+    setpagination([{ content: newValues }]);
     console.log(newValues);
   }, [filterData, PageSize, currentPage]);
   // ............
@@ -43,7 +43,7 @@ setpagination([{content: newValues }]);
     });
   }, [brand]);
 
-  
+
   useEffect(() => {
     if (!month) {
       setFilterData(products);
@@ -100,26 +100,26 @@ setpagination([{content: newValues }]);
       <section>
         <div>
           <div className={Styles.dGrid}>
-          { allOrdersEmpty ? (
-                   <div className={`${Styles.NodataContent} `}>No data found</div>
-                  ) : 
+            {allOrdersEmpty ? (
+              <div className={`${Styles.NodataContent} `}>No data found</div>
+            ) :
               pagination?.map((month, index) => {
                 if (month.content.length) {
                   return month.content.map((product) => {
                     if (!brand || brand == product.ManufacturerName__c) {
                       return (
-                        
-                        <div className={Styles.cardElement}>
+
+                        <div className={`${Styles.cardElement} cardHover`}>
                           <div className={`last:mb-0 mb-4 ${Styles.HoverArrow}`}>
-                           <div className={` border-[#D0CFCF] flex flex-col gap-4   ${Styles.ImgHover1}`}>
-                          {/* {isLoaded ? <img className={Styles.imgHolder} onClick={() => { setProductDetailId(product.Id) }} src={product?.[product.ProductCode]?.ContentDownloadUrl ?? product.image} /> : <LoaderV2 />} */}
-                          <img src={product.ProductImage?? "\\assets\\images\\dummy.png"} alt={product.Name} />
+                            <div className={` border-[#D0CFCF] flex flex-col gap-4   ${Styles.ImgHover1}`}>
+                              {/* {isLoaded ? <img className={Styles.imgHolder} onClick={() => { setProductDetailId(product.Id) }} src={product?.[product.ProductCode]?.ContentDownloadUrl ?? product.image} /> : <LoaderV2 />} */}
+                              <img src={product.ProductImage ?? "\\assets\\images\\dummy.png"} className="zoomInEffect" alt={product.Name} />
+                            </div>
                           </div>
-                        </div>
                           <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
-                         
+
                           <p
-                            className={Styles.titleHolder}
+                            className={`${Styles.titleHolder} linkEffect`}
                             onClick={() => {
                               setProductDetailId(product.Id);
                             }}
@@ -141,16 +141,16 @@ setpagination([{content: newValues }]);
                             </div>
                           )}
                         </div>
-                       
+
                       );
                     }
                   });
                 }
               })
-           }
+            }
           </div>
         </div>
-        <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false}/>
+        <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false} />
       </section>
       <Pagination
         className="pagination-bar"

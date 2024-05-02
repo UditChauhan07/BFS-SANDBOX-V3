@@ -5,7 +5,7 @@ import { ArrowRightInBrands } from "../lib/svg";
 const BrandCard = ({ brand, image }) => {
   const navigate = useNavigate();
   return (
-    <div className={`w-full last:mb-0 mb-4 ${Page.HoverArrow}`}>
+    <div className={`w-full last:mb-0 mb-4 ${Page.HoverArrow} cardHover`}>
       <div className={`border-b-[0.5px] border-[#D0CFCF] flex flex-col gap-4 h-full  ${Page.ImgHover1}`}>
         {image ? (
           <div className={`border-[0.5px]  relative  border-[#D0CFCF] ${Page.ImgHover}`}>

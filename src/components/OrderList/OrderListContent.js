@@ -108,7 +108,7 @@ function OrderListContent({ data }) {
           } ${date.getFullYear()}`;
 
           return (
-            <div className={` ${Styles.orderStatement}`} key={index}>
+            <div className={` ${Styles.orderStatement} cardHover`} key={index}>
               <div>
                 <div className={Styles.poNumber}>
                   <div className={Styles.poNumb1}>

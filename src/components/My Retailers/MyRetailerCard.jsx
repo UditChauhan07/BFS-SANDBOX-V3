@@ -29,7 +29,7 @@ const MyRetailerCard = ({ placeName, title, brands, accountId, address,selectedS
           localStorage.setItem("address", JSON.stringify(address));
         }}
       >
-        <div className={`${Styles.mainRetailer} flex flex-col justify-between`}>
+        <div className={`${Styles.mainRetailer} flex flex-col justify-between cardHover`}>
           <h2 className="leading-normal">{title}</h2>
           <div>
             <div>
