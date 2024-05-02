@@ -106,7 +106,7 @@ function LaunchCalendar({ productList, brand, month }) {
                           if (!brand || brand == product.brand || brand == product.ManufacturerName__c) {
                             return (
                               <>
-                                <div className="timeline-content" key={productIndex}>
+                                <div className="timeline-content cardHover" key={productIndex}>
                                   <div className="ProductInfo">
                                     <div className="BothDateTopFlex">
                                       <div className="ShipDate">

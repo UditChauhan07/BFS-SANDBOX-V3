@@ -577,7 +577,7 @@ function Dashboard({ dashboardData }) {
           <div className="col-lg-6 my-2">
             <div className={Styles.DashboardWidth}>
               <p className={Styles.Tabletext}>Month to date(MTD): Sales By Rep</p>
-              <div className={Styles.goaltable}>
+              <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className="">
                   <div className={Styles.table_scroll}>
                     <table className="table table-borderless ">
@@ -647,7 +647,7 @@ function Dashboard({ dashboardData }) {
           <div className="col-lg-6 my-2">
             <div className={Styles.DashboardWidth}>
               <p className={Styles.Tabletext}>Year to date(YTD): Sales By Rep</p>
-              <div className={Styles.goaltable}>
+              <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className="">
                   <div className={Styles.table_scroll}>
                     <table className="table table-borderless ">
@@ -718,7 +718,7 @@ function Dashboard({ dashboardData }) {
           <div className="col-lg-6 col-sm-12 my-2">
             <div className={Styles.DashboardWidth}>
               <p className={Styles.Tabletext}>Month to date(MTD): Goal by Brand</p>
-              <div className={Styles.goaltable}>
+              <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className={Styles.table_scroll}>
                   <table className="table table-borderless ">
                     <thead>
@@ -779,7 +779,7 @@ function Dashboard({ dashboardData }) {
           <div className="col-lg-6 col-sm-12 my-2 ">
             <div className={Styles.DashboardWidth}>
               <p className={Styles.Tabletext}>Leads by Brand</p>
-              <div className={Styles.goaltable1}>
+              <div className={`${Styles.goaltable1} cardShadowHover`}>
                 <div className={Styles.table_scroll}>
                   <table className="table table-borderless mt-2">
                     <thead>
@@ -847,7 +847,7 @@ function Dashboard({ dashboardData }) {
                     {accountPerformance.data?.map((ele, index) => {
                       if (index < 4) {
                         return (
-                          <div className="col-lg-6 col-md-6 col-sm-12 onHoverCursor">
+                          <div className="col-lg-6 col-md-6 col-sm-12 onHoverCursor cardHover">
                             <div
                               className={Styles.top_perform}
                               onClick={() => {
@@ -889,7 +889,7 @@ function Dashboard({ dashboardData }) {
                     {lowPerformanceArray?.map((ele, index) => {
                       if (index < 4) {
                         return (
-                          <div className="col-lg-6 col-md-6 col-sm-12 onHoverCursor">
+                          <div className="col-lg-6 col-md-6 col-sm-12 onHoverCursor cardHover">
                             <div
                               className={Styles.top_perform2}
                               onClick={() => {
@@ -925,7 +925,7 @@ function Dashboard({ dashboardData }) {
           <div className="col-lg-7">
             <p className={Styles.Tabletext}>Your Sales By Brand</p>
 
-            <div className={Styles.donuttop}>
+            <div className={`${Styles.donuttop} cardShadowHover`}>
               {/* <p className={` text-center mt-3  ${Styles.Tabletextt}`}>Sum of Order</p> */}
               <p className={`text-end ${Styles.main_heading}`}>MANUFACTURER</p>
               {!isLoading ? (
@@ -940,7 +940,7 @@ function Dashboard({ dashboardData }) {
           </div>
           <div className="col-lg-5">
             <p className={Styles.Tabletext}>Your Sales Performance Score in 2024</p>
-            <div className={Styles.donuttop1}>
+            <div className={`${Styles.donuttop1} cardShadowHover`}>
               {!isLoading ? (
                 <ContentLoader />
               ) : (
@@ -971,7 +971,7 @@ function Dashboard({ dashboardData }) {
 
         <div className="row mt-2 g-4">
           <div className="col-lg-3 col-md-6 col-sm-6">
-            <div className={Styles.dashbottom}>
+            <div className={`${Styles.dashbottom} cardShadowHover`}>
               {!isLoading ? <ContentLoader />
                 : <>
                   <div className={`text-center  ${Styles.active}`}>
@@ -985,7 +985,7 @@ function Dashboard({ dashboardData }) {
             </div>
           </div>
           <div className="col-lg-3 col-md-6 col-sm-6">
-            <div className={Styles.dashbottom}>
+            <div className={`${Styles.dashbottom} cardShadowHover`}>
               {!isLoading ? <ContentLoader />
                 : <>
                   <div className={`text-center  ${Styles.active}`}>
@@ -1001,7 +1001,7 @@ function Dashboard({ dashboardData }) {
             </div>
           </div>
           <div className="col-lg-3 col-md-6 col-sm-6">
-            <div className={Styles.dashbottom}>
+            <div className={`${Styles.dashbottom} cardShadowHover`}>
               {!isLoading ? <ContentLoader />
                 : <>
                   <div className={`text-center  ${Styles.active}`}>
@@ -1015,7 +1015,7 @@ function Dashboard({ dashboardData }) {
             </div>
           </div>
           <div className="col-lg-3 col-md-6 col-sm-6">
-            <div className={Styles.dashbottom}>
+            <div className={`${Styles.dashbottom} cardShadowHover`}>
               {!isLoading ? <ContentLoader />
                 : <>
                   <div className={`text-center  ${Styles.active}`}>
@@ -1033,7 +1033,7 @@ function Dashboard({ dashboardData }) {
         <div className="row mt-5">
           <div className="">
             <p className={Styles.Tabletext}>Total Sale By Brand</p>
-            <div className={Styles.graphmain}>
+            <div className={`${Styles.graphmain} cardShadowHover`}>
               <Chart options={dataa.options} series={manufacturerSalesYear} type="area" width="100%" height="100%" />
             </div>
           </div>

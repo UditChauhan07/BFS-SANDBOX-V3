@@ -49,7 +49,7 @@ function CustomerSupportPage({ data, PageSize, currentPage, manufacturerFilter, 
             <div className="col-lg-3 col-md-12 col-sm-12">
               <div className={Styles.supportLeft}>
                 <Link to={"/order-list"}>
-                  <div className={Styles.supportLeftBox}>
+                  <div className={`${Styles.supportLeftBox} cardHover`}>
                     <div className={Styles.supportLeftImg}>
                       <OrderStatusIcon width={42} height={42} />
                     </div>
@@ -62,7 +62,7 @@ function CustomerSupportPage({ data, PageSize, currentPage, manufacturerFilter, 
                 </Link>
 
                 <div
-                  className={Styles.supportLeftBox}
+                  className={`${Styles.supportLeftBox} cardHover`}
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     setModalOpen(true);
@@ -84,7 +84,7 @@ function CustomerSupportPage({ data, PageSize, currentPage, manufacturerFilter, 
                     setBrandManagementModalOpen(true);
                   }}
                 >
-                  <div className={Styles.supportLeftBox}>
+                  <div className={`${Styles.supportLeftBox} cardHover`}>
                     <div className={Styles.supportLeftImg}>
                       <DefaultSupportIcon width={42} height={42} />
                     </div>
@@ -96,7 +96,7 @@ function CustomerSupportPage({ data, PageSize, currentPage, manufacturerFilter, 
                 </div>
 
                 <div>
-                  <div className={Styles.supportLeftBox}>
+                  <div className={`${Styles.supportLeftBox} cardHover`}>
                     <div className={Styles.supportLeftImg}>
                       <MarketingSupportIcon width={42} height={42} />
                     </div>
@@ -109,7 +109,7 @@ function CustomerSupportPage({ data, PageSize, currentPage, manufacturerFilter, 
                 </div>
 
                 <div>
-                  <div className={Styles.supportLeftBox}>
+                  <div className={`${Styles.supportLeftBox} cardHover`}>
                     <div className={Styles.supportLeftImg}>
                       <DisplayIssuesIcon width={42} height={42} />
                     </div>
@@ -121,7 +121,7 @@ function CustomerSupportPage({ data, PageSize, currentPage, manufacturerFilter, 
                   </div>
                 </div>
                 <div>
-                  <div className={Styles.supportLeftBox}>
+                  <div className={`${Styles.supportLeftBox} cardHover`}>
                     <div className={Styles.supportLeftImg}>
                       <DIFTestIcon width={42} height={42} />
                     </div>
