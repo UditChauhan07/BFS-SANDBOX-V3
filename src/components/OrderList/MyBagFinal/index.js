@@ -37,7 +37,7 @@ function MyBagFinal({ setOrderDetail }) {
 
   let BodyContent = new FormData();
   BodyContent.append("key", Key.data.access_token);
-  BodyContent.append("opportunity_id",OrderId);
+  BodyContent.append("opportunity_id", OrderId);
 
   function downloadFiles(invoices) {
     invoices.forEach(file => {
@@ -51,7 +51,7 @@ function MyBagFinal({ setOrderDetail }) {
   }
 
   const getOrderDetails = async () => {
-    console.log({OrderId});
+    console.log({ OrderId });
     let data = ShareDrive();
     if (!data) {
       data = {};
@@ -222,13 +222,13 @@ function MyBagFinal({ setOrderDetail }) {
                                         !productImage.isLoaded ? <LoaderV2 /> :
                                           productImage.images?.[item.ProductCode] ?
                                             productImage.images[item.ProductCode]?.ContentDownloadUrl ?
-                                              <img src={productImage.images[item.ProductCode]?.ContentDownloadUrl} alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
-                                              : <img src={productImage.images[item.ProductCode]} alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
-                                            : <img src={Img1} alt="img" onClick={() => { setProductDetailId(item?.Product2Id) }} />
+                                              <img src={productImage.images[item.ProductCode]?.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
+                                              : <img src={productImage.images[item.ProductCode]} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
+                                            : <img src={Img1} className="zoomInEffect" alt="img" onClick={() => { setProductDetailId(item?.Product2Id) }} />
                                       }
                                     </div>
                                     <div className={Styles.Mainbox3}>
-                                      <h2 onClick={() => { setProductDetailId(item?.Product2Id) }} style={{ cursor: 'pointer' }}>{item.Name.split(OrderData.Name)}</h2>
+                                      <h2 onClick={() => { setProductDetailId(item?.Product2Id) }} className="linkEffect" style={{ cursor: 'pointer' }}>{item.Name.split(OrderData.Name)}</h2>
                                       <p>
                                         <span className={Styles.Span1} data-html2canvas-ignore>
                                           ${Number(item.ListPrice).toFixed(2)}

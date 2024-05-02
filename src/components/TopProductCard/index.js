@@ -44,7 +44,7 @@ const TopProductCard = ({ data, productImages, to = null }) => {
                    <div className={`last:mb-0 mb-4 ${Styles.HoverArrow}`}>
                    <div className={` border-[#D0CFCF] flex flex-col gap-4   ${Styles.ImgHover1}`}>
                   <img
-                    className={Styles.imgHolder}
+                    className={`${Styles.imgHolder} zoomInEffect`}
                     onClick={() => {
                       setProductDetailId(product.Id);
                     }}
@@ -57,7 +57,7 @@ const TopProductCard = ({ data, productImages, to = null }) => {
                 )}
                 <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
                 <p
-                  className={Styles.titleHolder}
+                  className={`${Styles.titleHolder} linkEffect`}
                   onClick={() => {
                     setProductDetailId(product.Id);
                   }}
