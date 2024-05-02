@@ -320,13 +320,13 @@ const handleNameChange = (event) => {
                                       !productImage.isLoaded ? <LoaderV2 /> :
                                         productImage.images?.[ele.product?.ProductCode] ?
                                           productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl ?
-                                            <img src={productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl} alt="img" width={25} onClick={() => { setProductDetailId(ele?.product?.Id) }} />
-                                            : <img src={productImage.images[ele.product?.ProductCode]} alt="img" width={25} onClick={() => { setProductDetailId(ele?.product?.Id) }} />
-                                          : <img src={Img1} alt="img" onClick={() => { setProductDetailId(ele?.product?.Id) }} />
+                                            <img src={productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(ele?.product?.Id) }} />
+                                            : <img src={productImage.images[ele.product?.ProductCode]} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(ele?.product?.Id) }} />
+                                          : <img src={Img1} className="zoomInEffect" alt="img" onClick={() => { setProductDetailId(ele?.product?.Id) }} />
                                     }
                                   </div>
                                   <div className={Styles.Mainbox3}>
-                                    <h2 onClick={() => { setProductDetailId(ele?.product?.Id) }} style={{ cursor: 'pointer' }}>{ele.product?.Name}</h2>
+                                    <h2 onClick={() => { setProductDetailId(ele?.product?.Id) }} style={{ cursor: 'pointer' }} className="linkEffect">{ele.product?.Name}</h2>
                                     <p>
                                       <span className={Styles.Span1}>
                                         {ele.product?.usdRetail__c.includes("$") ? `$${(+ele.product?.usdRetail__c.substring(1)).toFixed(2)}` : `$${Number(ele.product?.usdRetail__c).toFixed(2)}`}

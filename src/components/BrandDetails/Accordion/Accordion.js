@@ -132,13 +132,13 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
                                   !productImage.isLoaded?<LoaderV2/>:
                                   productImage.images?.[value?.ProductCode] ?
                                   productImage.images[value?.ProductCode]?.ContentDownloadUrl?
-                                  <img src={productImage.images[value?.ProductCode]?.ContentDownloadUrl} alt="img" width={35} onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})} />
-                                  :<img src={productImage.images[value?.ProductCode]} alt="img"  width={35} onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})}/>
-                                  :<img src={Img1} alt="img" onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})} />
+                                  <img src={productImage.images[value?.ProductCode]?.ContentDownloadUrl} className="zoomInEffect" alt="img" width={35} onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})} />
+                                  :<img src={productImage.images[value?.ProductCode]} className="zoomInEffect" alt="img"  width={35} onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})}/>
+                                  :<img src={Img1} className="zoomInEffect" alt="img" onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})} />
                                 }
                                 {/* {!productImage.isLoaded?<LoaderV2/>:productImage.images[value.ProductCode]?<img src={productImage.images[value.ProductCode]?.ContentDownloadUrl?productImage.images[value.ProductCode]?.ContentDownloadUrl:productImage.images[value.ProductCode]} alt="img" width={35} />:<img src={Img1} alt="img" />} */}
                               </td>
-                              <td className="text-capitalize" style={{ fontSize: '13px',cursor:'pointer' }} onMouseEnter={() => setShowName({ index: indexed, type: true })}
+                              <td className="text-capitalize linkEffect" style={{ fontSize: '13px',cursor:'pointer' }} onMouseEnter={() => setShowName({ index: indexed, type: true })}
                                 onMouseLeave={() => setShowName({ index: indexed })} onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})}>
                                 {indexed !== showName?.index && value.Name.length >= 23 ? `${value.Name.substring(0, 23)}...` : value.Name}
                               </td>
