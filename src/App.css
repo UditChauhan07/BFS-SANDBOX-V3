@@ -28,17 +28,20 @@ a {
 }
 @font-face {
   font-family: "Montserrat-400";
-  src: url("../public/assets/css/fonts/Montserrat-Regular.ttf") format("truetype");
+  src: url("../public/assets/css/fonts/Montserrat-Regular.ttf")
+    format("truetype");
   font-weight: 400;
 }
 @font-face {
   font-family: "Montserrat-500";
-  src: url("../public/assets/css/fonts/Montserrat-Medium.ttf") format("truetype");
+  src: url("../public/assets/css/fonts/Montserrat-Medium.ttf")
+    format("truetype");
   font-weight: 500;
 }
 @font-face {
   font-family: "Montserrat-600";
-  src: url("../public/assets/css/fonts/Montserrat-SemiBold.ttf") format("truetype");
+  src: url("../public/assets/css/fonts/Montserrat-SemiBold.ttf")
+    format("truetype");
   font-weight: 600;
 }
 @font-face {
@@ -348,7 +351,7 @@ input#searchright {
 .accordion-collapse.collapse.show {
   padding: 8px 0;
 }
-.react-datepicker__input-container button{
+.react-datepicker__input-container button {
   display: flex;
   width: 100%;
   justify-content: center;
@@ -367,13 +370,34 @@ input#searchright {
   text-transform: uppercase;
   margin-left: 35px;
 }
-.css-1jqq78o-placeholder,.css-qbdosj-Input,.css-1jqq78o-placeholder{
+.css-1jqq78o-placeholder,
+.css-qbdosj-Input,
+.css-1jqq78o-placeholder {
   color: black !important;
 }
-.css-1dimb5e-singleValue,.css-1xc3v61-indicatorContainer,.css-15lsz6c-indicatorContainer,.css-t3ipsp-control, .css-qbdosj-Input input, .css-1nmdiq5-menu
- {
+.css-1dimb5e-singleValue,
+.css-1xc3v61-indicatorContainer,
+.css-15lsz6c-indicatorContainer,
+.css-t3ipsp-control,
+.css-qbdosj-Input input,
+.css-1nmdiq5-menu {
   color: black;
 }
-.css-1xc3v61-indicatorContainer{
+.css-1xc3v61-indicatorContainer {
   color: black !important;
+}
+
+.zoomInEffect {
+  transition: all 0.2s ease;
+}
+.zoomInEffect:hover {
+  transform: scale(1.1);
+}
+.linkEffect {
+  transition: opacity 300ms, transform 300ms;
+}
+.linkEffect:hover {
+  /* text-shadow: 4px 4px 0px #d5d5d5, 4px -4px 0px rgba(0, 0, 0, 0.2); */
+  /* transform: scale(1.05); */
+  text-decoration: underline;
 }

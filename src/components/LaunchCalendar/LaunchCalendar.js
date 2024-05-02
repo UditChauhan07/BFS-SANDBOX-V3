@@ -121,14 +121,14 @@ function LaunchCalendar({ productList, brand, month }) {
                                     </div>
                                     <div className="d-flex mt-2">
                                       <div className="m-auto ProductImg">
-                                        <img src={product?.ProductImage ?? "\\assets\\images\\dummy.png"} alt={product.Name} onClick={() => {
+                                        <img className="zoomInEffect" src={product?.ProductImage ?? "\\assets\\images\\dummy.png"} alt={product.Name} onClick={() => {
                                           setProductDetailId(product.Id);
                                         }} style={{cursor:'pointer'}}/>
                                       </div>
-                                      <div className="LaunchProductDetail">
+                                      <div className="LaunchProductDetail " style={{  position: 'relative'}}>
                                         <h3 onClick={() => {
                                           setProductDetailId(product.Id);
-                                        }} style={{cursor:'pointer'}}>{product.Name}</h3>
+                                        }} style={{cursor:'pointer',marginBottom:'10px'}} className="linkEffect">{product.Name}</h3>
                                         <div className="size">
                                           Size <span className="ProductQty">{product.Size_Volume_Weight__c}</span>
                                         </div>

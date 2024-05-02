@@ -147,7 +147,7 @@ function OrderListContent({ data }) {
                             .map((ele, index) => {
                               return (
                                 <>
-                                  <li key={index} onClick={()=>{setProductDetailId(ele.Product2Id);setAccountId(item.AccountId);setManufacturerId(item.ManufacturerId__c);}} style={{cursor:'pointer'}}>
+                                  <li key={index} onClick={()=>{setProductDetailId(ele.Product2Id);setAccountId(item.AccountId);setManufacturerId(item.ManufacturerId__c);}} style={{cursor:'pointer'}} className="linkEffect">
                                     {Viewmore
                                       ? ele.Name.split(item.AccountName)[1]
                                       : ele.Name.split(item.AccountName)
