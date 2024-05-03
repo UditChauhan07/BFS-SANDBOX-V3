@@ -222,12 +222,12 @@ const MarketingCalendar = () => {
           ele.content.map((item) => {
             let temp = {};
             temp["MC Month"] = ele.month;
-            temp["Product Title"] = item.name;
-            temp["Product Description"] = item.description;
-            temp["Product Size"] = item.size;
-            temp["Product Ship Date"] = item.date;
-            temp["Product OCD Date"] = item.OCDDate;
-            temp["Product Brand"] = item.brand;
+            temp["Product Title"] = item.Name;
+            temp["Product Description"] = item.Description;
+            temp["Product Size"] = item.Size_Volume_Weight__c;
+            temp["Product Ship Date"] = product.Ship_Date__c ? (product.Ship_Date__c.split("-")[2] == 15 ? 'TBD' : product.Ship_Date__c.split("-")[2]) + '/' + monthNames[parseInt(product.Ship_Date__c.split("-")[1]) - 1].toUpperCase() + '/' + product.Ship_Date__c.split("-")[0] : 'NA';
+            temp["Product OCD Date"] = product.Launch_Date__c ? product.Launch_Date__c.split("-")[2] + '/' + monthNames[parseInt(product.Launch_Date__c.split("-")[1]) - 1].toUpperCase() + '/' + product.Launch_Date__c.split("-")[0] : 'NA';
+            temp["Product Brand"] = item.ManufacturerName__c;
             temp["Product Price"] = item.usdRetail__c;
             finalData.push(temp);
           });
