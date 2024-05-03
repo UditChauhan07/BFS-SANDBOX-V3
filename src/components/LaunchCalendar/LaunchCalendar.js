@@ -104,6 +104,20 @@ function LaunchCalendar({ productList, brand, month }) {
                         <span className={`timelineHolder0${(index % 3) + 1}`} id={month.month}>{month.month}</span>
                         {month.content.map((product, productIndex) => {
                           if (!brand || brand == product.brand || brand == product.ManufacturerName__c) {
+                            let price = 'NA';
+                                                if (product.usdRetail__c) {
+                                                    if (product.usdRetail__c.includes("$")) {
+                                                        let priceSplit = product.usdRetail__c.split('$')
+                                                        if (priceSplit.length == 2) {
+                                                            priceSplit = priceSplit[1].trim();
+                                                            price = "$" + parseFloat(priceSplit).toFixed(2);
+                                                        } else {
+                                                            price = product.usdRetail__c;
+                                                        }
+                                                    } else {
+                                                        price = "$" + parseFloat(product.usdRetail__c).toFixed(2);
+                                                    }
+                                                }
                             return (
                               <>
                                 <div className="timeline-content cardHover" key={productIndex}>
@@ -130,7 +144,8 @@ function LaunchCalendar({ productList, brand, month }) {
                                           setProductDetailId(product.Id);
                                         }} style={{cursor:'pointer',marginBottom:'10px'}} className="linkEffect">{product.Name}</h3>
                                         <div className="size">
-                                          Size <span className="ProductQty">{product.Size_Volume_Weight__c}</span>
+                                          <span>Size <span className="ProductQty">{product.Size_Volume_Weight__c}</span></span>
+                                          <span>Price <span className="ProductQty">{price}</span></span>
                                         </div>
                                         <p>{product.Description}</p>
                                       </div>
