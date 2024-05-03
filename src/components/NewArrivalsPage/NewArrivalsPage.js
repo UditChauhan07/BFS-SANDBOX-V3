@@ -107,6 +107,20 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                 if (month.content.length) {
                   return month.content.map((product) => {
                     if (!brand || brand == product.ManufacturerName__c) {
+                      let price = 'NA';
+                      if (product.usdRetail__c) {
+                        if (product.usdRetail__c.includes("$")) {
+                          let priceSplit = product.usdRetail__c.split('$')
+                          if (priceSplit.length == 2) {
+                            priceSplit = priceSplit[1].trim();
+                            price = "$" + parseFloat(priceSplit).toFixed(2);
+                          } else {
+                            price = product.usdRetail__c;
+                          }
+                        } else {
+                          price = "$" + parseFloat(product.usdRetail__c).toFixed(2);
+                        }
+                      }
                       return (
 
                         <div className={`${Styles.cardElement} cardHover`}>
@@ -126,7 +140,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                           >
                             {product?.Name?.substring(0, 15)}...
                           </p>
-                          <p className={Styles.priceHolder}>$ -- . --</p>
+                          <p className={Styles.priceHolder}>{price}</p>
                           {to ? (
                             <Link className={Styles.linkHolder}>
                               <p className={Styles.btnHolder}>

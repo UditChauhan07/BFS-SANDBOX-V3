@@ -30,7 +30,8 @@ h1.TopHeading {
   width: 60px;
   height: 60px;
   left: 0;
-  color: #237c94;
+  /* color: #237c94; */
+  color: #000;
   text-align: center;
   background-color: #e5e5e5;
   font-size: 18px;
@@ -62,7 +63,8 @@ h1.TopHeading {
 }
 .DateCurrent01 {
   background-color: #e5e5e5;
-  color: #237ca2;
+  /* color: #237ca2; */
+  color: #000;
   font-size: 18px;
   font-weight: 500;
   padding: 3px 8px;
@@ -73,7 +75,8 @@ h1.TopHeading {
 }
 .DateCurrent02 {
   background-color: #f3e8e0;
-  color: #3c9a4e;
+  /* color: #3c9a4e; */
+  color: #000;
   font-size: 18px;
   font-weight: 500;
   padding: 3px 8px;
@@ -84,7 +87,8 @@ h1.TopHeading {
 }
 .DateCurrent03 {
   background-color: #e0d3cc;
-  color: #9e4545;
+  /* color: #9e4545; */
+  color: #000;
   font-size: 16px;
   font-weight: 500;
   padding: 3px 8px;
@@ -117,7 +121,9 @@ h1.TopHeading {
   font-weight: 500;
   line-height: normal;
   letter-spacing: 1.12px;
-  margin-bottom: 8px;
+  margin: 0 10px 8px 0;
+  display: flex;
+  justify-content: space-between;
 }
 span.ProductQty {
   background-color: #000;
@@ -164,7 +170,8 @@ span.ProductQty {
   width: 60px;
   height: 60px;
   left: 0;
-  color: #3c9a4e;
+  /* color: #3c9a4e; */
+  color: #000;
   font-size: 18px;
   text-align: center;
   background-color: #f3e8e0;
@@ -192,7 +199,8 @@ span.ProductQty {
   width: 60px;
   height: 60px;
   left: 0;
-  color: #9e4545;
+  /* color: #9e4545; */
+  color: #000;
   font-size: 18px;
   text-align: center;
   background-color: #e0d3cc;
