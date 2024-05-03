@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import "./Style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { hexabrand,hexabrandText } from "../../lib/store";
+import { hexabrand, hexabrandText } from "../../lib/store";
 import ProductDetails from "../../pages/productDetails";
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 function LaunchCalendar({ productList, brand, month }) {
@@ -9,7 +9,7 @@ function LaunchCalendar({ productList, brand, month }) {
   const [productDetailId, setProductDetailId] = useState();
   const [isEmpty, setIsEmpty] = useState(false);
   useEffect(() => {
-  
+
     let temp = true;
     products.map((month) => {
       month.content.map((item) => {
@@ -105,19 +105,19 @@ function LaunchCalendar({ productList, brand, month }) {
                         {month.content.map((product, productIndex) => {
                           if (!brand || brand == product.brand || brand == product.ManufacturerName__c) {
                             let price = 'NA';
-                                                if (product.usdRetail__c) {
-                                                    if (product.usdRetail__c.includes("$")) {
-                                                        let priceSplit = product.usdRetail__c.split('$')
-                                                        if (priceSplit.length == 2) {
-                                                            priceSplit = priceSplit[1].trim();
-                                                            price = "$" + parseFloat(priceSplit).toFixed(2);
-                                                        } else {
-                                                            price = product.usdRetail__c;
-                                                        }
-                                                    } else {
-                                                        price = "$" + parseFloat(product.usdRetail__c).toFixed(2);
-                                                    }
-                                                }
+                            if (product.usdRetail__c) {
+                              if (product.usdRetail__c.includes("$")) {
+                                let priceSplit = product.usdRetail__c.split('$')
+                                if (priceSplit.length == 2) {
+                                  priceSplit = priceSplit[1].trim();
+                                  price = "$" + parseFloat(priceSplit).toFixed(2);
+                                } else {
+                                  price = product.usdRetail__c;
+                                }
+                              } else {
+                                price = "$" + parseFloat(product.usdRetail__c).toFixed(2);
+                              }
+                            }
                             return (
                               <>
                                 <div className="timeline-content cardHover" key={productIndex}>
@@ -137,12 +137,12 @@ function LaunchCalendar({ productList, brand, month }) {
                                       <div className="m-auto ProductImg">
                                         <img className="zoomInEffect" src={product?.ProductImage ?? "\\assets\\images\\dummy.png"} alt={product.Name} onClick={() => {
                                           setProductDetailId(product.Id);
-                                        }} style={{cursor:'pointer'}}/>
+                                        }} style={{ cursor: 'pointer' }} />
                                       </div>
-                                      <div className="LaunchProductDetail " style={{  position: 'relative'}}>
+                                      <div className="LaunchProductDetail " style={{ position: 'relative' }}>
                                         <h3 onClick={() => {
                                           setProductDetailId(product.Id);
-                                        }} style={{cursor:'pointer',marginBottom:'10px'}} className="linkEffect">{product.Name}</h3>
+                                        }} style={{ cursor: 'pointer', marginBottom: '10px' }} className="linkEffect">{product.Name}</h3>
                                         <div className="size">
                                           <span>Size <span className="ProductQty">{product.Size_Volume_Weight__c}</span></span>
                                           <span>Price <span className="ProductQty">{price}</span></span>
@@ -185,7 +185,7 @@ function LaunchCalendar({ productList, brand, month }) {
           </div>
         </div>
       </div>
-      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false}/>
+      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false} />
     </div>
   );
 }
