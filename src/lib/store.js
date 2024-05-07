@@ -15,6 +15,21 @@ export const salesRepIdKey = "BzQIEAjzCEHmlXc";
 export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3"]; //,"0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
 // export const originAPi = "https://dev.beautyfashionsales.com"
 
+export const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 export function ShareDrive(data, remove = false) {
   if (remove) {
     localStorage.removeItem(shareKey);
