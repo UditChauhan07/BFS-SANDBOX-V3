@@ -79,6 +79,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
     const resetForm = () => {
         setOrderId(null);
         setErrorList({})
+        setOrderConfirmed(false)
     }
     const productErrorHandler = (element) => {
         //can i use memo for errorlist?
