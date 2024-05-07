@@ -5,7 +5,7 @@ import Img1 from "./Images/Eye1.png";
 import axios from "axios";
 import Loading from "../../Loading";
 import { useNavigate } from "react-router-dom";
-import { ShareDrive, getOrderDetailsBasedId, getOrderDetailsInvoice, getProductImageAll, originAPi, supportShare } from "../../../lib/store";
+import { DestoryAuth, ShareDrive, getOrderDetailsBasedId, getOrderDetailsInvoice, getProductImageAll, originAPi, supportShare } from "../../../lib/store";
 import { MdOutlineDownload } from "react-icons/md";
 import LoaderV2 from "../../loader/v2";
 import ProductDetails from "../../../pages/productDetails";
@@ -17,6 +17,9 @@ function MyBagFinal({ setOrderDetail }) {
 
   const OrderId = JSON.parse(localStorage.getItem("OpportunityId"));
   const Key = JSON.parse(localStorage.getItem("Api Data"));
+  if(!Key){
+    DestoryAuth();
+  }
   const [productImage, setProductImage] = useState({ isLoaded: false, images: {} });
   const [productDetailId, setProductDetailId] = useState(null)
   const [invoices, setInvoice] = useState([]);
@@ -51,7 +54,7 @@ function MyBagFinal({ setOrderDetail }) {
   }
 
   const getOrderDetails = async () => {
-    console.log({ OrderId });
+
     let data = ShareDrive();
     if (!data) {
       data = {};
@@ -61,9 +64,13 @@ function MyBagFinal({ setOrderDetail }) {
       BodyContent,
       headersList
     );
-    if (response.data.data?.ManufacturerId__c) {
-      if (!data[response.data.data?.ManufacturerId__c]) {
-        data[response.data.data?.ManufacturerId__c] = {};
+    if (Object.values(data).length > 0) {
+      if (response.data.data?.ManufacturerId__c) {
+        if (data[response.data.data?.ManufacturerId__c]) {
+          if (!data[response.data.data?.ManufacturerId__c]) {
+            data[response.data.data?.ManufacturerId__c] = {};
+          }
+        }
       }
       if (Object.values(data[response.data.data?.ManufacturerId__c]).length > 0) {
         setProductImage({ isLoaded: true, images: data[response.data.data?.ManufacturerId__c] })
