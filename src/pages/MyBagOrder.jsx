@@ -59,7 +59,7 @@ function MyBagOrder(props) {
       })
     }
   }
-  const LoadingEffect = ()=>{
+  const LoadingEffect = () => {
     const intervalId = setInterval(() => {
       if (pdfLoadingText.length > 6) {
         setPdfLoadingText('.');
@@ -80,32 +80,34 @@ function MyBagOrder(props) {
   }
 
   const csvData = ({ data }) => {
-    let finalData = [];
-    let accountDetails = { "": "Account Name", " ": data.Name }
-    let brandDetail = { "": "Brand Name", " ": data.ManufacturerName__c }
-    let poDetail = { "": "PO Number", " ": data.PO_Number__c }
-    let orderNumberDetail = { "": "Order Number", " ": data.Order_Number__c }
-    let trackingumberDetail = { "": "Tracking Number", " ": data.Tracking__c }
-    let orderdateDetails = { "": "Order Date", " ": data.CreatedDate }
-    finalData.push(accountDetails)
-    finalData.push(brandDetail)
-    finalData.push(poDetail)
-    finalData.push(orderdateDetails)
-    if (data?.Order_Number__c) finalData.push(orderNumberDetail)
-    if (data?.Order_Number__c) finalData.push(orderNumberDetail)
-    if (data?.Tracking__c) finalData.push(trackingumberDetail)
-    let productHeaderDetail = { "": "Product Name", " ": "Product Qty", "  ": "Product Price" }
-    if (data?.OpportunityLineItems?.length > 0) finalData.push(productHeaderDetail)
-    if (data?.OpportunityLineItems.length) {
-      data?.OpportunityLineItems?.map((ele) => {
-        let temp = {};
-        temp[""] = ele.Name;
-        temp[" "] = ele.Quantity;
-        temp["  "] = ele.UnitPrice;
-        finalData.push(temp);
-      });
+    if (data) {
+      let finalData = [];
+      let accountDetails = { "": "Account Name", " ": data.Name }
+      let brandDetail = { "": "Brand Name", " ": data.ManufacturerName__c }
+      let poDetail = { "": "PO Number", " ": data.PO_Number__c }
+      let orderNumberDetail = { "": "Order Number", " ": data.Order_Number__c }
+      let trackingumberDetail = { "": "Tracking Number", " ": data.Tracking__c }
+      let orderdateDetails = { "": "Order Date", " ": data.CreatedDate }
+      finalData.push(accountDetails)
+      finalData.push(brandDetail)
+      finalData.push(poDetail)
+      finalData.push(orderdateDetails)
+      if (data?.Order_Number__c) finalData.push(orderNumberDetail)
+      if (data?.Order_Number__c) finalData.push(orderNumberDetail)
+      if (data?.Tracking__c) finalData.push(trackingumberDetail)
+      let productHeaderDetail = { "": "Product Name", " ": "Product Qty", "  ": "Product Price" }
+      if (data?.OpportunityLineItems?.length > 0) finalData.push(productHeaderDetail)
+      if (data?.OpportunityLineItems.length) {
+        data?.OpportunityLineItems?.map((ele) => {
+          let temp = {};
+          temp[""] = ele.Name;
+          temp[" "] = ele.Quantity;
+          temp["  "] = ele.UnitPrice;
+          finalData.push(temp);
+        });
+      }
+      return finalData;
     }
-    return finalData;
   };
 
   const generateXLSX = (orderDetail) => {

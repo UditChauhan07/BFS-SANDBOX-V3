@@ -35,6 +35,7 @@ import SignUp from "./pages/SignUp";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TargetReport from "./reports/targetReport";
 import YearlyComparisonReport from "./reports/yealyComparison/ComparisonReport";
+import BMAIssues from "./pages/BMAIssues";
 
 
 function App() {
@@ -98,7 +99,8 @@ function App() {
             <Route path="/sign-up" element={<SignUp />}></Route>
             <Route path="/orderDetails" element={<MyBagOrder />}></Route>
             <Route path="/orderStatusForm" element={<OrderStatusForm />}></Route>
-            <Route path="/customerService" element={<CustomerServiceForm />}></Route>
+            {/* <Route path="/customerService" element={<CustomerServiceForm />}></Route> */}
+            <Route path="/customerService" element={<BMAIssues />}></Route>
             
             {/* 1234 */}
           </Routes>
