@@ -15,7 +15,9 @@ const BMAIssues = () => {
     const [orderConfirmed,setOrderConfirmed] = useState(false)
     const [files, setFile] = useState([]);
     const [desc,setDesc] = useState();
+    const [subject,setSubject] = useState();
     const [accountId, setAccountId] = useState(null)
+    const [contactId, setContactId] = useState(null)
     const [manufacturerId, setManufacturerId] = useState(null)
     const [errorList, setErrorList] = useState({});
 
@@ -32,7 +34,7 @@ const BMAIssues = () => {
             getOrderList({
               user: {
                 key: response.x_access_token,
-                Sales_Rep__c: true ? "00530000005AdvsAAC" : response.Sales_Rep__c,
+                Sales_Rep__c: false ? "00530000005AdvsAAC" : response.Sales_Rep__c,
               },
               month: "",
             })
@@ -54,27 +56,38 @@ const BMAIssues = () => {
             console.log({ err });
           });
       }, []);
+      
       const SubmitHandler = ()=>{
-        alert("coming soon")
-        return;
         GetAuthData()
         .then((user) => {
           if (user) {
             let rawData = {
               orderStatusForm: {
                 typeId: "0123b000000GfOEAA0",
-                salesRepId: user.Sales_Rep__c,
                 reason: reason,
-                accountId: accountId,
-                contactId: manufacturerId,
-                desc: desc,
+                salesRepId: user.Sales_Rep__c,
+                contactId,
+                accountId,
+                opportunityId: orderId,
+                manufacturerId,
+                desc,
                 priority: "Medium",
                 sendEmail: false,
-                subject: "",
+                subject,
+                // Associated_Order_Number__c:null,
+                // Associated_PO_Number__c:null,
+                // Actual_Amount__c:null,
               },
               key: user.x_access_token,
             };
-            console.log({rawData});
+            let errorlistObj = Object.keys(errorList);
+            let systemStr = "";
+            if(errorlistObj.length){
+              errorlistObj.map((id)=>{
+                systemStr += `${errorList[id].Name}(${errorList[id].ProductCode}) having ${reason} for ${errorList[id].issue} out of ${errorList[id].Quantity} Qty.\n`
+              })
+            }
+            console.log({rawData,systemStr});
             return
             postSupportAny({ rawData })
               .then((response) => {
@@ -96,7 +109,7 @@ const BMAIssues = () => {
     return (<AppLayout>
         <section>
             <BMAIHandler reasons={reasons} setReason={setReason} reason={reason}/>
-            {true && <OrderCardHandler orders={orders} orderId={orderId} setOrderId={setOrderId} reason={reason} orderConfirmedStatus={{setOrderConfirmed,orderConfirmed}} accountIdObj={{accountId,setAccountId}} manufacturerIdObj={{manufacturerId,setManufacturerId}} errorListObj={{errorList,setErrorList}}/>}
+            {true && <OrderCardHandler orders={orders} orderId={orderId} setOrderId={setOrderId} reason={reason} orderConfirmedStatus={{setOrderConfirmed,orderConfirmed}} accountIdObj={{accountId,setAccountId}} manufacturerIdObj={{manufacturerId,setManufacturerId}} errorListObj={{errorList,setErrorList}} contactIdObj={{contactId,setContactId}} accountList={accountList} setSubject={setSubject}/>}
             {/*  files={files} desc={desc} */}
             {true && <Attachements setFile={setFile} files={files} setDesc={setDesc} orderConfirmed={orderConfirmed} SubmitHandler={SubmitHandler}/>}
         </section>

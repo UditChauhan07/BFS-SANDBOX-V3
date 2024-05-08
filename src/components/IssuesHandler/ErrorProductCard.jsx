@@ -18,7 +18,7 @@ const ErrorProductCard = ({Styles1,productErrorHandler,errorList,setProductDetai
         <td>{product.ProductCode}</td>
         <td>{product.Quantity.toFixed(2)}</td>
         <td>{product.TotalPrice.toFixed(2)}</td>
-        {(reason &&reason != "Charges" &&errorList?.[product.Id]?.Id )&& <td>
+        {(reason &&reason != "Charges" &&errorList?.[product.Id]?.Id)&& <td>
             <input type="number" max={product.Quantity} className={Styles1.productErrorQtyHolder} id={`oP${product.Id}`} value1={errorList?.[product.Id]?.issue?errorList?.[product.Id]?.issue:null} onKeyUp={(e)=>{
                 // if(parseInt(e.target.value) <= product.Quantity){
                     // console.log(e.target.value);

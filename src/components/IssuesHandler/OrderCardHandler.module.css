@@ -5,7 +5,7 @@
   border-radius: 10px;
   position: relative;
 }
-.openListHolder{
+/* .openListHolder{
   animation: openList 10s;
 }
 @keyframes openList {
@@ -15,7 +15,7 @@
   100% {
     height: 100%;
   }
-}
+} */
 
 .shake {
   animation: shake 0.5s;
