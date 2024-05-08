@@ -11,6 +11,8 @@ import styles from "../../components/Modal UI/Styles.module.css";
 import { CloseButton, SearchIcon } from "../../lib/svg";
 import YearlyComparisonReportTable from "../../components/comparison report table/YearlyComparisonReport";
 import { getYearlyComparison } from "../../lib/store";
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
@@ -40,10 +42,81 @@ const YearlyComparisonReport = () => {
     setExportToExcelState(true);
   };
 
+  //csv Data
+  let csvData = [];
+  let totalwholesale = 0;
+  let totalretailer = 0;
+  if (apiData?.length) {
+    apiData?.map((ele) => {
+      totalretailer += ele.Jan.retail_revenue__c;
+      totalwholesale += ele.Jan.Whole_Sales_Amount;
+      totalretailer += ele.Feb.retail_revenue__c;
+      totalwholesale += ele.Feb.Whole_Sales_Amount;
+      totalretailer += ele.Mar.retail_revenue__c;
+      totalwholesale += ele.Mar.Whole_Sales_Amount;
+      totalretailer += ele.Apr.retail_revenue__c;
+      totalwholesale += ele.Apr.Whole_Sales_Amount;
+      totalretailer += ele.May.retail_revenue__c;
+      totalwholesale += ele.May.Whole_Sales_Amount;
+      totalretailer += ele.Jun.retail_revenue__c;
+      totalwholesale += ele.Jun.Whole_Sales_Amount;
+      totalretailer += ele.Jul.retail_revenue__c;
+      totalwholesale += ele.Jul.Whole_Sales_Amount;
+      totalretailer += ele.Aug.retail_revenue__c;
+      totalwholesale += ele.Aug.Whole_Sales_Amount;
+      totalretailer += ele.Sep.retail_revenue__c;
+      totalwholesale += ele.Sep.Whole_Sales_Amount;
+      totalretailer += ele.Oct.retail_revenue__c;
+      totalwholesale += ele.Oct.Whole_Sales_Amount;
+      totalretailer += ele.Nov.retail_revenue__c;
+      totalwholesale += ele.Nov.Whole_Sales_Amount;
+      totalretailer += ele.Dec.retail_revenue__c;
+      totalwholesale += ele.Dec.Whole_Sales_Amount;
+      return csvData.push({
+        AccountName: ele.AccountName,
+        Estee_Lauder_Number__c: ele.Estee_Lauder_Number__c,
+        Sales_Rep__c: ele.Sales_Rep__c,
+        "Jan Retail Revenue": `$${Number(ele.Jan.retail_revenue__c).toFixed(2)}`,
+        "Jan Wholesale Amount": `$${Number(ele.Jan.Whole_Sales_Amount).toFixed(2)}`,
+        "Feb Retail Revenue": `$${Number(ele.Feb.retail_revenue__c).toFixed(2)}`,
+        "Feb Wholesale Amount": `$${Number(ele.Feb.Whole_Sales_Amount).toFixed(2)}`,
+        "Mar Retail Revenue": `$${Number(ele.Mar.retail_revenue__c).toFixed(2)}`,
+        "Mar Wholesale Amount": `$${Number(ele.Mar.Whole_Sales_Amount).toFixed(2)}`,
+        "Apr Retail Revenue": `$${Number(ele.Apr.retail_revenue__c).toFixed(2)}`,
+        "Apr Wholesale Amount": `$${Number(ele.Apr.Whole_Sales_Amount).toFixed(2)}`,
+        "May Retail Revenue": `$${Number(ele.May.retail_revenue__c).toFixed(2)}`,
+        "May Wholesale Amount": `$${Number(ele.May.Whole_Sales_Amount).toFixed(2)}`,
+        "Jun Retail Revenue": `$${Number(ele.Jun.retail_revenue__c).toFixed(2)}`,
+        "Jun Wholesale Amount": `$${Number(ele.Jun.Whole_Sales_Amount).toFixed(2)}`,
+        "Jul Retail Revenue": `$${Number(ele.Jul.retail_revenue__c).toFixed(2)}`,
+        "Jul Wholesale Amount": `$${Number(ele.Jul.Whole_Sales_Amount).toFixed(2)}`,
+        "Aug Retail Revenue": `$${Number(ele.Aug.retail_revenue__c).toFixed(2)}`,
+        "Aug Wholesale Amount": `$${Number(ele.Aug.Whole_Sales_Amount).toFixed(2)}`,
+        "Sep Retail Revenue": `$${Number(ele.Sep.retail_revenue__c).toFixed(2)}`,
+        "Sep Wholesale Amount": `$${Number(ele.Sep.Whole_Sales_Amount).toFixed(2)}`,
+        "Oct Retail Revenue": `$${Number(ele.Oct.retail_revenue__c).toFixed(2)}`,
+        "Oct Wholesale Amount": `$${Number(ele.Oct.Whole_Sales_Amount).toFixed(2)}`,
+        "Nov Retail Revenue": `$${Number(ele.Nov.retail_revenue__c).toFixed(2)}`,
+        "Nov Wholesale Amount": `$${Number(ele.Nov.Whole_Sales_Amount).toFixed(2)}`,
+        "Dec Retail Revenue": `$${Number(ele.Dec.retail_revenue__c).toFixed(2)}`,
+        "Dec Wholesale Amount": `$${Number(ele.Dec.Whole_Sales_Amount).toFixed(2)}`,
+        "Total Retail Revenue": `$${Number(ele.Dec.retail_revenue__c).toFixed(2)}`,
+        "Total Wholesale Amount": `$${Number(ele.Dec.Whole_Sales_Amount).toFixed(2)}`,
+      });
+    });
+  }
   const exportToExcel = () => {
     setExportToExcelState(false);
-    // Your export logic here
+    const ws = XLSX.utils.json_to_sheet(csvData);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(data, `Comparison Report ${new Date().toDateString()}` + fileExtension);
   };
+  // const exportToExcel = () => {
+  //   setExportToExcelState(false);
+  //   // Your export logic here
+  // };
 
   const resetFilter = async () => {
     setIsLoading(true);
