@@ -46,33 +46,115 @@ const YearlyComparisonReport = () => {
   let csvData = [];
   let totalwholesale = 0;
   let totalretailer = 0;
+  let monthTotalAmount = {
+    Jan: {
+      retailer: 0,
+      wholesale: 0
+    },
+    Feb: {
+      retailer: 0,
+      wholesale: 0
+    },
+    Mar: {
+      retailer: 0,
+      wholesale: 0
+    },
+    Apr: {
+      retailer: 0,
+      wholesale: 0
+    },
+    May: {
+      retailer: 0,
+      wholesale: 0
+    },
+    Jun: {
+      retailer: 0,
+      wholesale: 0
+    },
+    Jul: {
+      retailer: 0,
+      wholesale: 0
+    },
+    Aug: {
+      retailer: 0,
+      wholesale: 0
+    },
+    Sep: {
+      retailer: 0,
+      wholesale: 0
+    },
+    Oct: {
+      retailer: 0,
+      wholesale: 0
+    },
+    Nov: {
+      retailer: 0,
+      wholesale: 0
+    },
+    Dec: {
+      retailer: 0,
+      wholesale: 0
+    },
+    total: {
+      retailer: 0,
+      wholesale: 0
+    }
+  };
   if (apiData?.length) {
-    apiData?.map((ele) => {
+    apiData?.map((ele, index) => {
+
       totalretailer += ele.Jan.retail_revenue__c;
+      monthTotalAmount.Jan.retailer += ele.Jan.retail_revenue__c;
+      monthTotalAmount.Jan.wholesale += ele.Jan.Whole_Sales_Amount;
       totalwholesale += ele.Jan.Whole_Sales_Amount;
       totalretailer += ele.Feb.retail_revenue__c;
+      monthTotalAmount.Feb.retailer += ele.Feb.retail_revenue__c;
+      monthTotalAmount.Feb.wholesale += ele.Feb.Whole_Sales_Amount;
       totalwholesale += ele.Feb.Whole_Sales_Amount;
       totalretailer += ele.Mar.retail_revenue__c;
       totalwholesale += ele.Mar.Whole_Sales_Amount;
+      monthTotalAmount.Mar.retailer += ele.Mar.retail_revenue__c;
+      monthTotalAmount.Mar.wholesale += ele.Mar.Whole_Sales_Amount;
       totalretailer += ele.Apr.retail_revenue__c;
       totalwholesale += ele.Apr.Whole_Sales_Amount;
+      monthTotalAmount.Apr.retailer += ele.Apr.retail_revenue__c;
+      monthTotalAmount.Apr.wholesale += ele.Apr.Whole_Sales_Amount;
       totalretailer += ele.May.retail_revenue__c;
       totalwholesale += ele.May.Whole_Sales_Amount;
+      monthTotalAmount.May.retailer += ele.May.retail_revenue__c;
+      monthTotalAmount.May.wholesale += ele.May.Whole_Sales_Amount;
       totalretailer += ele.Jun.retail_revenue__c;
       totalwholesale += ele.Jun.Whole_Sales_Amount;
+      monthTotalAmount.Jun.retailer += ele.Jun.retail_revenue__c;
+      monthTotalAmount.Jun.wholesale += ele.Jun.Whole_Sales_Amount;
       totalretailer += ele.Jul.retail_revenue__c;
       totalwholesale += ele.Jul.Whole_Sales_Amount;
+      monthTotalAmount.Jul.retailer += ele.Jul.retail_revenue__c;
+      monthTotalAmount.Jul.wholesale += ele.Jul.Whole_Sales_Amount;
       totalretailer += ele.Aug.retail_revenue__c;
       totalwholesale += ele.Aug.Whole_Sales_Amount;
+      monthTotalAmount.Aug.retailer += ele.Aug.retail_revenue__c;
+      monthTotalAmount.Aug.wholesale += ele.Aug.Whole_Sales_Amount;
       totalretailer += ele.Sep.retail_revenue__c;
       totalwholesale += ele.Sep.Whole_Sales_Amount;
+      monthTotalAmount.Sep.retailer += ele.Sep.retail_revenue__c;
+      monthTotalAmount.Sep.wholesale += ele.Sep.Whole_Sales_Amount;
       totalretailer += ele.Oct.retail_revenue__c;
       totalwholesale += ele.Oct.Whole_Sales_Amount;
+      monthTotalAmount.Oct.retailer += ele.Oct.retail_revenue__c;
+      monthTotalAmount.Oct.wholesale += ele.Oct.Whole_Sales_Amount;
       totalretailer += ele.Nov.retail_revenue__c;
       totalwholesale += ele.Nov.Whole_Sales_Amount;
+      monthTotalAmount.Nov.retailer += ele.Nov.retail_revenue__c;
+      monthTotalAmount.Nov.wholesale += ele.Nov.Whole_Sales_Amount;
       totalretailer += ele.Dec.retail_revenue__c;
       totalwholesale += ele.Dec.Whole_Sales_Amount;
-      return csvData.push({
+      monthTotalAmount.Dec.retailer += ele.Dec.retail_revenue__c;
+      monthTotalAmount.Dec.wholesale += ele.Dec.Whole_Sales_Amount;
+      monthTotalAmount.total.retailer += totalretailer;
+      monthTotalAmount.total.wholesale += totalwholesale
+
+       csvData.push({
         AccountName: ele.AccountName,
         Estee_Lauder_Number__c: ele.Estee_Lauder_Number__c,
         Sales_Rep__c: ele.Sales_Rep__c,
@@ -100,9 +182,43 @@ const YearlyComparisonReport = () => {
         "Nov Wholesale Amount": `$${Number(ele.Nov.Whole_Sales_Amount).toFixed(2)}`,
         "Dec Retail Revenue": `$${Number(ele.Dec.retail_revenue__c).toFixed(2)}`,
         "Dec Wholesale Amount": `$${Number(ele.Dec.Whole_Sales_Amount).toFixed(2)}`,
-        "Total Retail Revenue": `$${Number(ele.Dec.retail_revenue__c).toFixed(2)}`,
-        "Total Wholesale Amount": `$${Number(ele.Dec.Whole_Sales_Amount).toFixed(2)}`,
+        "Total Retail Revenue": `$${Number(totalretailer).toFixed(2)}`,
+        "Total Wholesale Amount": `$${Number(totalwholesale).toFixed(2)}`,
       });
+      if((apiData.length-1) == index){
+        csvData.push({
+          AccountName: "",
+          Estee_Lauder_Number__c: "Total",
+          Sales_Rep__c: "",
+          "Jan Retail Revenue": `$${Number(monthTotalAmount.Jan.retailer).toFixed(2)}`,
+          "Jan Wholesale Amount": `$${Number(monthTotalAmount.Jan.wholesale).toFixed(2)}`,
+          "Feb Retail Revenue": `$${Number(monthTotalAmount.Feb.retailer).toFixed(2)}`,
+          "Feb Wholesale Amount": `$${Number(monthTotalAmount.Feb.wholesale).toFixed(2)}`,
+          "Mar Retail Revenue": `$${Number(monthTotalAmount.Mar.retailer).toFixed(2)}`,
+          "Mar Wholesale Amount": `$${Number(monthTotalAmount.Mar.wholesale).toFixed(2)}`,
+          "Apr Retail Revenue": `$${Number(monthTotalAmount.Apr.retailer).toFixed(2)}`,
+          "Apr Wholesale Amount": `$${Number(monthTotalAmount.Apr.wholesale).toFixed(2)}`,
+          "May Retail Revenue": `$${Number(monthTotalAmount.May.retailer).toFixed(2)}`,
+          "May Wholesale Amount": `$${Number(monthTotalAmount.May.wholesale).toFixed(2)}`,
+          "Jun Retail Revenue": `$${Number(monthTotalAmount.Jun.retailer).toFixed(2)}`,
+          "Jun Wholesale Amount": `$${Number(monthTotalAmount.Jun.wholesale).toFixed(2)}`,
+          "Jul Retail Revenue": `$${Number(monthTotalAmount.Jul.retailer).toFixed(2)}`,
+          "Jul Wholesale Amount": `$${Number(monthTotalAmount.Jul.wholesale).toFixed(2)}`,
+          "Aug Retail Revenue": `$${Number(monthTotalAmount.Aug.retailer).toFixed(2)}`,
+          "Aug Wholesale Amount": `$${Number(monthTotalAmount.Aug.wholesale).toFixed(2)}`,
+          "Sep Retail Revenue": `$${Number(monthTotalAmount.Sep.retailer).toFixed(2)}`,
+          "Sep Wholesale Amount": `$${Number(monthTotalAmount.Sep.wholesale).toFixed(2)}`,
+          "Oct Retail Revenue": `$${Number(monthTotalAmount.Oct.retailer).toFixed(2)}`,
+          "Oct Wholesale Amount": `$${Number(monthTotalAmount.Oct.wholesale).toFixed(2)}`,
+          "Nov Retail Revenue": `$${Number(monthTotalAmount.Nov.retailer).toFixed(2)}`,
+          "Nov Wholesale Amount": `$${Number(monthTotalAmount.Nov.wholesale).toFixed(2)}`,
+          "Dec Retail Revenue": `$${Number(monthTotalAmount.Dec.retailer).toFixed(2)}`,
+          "Dec Wholesale Amount": `$${Number(monthTotalAmount.Dec.wholesale).toFixed(2)}`,
+          "Total Retail Revenue": `$${Number(monthTotalAmount.total.retailer).toFixed(2)}`,
+          "Total Wholesale Amount": `$${Number(monthTotalAmount.total.wholesale).toFixed(2)}`,
+        });
+      }
+      return csvData;
     });
   }
   const exportToExcel = () => {
