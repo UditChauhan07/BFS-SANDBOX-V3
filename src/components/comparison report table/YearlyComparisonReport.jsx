@@ -8,18 +8,58 @@ const YearlyComparisonReportTable = ({ comparisonData }) => {
   let totalwholesale = 0;
   let totalretailer = 0;
   let monthTotalAmount = {
-    Jan: 0,
-    Feb: 0,
-    Mar: 0,
-    Apr: 0,
-    May: 0,
-    Jun: 0,
-    Jul: 0,
-    Aug: 0,
-    Sep: 0,
-    Oct: 0,
-    Nov: 0,
-    Dec: 0,
+    Jan: {
+      retailer:0,
+      wholesale:0
+    },
+    Feb: {
+      retailer:0,
+      wholesale:0
+    },
+    Mar: {
+      retailer:0,
+      wholesale:0
+    },
+    Apr: {
+      retailer:0,
+      wholesale:0
+    },
+    May: {
+      retailer:0,
+      wholesale:0
+    },
+    Jun: {
+      retailer:0,
+      wholesale:0
+    },
+    Jul: {
+      retailer:0,
+      wholesale:0
+    },
+    Aug: {
+      retailer:0,
+      wholesale:0
+    },
+    Sep: {
+      retailer:0,
+      wholesale:0
+    },
+    Oct: {
+      retailer:0,
+      wholesale:0
+    },
+    Nov: {
+      retailer:0,
+      wholesale:0
+    },
+    Dec: {
+      retailer:0,
+      wholesale:0
+    },
+    total:{
+      retailer:0,
+      wholesale:0
+    }
   };
   
   return (
@@ -75,32 +115,59 @@ const YearlyComparisonReportTable = ({ comparisonData }) => {
                 </thead>
                 {comparisonData?.length ? (
                   <tbody>
+                    {console.log({comparisonData})}
                     <>
                       {comparisonData?.map((ele, index) => {
                         totalretailer += ele.Jan.retail_revenue__c;
+                        monthTotalAmount.Jan.retailer += ele.Jan.retail_revenue__c;
+                        monthTotalAmount.Jan.wholesale += ele.Jan.Whole_Sales_Amount;
                         totalwholesale += ele.Jan.Whole_Sales_Amount;
                         totalretailer += ele.Feb.retail_revenue__c;
+                        monthTotalAmount.Feb.retailer += ele.Feb.retail_revenue__c;
+                        monthTotalAmount.Feb.wholesale += ele.Feb.Whole_Sales_Amount;
                         totalwholesale += ele.Feb.Whole_Sales_Amount;
                         totalretailer += ele.Mar.retail_revenue__c;
                         totalwholesale += ele.Mar.Whole_Sales_Amount;
+                        monthTotalAmount.Mar.retailer += ele.Mar.retail_revenue__c;
+                        monthTotalAmount.Mar.wholesale += ele.Mar.Whole_Sales_Amount;
                         totalretailer += ele.Apr.retail_revenue__c;
                         totalwholesale += ele.Apr.Whole_Sales_Amount;
+                        monthTotalAmount.Apr.retailer += ele.Apr.retail_revenue__c;
+                        monthTotalAmount.Apr.wholesale += ele.Apr.Whole_Sales_Amount;
                         totalretailer += ele.May.retail_revenue__c;
                         totalwholesale += ele.May.Whole_Sales_Amount;
+                        monthTotalAmount.May.retailer += ele.May.retail_revenue__c;
+                        monthTotalAmount.May.wholesale += ele.May.Whole_Sales_Amount;
                         totalretailer += ele.Jun.retail_revenue__c;
                         totalwholesale += ele.Jun.Whole_Sales_Amount;
+                        monthTotalAmount.Jun.retailer += ele.Jun.retail_revenue__c;
+                        monthTotalAmount.Jun.wholesale += ele.Jun.Whole_Sales_Amount;
                         totalretailer += ele.Jul.retail_revenue__c;
                         totalwholesale += ele.Jul.Whole_Sales_Amount;
+                        monthTotalAmount.Jul.retailer += ele.Jul.retail_revenue__c;
+                        monthTotalAmount.Jul.wholesale += ele.Jul.Whole_Sales_Amount;
                         totalretailer += ele.Aug.retail_revenue__c;
                         totalwholesale += ele.Aug.Whole_Sales_Amount;
+                        monthTotalAmount.Aug.retailer += ele.Aug.retail_revenue__c;
+                        monthTotalAmount.Aug.wholesale += ele.Aug.Whole_Sales_Amount;
                         totalretailer += ele.Sep.retail_revenue__c;
                         totalwholesale += ele.Sep.Whole_Sales_Amount;
+                        monthTotalAmount.Sep.retailer += ele.Sep.retail_revenue__c;
+                        monthTotalAmount.Sep.wholesale += ele.Sep.Whole_Sales_Amount;
                         totalretailer += ele.Oct.retail_revenue__c;
                         totalwholesale += ele.Oct.Whole_Sales_Amount;
+                        monthTotalAmount.Oct.retailer += ele.Oct.retail_revenue__c;
+                        monthTotalAmount.Oct.wholesale += ele.Oct.Whole_Sales_Amount;
                         totalretailer += ele.Nov.retail_revenue__c;
                         totalwholesale += ele.Nov.Whole_Sales_Amount;
+                        monthTotalAmount.Nov.retailer += ele.Nov.retail_revenue__c;
+                        monthTotalAmount.Nov.wholesale += ele.Nov.Whole_Sales_Amount;
                         totalretailer += ele.Dec.retail_revenue__c;
                         totalwholesale += ele.Dec.Whole_Sales_Amount;
+                        monthTotalAmount.Dec.retailer += ele.Dec.retail_revenue__c;
+                        monthTotalAmount.Dec.wholesale += ele.Dec.Whole_Sales_Amount;
+                        monthTotalAmount.total.retailer += totalretailer;
+                        monthTotalAmount.total.wholesale += totalwholesale
                         return (
                           <>
                             <tr key={index}>
@@ -179,130 +246,106 @@ const YearlyComparisonReportTable = ({ comparisonData }) => {
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
                       {" "}
-                      {monthTotalAmount.Jan.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Jan.retail_revenue__c).toFixed(2))
+                      {monthTotalAmount.Jan.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.Jan.retailer).toFixed(2))
                         : "NA"}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Jan.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Jan.Whole_Sales_Amount).toFixed(2))
-                        : "NA"}
+                      { "$" + formentAcmount(Number(monthTotalAmount.Jan.wholesale).toFixed(2))}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
                       {" "}
-                      {monthTotalAmount.Feb.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Feb.retail_revenue__c).toFixed(2))
+                      {monthTotalAmount.Feb.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.Feb.retailer).toFixed(2))
                         : "NA"}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Feb.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Feb.Whole_Sales_Amount).toFixed(2))
+                      {"$" + formentAcmount(Number(monthTotalAmount.Feb.wholesale).toFixed(2))}{" "}
+                    </td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      {monthTotalAmount.Mar.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.Mar.retailer).toFixed(2))
+                        : "NA"}
+                    </td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      {"$" + formentAcmount(Number(monthTotalAmount.Mar.wholesale).toFixed(2))}
+                    </td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      {monthTotalAmount.Apr.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.Apr.retailer).toFixed(2))
                         : "NA"}{" "}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Mar.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Mar.retail_revenue__c).toFixed(2))
+                      {"$" + formentAcmount(Number(monthTotalAmount.Apr.wholesale).toFixed(2))}
+                    </td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      {monthTotalAmount.May.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.May.retailer).toFixed(2))
                         : "NA"}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Mar.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Mar.Whole_Sales_Amount).toFixed(2))
+                      {"$" + formentAcmount(Number(monthTotalAmount.May.wholesale).toFixed(2))}
+                    </td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      {monthTotalAmount.Jun.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.Jun.retailer).toFixed(2))
                         : "NA"}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Apr.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Apr.retail_revenue__c).toFixed(2))
-                        : "NA"}{" "}
+                      {"$" + formentAcmount(Number(monthTotalAmount.Jun.wholesale).toFixed(2))}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Apr.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Apr.Whole_Sales_Amount).toFixed(2))
+                      {monthTotalAmount.Jul.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.Jul.retailer).toFixed(2))
                         : "NA"}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.May.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.May.retail_revenue__c).toFixed(2))
+                      {"$" + formentAcmount(Number(monthTotalAmount.Jul.wholesale).toFixed(2))}
+                    </td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      {monthTotalAmount.Aug.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.Aug.retailer).toFixed(2))
                         : "NA"}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.May.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.May.Whole_Sales_Amount).toFixed(2))
+                      {"$" + formentAcmount(Number(monthTotalAmount.Aug.wholesale).toFixed(2))}
+                    </td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      {monthTotalAmount.Sep.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.Sep.retailer).toFixed(2))
                         : "NA"}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Jun.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Jun.retail_revenue__c).toFixed(2))
+                      {"$" + formentAcmount(Number(monthTotalAmount.Sep.wholesale).toFixed(2))}
+                    </td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      {monthTotalAmount.Oct.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.Oct.retailer).toFixed(2))
                         : "NA"}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Jun.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Jun.Whole_Sales_Amount).toFixed(2))
+                      {"$" + formentAcmount(Number(monthTotalAmount.Oct.wholesale).toFixed(2))}
+                    </td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      {monthTotalAmount.Nov.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.Nov.retailer).toFixed(2))
                         : "NA"}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Jul.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Jul.retail_revenue__c).toFixed(2))
+                      { "$" + formentAcmount(Number(monthTotalAmount.Nov.wholesale).toFixed(2))}
+                    </td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
+                      {monthTotalAmount.Dec.retailer
+                        ? "$" + formentAcmount(Number(monthTotalAmount.Dec.retailer).toFixed(2))
                         : "NA"}
                     </td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Jul.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Jul.Whole_Sales_Amount).toFixed(2))
-                        : "NA"}
-                    </td>
-                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Aug.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Aug.retail_revenue__c).toFixed(2))
-                        : "NA"}
-                    </td>
-                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Aug.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Aug.Whole_Sales_Amount).toFixed(2))
-                        : "NA"}
-                    </td>
-                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Sep.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Sep.retail_revenue__c).toFixed(2))
-                        : "NA"}
-                    </td>
-                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Sep.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Sep.Whole_Sales_Amount).toFixed(2))
-                        : "NA"}
-                    </td>
-                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Oct.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Oct.retail_revenue__c).toFixed(2))
-                        : "NA"}
-                    </td>
-                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Oct.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Oct.Whole_Sales_Amount).toFixed(2))
-                        : "NA"}
-                    </td>
-                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Nov.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Nov.retail_revenue__c).toFixed(2))
-                        : "NA"}
-                    </td>
-                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Nov.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Nov.Whole_Sales_Amount).toFixed(2))
-                        : "NA"}
-                    </td>
-                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Dec.retail_revenue__c
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Dec.retail_revenue__c).toFixed(2))
-                        : "NA"}
-                    </td>
-                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
-                      {monthTotalAmount.Dec.Whole_Sales_Amount
-                        ? "$" + formentAcmount(Number(monthTotalAmount.Dec.Whole_Sales_Amount).toFixed(2))
-                        : "NA"}
+                      {"$" + formentAcmount(Number(monthTotalAmount.Dec.wholesale).toFixed(2))}
                     </td>
                     <td className={`${styles.lastRow} ${styles.stickyLastRow} ${styles.stickySecondLastColumn}`} style={{ maxWidth: "100px" }}>
-                      ${formentAcmount(Number(totalretailer).toFixed(2))}
+                      ${formentAcmount(Number(monthTotalAmount.total.retailer).toFixed(2))}
                     </td>
-                    <td className={`${styles.lastRow} ${styles.stickyLastRow} ${styles.stickyLastColumn}`}>${formentAcmount(totalwholesale.toFixed(2))}</td>
+                    <td className={`${styles.lastRow} ${styles.stickyLastRow} ${styles.stickyLastColumn}`}>${formentAcmount(monthTotalAmount.total.wholesale.toFixed(2))}</td>
                   </tr>
                 </tfoot>
               </table>
