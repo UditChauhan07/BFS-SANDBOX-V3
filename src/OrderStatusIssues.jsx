@@ -134,7 +134,7 @@ const OrderStatusIssues = () => {
         setOrders([])
         getOrderlIsthandler({ key: userData.x_access_token, Sales_Rep__c: value })
     }
-    return (<CustomerSupportLayout
+    return (<AppLayout
         filterNodes={
             <>
               {(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
@@ -173,7 +173,8 @@ const OrderStatusIssues = () => {
                 <section>
                     <div className="">
                         <div className={Styles.orderMainDiv}>
-                            <div className={Styles.OrderMainPr} style={{width:'100%'}}>
+                            {/* style={{width:'100%'}} */}
+                            <div className={Styles.OrderMainPr} >
                                 <div className={Styles.inorderflex}>
                                     <div>
                                         <h2>Your Orders</h2>
@@ -220,6 +221,6 @@ const OrderStatusIssues = () => {
                 </section>
             </div>
         )}
-    </CustomerSupportLayout>)
+    </AppLayout>)
 }
 export default OrderStatusIssues;
