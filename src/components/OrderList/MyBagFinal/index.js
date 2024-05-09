@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Styles from "./Styles.module.css";
-import Img1 from "./Images/Eye1.png";
 import axios from "axios";
 import Loading from "../../Loading";
 import { useNavigate } from "react-router-dom";
@@ -11,13 +10,14 @@ import LoaderV2 from "../../loader/v2";
 import ProductDetails from "../../../pages/productDetails";
 
 function MyBagFinal({ setOrderDetail }) {
+  let Img1 = "/assets/images/dummy.png";
   const [OrderData, setOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const OrderId = JSON.parse(localStorage.getItem("OpportunityId"));
   const Key = JSON.parse(localStorage.getItem("Api Data"));
-  if(!Key){
+  if (!Key) {
     DestoryAuth();
   }
   const [productImage, setProductImage] = useState({ isLoaded: false, images: {} });
@@ -60,10 +60,11 @@ function MyBagFinal({ setOrderDetail }) {
       data = {};
     }
     const response = await axios.post(
-      `${originAPi}/beauty/0DS68FOD7s`,
+      `${originAPi}/beauty/BKpeLbweyZPXmwe`,
       BodyContent,
       headersList
     );
+    console.log({response});
     if (Object.values(data).length > 0) {
       if (response.data.data?.ManufacturerId__c) {
         if (data[response.data.data?.ManufacturerId__c]) {
@@ -72,10 +73,12 @@ function MyBagFinal({ setOrderDetail }) {
           }
         }
       }
-      if (Object.values(data[response.data.data?.ManufacturerId__c]).length > 0) {
-        setProductImage({ isLoaded: true, images: data[response.data.data?.ManufacturerId__c] })
-      } else {
-        setProductImage({ isLoaded: false, images: {} })
+      if (data[response.data.data?.ManufacturerId__c]) {
+        if (Object.values(data[response.data.data?.ManufacturerId__c]).length > 0) {
+          setProductImage({ isLoaded: true, images: data[response.data.data?.ManufacturerId__c] })
+        } else {
+          setProductImage({ isLoaded: false, images: {} })
+        }
       }
     }
     if (response.data.data.OpportunityLineItems.length > 0) {
@@ -226,12 +229,13 @@ function MyBagFinal({ setOrderDetail }) {
                                   <div className={Styles.Mainbox1M}>
                                     <div className={Styles.Mainbox2} style={{ cursor: 'pointer' }}>
                                       {
+                                        item?.ContentDownloadUrl ? <img src={item.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />:
                                         !productImage.isLoaded ? <LoaderV2 /> :
                                           productImage.images?.[item.ProductCode] ?
                                             productImage.images[item.ProductCode]?.ContentDownloadUrl ?
                                               <img src={productImage.images[item.ProductCode]?.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
                                               : <img src={productImage.images[item.ProductCode]} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
-                                            : <img src={Img1} className="zoomInEffect" alt="img" onClick={() => { setProductDetailId(item?.Product2Id) }} />
+                                            : <img src={Img1} className="zoomInEffect" alt="img" onClick={() => { setProductDetailId(item?.Product2Id) }} width={25} />
                                       }
                                     </div>
                                     <div className={Styles.Mainbox3}>

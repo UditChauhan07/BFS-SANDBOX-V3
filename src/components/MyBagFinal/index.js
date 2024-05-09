@@ -26,9 +26,9 @@ function MyBagFinal() {
   const [orderStatus, setorderStatus] = useState({ status: false, message: "" })
   const [productDetailId, setProductDetailId] = useState(null)
   const [userData, setUserData] = useState(null)
-  const [salesRepData,setSalesRepData] = useState({Name:null,Id:null})
+  const [salesRepData, setSalesRepData] = useState({ Name: null, Id: null })
   const [limitInput, setLimitInput] = useState("");
-const handleNameChange = (event) => {
+  const handleNameChange = (event) => {
     const limit = 10;
     setLimitInput(event.target.value.slice(0, limit));
   };
@@ -45,13 +45,13 @@ const handleNameChange = (event) => {
     if (!data) {
       data = {};
     }
-    GetAuthData().then((user)=>{
+    GetAuthData().then((user) => {
       setUserData(user);
-      getSalesRepList({key:user.x_access_token}).then((repList)=>{
+      getSalesRepList({ key: user.x_access_token }).then((repList) => {
         let repData = repList.data.filter(item => item.Id === localStorage.getItem(salesRepIdKey))
-        setSalesRepData(repData?.[0]||{})
-      }).catch((e)=>console.log({e}))
-    }).catch((e)=>console.log({e}))
+        setSalesRepData(repData?.[0] || {})
+      }).catch((e) => console.log({ e }))
+    }).catch((e) => console.log({ e }))
     if (bagValue) {
       if (bagValue.Manufacturer) {
         if (bagValue.Manufacturer.id) {
@@ -283,11 +283,11 @@ const handleNameChange = (event) => {
                     <b> {buttonActive ? PONumber : "---"}</b>
                   ) : (
                     <input type="text" defaultValue={PONumber} onKeyUp={(e) => setPONumber(e.target.value)} placeholder=" Enter PO Number" style={{ borderBottom: "1px solid black" }}
-                    id="limit_input"
-                    name="limit_input"
-                    value={limitInput}
-                    onChange={handleNameChange} />
-                   
+                      id="limit_input"
+                      name="limit_input"
+                      value={limitInput}
+                      onChange={handleNameChange} />
+
                   )}
                 </h5>
                 {!isPOEditable && (
@@ -317,12 +317,13 @@ const handleNameChange = (event) => {
                                 <div className={Styles.Mainbox1M}>
                                   <div className={Styles.Mainbox2} style={{ cursor: 'pointer' }}>
                                     {
-                                      !productImage.isLoaded ? <LoaderV2 /> :
-                                        productImage.images?.[ele.product?.ProductCode] ?
-                                          productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl ?
-                                            <img src={productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(ele?.product?.Id) }} />
-                                            : <img src={productImage.images[ele.product?.ProductCode]} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(ele?.product?.Id) }} />
-                                          : <img src={Img1} className="zoomInEffect" alt="img" onClick={() => { setProductDetailId(ele?.product?.Id) }} />
+                                      ele.product?.ContentDownloadUrl ? <img src={ele.product?.ContentDownloadUrl} f className="zoomInEffect" alt="img" width={50} onClick={() => { setProductDetailId(ele?.product?.Id) }} /> :
+                                        !productImage.isLoaded ? <LoaderV2 /> :
+                                          productImage.images?.[ele.product?.ProductCode] ?
+                                            productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl ?
+                                              <img src={productImage.images[ele.product?.ProductCode]?.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(ele?.product?.Id) }} />
+                                              : <img src={productImage.images[ele.product?.ProductCode]} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(ele?.product?.Id) }} />
+                                            : <img src={Img1} className="zoomInEffect" alt="img" onClick={() => { setProductDetailId(ele?.product?.Id) }} />
                                     }
                                   </div>
                                   <div className={Styles.Mainbox3}>
@@ -403,11 +404,11 @@ const handleNameChange = (event) => {
                         <p>No Shipping Address</p>
                       )}
                     </div>
-                    {(admins.includes(userData?.Sales_Rep__c)&&salesRepData?.Id &&buttonActive)&&<>
-                    <h2>Order For</h2>
-                    <div className={Styles.ShipAdress}>
-                      {userData?.Sales_Rep__c == salesRepData?.Id ?'Me':salesRepData?.Name}
-                    </div>
+                    {(admins.includes(userData?.Sales_Rep__c) && salesRepData?.Id && buttonActive) && <>
+                      <h2>Order For</h2>
+                      <div className={Styles.ShipAdress}>
+                        {userData?.Sales_Rep__c == salesRepData?.Id ? 'Me' : salesRepData?.Name}
+                      </div>
                     </>}
                     <div className={Styles.ShipAdress2}>
                       {/* <label>NOTE</label> */}

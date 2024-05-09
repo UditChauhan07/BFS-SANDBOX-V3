@@ -26,16 +26,15 @@ import MyBag from "./pages/MyBag";
 import OrderListPage from "./pages/OrderListPage";
 import Product from "./components/BrandDetails/Product";
 import BagProvider from "./context/BagContext";
-// import OrderList from "./pages/OrderListPage";
 import MyBagOrder from "./pages/MyBagOrder";
 import OrderStatusForm from "./pages/OrderStatusForm";
 import CustomerSupportDetails from "./pages/CustomerSupportDetails";
-import CustomerServiceForm from "./pages/CustomerServiceForm";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TargetReport from "./reports/targetReport";
 import YearlyComparisonReport from "./reports/yealyComparison/ComparisonReport";
 import BMAIssues from "./pages/BMAIssues";
+import OrderStatusIssues from "./OrderStatusIssues";
 
 
 function App() {
@@ -100,7 +99,8 @@ function App() {
             <Route path="/orderDetails" element={<MyBagOrder />}></Route>
             <Route path="/orderStatusForm" element={<OrderStatusForm />}></Route>
             {/* <Route path="/customerService" element={<CustomerServiceForm />}></Route> */}
-            {/* <Route path="/customerService" element={<BMAIssues />}></Route> */}
+            <Route path="/customerService" element={<BMAIssues />}></Route>
+            <Route path="/orderStatus" element={<OrderStatusIssues />}></Route>
             
             {/* 1234 */}
           </Routes>

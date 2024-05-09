@@ -103,7 +103,7 @@ item.Status === "Active Account" ));
     const dataWithTotals = filteredSalesReportData?.map((ele) =>
       ele.Orders.map((item) => ({
         ManufacturerName: ele.ManufacturerName__c,
-        AccountName: item.Name,
+        AccountName: item.AccountName,
         AccountType: item.AccountType,
         DateOpen: item.DateOpen,
         Status: item.Status,
@@ -212,7 +212,6 @@ item.Status === "Active Account" ));
     setIsLoading(true);
     setYearForTableSort(yearFor);
     const result = await salesReportApi.salesReportData({ yearFor });
-    console.log({result});
     let salesListName = [];
     let salesList = [];
     let manuIds = [];

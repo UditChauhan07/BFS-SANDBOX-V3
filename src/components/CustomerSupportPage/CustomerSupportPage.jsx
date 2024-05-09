@@ -48,7 +48,7 @@ function CustomerSupportPage({ data, PageSize, currentPage, manufacturerFilter, 
           <div className="row">
             <div className="col-lg-3 col-md-12 col-sm-12">
               <div className={Styles.supportLeft}>
-                <Link to={"/order-list"}>
+                <Link to={"/orderStatus"}>
                   <div className={`${Styles.supportLeftBox} cardHover`}>
                     <div className={Styles.supportLeftImg}>
                       <OrderStatusIcon width={42} height={42} />
@@ -60,13 +60,13 @@ function CustomerSupportPage({ data, PageSize, currentPage, manufacturerFilter, 
                     </div>
                   </div>
                 </Link>
-                {/* <Link to={"/customerService"}> */}
+                <Link to={"/customerService"}>
                 <div
                   className={`${Styles.supportLeftBox} cardHover`}
                   style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setModalOpen(true);
-                  }}
+                  // onClick={() => {
+                  //   setModalOpen(true);
+                  // }}
                 >
                   <div className={Styles.supportLeftImg}>
                     <CustomerServiceIcon width={42} height={42} />
@@ -76,7 +76,7 @@ function CustomerSupportPage({ data, PageSize, currentPage, manufacturerFilter, 
                     <p>Resolving Concerns Serving Solutions</p>
                   </div>
                 </div>
-                {/* </Link> */}
+                </Link>
                 {/* Brand Management Approval */}
                 <div
                   style={{ cursor: "pointer" }}
