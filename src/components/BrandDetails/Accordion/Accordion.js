@@ -129,6 +129,7 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
                             <tr className={`${styles.ControlTR} w-full `} key={indexed}>
                               <td className={styles.ControlStyle} style={{cursor:'pointer'}}>
                                 {
+                                  value.ContentDownloadUrl ? <img src={value.ContentDownloadUrl} className="zoomInEffect" alt="img"  width={50} onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})}/>:
                                   !productImage.isLoaded?<LoaderV2/>:
                                   productImage.images?.[value?.ProductCode] ?
                                   productImage.images[value?.ProductCode]?.ContentDownloadUrl?

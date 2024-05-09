@@ -512,7 +512,7 @@ export async function getProductList({ rawData }) {
     "Content-Type": "application/json",
   };
 
-  let response = await fetch(url + "HSc6cv4", {
+  let response = await fetch(url + "7ozraf8z5TdMyyH", {
     method: "POST",
     body: JSON.stringify(rawData),
     headers: headersList,
@@ -521,6 +521,7 @@ export async function getProductList({ rawData }) {
   if (data.status == 300) {
     DestoryAuth();
   } else {
+    console.warn({data});
     return data;
   }
 }

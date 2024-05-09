@@ -7,12 +7,13 @@ import ErrorProductCard from "./ErrorProductCard";
 import { BiCheck, BiLeftArrow, BiLock, BiRightArrow } from "react-icons/bi";
 import Select from "react-select";
 
-const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedStatus, files = [], desc, errorListObj, manufacturerIdObj, accountIdObj, accountList, contactIdObj,setSubject }) => {
+const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedStatus, files = [], desc, errorListObj, manufacturerIdObj, accountIdObj, accountList, contactIdObj,setSubject,Actual_Amount__cObj }) => {
     const { setOrderConfirmed, orderConfirmed } = orderConfirmedStatus || null;
     const { accountId, setAccountId } = accountIdObj || null;
     const { manufacturerId, setManufacturerId } = manufacturerIdObj || null;
     const { errorList, setErrorList } = errorListObj || null;
     const { contactId, setContactId } = contactIdObj || null;
+    const { Actual_Amount__c, setActual_Amount__c } = Actual_Amount__cObj || null;
     let size = 3;
     const [Viewmore, setviewmore] = useState(false);
     const [searchPo, setSearchPO] = useState(null);
@@ -69,6 +70,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                     setManufacturerId(item.ManufacturerId__c)
                     setAccountId(item.AccountId)
                     accountItemID = item.AccountId
+                    setActual_Amount__c(item.Amount)
                 }
             })
             setSearchPO(null);
@@ -132,28 +134,37 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                     if ((errorList[id].issue == 0 || !errorList[id].issue) || errorList[id].issue > errorList[id].Quantity) {
                         confimationStatus = false;
                         const myElement = document.getElementById(`oP${id}`);
-                        myElement.style.borderBottom = "1px solid red";
+                        if(myElement){
+                            myElement.style.borderBottom = "1px solid red";
+                        }
                         shakeHandler(`oP${id}`)
                     } else {
                         const myElement = document.getElementById(`oP${id}`);
-                        // myElement.style.border = 0;
-                        myElement.style.borderBottom = "1px solid #00FF00"
+                       if(myElement){
+                           myElement.style.borderBottom = "1px solid #00FF00"
+                        }
                     }
                 })
             }
             if (confimationStatus) {
                 error.map((id) => {
                     const myElement = document.getElementById(`oP${id}`);
-                    myElement.style.borderBottom = "1px solid #ccc"
+                    if(myElement){
+                        myElement.style.borderBottom = "1px solid #ccc"
+                    }
                 })
                 if(!contactId){
                     const myElement = document.getElementById("contactSelector");
-                    myElement.style.borderBottom = "1px solid red"
+                    if(myElement){
+                        myElement.style.borderBottom = "1px solid red"
+                    }
                     shakeHandler(`contactSelector`)
                     
                 }else{
                     const myElement = document.getElementById("contactSelector");
-                    myElement.style.borderBottom = "1px solid #ccc"
+                    if(myElement){
+                        myElement.style.borderBottom = "1px solid #ccc"
+                    }
                     setOrderConfirmed(true)
                 }
             }
@@ -238,6 +249,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
 
                                                                     {item.OpportunityLineItems?.records
                                                                         .map((ele, index) => {
+                                                                            console.log({ele});
                                                                             if (!orderConfirmed || (orderConfirmed && Object.keys(errorList).includes(ele.Id))) {
                                                                                 return (<ErrorProductCard Styles1={Styles1} productErrorHandler={productErrorHandler} errorList={errorList} setProductDetailId={setProductDetailId} product={ele} productImage={productImage} reason={reason} AccountName={item.AccountName} ErrorProductQtyHandler={ErrorProductQtyHandler} readOnly={orderConfirmed} />)
                                                                             }
@@ -334,7 +346,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                     </div>}
                                                     <div className={Styles1.Margitotal}>
                                                         <p className={Styles1.detailsTitleHolder}>Contact Person</p>
-                                                        <p className={Styles1.detailsDescHolder}>
+                                                        <p className={Styles1.detailsDescHolder} style={{display:'flex',justifyContent:'end',marginTop:'5px'}}>
                                                             {/* <Select
                                                                 options={contacts}
                                                                 defaultValue={{
@@ -352,7 +364,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                                 menuPosition={"fixed"}
                                                                 menuShouldScrollIntoView={false}
                                                             /> */}
-                                                            <select id="contactSelector" onChange={(e) => { setContactId(e.target.value) }}>
+                                                            <select id="contactSelector" style={{width:'200px'}}className="form-control" onChange={(e) => { setContactId(e.target.value) }}>
                                                                 <option>Select Contact</option>
                                                                 {contacts.map(element => (
                                                                     <option value={element.value}>{element.label}</option>
