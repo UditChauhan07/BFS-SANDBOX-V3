@@ -1,7 +1,6 @@
 /* eslint-disable no-lone-blocks */
 import React, { useEffect, useState } from "react";
 import Styles from "./Styles.module.css";
-import Img1 from "./Images/Eye1.png";
 import QuantitySelector from "../BrandDetails/Accordion/QuantitySelector";
 import { useNavigate } from "react-router-dom";
 import { GetAuthData, OrderPlaced, POGenerator, ShareDrive, admins, fetchBeg, getProductImageAll, getSalesRepList, salesRepIdKey } from "../../lib/store";
@@ -13,6 +12,7 @@ import LoaderV2 from "../loader/v2";
 import ProductDetails from "../../pages/productDetails";
 
 function MyBagFinal() {
+  let Img1 = "/assets/images/dummy.png";
   const navigate = useNavigate();
   const [orderDesc, setOrderDesc] = useState(null);
   const [PONumber, setPONumber] = useState(POGenerator());
