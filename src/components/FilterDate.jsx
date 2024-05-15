@@ -21,7 +21,7 @@ const FilterDate = ({ label, onChange, value, minWidth }) => {
         defaultValue={value}
         value={value}
       /> */}
-      <DatePicker selected={new Date(value)} onChange={onChange} dateFormat="dd/MM/yyyy" customInput={<ExampleCustomInput />} />
+      <DatePicker selected={new Date(value)} onChange={onChange} dateFormat="MMM/dd/yyyy" customInput={<ExampleCustomInput />} />
     </div>
   );
 };
