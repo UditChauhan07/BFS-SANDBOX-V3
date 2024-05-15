@@ -99,7 +99,7 @@ function App() {
             <Route path="/orderDetails" element={<MyBagOrder />}></Route>
             <Route path="/orderStatusForm" element={<OrderStatusForm />}></Route>
             {/* <Route path="/customerService" element={<CustomerServiceForm />}></Route> */}
-            {/* <Route path="/customerService" element={<BMAIssues />}></Route> */}
+            <Route path="/customerService" element={<BMAIssues />}></Route>
             <Route path="/orderStatus" element={<OrderStatusIssues />}></Route>
             
             {/* 1234 */}

@@ -4,9 +4,9 @@ import CustomerSupportLayout from "../components/customerSupportLayout";
 
 const OrderStatusForm = () => {
   return (
-    <AppLayout>
+    <CustomerSupportLayout>
       <OrderStatusFormSection />
-    </AppLayout>
+    </CustomerSupportLayout>
   );
 };
 export default OrderStatusForm;

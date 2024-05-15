@@ -134,7 +134,7 @@ const OrderStatusIssues = () => {
         setOrders([])
         getOrderlIsthandler({ key: userData.x_access_token, Sales_Rep__c: value })
     }
-    return (<AppLayout
+    return (<CustomerSupportLayout
         filterNodes={
             <>
               {(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
@@ -221,6 +221,6 @@ const OrderStatusIssues = () => {
                 </section>
             </div>
         )}
-    </AppLayout>)
+    </CustomerSupportLayout>)
 }
 export default OrderStatusIssues;

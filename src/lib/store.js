@@ -1,6 +1,6 @@
-export const originAPi = "https://b2b.beautyfashionsales.com"
+// export const originAPi = "https://b2b.beautyfashionsales.com"
 // export const originAPi = "https://dev.beautyfashionsales.com"
-// export const originAPi = "http://localhost:2000"
+export const originAPi = "http://localhost:6194"
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
 const orderKey = "orders";
@@ -13,7 +13,6 @@ const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
 export const salesRepIdKey = "BzQIEAjzCEHmlXc";
 export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3"]; //,"0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
-// export const originAPi = "https://dev.beautyfashionsales.com"
 
 export const months = [
   "January",
@@ -353,6 +352,7 @@ export async function getDashboardata({ user }) {
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
+  // console.warn({data:user.Sales_Rep__c});
   if (data.status == 300) {
     DestoryAuth();
   } else {
