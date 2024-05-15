@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styles from "./Style.module.css";
-import Img1 from "./images/makeup1.png";
 import CollapsibleRow from "../../CollapsibleRow";
 import QuantitySelector from "./QuantitySelector";
 import ModalPage from "../../Modal UI";
@@ -9,6 +8,7 @@ import LoaderV2 from "../../loader/v2";
 import ProductDetails from "../../../pages/productDetails";
 
 const Accordion = ({ data, formattedData,productImage=[] }) => {
+  let Img1 = "/assets/images/dummy.png";
   const { orders, setOrders, setOrderQuantity, addOrder, setOrderProductPrice } = useBag();
   const [replaceCartModalOpen, setReplaceCartModalOpen] = useState(false);
   const [replaceCartProduct, setReplaceCartProduct] = useState({});
@@ -135,7 +135,7 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
                                   productImage.images[value?.ProductCode]?.ContentDownloadUrl?
                                   <img src={productImage.images[value?.ProductCode]?.ContentDownloadUrl} className="zoomInEffect" alt="img" width={35} onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})} />
                                   :<img src={productImage.images[value?.ProductCode]} className="zoomInEffect" alt="img"  width={35} onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})}/>
-                                  :<img src={Img1} className="zoomInEffect" alt="img" onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})} />
+                                  :<img src={Img1} className="zoomInEffect" alt="img" onClick={()=>sendProductIdHandler({productId:value.Id,productName:value.Name})}  width={50}/>
                                 }
                                 {/* {!productImage.isLoaded?<LoaderV2/>:productImage.images[value.ProductCode]?<img src={productImage.images[value.ProductCode]?.ContentDownloadUrl?productImage.images[value.ProductCode]?.ContentDownloadUrl:productImage.images[value.ProductCode]} alt="img" width={35} />:<img src={Img1} alt="img" />} */}
                               </td>

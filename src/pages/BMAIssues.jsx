@@ -24,11 +24,11 @@ const BMAIssues = () => {
   const [errorList, setErrorList] = useState({});
 
   const reasons = [
-    { name: "Charges", icon: '/assets/charge.png', desc: "You may extra pay amount for order?" },
-    { name: "Product Missing", icon: '/assets/missing.png', desc: "can't find product in Order?" },
-    { name: "Product Overage", icon: '/assets/expiration.png', desc: "got expired product in order?" },
-    { name: "Product Damage", icon: '/assets/damaged.png', desc: "got damage product in order?" },
-    { name: "Update Account Info", icon: '/assets/account.png', desc: "change my personal details" }
+    { name: "Charges", icon: '/assets/Charges.svg', desc: "extra pay amount for order?" },
+    { name: "Product Missing", icon: '/assets/missing.svg', desc: "can't find product in Order?" },
+    { name: "Product Overage", icon: '/assets/overage.svg', desc: "got expired product in order?" },
+    { name: "Product Damage", icon: '/assets/damage.svg', desc: "got damage product in order?" },
+    { name: "Update Account Info", icon: '/assets/account.svg', desc: "change my personal details" }
   ];
   useEffect(() => {
     GetAuthData()

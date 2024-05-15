@@ -152,11 +152,7 @@ function Dashboard({ dashboardData }) {
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
   const [selMonth, setSelMonth] = useState(`${currentYear}|${currentMonth}`);
-  const [tabledata, settabledata] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [lineChart, setlineChart] = useState();
-  const [dashboardRelatedData, setDashboardRelatedData] = useState({});
   const [brandData, setBrandData] = useState([]);
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);

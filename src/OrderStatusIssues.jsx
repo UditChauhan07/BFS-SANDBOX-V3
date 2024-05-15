@@ -173,7 +173,8 @@ const OrderStatusIssues = () => {
                 <section>
                     <div className="">
                         <div className={Styles.orderMainDiv}>
-                            <div className={Styles.OrderMainPr} style={{width:'100%'}}>
+                            {/* style={{width:'100%'}} */}
+                            <div className={Styles.OrderMainPr} >
                                 <div className={Styles.inorderflex}>
                                     <div>
                                         <h2>Your Orders</h2>

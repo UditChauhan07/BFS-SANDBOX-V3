@@ -16,10 +16,11 @@ const BMAIHandler = ({ reasons, reason, setReason }) => {
                 <div className={Styles.reasonHolder}>
                     {reasons.map((item) => {
                         return (<div className={`${Styles.reasonCard} ${reason == item.name ? Styles.activeReason : ''}`} title={reason != item.name ? `Click here to Select '${item.name}'` : null} id={reason == item.name ? "reason" : ""} onClick={reason == item.name ? shakeHandler : () => setReason(item.name)}>
-                            <img src={item.icon} alt={item.name} className={Styles.iconHolder} />
-                            <p className={Styles.textHolder}>{item.name}<br />
-                                <p className={Styles.descHolder}>{item.desc}</p>
-                            </p>
+                            <div style={{ display: 'flex' }}>
+                                <img src={item.icon} alt={item.name} className={Styles.iconHolder} />
+                                <p className={Styles.textHolder}>{item.name}</p>
+                            </div>
+                            <p className={Styles.descHolder}>{item.desc}</p>
                         </div>)
                     })}
                 </div>

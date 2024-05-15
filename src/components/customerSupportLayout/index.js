@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CustomerServiceIcon, OrderStatusIcon, DefaultSupportIcon, MarketingSupportIcon, DIFTestIcon, DisplayIssuesIcon } from "../../lib/svg";
 import SelectCaseReason from "../CustomerServiceFormSection/SelectCaseReason/SelectCaseReason";
 import { BiLeftArrow } from "react-icons/bi";
+import BrandManagementModal from "../Brand Management Approval/BrandManagementModal";
 
 const CustomerSupportLayout = ({ children, filterNodes }) => {
     const navigate = useNavigate();
@@ -36,11 +37,16 @@ const CustomerSupportLayout = ({ children, filterNodes }) => {
                         onClose={() => setModalOpen(false)}
                         content={<SelectCaseReason reasons={reasons} onClose={() => setModalOpen(false)} recordType={{ id: "0123b0000007z9pAAA", name: "Customer Service" }} />}
                     />
+                    <ModalPage
+                        open={brandManagementModalOpen}
+                        onClose={() => setBrandManagementModalOpen(false)}
+                        content={<BrandManagementModal onClose={() => setBrandManagementModalOpen(false)} recordType={{ id: "0123b000000GfOEAA0", name: "Brand Management Approval" }} />}
+                    />
                     <div className={Styles.supportMain}>
                         <div className="row">
                             <div className="col-lg-3 col-md-12 col-sm-12">
                                 <div className={Styles.supportLeft}>
-                                    <Link to={"/orderStatus"} className={`${(path == "/orderStatus" ||path =="/orderStatusForm") && Styles1.activeReason}`}>
+                                    <Link to={"/orderStatus"} className={`${(path == "/orderStatus" || path == "/orderStatusForm") && Styles1.activeReason}`}>
                                         <div className={`${Styles.supportLeftBox} cardHover`} >
                                             <div className={Styles.supportLeftImg}>
                                                 <OrderStatusIcon width={42} height={42} />
