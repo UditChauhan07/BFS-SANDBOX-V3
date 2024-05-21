@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { originAPi } from "../../lib/store"
 import LoaderV2 from "../loader/v2"
 
-const ErrorProductCard = ({Styles1,productErrorHandler,errorList,setProductDetailId,product,productImage,reason,setErrorList,ErrorProductQtyHandler,AccountName=null,readOnly=false})=>{
-    return(<tr style={{borderBottom: '1px solid #ccc',borderBottomLeftRadius:'50px',borderBottomRightRadius:'50px'}}>
+const ErrorProductCard = ({ Styles1, productErrorHandler, errorList, setProductDetailId, product, productImage, reason, setErrorList, ErrorProductQtyHandler, AccountName = null, readOnly = false }) => {
+    return (<tr style={{ borderBottom: '1px solid #ccc', borderBottomLeftRadius: '50px', borderBottomRightRadius: '50px' }}>
         <td style={{ width: '200px', display: 'flex' }} className={Styles1.productImageHolder}>
-            {!readOnly&&<input type="checkbox" id={product.Id} onChange={()=>productErrorHandler(product)} checked={errorList?.[product.Id]?.Id?true:false} readOnly={readOnly}/>}
+            {!readOnly && <input type="checkbox" id={product.Id} onChange={() => productErrorHandler(product)} checked={errorList?.[product.Id]?.Id ? true : false} readOnly={readOnly} />}
             {
                 !productImage.isLoaded ? <LoaderV2 /> :
                     productImage.images?.[product.ProductCode] ?
@@ -18,18 +18,18 @@ const ErrorProductCard = ({Styles1,productErrorHandler,errorList,setProductDetai
         <td>{product.ProductCode}</td>
         <td>{product.Quantity}</td>
         <td>{product.TotalPrice.toFixed(2)}</td>
-        {(reason &&reason != "Charges" &&errorList?.[product.Id]?.Id)&& <td>
-            <input type="number" max={product.Quantity} className={Styles1.productErrorQtyHolder} id={`oP${product.Id}`} value1={errorList?.[product.Id]?.issue?errorList?.[product.Id]?.issue:null} onKeyUp={(e)=>{
-                // if(parseInt(e.target.value) <= product.Quantity){
-                    // console.log(e.target.value);
-                    ErrorProductQtyHandler(errorList?.[product.Id]?.Id,e.target.value)
-                // }else{
-                    // e.target.value = null;
-                    // productErrorHandler(errorList?.[product.Id])
-                // }
+        {(reason && reason != "Charges" && errorList?.[product.Id]?.Id) && <td>
+            <input type="text" max={product.Quantity} className={Styles1.productErrorQtyHolder} id={`oP${product.Id}`} value1={errorList?.[product.Id]?.issue ? errorList?.[product.Id]?.issue : null} onKeyUp={(e) => {
+                if(!Number(e.target.value)){
+                    console.log({e:errorList?.[product.Id]});
+                    e.target.value = null;
+                    ErrorProductQtyHandler(errorList?.[product.Id]?.Id, 0)
+                    return;
+                }
+                ErrorProductQtyHandler(errorList?.[product.Id]?.Id, e.target.value)
             }} readOnly={readOnly} />
-            <br/>
-            <small style={{fontSize:'9px'}}>{`Enter ${reason}'s Qty`}</small></td>}
+            <br />
+            <small style={{ fontSize: '9px' }}>{`Enter ${reason}'s Qty`}</small></td>}
     </tr>)
 }
 export default ErrorProductCard;
