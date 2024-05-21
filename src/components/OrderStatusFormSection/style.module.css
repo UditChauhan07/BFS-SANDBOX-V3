@@ -68,13 +68,13 @@
 }
 .btn{
   padding: 0.5rem 2rem;
-border: 1px solid #000;
-background: #FFF;
+border: 1px solid #fff;
+background: #000;
 text-align: center;
 text-transform: uppercase;
 cursor: pointer;
 text-decoration: none;
-color: #000;
+color: #fff;
 }
 .btn:hover{
   background: #000;

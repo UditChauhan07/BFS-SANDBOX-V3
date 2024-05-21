@@ -412,7 +412,7 @@ function Dashboard({ dashboardData }) {
                   colors: colorArray,
                
                   labels: Object.values(dashboard?.monthlyManufactureData).map((value) => {
-                    return value?.name || 0;
+                    return value?.brandName || 0;
                   }),
                 },
               });
@@ -595,19 +595,19 @@ function Dashboard({ dashboardData }) {
                             <tbody>
                               {Monthlydataa.data?.map((e) => {
                                 // console.log("e.....", e);
-                                totalTargetForMTDSalesRep = Number(e?.total || 0) + Number(totalTargetForMTDSalesRep);
-                                totalAmountForMTDSalesRep = Number(e.sale || 0) + Number(totalAmountForMTDSalesRep);
-                                totalDiffForMTDSalesRep = Number(e?.diff || 0) + Number(totalDiffForMTDSalesRep);
-                                let targetDiff = e.total - e.target
+                                totalTargetForMTDSalesRep = Number(e?.MonthlyTarget || 0) + Number(totalTargetForMTDSalesRep);
+                                totalAmountForMTDSalesRep = Number(e.MonthlySale || 0) + Number(totalAmountForMTDSalesRep);
+                                totalDiffForMTDSalesRep = Number(e?.Difference || 0) + Number(totalDiffForMTDSalesRep);
+                                let targetDiff = e.TargetRollover
                                 return (
                                   <tr key={e}>
-                                    <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.name }) }} style={{ cursor: 'pointer' }}>
-                                      <UserIcon /> {e.name}
+                                    <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.SalesRepName }) }} style={{ cursor: 'pointer' }}>
+                                      <UserIcon /> {e.SalesRepName}
                                     </td>
-                                    <td className={Styles.tabletd}>${formatNumber(e?.total || 0)} {targetDiff && e.target ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.target)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.target)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null}</td>
-                                    <td className={Styles.tabletd}>${formatNumber(e.sale || 0)}</td>
+                                    <td className={Styles.tabletd}>${formatNumber(e?.MonthlyTarget || 0)} {targetDiff ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.StaticTarget)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.StaticTarget)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null}</td>
+                                    <td className={Styles.tabletd}>${formatNumber(e.MonthlySale || 0)}</td>
                                     {/* <td className={Styles.tabletd}>${formatNumber(e?.diff || 0)}</td> */}
-                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${e.total < e.sale ? '+' + formatNumber(e.sale - e.total || 0) : formatNumber(e.total - e.sale || 0)}</span><span className={e.total < e.sale ? Styles.matchHolder : Styles.shortHolder}>{e.total < e.sale ? 'MATCH' : 'SHORT'}</span></td>
+                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${formatNumber(e.Difference || 0)}</span><span className={e.Difference<=0 ? Styles.matchHolder : Styles.shortHolder}>{e.Difference<=0 ? 'MATCH' : 'SHORT'}</span></td>
                                   </tr>
                                 );
                               })}
@@ -664,20 +664,19 @@ function Dashboard({ dashboardData }) {
                           {Yearlydataa.data ? (
                             <tbody>
                               {Yearlydataa.data?.map((e, index) => {
-                                totalTargetForYTDSalesRep = Number(e?.total || 0) + Number(totalTargetForYTDSalesRep);
-                                totalAmountForYTDSalesRep = Number(e.sale || 0) + Number(totalAmountForYTDSalesRep);
-                                totalDiffForYTDSalesRep = Number(e?.diff || 0) + Number(totalDiffForYTDSalesRep);
-                                let targetDiff = e.total - e.target
+                                totalTargetForYTDSalesRep = Number(e?.MonthlyTarget || 0) + Number(totalTargetForYTDSalesRep);
+                                totalAmountForYTDSalesRep = Number(e.MonthlySale || 0) + Number(totalAmountForYTDSalesRep);
+                                totalDiffForYTDSalesRep = Number(e?.Difference || 0) + Number(totalDiffForYTDSalesRep);
+                                let targetDiff = e.TargetRollover
                                 return (
                                   <tr key={e}>
-                                    <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.name }) }} style={{ cursor: 'pointer' }}>
-                                      <UserIcon /> {e.name}
+                                    <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.SalesRepName }) }} style={{ cursor: 'pointer' }}>
+                                      <UserIcon /> {e.SalesRepName}
                                     </td>
-                                    <td className={Styles.tabletd}>${formatNumber(e?.total || 0)} {targetDiff && e.target ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.target)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.target)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null}</td>
-                                    <td className={Styles.tabletd}>${formatNumber(e.sale)}</td>
-                                    {/* <td className={Styles.tabletd}>${formatNumber(e.diff)}</td> */}
-                                    <td className={`${Styles.tabletd} ${Styles.flex}`}>${e.total < e.sale ? '+' + formatNumber(e.sale - e.total || 0) : formatNumber(e.total - e.sale || 0)}<span className={e.total < e.sale ? Styles.matchHolder : Styles.shortHolder}>{e.total < e.sale ? 'MATCH' : 'SHORT'}</span></td>
-                                  </tr>
+                                    <td className={Styles.tabletd}>${formatNumber(e?.MonthlyTarget || 0)} {targetDiff ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.StaticTarget)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.StaticTarget)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null}</td>
+                                    <td className={Styles.tabletd}>${formatNumber(e.MonthlySale || 0)}</td>
+                                    {/* <td className={Styles.tabletd}>${formatNumber(e?.diff || 0)}</td> */}
+                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${formatNumber(e.Difference || 0)}</span><span className={e.Difference<=0 ? Styles.matchHolder : Styles.shortHolder}>{e.Difference<=0 ? 'MATCH' : 'SHORT'}</span></td></tr>
                                 );
                               })}
                               <tr className={`${Styles.tablerow} ${Styles.stickyBottom}`}>
@@ -734,19 +733,20 @@ function Dashboard({ dashboardData }) {
                           {brandData.data?.length ? (
                             <>
                               {brandData.data?.map((e, i) => {
-                                totalTargetForMTDGoalBrand = Number(e?.total || 0) + Number(totalTargetForMTDGoalBrand);
-                                totalAmountForMTDGoalBrand = Number(e.sale || 0) + Number(totalAmountForMTDGoalBrand);
-                                totalDiffForMTDGoalBrand = Number((Number(e.total - e.sale || 0)).toFixed(0)) + Number(totalDiffForMTDGoalBrand);
+                                totalTargetForMTDGoalBrand = Number(e?.MonthlyTarget || 0) + Number(totalTargetForMTDGoalBrand);
+                                totalAmountForMTDGoalBrand = Number(e.MonthlySale || 0) + Number(totalAmountForMTDGoalBrand);
+                                totalDiffForMTDGoalBrand = Number((Number(e.Difference || 0)).toFixed(0)) + Number(totalDiffForMTDGoalBrand);
                                 // console.log({e,i});
-                                let targetDiff = e.total - e.target
+                                let targetDiff = e.TargetRollover
                                 return (
                                   <tr key={e}>
-                                    <td className={` ps-3 ${Styles.tabletd}`} onClick={() => { sendDataTargetHandler({ manufacturerId: e.id }) }} style={{ cursor: 'pointer' }}>{e.name}</td>
-                                    {/* <td className={Styles.tabletd}>{e.totalOrder}</td> */}
-                                    <td className={Styles.tabletd}>${formatNumber(e?.total || 0)} {targetDiff && e.target ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.target)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.target)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null}</td>
-                                    <td className={Styles.tabletd}>${formatNumber(e.sale)}</td>
-                                    <td className={`${Styles.tabletd} ${Styles.flex}`}>${e.total < e.sale ? '+' + formatNumber(e.sale - e.total || 0) : formatNumber(e.total - e.sale || 0)}<span className={e.total < e.sale ? Styles.matchHolder : Styles.shortHolder}>{e.total < e.sale ? 'MATCH' : 'SHORT'}</span></td>
-                                  </tr>
+                                    <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ manufacturerId: e.ManufacturerId }) }}  style={{ cursor: 'pointer' }}>
+                                      <UserIcon /> {e.brandName}
+                                    </td>
+                                    <td className={Styles.tabletd}>${formatNumber(e?.MonthlyTarget || 0)} {targetDiff ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.StaticTarget)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.StaticTarget)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null}</td>
+                                    <td className={Styles.tabletd}>${formatNumber(e.MonthlySale || 0)}</td>
+                                    {/* <td className={Styles.tabletd}>${formatNumber(e?.diff || 0)}</td> */}
+                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${formatNumber(e.Difference || 0)}</span><span className={e.Difference<=0 ? Styles.matchHolder : Styles.shortHolder}>{e.Difference<=0 ? 'MATCH' : 'SHORT'}</span></td></tr>
                                 );
                               })}
                               <tr className={`${Styles.tablerow} ${Styles.stickyBottom}`}>

@@ -11,7 +11,7 @@ const Attachements = ({files,setFile,setDesc,orderConfirmed,SubmitHandler}) => {
                 Object.keys(reqfiles).map((index)=>{
                     let url =URL.createObjectURL(reqfiles[index])
                     if(url){
-                        tempFile.push(url);
+                        tempFile.push({preview:url,file:reqfiles[index]});
                     }
                     // this thoughing me Failed to execute 'createObjectURL' on 'URL': Overload resolution failed?
                 })
@@ -44,7 +44,7 @@ const Attachements = ({files,setFile,setDesc,orderConfirmed,SubmitHandler}) => {
             lock1.classList.add(Styles.shake)
         }
     }
-    return (<section style={{borderBottom:'1px solid #ccc'}}>
+    return (<section style={{borderBottom:'1px solid #ccc'}} id="AttachementSection">
         <h2 className={Styles.reasonTitle}><span style={{cursor:"pointer"}} onClick={shakeHandler}>Help us by sending some Details:</span> {!orderConfirmed && <BiLock style={{float:'right'}} id="lock2"/>}</h2>
         {orderConfirmed &&
         <div className={Styles.attachContainer}>
@@ -55,7 +55,9 @@ const Attachements = ({files,setFile,setDesc,orderConfirmed,SubmitHandler}) => {
                 <input type="file" style={{width:0,height:0}} id="attachement" onChange={handleChange} multiple  accept="image/*"/>
                 <div className={Styles.imgHolder}>
                 {files.map((file,index)=>(
-                    <img src={file} key={index}/>
+                    <a href={file?.preview} title="Click to Download">
+                        <img src={file?.preview} key={index} alt={file?.preview}/>
+                    </a>
                 ))}
                 </div>
             </div>

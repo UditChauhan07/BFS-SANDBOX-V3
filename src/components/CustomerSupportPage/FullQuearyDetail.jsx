@@ -82,14 +82,14 @@ function FullQuearyDetail({ data, setRest }) {
                         </svg>
                     </Link>
                     <span>CUSTOMER Support </span> - My Support Tickets Status detail</h2>
-                <h4 className={Detail.FullQuearyDetailH4}>{data.RecordType.Name} for Case Reason <span>- {data.Reason}</span> </h4>
+                <h4 className={Detail.FullQuearyDetailH4}>{data.RecordType?.Name} for Case Reason <span>- {data.Reason}</span> </h4>
                 <div className={`row ${Detail.FlexReverse}`}>
                     <div className='col-lg-9 col-md-9 col-sm-12'>
                         <div className={Detail.LeftMainDiv}>
                             <div className={Detail.LeftMainTopBox}>
                                 <p>
                                     <UserChecked />
-                                    <span>{data.Account.Name}</span>&nbsp; raised this on{date.getDate()}/{monthNames[date.getMonth()]}/{date.getFullYear()} {formatAMPM(date)}
+                                    <span>{data.Account?.Name}</span>&nbsp; raised this on{date.getDate()}/{monthNames[date.getMonth()]}/{date.getFullYear()} {formatAMPM(date)}
                                 </p>
                             </div>
                             <p style={{ marginTop: "1rem" }}>{data.Description}</p>

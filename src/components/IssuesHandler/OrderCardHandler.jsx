@@ -6,6 +6,7 @@ import ProductDetails from "../../pages/productDetails";
 import ErrorProductCard from "./ErrorProductCard";
 import { BiCheck, BiLeftArrow, BiLock, BiRightArrow } from "react-icons/bi";
 import Select from "react-select";
+import ModalPage from "../Modal UI";
 
 const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedStatus, files = [], desc, errorListObj, manufacturerIdObj, accountIdObj, accountList, contactIdObj,setSubject,Actual_Amount__cObj }) => {
     const { setOrderConfirmed, orderConfirmed } = orderConfirmedStatus || null;
@@ -94,6 +95,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
 
     const resetForm = () => {
         setOrderId(null);
+        setContactId(null)
         setErrorList({})
         setOrderConfirmed(false)
     }
@@ -113,7 +115,6 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
     }
 
     const ErrorProductQtyHandler = (id, value) => {
-        if (value) {
             let temp = errorList;
             if (temp.hasOwnProperty(id)) {
                 // if (parseInt(value) <= temp[id].Quantity) {
@@ -121,8 +122,8 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                 setErrorList(temp)
                 // }
             }
-        }
     }
+    const [emptyProduct,setemptyProduct]= useState(false);
 
     const orderConfirmationHandler = () => {
         let error = Object.keys(errorList)
@@ -135,9 +136,10 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                         confimationStatus = false;
                         const myElement = document.getElementById(`oP${id}`);
                         if(myElement){
+                            myElement.scrollIntoView({ behavior: "smooth", block: "center" });
                             myElement.style.borderBottom = "1px solid red";
+                            shakeHandler(`oP${id}`)
                         }
-                        shakeHandler(`oP${id}`)
                     } else {
                         const myElement = document.getElementById(`oP${id}`);
                        if(myElement){
@@ -156,20 +158,28 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                 if(!contactId){
                     const myElement = document.getElementById("contactSelector");
                     if(myElement){
+                        myElement.scrollIntoView({ behavior: "smooth", block: "center" });
                         myElement.style.borderBottom = "1px solid red"
+                        shakeHandler(`contactSelector`)
+                        
                     }
-                    shakeHandler(`contactSelector`)
                     
                 }else{
                     const myElement = document.getElementById("contactSelector");
                     if(myElement){
                         myElement.style.borderBottom = "1px solid #ccc"
                     }
+                    document.getElementById("AttachementSection")?.scrollIntoView({ behavior: "smooth", block: "center" });
                     setOrderConfirmed(true)
                 }
             }
         } else {
-            alert("please select any product...")
+            setemptyProduct(true)
+            var element = document.getElementsByTagName("checkbox");
+            if (element.length>0) {
+              element[0].scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+            // alert("please select any product...")
         }
     }
     const shakeHandler = (id = null) => {
@@ -183,11 +193,33 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
         }
     }
     return (<section style={{ borderBottom: '1px solid #ccc' }}>
-        <p className={Styles1.reasonTitle}><span style={{ cursor: "pointer" }} onClick={() => shakeHandler()}>Select the order you want to handle:</span> {!orderId && reason && <input type="text" placeholder='Search by PO Number' autoComplete="off" className={Styles1.searchBox} onKeyUp={(e) => { setSearchPO(e.target.value) }} id="poSearchInput" />} {!reason && <BiLock id="lock1" style={{ float: 'right' }} />}</p>
+        {emptyProduct ? (
+          <ModalPage
+            open
+            content={
+              <div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
+                <h2 className={`${Styles.warning} `}>Product Empty</h2>
+                <p className={`${Styles.warningContent} `} style={{ lineHeight: '22px' }}>
+                  Please select Product before processing further
+                </p>
+                <div className="d-flex justify-content-around ">
+                  <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setemptyProduct(false)}>
+                    OK
+                  </button>
+                </div>
+              </div>
+            }
+            onClose={() => {
+              setemptyProduct(false);
+            }}
+          />
+        ) : null}
+        <p className={Styles1.reasonTitle}><span style={{ cursor: "pointer" }} onClick={() => shakeHandler()}>Select the order you want to handle:</span> {!orderId && reason && <input type="text" placeholder='Search by PO Number' autoComplete="off" className={Styles1.searchBox} title="You can search by PO Number, Account Name & Brand for last 3 month Orders" onKeyUp={(e) => { setSearchPO(e.target.value) }} id="poSearchInput" />} {!reason && <BiLock id="lock1" style={{ float: 'right' }} />}</p>
         {reason && reason != "Update Account Info" &&
             <div className={`${Styles1.orderListHolder} ${Styles1.openListHolder}`} style={(orderId && (!searchPo || searchPo == "")) ? { overflow: 'unset', height: 'auto', border: 0 } : {}}>
                 <div>
-                    {orders.map((item, index) => {
+                    {orders.length>0 ?
+                    orders.map((item, index) => {
                         let date = new Date(item.CreatedDate);
                         let cdate = `${date.getDate()} ${months[date.getMonth()]
                             } ${date.getFullYear()}`;
@@ -364,7 +396,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                                 menuPosition={"fixed"}
                                                                 menuShouldScrollIntoView={false}
                                                             /> */}
-                                                            <select id="contactSelector" style={{width:'200px'}}className="form-control" onChange={(e) => { setContactId(e.target.value) }}>
+                                                            <select id="contactSelector" style={{width:'200px'}} className="form-control" onChange={(e) => { setContactId(e.target.value) }} title={!contactId ? "Please select Contact":null}>
                                                                 <option>Select Contact</option>
                                                                 {contacts.map(element => (
                                                                     <option value={element.value}>{element.label}</option>
@@ -376,7 +408,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                         <button className={Styles1.btnHolder} title="Click here to Continue" onClick={() => orderConfirmationHandler()}>I'M Done<BiCheck /></button>
                                                     </div>}
                                                     {(orderId == item.Id && orderConfirmed) && <div className={Styles1.Margitotal}>
-                                                        <button className={Styles1.btnHolder} title="Click here to Change in Products" onClick={() => setOrderConfirmed(false)}>Wanna Change?</button>
+                                                        <button className={Styles1.btnHolder} title="Click here to Change in Products" onClick={() =>{ setOrderConfirmed(false);}}>Wanna Change?</button>
                                                     </div>}
                                                 </>}
                                             </div>
@@ -386,7 +418,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                 </div>
                             )
                         }
-                    })}
+                    }):<p style={{textAlign:'center'}}>No Order Found</p>}
                 </div >
             </div >}
         <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false} AccountId={accountId} ManufacturerId={manufacturerId} />
