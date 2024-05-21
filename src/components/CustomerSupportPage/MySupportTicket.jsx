@@ -59,10 +59,10 @@ function MySupportTicket({ data, PageSize, currentPage }) {
                       </div>
 
                       <div className={Styles.ShopNameBrand}>
-                        <p className={Styles.ShopNameLocation}>
+                        {item.Account?.Name&&<p className={Styles.ShopNameLocation}>
                           <UserChecked />
-                          &nbsp;{item.Account.Name}
-                        </p>
+                          &nbsp;{item.Account?.Name}
+                        </p>}
                         <p className={Styles.Para2}>
                           {item.ManufacturerName__c && (
                             <>

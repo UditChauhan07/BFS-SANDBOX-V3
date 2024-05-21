@@ -2,7 +2,7 @@ import CustomerSupportLayout from "./components/customerSupportLayout";
 import Filters from "./components/OrderList/Filters";
 import Styles from "./components/OrderList/style.module.css";
 import AppLayout from "./components/AppLayout";
-import { GetAuthData, admins, getOrderList, getSalesRepList } from "./lib/store";
+import { GetAuthData, admins, getOrderCustomerSupport, getOrderList, getSalesRepList } from "./lib/store";
 import Loading from "./components/Loading";
 import Pagination from "./components/Pagination/Pagination";
 import OrderListContent from "./components/OrderList/OrderListContent";
@@ -112,7 +112,7 @@ const OrderStatusIssues = () => {
     }, [searchShipBy]);
 
     const getOrderlIsthandler = ({ key, Sales_Rep__c }) => {
-        getOrderList({
+        getOrderCustomerSupport({
             user: {
                 key,
                 Sales_Rep__c,
