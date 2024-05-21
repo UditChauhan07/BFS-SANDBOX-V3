@@ -98,7 +98,7 @@
   font-size: 12px;
 }
 .btnHolder {
-  color: #000;
+  color: #fff;
   text-align: center;
   font-family: "Montserrat";
   font-size: 16px;
@@ -108,8 +108,8 @@
   line-height: 33px;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  border: 1px solid #000;
-  background: rgba(64, 58, 53, 0);
+  border: 1px solid #fff;
+  background: #000;
   display: flex;
   justify-content: center;
   align-items: center;

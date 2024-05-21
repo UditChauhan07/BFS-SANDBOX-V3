@@ -16,7 +16,7 @@ const ErrorProductCard = ({Styles1,productErrorHandler,errorList,setProductDetai
             }
             <label for={product.Id}>{product.Name.split(AccountName)[1]}</label></td>
         <td>{product.ProductCode}</td>
-        <td>{product.Quantity.toFixed(2)}</td>
+        <td>{product.Quantity}</td>
         <td>{product.TotalPrice.toFixed(2)}</td>
         {(reason &&reason != "Charges" &&errorList?.[product.Id]?.Id)&& <td>
             <input type="number" max={product.Quantity} className={Styles1.productErrorQtyHolder} id={`oP${product.Id}`} value1={errorList?.[product.Id]?.issue?errorList?.[product.Id]?.issue:null} onKeyUp={(e)=>{

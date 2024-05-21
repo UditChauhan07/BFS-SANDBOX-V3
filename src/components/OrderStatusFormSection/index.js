@@ -16,7 +16,6 @@ const OrderStatusFormSection = () => {
 
   useEffect(() => {
     let data = supportDriveBeg();
-    console.log({ data });
     setTicket(data);
     GetAuthData()
       .then((user) => {
@@ -107,7 +106,6 @@ const OrderStatusFormSection = () => {
       />
     );
   };
-  console.log(initialValues);
   return (
     <Formik initialValues={initialValues} validationSchema={OrderStatusSchema} onSubmit={onSubmitHandler}>
       {(formProps) => (
@@ -169,7 +167,7 @@ const OrderStatusFormSection = () => {
             </label>
             <div className={styles.dFlex}>
               {" "}
-              <Link to={"/order-list"} className={styles.btn}>
+              <Link to={"/orderStatus"} className={styles.btn}>
                 Cancel
               </Link>
               <input type="submit" className={styles.btn} value={"Submit"} disabled={activeBtn} />

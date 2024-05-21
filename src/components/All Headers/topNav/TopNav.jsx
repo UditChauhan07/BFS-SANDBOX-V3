@@ -52,14 +52,15 @@ const TopNav = () => {
                   Need Help?&nbsp; <NeedHelp />
                   {/* </a> */}
                   <ul className="dropdown-menu">
-                    <li onClick={() => navigate("/order-list")}>
+                    <li onClick={() => navigate("/orderStatus")}>
                       <Link to="/order-list" className="dropdown-item text-start">
                         Order Status
                       </Link>
                     </li>
                     <li
                       onClick={() => {
-                        setModalOpen(true);
+                        // setModalOpen(true);
+                        navigate("/customerService")
                       }}
                     >
                       <Link to="" className="dropdown-item text-start">
@@ -76,6 +77,12 @@ const TopNav = () => {
                 Welcome,
                 <span className={`m-0 ${styles.nameText}`}>{userName ?? "User"}</span>
               </p>
+              {/* <div className={styles.vr}></div>
+              <p className={`m-0 ${styles.nameText}`}>
+                <Link to="/order-list" className="linkStyle">
+                  Settings{" "}
+                </Link>
+              </p> */}
               <div className={styles.vr}></div>
               <p className={`m-0 ${styles.nameText}`}>
                 <Link to="/order-list" className="linkStyle">
