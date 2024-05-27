@@ -35,6 +35,7 @@ import TargetReport from "./reports/targetReport";
 import YearlyComparisonReport from "./reports/yealyComparison/ComparisonReport";
 import BMAIssues from "./pages/BMAIssues";
 import OrderStatusIssues from "./OrderStatusIssues";
+import EmailSetting from "./pages/EmailSetting";
 
 
 function App() {
@@ -101,6 +102,7 @@ function App() {
             {/* <Route path="/customerService" element={<CustomerServiceForm />}></Route> */}
             <Route path="/customerService" element={<BMAIssues />}></Route>
             <Route path="/orderStatus" element={<OrderStatusIssues />}></Route>
+            <Route path="/emailSetting" element={<EmailSetting />}></Route>
             
             {/* 1234 */}
           </Routes>

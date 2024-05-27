@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { NeedHelp } from "../../../lib/svg";
+import { CustomerServiceIcon, NeedHelp, OrderStatusIcon } from "../../../lib/svg";
 import ModalPage from "../../Modal UI";
 import SelectCaseReason from "../../CustomerServiceFormSection/SelectCaseReason/SelectCaseReason";
 import { GetAuthData, getSessionStatus } from "../../../lib/store";
+import { BiMailSend } from "react-icons/bi";
 // import Redirect from "../../Redirect";
 const TopNav = () => {
   const navigate = useNavigate();
@@ -53,8 +54,8 @@ const TopNav = () => {
                   {/* </a> */}
                   <ul className="dropdown-menu">
                     <li onClick={() => navigate("/orderStatus")}>
-                      <Link to="/order-list" className="dropdown-item text-start">
-                        Order Status
+                      <Link to="/order-list" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
+                        <OrderStatusIcon width={15} height={15}/>&nbsp;Order Status
                       </Link>
                     </li>
                     <li
@@ -63,8 +64,8 @@ const TopNav = () => {
                         navigate("/customerService")
                       }}
                     >
-                      <Link to="" className="dropdown-item text-start">
-                        Customer Services
+                      <Link to="/customerService" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
+                       <CustomerServiceIcon width={15} height={15}/>&nbsp;Customer Services
                       </Link>
                     </li>
                   </ul>
@@ -77,12 +78,17 @@ const TopNav = () => {
                 Welcome,
                 <span className={`m-0 ${styles.nameText}`}>{userName ?? "User"}</span>
               </p>
-              {/* <div className={styles.vr}></div>
+              <div className={styles.vr}></div>
               <p className={`m-0 ${styles.nameText}`}>
-                <Link to="/order-list" className="linkStyle">
-                  Settings{" "}
-                </Link>
-              </p> */}
+              <div className="dropdown d-flex justify-content-center align-items-center " role="button" data-bs-toggle="dropdown" style={{zIndex:1021}}>
+                  Settings
+                  <ul className="dropdown-menu">
+                    <li onClick={() => navigate("/emailSetting")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{lineHeight:'15px'}}>
+                  <BiMailSend/>&nbsp;Email Blast
+                </li>
+                </ul>
+                </div>
+              </p>
               <div className={styles.vr}></div>
               <p className={`m-0 ${styles.nameText}`}>
                 <Link to="/order-list" className="linkStyle">

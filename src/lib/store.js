@@ -12,7 +12,7 @@ const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
 export const salesRepIdKey = "BzQIEAjzCEHmlXc";
-export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3"]; //,"0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
+export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3","0053b00000CwOnLAAV"]; //,"0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
 
 export const months = [
   "January",
@@ -236,7 +236,7 @@ export async function getOrderCustomerSupport({ user, PONumber }) {
   let bodyContent = new FormData();
   bodyContent.append("key", user.key);
   bodyContent.append("Sales_Rep__c", user.Sales_Rep__c);
-  if(PONumber)bodyContent.append("PONumber", PONumber);
+  if (PONumber) bodyContent.append("PONumber", PONumber);
 
   let response = await fetch(url + "v3/Jn91V1GChwP9dZg", {
     method: "POST",
@@ -365,7 +365,7 @@ export async function getDashboardata({ user }) {
     };
   }
 
- headersList = {...headersList,key:user.x_access_token,SalesRepId:user.Sales_Rep__c}
+  headersList = { ...headersList, key: user.x_access_token, SalesRepId: user.Sales_Rep__c }
 
   let response = await fetch(originAPi + "/95zWpMEFtbAr8lq/FlEpv2cw4VbxgDF", {
     // let response = await fetch(url + "v3/3kMMguJj62cyyf0", {
@@ -374,7 +374,7 @@ export async function getDashboardata({ user }) {
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
-  console.warn({data});
+  console.warn({ data });
   // console.warn({data:user.Sales_Rep__c});
   if (data.status == 300) {
     DestoryAuth();
@@ -544,7 +544,7 @@ export async function getProductList({ rawData }) {
   if (data.status == 300) {
     DestoryAuth();
   } else {
-    console.warn({data});
+    console.warn({ data });
     return data;
   }
 }
@@ -569,7 +569,6 @@ export async function getProductImage({ rawData }) {
 }
 
 export async function getProductImageAll({ rawData }) {
-  console.log({ rawData });
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -684,6 +683,25 @@ export async function getSalesRepList({ key }) {
   }
 }
 
+export async function getEmailBlast({ key, Id }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M", {
+    method: "POST",
+    body: JSON.stringify({ key, Id }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
+
 export async function getSessionStatus({ key, salesRepId }) {
   let headersList = {
     Accept: "*/*",
@@ -747,7 +765,7 @@ export async function getOrderDetailsPdf({ key, opportunity_id }) {
     "Content-Type": "application/json",
   };
 
-  let response = await fetch(originAPi+"/mIRX7B9FlQjmOaf/0DS68FOD7s", {
+  let response = await fetch(originAPi + "/mIRX7B9FlQjmOaf/0DS68FOD7s", {
     method: "POST",
     body: JSON.stringify({ key, opportunity_id }),
     headers: headersList,
@@ -756,89 +774,89 @@ export async function getOrderDetailsPdf({ key, opportunity_id }) {
   if (data.status == 300) {
     DestoryAuth();
   } else {
-    return data?.file||false;
+    return data?.file || false;
   }
 }
 
-export async function getMarketingCalendarPDF({ key, manufacturerId,month }) {
+export async function getMarketingCalendarPDF({ key, manufacturerId, month }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
   };
 
-  let response = await fetch(originAPi+"/mIRX7B9FlQjmOaf", {
+  let response = await fetch(originAPi + "/mIRX7B9FlQjmOaf", {
     method: "POST",
-    body: JSON.stringify({ key, manufacturerId,month }),
+    body: JSON.stringify({ key, manufacturerId, month }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
-  console.log({data});
+  console.log({ data });
   if (data.status == 300) {
     DestoryAuth();
   } else {
-    return data?.file||false;
+    return data?.file || false;
   }
 }
 
-export async function getMarketingCalendarPDFV2({ key, manufacturerId,month }) {
+export async function getMarketingCalendarPDFV2({ key, manufacturerId, month }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
   };
 
-  let response = await fetch(originAPi+"/mIRX7B9FlQjmOaf/VTOUZjSm8aIm1ve", {
+  let response = await fetch(originAPi + "/mIRX7B9FlQjmOaf/VTOUZjSm8aIm1ve", {
     method: "POST",
-    body: JSON.stringify({ key, manufacturerId,month }),
+    body: JSON.stringify({ key, manufacturerId, month }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
-  console.log({data});
+  console.log({ data });
   if (data.status == 300) {
     DestoryAuth();
   } else {
-    return data?.file||false;
+    return data?.file || false;
   }
 }
 
-export async function getMarketingCalendarPDFV3({ key, manufacturerId,month }) {
+export async function getMarketingCalendarPDFV3({ key, manufacturerId, month }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
   };
 
-  let response = await fetch(originAPi+"/mIRX7B9FlQjmOaf/ohSOBafoPQH0NQi", {
+  let response = await fetch(originAPi + "/mIRX7B9FlQjmOaf/ohSOBafoPQH0NQi", {
     method: "POST",
-    body: JSON.stringify({ key, manufacturerId,month }),
+    body: JSON.stringify({ key, manufacturerId, month }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
   if (data.status == 300) {
     DestoryAuth();
   } else {
-    return data?.file||false;
+    return data?.file || false;
   }
 }
-export async function uploadFileSupport({key,supportId,files}){
-  if(files.length){
+export async function uploadFileSupport({ key, supportId, files }) {
+  if (files.length) {
 
     let headersList = {
-      "Accept": "*/*",key,supportId
-   }
-   console.log({headersList});
-   let bodyContent = new FormData();
-   files.map((file)=>{
-   bodyContent.append("files", file.file);
-   })
-   let response = await fetch(originAPi+"/unCb9Coo4FFqCtG/w72MrdYNHfsSsqe", { 
-     method: "POST",
-     body: bodyContent,
-     headers: headersList
-   });
-   
-   let data = JSON.parse(await response.text());
-   if(data){
-    return data.data
-   }
+      "Accept": "*/*", key, supportId
+    }
+    console.log({ headersList });
+    let bodyContent = new FormData();
+    files.map((file) => {
+      bodyContent.append("files", file.file);
+    })
+    let response = await fetch(originAPi + "/unCb9Coo4FFqCtG/w72MrdYNHfsSsqe", {
+      method: "POST",
+      body: bodyContent,
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    if (data) {
+      return data.data
+    }
   }
 }
 
@@ -860,8 +878,8 @@ export const hexabrand = {
   a0ORb000000QzsfMAC: "#B7C8B3",
   a0O1O00000XYBvkUAH: "#6D243E",
   a0O1O00000XYBvaUAH: "#4B95DD",
-  a0ORb000000nDfFMAU:"#073763",
-  a0ORb000000nDIiMAM:"#7f6000"
+  a0ORb000000nDfFMAU: "#073763",
+  a0ORb000000nDIiMAM: "#7f6000"
 };
 
 export const hexabrandText = {
@@ -881,12 +899,17 @@ export const hexabrandText = {
   a0ORb000000QzsfMAC: "#445840",
   a0O1O00000XYBvkUAH: "#ffffff",
   a0O1O00000XYBvaUAH: "#ffffff",
-  a0ORb000000nDfFMAU:"#deb887",
-  a0ORb000000nDIiMAM:"#deb887"
+  a0ORb000000nDfFMAU: "#deb887",
+  a0ORb000000nDIiMAM: "#deb887"
 };
 
 
-export function DateConvert(dateString) {
+export function DateConvert(dateString, timeStamp=false) {
+  if(timeStamp){
+  const options = { year: "numeric", month: "long", day: "numeric"}
+  dateString= new Date(dateString).toLocaleDateString(undefined, options)
+  return dateString
+  }
   if (dateString) {
     const [year, month, day] = dateString.split(/[-/]/);
     if (day && month && year) {
