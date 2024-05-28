@@ -35,6 +35,21 @@
   place-content: center;
   cursor: pointer;
 }
+.searchBox {
+  float: right;
+  /* border-radius: 50px; */
+  border-bottom: 1px solid #ccc;
+  font-size: 12px;
+  width: 150px;
+  text-align: right;
+  margin-left: 10px;
+}
+.searchBox::placeholder {
+  font-size: 12px;
+}
+.searchBox:focus {
+  outline: none;
+}
 .table th {
   background-color: #f8f8f8 !important;
   color: #000 !important;

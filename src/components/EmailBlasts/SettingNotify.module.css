@@ -1,22 +1,58 @@
-.submitButton{
-    color: #fff;
-    text-align: center;
-    font-family: "Montserrat";
-    font-size: 18px;
+.container {
+  width: 60%;
+  margin: 2rem auto;
+}
+.formContainer {
+  border-radius: 8px;
+  border: 1px solid #d5d9d9;
+  background: #f8fafb;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+}
+.containerTitle {
+    color: #000;
+    font-family: Montserrat;
+    font-size: 22px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-    letter-spacing: 1.8px;
+    letter-spacing: 2.2px;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .labelHolder {
     border-radius: 8px;
-    background: #000;
-    height: 42px;
-    width: 150px;
-    height: 30px;
-    display: grid;
-    place-content: center;
-    cursor: pointer;
-}
-.settingContainer{
-    font-family: Montserrat-500;
+    border: 1px solid #d5d9d9;
+    background: #fff;
+    width: 100%;
+    display: flex;
+    color: #9c9c9c;
+    padding: 0.5rem 1rem;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
     font-weight: 500;
+    line-height: normal;
+    letter-spacing: 1.6px;
+    flex-direction: column;
+    gap: 4px;
+    text-transform: capitalize;
+  }
+.submitButton {
+    padding: 0.5rem 2rem;
+    border: 1px solid #fff;
+    background: #000;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+}
+.settingContainer {
+  font-family: Montserrat-500;
+  font-weight: 500;
 }

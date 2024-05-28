@@ -2,13 +2,14 @@ import { useState } from "react"
 import { DateConvert } from "../../lib/store"
 import SettingNotify from "./SettingNotify"
 import Styles from "./index.module.css"
+import { BiMailSend, BiPlus } from "react-icons/bi"
 
-const EmailTable = ({ data,setSetting,setting }) => {
+const EmailTable = ({ data,setSetting,setting,setSearchValue }) => {
     return (
         <div>
             {setting ? <SettingNotify setSetting={setSetting} /> :
                 <>
-                    <div className={Styles.titleHolder}><h2>NewLetter List</h2><div className={Styles.settingButton} onClick={() => { setSetting(true) }}>Setting</div></div>
+                    <div className={Styles.titleHolder}><h2>NewLetter List</h2><div className="d-flex"><div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} onClick={() => { setSetting(true) }}><BiMailSend/>&nbsp;Setting</div><input type="text"  autoComplete="off" placeholder="Search Contacts" className={Styles.searchBox} onKeyUp={(e)=>setSearchValue(e.target.value)}/></div></div>
                     <table style={{ width: '100%' }}>
                         <thead className={Styles.table}>
                             <tr>

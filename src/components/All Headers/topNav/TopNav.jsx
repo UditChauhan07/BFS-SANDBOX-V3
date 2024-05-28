@@ -4,25 +4,29 @@ import { Link, useNavigate } from "react-router-dom";
 import { CustomerServiceIcon, NeedHelp, OrderStatusIcon } from "../../../lib/svg";
 import ModalPage from "../../Modal UI";
 import SelectCaseReason from "../../CustomerServiceFormSection/SelectCaseReason/SelectCaseReason";
-import { GetAuthData, getSessionStatus } from "../../../lib/store";
+import { GetAuthData, admins, getSessionStatus } from "../../../lib/store";
 import { BiMailSend } from "react-icons/bi";
 // import Redirect from "../../Redirect";
 const TopNav = () => {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [userName, setUserName] = useState(localStorage.getItem("Name"));
+  const [showSetting, setShowSetting] = useState(false)
 
-  useEffect(()=>{
-    GetAuthData().then((user)=>{
-      getSessionStatus({key:user?.x_access_token,salesRepId:user?.Sales_Rep__c}).then((status)=>{
+  useEffect(() => {
+    GetAuthData().then((user) => {
+      getSessionStatus({ key: user?.x_access_token, salesRepId: user?.Sales_Rep__c }).then((status) => {
+        if (admins.includes(status.data.Id)) {
+          setShowSetting(true);
+        }
         setUserName(status?.data?.Name)
-      }).catch((statusErr)=>{
-        console.log({statusErr});
+      }).catch((statusErr) => {
+        console.log({ statusErr });
       })
-    }).catch((userErr)=>{
-      console.log({userErr});
+    }).catch((userErr) => {
+      console.log({ userErr });
     })
-  },[])
+  }, [])
 
   // console.log("userDetails", userDetails);
   const reasons = {
@@ -49,13 +53,13 @@ const TopNav = () => {
               <div className={styles.vr}></div>
               <p className={`m-0 ${styles.language}`}>EN</p>
               <p className={`m-0 ${styles.language} ${styles.text} flex`}>
-                <div className="dropdown d-flex justify-content-center align-items-center " role="button" data-bs-toggle="dropdown" style={{zIndex:1021}}>
+                <div className="dropdown d-flex justify-content-center align-items-center " role="button" data-bs-toggle="dropdown" style={{ zIndex: 1021 }}>
                   Need Help?&nbsp; <NeedHelp />
                   {/* </a> */}
                   <ul className="dropdown-menu">
                     <li onClick={() => navigate("/orderStatus")}>
                       <Link to="/order-list" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
-                        <OrderStatusIcon width={15} height={15}/>&nbsp;Order Status
+                        <OrderStatusIcon width={15} height={15} />&nbsp;Order Status
                       </Link>
                     </li>
                     <li
@@ -65,7 +69,7 @@ const TopNav = () => {
                       }}
                     >
                       <Link to="/customerService" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
-                       <CustomerServiceIcon width={15} height={15}/>&nbsp;Customer Services
+                        <CustomerServiceIcon width={15} height={15} />&nbsp;Customer Services
                       </Link>
                     </li>
                   </ul>
@@ -78,17 +82,18 @@ const TopNav = () => {
                 Welcome,
                 <span className={`m-0 ${styles.nameText}`}>{userName ?? "User"}</span>
               </p>
+             {showSetting&&<>
               <div className={styles.vr}></div>
               <p className={`m-0 ${styles.nameText}`}>
-              <div className="dropdown d-flex justify-content-center align-items-center " role="button" data-bs-toggle="dropdown" style={{zIndex:1021}}>
+                <div className="dropdown d-flex justify-content-center align-items-center " role="button" data-bs-toggle="dropdown" style={{ zIndex: 1021 }}>
                   Settings
                   <ul className="dropdown-menu">
-                    <li onClick={() => navigate("/emailSetting")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{lineHeight:'15px'}}>
-                  <BiMailSend/>&nbsp;Email Blast
-                </li>
-                </ul>
+                    <li onClick={() => navigate("/emailSetting")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
+                      <BiMailSend />&nbsp;Email Blast
+                    </li>
+                  </ul>
                 </div>
-              </p>
+              </p></>}
               <div className={styles.vr}></div>
               <p className={`m-0 ${styles.nameText}`}>
                 <Link to="/order-list" className="linkStyle">

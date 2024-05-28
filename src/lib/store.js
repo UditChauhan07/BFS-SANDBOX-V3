@@ -701,6 +701,28 @@ export async function getEmailBlast({ key, Id }) {
     return data.data;
   }
 }
+export async function storeDatesHandler({ key, dates }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/08fC7mUSNzUduyt", {
+    method: "POST",
+    body: JSON.stringify({ key, dates:JSON.stringify(dates) }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    if(data.status == 200){
+      return true;
+    }else{
+      return false
+    }
+  }
+}
 
 export async function getSessionStatus({ key, salesRepId }) {
   let headersList = {
@@ -836,29 +858,29 @@ export async function getMarketingCalendarPDFV3({ key, manufacturerId, month }) 
     return data?.file || false;
   }
 }
-export async function uploadFileSupport({ key, supportId, files }) {
-  if (files.length) {
+  export async function uploadFileSupport({ key, supportId, files }) {
+    if (files.length) {
 
-    let headersList = {
-      "Accept": "*/*", key, supportId
-    }
-    console.log({ headersList });
-    let bodyContent = new FormData();
-    files.map((file) => {
-      bodyContent.append("files", file.file);
-    })
-    let response = await fetch(originAPi + "/unCb9Coo4FFqCtG/w72MrdYNHfsSsqe", {
-      method: "POST",
-      body: bodyContent,
-      headers: headersList
-    });
+      let headersList = {
+        "Accept": "*/*", key, supportId
+      }
+      console.log({ headersList });
+      let bodyContent = new FormData();
+      files.map((file) => {
+        bodyContent.append("files", file.file);
+      })
+      let response = await fetch(originAPi + "/unCb9Coo4FFqCtG/w72MrdYNHfsSsqe", {
+        method: "POST",
+        body: bodyContent,
+        headers: headersList
+      });
 
-    let data = JSON.parse(await response.text());
-    if (data) {
-      return data.data
+      let data = JSON.parse(await response.text());
+      if (data) {
+        return data.data
+      }
     }
   }
-}
 
 
 export const hexabrand = {
