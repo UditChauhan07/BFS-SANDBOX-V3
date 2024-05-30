@@ -112,40 +112,8 @@ const OrderStatusFormSection = () => {
         <div className={styles.container}>
           <Form className={styles.formContainer}>
             <b className={styles.containerTitle}>Order Status : {supportTicketData?.orderStatusForm?.reason}</b>
-            {/* <label className={styles.labelHolder}>
-            Priority
-            <select
-              onChange={(e) => {
-                onChangeHandler("priority", e.target.value);
-              }}
-              required
-            >
-              {prioritiesList.map((priority) => {
-                return (
-                  <option value={priority.value} selected={priority.value == supportTicketData?.orderStatusForm?.priority}>
-                    {priority.name}
-                  </option>
-                );
-              })}
-            </select>
-          </label>  */}
-
             <label className={styles.labelHolder}>
               Contact Name
-              {/* <Field
-              component="select"
-              name="contact"
-            >
-              <option val>Select Contact</option>
-              {contactList.map((contact) => {
-                console.log(contact);
-                return (
-                  <option value={contact.Id} selected={contact.Id == supportTicketData?.orderStatusForm?.contactId}>
-                    {contact.Name}
-                  </option>
-                );
-              })}
-            </Field> */}
               <Field name="contact.value" className="contact" options={contactList.map((contact) => ({ label: contact.Name, value: contact.Id }))} component={SearchableSelect} />
             </label>
             <ErrorMessage component={TextError} name="contact" />

@@ -258,8 +258,10 @@ function Dashboard({ dashboardData }) {
             setTargetValue(Number(dashboard.salesRepTarget));
             setAchievedSales(Number(dashboard?.totalPrice));
             setIsLoading(true)
-            if (dashboard.rawPerformance) {
-              setAccountPerformance({ isLoaded: true, data: dashboard.rawPerformance })
+            if (dashboard.rawPerformance.length) {
+              setAccountPerformance({ isLoaded: true, data: dashboard?.rawPerformance||[] })
+            }else{
+              setAccountPerformance({ isLoaded: true, data:[] })
             }
             if (dashboard?.monthlySalesRepData) {
               let monthlyDataKey = Object.keys(dashboard?.monthlySalesRepData)
@@ -450,7 +452,7 @@ function Dashboard({ dashboardData }) {
         console.error({ error });
       });
   };
-  let lowPerformanceArray = accountPerformance?.data?.slice(0).reverse().map((ele) => ele);
+  let lowPerformanceArray = accountPerformance?.data?.slice(0)?.reverse()?.map((ele) => ele);
 
   const changeMonthHandler = (value) => {
     setIsLoading(false);

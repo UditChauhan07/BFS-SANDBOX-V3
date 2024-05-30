@@ -5,7 +5,7 @@ import styles from "../OrderStatusFormSection/style.module.css";
 import { AccountInfoValidation } from "../../validation schema/AccountInfoValidation";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-const AccountInfo = ({ reason, Accounts, postSupportAny, GetAuthData }) => {
+const AccountInfo = ({ reason, Accounts, postSupportAny, GetAuthData ,setSubmitForm}) => {
     const navigate = useNavigate();
 
     const initialValues = {
@@ -28,6 +28,7 @@ const AccountInfo = ({ reason, Accounts, postSupportAny, GetAuthData }) => {
     };
     const onSubmitHandler = (values) => {
         let subject = `Customer Service for ${reason}`;
+        setSubmitForm(true)
         GetAuthData()
             .then((user) => {
                 if (user) {

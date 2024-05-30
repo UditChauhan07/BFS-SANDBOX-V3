@@ -46,6 +46,7 @@ const MarketingCalendar = () => {
   useEffect(() => {
     GetAuthData().then((user) => {
       getMarketingCalendar({ key: user.x_access_token }).then((productRes) => {
+        console.log({productRes});
         setProductList(productRes)
         setIsloaed(true)
         setTimeout(() => {
