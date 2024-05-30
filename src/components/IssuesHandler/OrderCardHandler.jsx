@@ -127,6 +127,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
 
     const orderConfirmationHandler = () => {
         let error = Object.keys(errorList)
+        console.log({error});
         if (error.length) {
             let confimationStatus = true;
             if (reason != "Charges") {
@@ -136,6 +137,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                         confimationStatus = false;
                         const myElement = document.getElementById(`oP${id}`);
                         if(myElement){
+                            console.warn({myElement});
                             myElement.scrollIntoView({ behavior: "smooth", block: "center" });
                             myElement.style.borderBottom = "1px solid red";
                             shakeHandler(`oP${id}`)
@@ -158,6 +160,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                 if(!contactId){
                     const myElement = document.getElementById("contactSelector");
                     if(myElement){
+                        console.error({myElement});
                         myElement.scrollIntoView({ behavior: "smooth", block: "center" });
                         myElement.style.borderBottom = "1px solid red"
                         shakeHandler(`contactSelector`)
@@ -165,11 +168,11 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                     }
                     
                 }else{
+                    document.getElementById("AttachementSection")?.scrollIntoView({ behavior: "smooth", block: "center" });
                     const myElement = document.getElementById("contactSelector");
                     if(myElement){
                         myElement.style.borderBottom = "1px solid #ccc"
                     }
-                    document.getElementById("AttachementSection")?.scrollIntoView({ behavior: "smooth", block: "center" });
                     setOrderConfirmed(true)
                 }
             }
@@ -214,7 +217,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
             }}
           />
         ) : null}
-        <p className={Styles1.reasonTitle}><span style={{ cursor: "pointer" }} onClick={() => shakeHandler()}>Select the order you want to handle:</span> {!orderId && reason && <input type="text" placeholder='Search by PO Number' autoComplete="off" className={Styles1.searchBox} title="You can search by PO Number, Account Name & Brand for last 3 month Orders" onKeyUp={(e) => { setSearchPO(e.target.value) }} id="poSearchInput" />} {!reason && <BiLock id="lock1" style={{ float: 'right' }} />}</p>
+        <p className={Styles1.reasonTitle}><span style={{ cursor: "pointer" }} onClick={() => shakeHandler()}>Select the order you want to handle:</span> {!orderId && reason && <input type="text" placeholder='Search Order' autoComplete="off" className={Styles1.searchBox} title="You can search by PO Number, Account Name & Brand for last 3 month Orders" onKeyUp={(e) => { setSearchPO(e.target.value) }} id="poSearchInput" style={{width:'120px'}} />} {!reason && <BiLock id="lock1" style={{ float: 'right' }} />}</p>
         {reason && reason != "Update Account Info" &&
             <div className={`${Styles1.orderListHolder} ${Styles1.openListHolder}`} style={(orderId && (!searchPo || searchPo == "")) ? { overflow: 'unset', height: 'auto', border: 0 } : {}}>
                 <div>
@@ -252,7 +255,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                             </div>
                                         </div>
 
-                                        <div className={Styles.productDetail}>
+                                        <div className={Styles.productDetail} style={{padding:'0 30px'}}>
                                             <div className={Styles.Prod1}>
                                                 <div className={Styles.ProtuctInnerBox}>
                                                     <div className={Styles.BoxBlack}>
@@ -270,7 +273,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                             <table>
                                                                 <thead>
                                                                     <tr>
-                                                                        <th style={{ width: '250px' }}>Name</th>
+                                                                        <th style={{ width: '225px' }}>Name</th>
                                                                         <th style={{ width: '75px' }}>Code</th>
                                                                         <th style={{ width: '75px' }}>Qty</th>
                                                                         <th style={{ width: '75px' }}>Price</th>
@@ -281,7 +284,6 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
 
                                                                     {item.OpportunityLineItems?.records
                                                                         .map((ele, index) => {
-                                                                            console.log({ele});
                                                                             if (!orderConfirmed || (orderConfirmed && Object.keys(errorList).includes(ele.Id))) {
                                                                                 return (<ErrorProductCard Styles1={Styles1} productErrorHandler={productErrorHandler} errorList={errorList} setProductDetailId={setProductDetailId} product={ele} productImage={productImage} reason={reason} AccountName={item.AccountName} ErrorProductQtyHandler={ErrorProductQtyHandler} readOnly={orderConfirmed} />)
                                                                             }
@@ -322,6 +324,14 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                 </div>
                                             </div>
                                             <div className={Styles1.totalProductPrice}>
+                                                <div className={Styles1.Margitotal}>
+                                                    <p className={Styles1.detailsTitleHolder}>Total</p>
+                                                    <p className={Styles1.detailsDescHolder}>${Number(item.Amount).toFixed(2)}</p>
+                                                </div>
+                                                <div className={Styles1.Margitotal}>
+                                                    <p className={Styles1.detailsTitleHolder}>Order Placed</p>
+                                                    <p className={Styles1.detailsDescHolder}>{cdate}</p>
+                                                </div>
                                                 {(orderId && (!searchPo || searchPo == "")) && <>
                                                     <div className={Styles1.Margitotal}>
                                                         <p className={Styles1.detailsTitleHolder}>Customer Support For</p>
@@ -336,14 +346,6 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                         <p className={Styles1.detailsDescHolder}>{setSubject(`Customer Service for ${reason} having PO# ${item.PO_Number__c} Created on ${datemonth}`)}Customer Service for {reason} having <br /> PO# {item.PO_Number__c} Created on {datemonth}</p>
                                                     </div>
                                                 </>}
-                                                <div className={Styles1.Margitotal}>
-                                                    <p className={Styles1.detailsTitleHolder}>Total</p>
-                                                    <p className={Styles1.detailsDescHolder}>${Number(item.Amount).toFixed(2)}</p>
-                                                </div>
-                                                <div className={Styles1.Margitotal}>
-                                                    <p className={Styles1.detailsTitleHolder}>Order Placed</p>
-                                                    <p className={Styles1.detailsDescHolder}>{cdate}</p>
-                                                </div>
 
                                                 {(orderId && (!searchPo || searchPo == "")) && <>
                                                     {item.StageName && <div className={Styles1.Margitotal}>
@@ -405,10 +407,10 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                         </p>
                                                     </div>
                                                     {(orderId == item.Id && !orderConfirmed) && <div className={Styles1.Margitotal}>
-                                                        <button className={Styles1.btnHolder} title="Click here to Continue" onClick={() => orderConfirmationHandler()}>I'M Done<BiCheck /></button>
+                                                        <div className={Styles1.btnHolder} title="Click here to Continue" onClick={() => orderConfirmationHandler()}>I'M Done<BiCheck /></div>
                                                     </div>}
                                                     {(orderId == item.Id && orderConfirmed) && <div className={Styles1.Margitotal}>
-                                                        <button className={Styles1.btnHolder} title="Click here to Change in Products" onClick={() =>{ setOrderConfirmed(false);}}>Wanna Change?</button>
+                                                        <div className={Styles1.btnHolder} title="Click here to Change in Products" onClick={() =>{ setOrderConfirmed(false);}}>Wanna Change?</div>
                                                     </div>}
                                                 </>}
                                             </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import CustomerSupportPage from "../components/CustomerSupportPage/CustomerSupportPage";
 import { FilterItem } from "../components/FilterItem";
 import FilterSearch from "../components/FilterSearch";
@@ -77,6 +77,19 @@ const CustomerSupport = () => {
     brandhandler({ key: userData.x_access_token, userId: value })
     reatilerHandler({ key: userData.x_access_token, userId: value })
   }
+  const filteredData = useMemo(() => {
+    let newValues = supportList;
+    if (manufacturerFilter) {
+      newValues = newValues.filter((item) => item.ManufacturerId__c === manufacturerFilter);
+    }
+    if (searchBy) {
+      newValues = newValues?.filter((value) => value.CaseNumber?.toLowerCase().includes(searchBy?.toLowerCase()));
+    }
+    if (retailerFilter) {
+      newValues = newValues.filter((item) => item.AccountId === retailerFilter);
+    }
+    return newValues;
+  }, [supportList, retailerFilter, manufacturerFilter, searchBy]);
   return (
     <AppLayout
       filterNodes={
@@ -152,7 +165,7 @@ const CustomerSupport = () => {
           <Loading />
         ) : (
           <CustomerSupportPage
-            data={supportList}
+            data={filteredData}
             currentPage={currentPage}
             PageSize={PageSize}
             manufacturerFilter={manufacturerFilter}
@@ -163,7 +176,7 @@ const CustomerSupport = () => {
         <Pagination
           className="pagination-bar"
           currentPage={currentPage}
-          totalCount={supportList?.length}
+          totalCount={filteredData?.length}
           pageSize={PageSize}
           onPageChange={(page) => setCurrentPage(page)}
         />
