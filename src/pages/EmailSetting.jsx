@@ -15,8 +15,17 @@ const EmailSetting = () => {
     const [notifyDate, setNotifyDate] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const [setting, setSetting] = useState(false)
+    const [checkId,setCheckId] = useState([])
+    const [searchValue, setSearchValue] = useState();
+    const [checked, setChecked] = useState(false)
 
     useEffect(() => {
+        getDataHandler()
+    }, [])
+    const getDataHandler = ()=>{
+        setContactList({ isLoaded: false, data: [] })
+        setSearchValue(null)
+        setCheckId([])
         GetAuthData().then((user) => {
             if (admins.includes(user.Sales_Rep__c)) {
                 setUser(user)
@@ -32,12 +41,8 @@ const EmailSetting = () => {
         }).catch((err) => {
             console.log({ err });
         })
-    }, [])
+    }
     const { isLoaded, data } = contactList
-    console.log(
-        { data }
-    );
-    const [searchValue, setSearchValue] = useState();
     const mailList = useMemo(() => {
         return (
             data
@@ -55,6 +60,17 @@ const EmailSetting = () => {
                 })
         );
     }, [data,searchValue]);
+    function checkedAll(value) {
+        setChecked(!checked)
+        let temp = []
+        if (value) {
+            mailList.map((contact, index) => {
+                temp.push(contact.id)
+            })
+        }
+        setCheckId(temp)
+    }
+    return null;
 
     return (<AppLayout>
         {isLoaded ? <div>
@@ -62,7 +78,7 @@ const EmailSetting = () => {
                 <EmailTable data={mailList.slice(
                     (currentPage - 1) * PageSize,
                     currentPage * PageSize
-                )} setSetting={setSetting} setting={setting} setSearchValue={setSearchValue} />
+                )} setSetting={setSetting} setting={setting} setSearchValue={setSearchValue} checkIdObj={{setCheckId,checkId,checkedAll,checked}} notifyDate={notifyDate} getDataHandler={getDataHandler}/>
                 {!setting && <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}

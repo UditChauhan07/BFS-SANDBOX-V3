@@ -4,7 +4,7 @@ import { useManufacturer } from "../../api/useManufacturer";
 import FilterSearch from "../FilterSearch";
 import { CloseButton } from "../../lib/svg";
 
-const Filters = ({ value, onChange, resetFilter }) => {
+const Filters = ({ value, onChange, resetFilter,monthHide=true }) => {
   const { data: manufacturerData } = useManufacturer();
   const handleMonthFilter = (v) => onChange("month", v);
   const handleManufacturerFilter = (v) => onChange("manufacturer", v);
@@ -12,9 +12,10 @@ const Filters = ({ value, onChange, resetFilter }) => {
 
   return (
     <>
-      <FilterItem
+      {monthHide&&<FilterItem
         label="Months"
         name="Months"
+        monthHide={false}
         value={value.month}
         options={[
           {
@@ -31,7 +32,7 @@ const Filters = ({ value, onChange, resetFilter }) => {
           },
         ]}
         onChange={handleMonthFilter}
-      />
+      />}
       <FilterItem
         label="MANUFACTURER"
         name="MANUFACTURER"

@@ -162,7 +162,7 @@ const CustomerSupport = () => {
     >
       <>
         {!loaded ? (
-          <Loading />
+          <Loading height={'70vh'} />
         ) : (
           <CustomerSupportPage
             data={filteredData}

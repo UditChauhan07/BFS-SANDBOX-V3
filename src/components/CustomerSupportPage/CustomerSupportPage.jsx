@@ -48,28 +48,25 @@ function CustomerSupportPage({ data, PageSize, currentPage, manufacturerFilter, 
                   </div>
                 </Link>
                 <Link to={"/customerService"}>
-                <div
-                  className={`${Styles.supportLeftBox} cardHover`}
-                  style={{ cursor: "pointer" }}
+                  <div
+                    className={`${Styles.supportLeftBox} cardHover`}
+                    style={{ cursor: "pointer" }}
                   // onClick={() => {
                   //   setModalOpen(true);
                   // }}
-                >
-                  <div className={Styles.supportLeftImg}>
-                    <CustomerServiceIcon width={42} height={42} />
+                  >
+                    <div className={Styles.supportLeftImg}>
+                      <CustomerServiceIcon width={42} height={42} />
+                    </div>
+                    <div className={Styles.supportLeftContent}>
+                      <h2>Customer Services </h2>
+                      <p>Resolving Concerns Serving Solutions</p>
+                    </div>
                   </div>
-                  <div className={Styles.supportLeftContent}>
-                    <h2>Customer Services </h2>
-                    <p>Resolving Concerns Serving Solutions</p>
-                  </div>
-                </div>
                 </Link>
                 {/* Brand Management Approval */}
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setBrandManagementModalOpen(true);
-                  }}
+                <Link
+                  to={"/brandManagementApproval"}
                 >
                   <div className={`${Styles.supportLeftBox} cardHover`}>
                     <div className={Styles.supportLeftImg}>
@@ -80,7 +77,7 @@ function CustomerSupportPage({ data, PageSize, currentPage, manufacturerFilter, 
                       <p>Effective Management</p>
                     </div>
                   </div>
-                </div>
+                </Link>
 
                 <div>
                   <div className={`${Styles.supportLeftBox} cardHover`}>
