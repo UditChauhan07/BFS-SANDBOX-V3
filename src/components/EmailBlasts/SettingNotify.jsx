@@ -5,8 +5,8 @@ import ModalPage from "../Modal UI";
 import { GetAuthData, storeDatesHandler } from "../../lib/store";
 import Loading from "../Loading";
 
-const SettingNotify = ({ setSetting }) => {
-    const [size, setSize] = useState(0);
+const SettingNotify = ({ setSetting,notifyDate,getDataHandler }) => {
+    const [size, setSize] = useState(notifyDate.length??0);
     const [loader, setLoaded] = useState(false)
     let option = [{ lable: "Select Date for Notification", value: 0 }, { lable: 1, value: 1 }, { lable: 2, value: 2 }, { lable: 3, value: 3 }, { lable: 4, value: 4 }, { lable: 5, value: 5 }, { lable: 6, value: 6 }, { lable: 7, value: 7 }, { lable: 8, value: 8 }, { lable: 9, value: 9 }, { lable: 10, value: 10 }, { lable: 11, value: 11 }, { lable: 12, value: 12 }, { lable: 13, value: 13 }, { lable: 14, value: 14 }, { lable: 15, value: 15 }, { lable: 16, value: 16 }, { lable: 17, value: 17 }, { lable: 18, value: 18 }, { lable: 19, value: 19 }, { lable: 20, value: 20 }, { lable: 21, value: 21 }, { lable: 22, value: 22 }, { lable: 23, value: 23 }, { lable: 24, value: 24 }, { lable: 25, value: 25 }, { lable: 26, value: 26 }, { lable: 27, value: 27 }, { lable: 28, value: 28 }]
     const [formAlert, setFormAlert] = useState(false);
@@ -18,7 +18,21 @@ const SettingNotify = ({ setSetting }) => {
             setSize(0)
         }
     }
-    // useEffect(()=>{},[formAlert])
+    useEffect(()=>{
+        let freqElement = document.getElementById("freq")
+        if(freqElement && notifyDate.length){
+            freqElement.value = notifyDate.length
+            filledValue();
+        }
+    },[])
+    const filledValue = ()=>{
+        notifyDate.map((element,_i)=>{
+            let freqSelElement = document.getElementById("freq"+_i)
+            if(freqSelElement){
+                freqSelElement.value = element.date
+            }
+        })
+    }
     const submitHandler = () => {
         let values = [];
         new Array(size).fill(1).map((element, index) => {
@@ -42,7 +56,8 @@ const SettingNotify = ({ setSetting }) => {
                 storeDatesHandler({ key: user.x_access_token, dates: values }).then((resposne) => {
                     if (resposne) {
                         setSetting(false)
-                        setLoaded(false)
+                        // setLoaded(false)
+                        getDataHandler()
                     }
                 }).catch((resErr) => {
                     console.log({ resErr });

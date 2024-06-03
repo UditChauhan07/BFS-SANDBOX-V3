@@ -12,7 +12,7 @@ const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
 export const salesRepIdKey = "BzQIEAjzCEHmlXc";
-export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3","0053b00000CwOnLAAV"]; //,"0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
+export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3"]; //,"0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
 
 export const months = [
   "January",
@@ -701,6 +701,42 @@ export async function getEmailBlast({ key, Id }) {
     return data.data;
   }
 }
+export async function deleteEmailBlast({ key, ids }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/uZYl7iJRZswNYd6", {
+    method: "POST",
+    body: JSON.stringify({ key, ids }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
+export async function resetEmailBlast({ key, ids }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/8XoSdoqMZ2dAiqh", {
+    method: "POST",
+    body: JSON.stringify({ key, ids }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
 export async function storeDatesHandler({ key, dates }) {
   let headersList = {
     Accept: "*/*",
@@ -709,16 +745,16 @@ export async function storeDatesHandler({ key, dates }) {
 
   let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/08fC7mUSNzUduyt", {
     method: "POST",
-    body: JSON.stringify({ key, dates:JSON.stringify(dates) }),
+    body: JSON.stringify({ key, dates: JSON.stringify(dates) }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
   if (data.status == 300) {
     DestoryAuth();
   } else {
-    if(data.status == 200){
+    if (data.status == 200) {
       return true;
-    }else{
+    } else {
       return false
     }
   }
@@ -858,29 +894,29 @@ export async function getMarketingCalendarPDFV3({ key, manufacturerId, month }) 
     return data?.file || false;
   }
 }
-  export async function uploadFileSupport({ key, supportId, files }) {
-    if (files.length) {
+export async function uploadFileSupport({ key, supportId, files }) {
+  if (files.length) {
 
-      let headersList = {
-        "Accept": "*/*", key, supportId
-      }
-      console.log({ headersList });
-      let bodyContent = new FormData();
-      files.map((file) => {
-        bodyContent.append("files", file.file);
-      })
-      let response = await fetch(originAPi + "/unCb9Coo4FFqCtG/w72MrdYNHfsSsqe", {
-        method: "POST",
-        body: bodyContent,
-        headers: headersList
-      });
+    let headersList = {
+      "Accept": "*/*", key, supportId
+    }
+    console.log({ headersList });
+    let bodyContent = new FormData();
+    files.map((file) => {
+      bodyContent.append("files", file.file);
+    })
+    let response = await fetch(originAPi + "/unCb9Coo4FFqCtG/w72MrdYNHfsSsqe", {
+      method: "POST",
+      body: bodyContent,
+      headers: headersList
+    });
 
-      let data = JSON.parse(await response.text());
-      if (data) {
-        return data.data
-      }
+    let data = JSON.parse(await response.text());
+    if (data) {
+      return data.data
     }
   }
+}
 
 
 export const hexabrand = {
@@ -926,11 +962,11 @@ export const hexabrandText = {
 };
 
 
-export function DateConvert(dateString, timeStamp=false) {
-  if(timeStamp){
-  const options = { year: "numeric", month: "long", day: "numeric"}
-  dateString= new Date(dateString).toLocaleDateString(undefined, options)
-  return dateString
+export function DateConvert(dateString, timeStamp = false) {
+  if (timeStamp) {
+    const options = { year: "numeric", month: "long", day: "numeric" }
+    dateString = new Date(dateString).toLocaleDateString(undefined, options)
+    return dateString
   }
   if (dateString) {
     const [year, month, day] = dateString.split(/[-/]/);
