@@ -34,14 +34,14 @@ const MyRetailerCard = ({ placeName, title, brands, accountId, address,selectedS
           <div>
             <div>
               <div className={Styles.RetailerImg}>
-                <img
+                {/* <img
                   className="position-absolute w-100"
                   src={require("./Image/MapLocation.png")}
                   alt="img"
                   style={{
                     zIndex: 0,
                   }}
-                />
+                /> */}
                 <div className="d-flex ps-2 gap-2" style={{ zIndex: 1 }}>
                   <img className={Styles.ControlerImg} src={"/assets/images/LocationPin.svg"} alt="img" />
                   <p

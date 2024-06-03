@@ -137,22 +137,10 @@ const OrderStatusIssues = () => {
     return (<CustomerSupportLayout
         filterNodes={
             <>
-              {(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
-                <FilterItem
-                  minWidth="220px"
-                  label="salesRep"
-                  name="salesRep"
-                  value={selectedSalesRepId}
-                  options={salesRepList.map((salesRep) => ({
-                    label: salesRep.Id == userData.Sales_Rep__c ? 'My Orders ('+salesRep.Name+')' : salesRep.Name,
-                    value: salesRep.Id,
-                  }))}
-                  onChange={(value) => orderListBasedOnRepHandler(value)}
-                />
-              }
               <Filters
                 onChange={handleFilterChange}
                 value={filterValue}
+                monthHide={false}
                 resetFilter={() => {
                   onFilterChange({
                     manufacturer: null,
@@ -169,12 +157,12 @@ const OrderStatusIssues = () => {
         {!loaded ? (
             <Loading />
         ) : (
-            <div>
+            <div className="">
                 <section>
                     <div className="">
                         <div className={Styles.orderMainDiv}>
                             {/* style={{width:'100%'}} */}
-                            <div className={Styles.OrderMainPr} >
+                            <div className={Styles.OrderMainFull} >
                                 <div className={Styles.inorderflex}>
                                     <div>
                                         <h2>Your Orders</h2>

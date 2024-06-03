@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import ProductDetails from "../../pages/productDetails";
 import ErrorProductCard from "./ErrorProductCard";
 import { BiCheck, BiLeftArrow, BiLock, BiRightArrow } from "react-icons/bi";
-import Select from "react-select";
 import ModalPage from "../Modal UI";
 
 const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedStatus, files = [], desc, errorListObj, manufacturerIdObj, accountIdObj, accountList, contactIdObj,setSubject,Actual_Amount__cObj }) => {
@@ -234,9 +233,9 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                     searchPo?.toLowerCase())) : !orderId) || orderId == item.Id) {
                             return (
                                 <div className={` ${Styles.orderStatement} cardHover ${orderId == item.Id ? Styles1.selOrder : ''}`} style={{ paddingBottom: '15px' }} key={index}>
-                                    <label for={`order${item.Id}`} style={{ width: '100%', position: 'relative' }} className={(index % 2 == 0) ? Styles1.cardEnterRight : Styles1.cardEnterLeft}>
+                                    <div style={{position: 'relative' }} className={(index % 2 == 0) ? Styles1.cardEnterRight : Styles1.cardEnterLeft}>
                                         <input type="radio" id={`order${item.Id}`} value={item.Id} onClick={(e) => { orderSelectHandler(e) }} name="order" className={Styles1.inputHolder} checked={item.Id == orderId} />
-                                        <div className={Styles.poNumber} style={item.Id == orderId ? { background: 'linear-gradient(90deg, #FFFFFF 0%,#000000 100%)' } : {}}>
+                                        <label for={`order${item.Id}`}  title={!orderId ? "click to select" : null} className={Styles.poNumber} style={item.Id == orderId ? { background: 'linear-gradient(90deg, #FFFFFF 0%,#000000 100%)' } : {}}>
                                             <div className={Styles1.dFlex}>
                                                 <div className={Styles.poNumb1}>
                                                     <h3>PO Number</h3>
@@ -253,9 +252,9 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                 <h3 style={item.Id == orderId ? { color: '#fff' } : {}}>Ship To </h3>
                                                 <p style={item.Id == orderId ? { color: '#fff' } : {}}>{item.AccountName}</p>
                                             </div>
-                                        </div>
+                                        </label>
 
-                                        <div className={Styles.productDetail} style={{padding:'0 30px'}}>
+                                        <div className={`${Styles.productDetail} ${item.Id == orderId ? Styles.warp : null}`} style={{padding:'0 30px'}}>
                                             <div className={Styles.Prod1}>
                                                 <div className={Styles.ProtuctInnerBox}>
                                                     <div className={Styles.BoxBlack}>
@@ -415,7 +414,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                 </>}
                                             </div>
                                         </div>
-                                    </label>
+                                    </div>
                                     {orderId && <b aria-label="Click Here" title="Click here" onClick={() => { resetForm() }} style={{ cursor: 'pointer', marginLeft: '15px', textDecoration: 'underline' }}>Wrong Order. Want to Change Order?</b>}
                                 </div>
                             )
