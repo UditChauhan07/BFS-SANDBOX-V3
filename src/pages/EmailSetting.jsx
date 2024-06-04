@@ -23,14 +23,13 @@ const EmailSetting = () => {
         getDataHandler()
     }, [])
     const getDataHandler = ()=>{
-        setContactList({ isLoaded: false, data: [] })
         setSearchValue(null)
         setCheckId([])
         GetAuthData().then((user) => {
             if (admins.includes(user.Sales_Rep__c)) {
                 setUser(user)
                 getEmailBlast({ key: user.access_token, Id: user.Sales_Rep__c }).then((list) => {
-                    setContactList({ isLoaded: true, data: list.notifyMail })
+                    setContactList({ isLoaded: true, data: JSON.parse(list.notifyMail) })
                     setNotifyDate(list.notifyDate)
                 }).catch((conErr) => {
                     console.log({ conErr });
@@ -70,7 +69,7 @@ const EmailSetting = () => {
         }
         setCheckId(temp)
     }
-    return null;
+    return <AppLayout/>;
 
     return (<AppLayout>
         {isLoaded ? <div>
@@ -78,7 +77,8 @@ const EmailSetting = () => {
                 <EmailTable data={mailList.slice(
                     (currentPage - 1) * PageSize,
                     currentPage * PageSize
-                )} setSetting={setSetting} setting={setting} setSearchValue={setSearchValue} checkIdObj={{setCheckId,checkId,checkedAll,checked}} notifyDate={notifyDate} getDataHandler={getDataHandler}/>
+
+                )} setSetting={setSetting} setting={setting} setSearchValue={setSearchValue} checkIdObj={{setCheckId,checkId,checkedAll,checked}} notifyDate={notifyDate} getDataHandler={getDataHandler} setCurrentPage={setCurrentPage} setContactList={setContactList}/>
                 {!setting && <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}
