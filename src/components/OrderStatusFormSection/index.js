@@ -9,7 +9,7 @@ import Select from "react-select";
 import { BiUpload } from "react-icons/bi";
 import Loading from "../Loading";
 
-const OrderStatusFormSection = () => {
+const OrderStatusFormSection = ({setSubmitLoad}) => {
   const navigate = useNavigate();
   const [prioritiesList, setPrioritiesList] = useState([]);
   const [contactList, setContactList] = useState([]);
@@ -108,7 +108,7 @@ const OrderStatusFormSection = () => {
       supportTicketData?.orderStatusForm?.contactId ||""
   };
   let [files, setFile] = useState([])
-  const [submitLoad,setSubmitLoad] = useState(false)
+
   function handleChange(e) {
     let tempFile = [];
     let reqfiles = e.target.files;
@@ -139,7 +139,6 @@ const OrderStatusFormSection = () => {
       />
     );
   };
-  if(submitLoad) return <Loading height={"70vh"} />
   return (
     <Formik initialValues={initialValues} validationSchema={OrderStatusSchema} onSubmit={onSubmitHandler}>
       {(formProps) => (
