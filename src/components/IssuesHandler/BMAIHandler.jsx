@@ -30,14 +30,14 @@ const BMAIHandler = ({ reasons, reason, setReason,resetHandler }) => {
               <div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
                 <h2 className={`${Styles.warning} `}>Please Confirm</h2>
                 <p className={`${Styles.warningContent} `} style={{ lineHeight: '22px' }}>
-                How can we help you?
+                Do you want to change the reason?
                 </p>
                 <div className="d-flex justify-content-around ">
                 <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => { setReason(temReason);resetHandler();SetTemReason();SetConfirm(false)}}>
-                    Ok
+                    Yes
                   </button>
                   <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => SetConfirm(false)}>
-                    Cancel
+                    No
                   </button>
                 </div>
               </div>
@@ -48,7 +48,7 @@ const BMAIHandler = ({ reasons, reason, setReason,resetHandler }) => {
           />
         ) : null}
             <div>
-                <p className={Styles.reasonTitle}>Select  a reason for your visit:</p>
+                <p className={Styles.reasonTitle}>How can we help you?</p>
                 <div className={Styles.reasonHolder}>
                     {reasons.map((item) => {
                         return (<div className={`${Styles.reasonCard} ${reason == item.name ? Styles.activeReason : ''}`} title={reason != item.name ? `Click here to Select '${item.name}'` : null} id={reason == item.name ? "reason" : ""} onClick={reason == item.name ? shakeHandler : () => OnChangeHandler(item.name)}>

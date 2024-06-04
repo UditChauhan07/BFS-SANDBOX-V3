@@ -6,16 +6,10 @@ import Loading from "../Loading";
 import AccountInfo from "../IssuesHandler/AccountInfo";
 
 
-const BrandManagementPage = () => {
+const BrandManagementPage = ({ setSubmitForm }) => {
     const navigate = useNavigate();
     const reasons = [{ name: "RTV Request", icon: '/assets/request.png', desc: "" }, { name: "Other", icon: '/assets/Other.png', desc: "" }];
     const [reason, setReason] = useState();
-    const [files, setFile] = useState([]);
-    const [desc, setDesc] = useState();
-    const [salesRepId, setSalesRepId] = useState(null);
-    const [sumitForm, setSubmitForm] = useState(false)
-    const [accountId,setAccountId] = useState();
-    const [contactId,setContactId]= useState();
     const [accountList, setAccountList] = useState([]);
     const resetHandler = () => {
     }
@@ -39,11 +33,11 @@ const BrandManagementPage = () => {
                 console.log({ error });
             });
     }, [])
-    if (sumitForm) return <Loading height={'80vh'} />;
+
     return (
         <section>
             <BMAIHandler reasons={reasons} reason={reason} setReason={setReason} resetHandler={resetHandler} />
-            {reason&&<AccountInfo reason={reason} Accounts={accountList} postSupportAny={postSupportAny} GetAuthData={GetAuthData} setSubmitForm={setSubmitForm} typeId={"0123b000000GfOEAA0"}/>}
+            {reason && <AccountInfo reason={reason} Accounts={accountList} postSupportAny={postSupportAny} GetAuthData={GetAuthData} setSubmitForm={setSubmitForm} typeId={"0123b000000GfOEAA0"} />}
         </section>
     )
 }
