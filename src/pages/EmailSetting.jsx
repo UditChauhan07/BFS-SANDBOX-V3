@@ -69,7 +69,7 @@ const EmailSetting = () => {
         }
         setCheckId(temp)
     }
-    return <AppLayout/>;
+    // return <AppLayout/>;
 
     return (<AppLayout>
         {isLoaded ? <div>

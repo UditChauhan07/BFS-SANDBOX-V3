@@ -9,14 +9,15 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
     const { checkId, setCheckId, checked, checkedAll } = checkIdObj
     const [alert, setAlert] = useState(false)
     const [emailHtml, setEmailHtml] = useState(null);
+    const [mailSend, setMailSend] = useState(false)
     const resentHandler = () => {
         if (checkId.length) {
             setContactList({ isLoaded: false, data: [] })
             resetEmailBlast({ key: "8XoSdoqMZ2dAiqh", ids: JSON.stringify(checkId) }).then((res) => {
                 console.log({ res });
                 resentEmailBlast({ key: "8XoSdoqMZ2dAiqh", ids: JSON.stringify(checkId) }).then((result) => {
-                    console.log({ result });
-                    getDataHandler()
+                    setMailSend(true);
+                    // getDataHandler()
                 }).catch((err1) => {
                     console.log({ err1 });
                 })
@@ -52,7 +53,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
             setAlert(true)
         }
     }
-  
+
     return (
         <div>
             <ModalPage
@@ -72,6 +73,25 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                 }
                 onClose={() => {
                     setAlert(false);
+                }}
+            />
+            <ModalPage
+                open={mailSend}
+                content={
+                    <div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
+                        <h2 className={`${Styles.warning} `}>Mail Send.</h2>
+                        <p className={`${Styles.warningContent} `} style={{ lineHeight: '22px' }}>
+                            Mail Send to Selected Contact. Please refresh list to get queue data.
+                        </p>
+                        <div className="d-flex justify-content-around ">
+                            <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setMailSend(false)}>
+                                Ok
+                            </button>
+                        </div>
+                    </div>
+                }
+                onClose={() => {
+                    setMailSend(false);
                 }}
             />
             <ModalPage
@@ -141,7 +161,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                                         <td>{contact.ContactName}</td>
                                         <td>{contact.ContactEmail}</td>
                                         <td>{DateConvert(contact.Date, true)}</td>
-                                        <td>{contact.mailStatus == 1 ? <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#90EE90] text-center rounded-lg text-[#ffffff] text-sm cursor">Send</p> : contact.mailStatus == 2 ? <p className="bg-[#FF474C] text-center rounded-lg text-[#ffffff] text-sm">Failed</p> : <p className="bg-[#FFFFED] text-center rounded-lg text-[#000] text-sm/[13px]">Not Send</p>}</td>
+                                        <td>{contact.mailStatus == 1 ? <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#90EE90] text-center rounded-lg text-[#ffffff] text-sm cursor">Send</p> : contact.mailStatus == 2 ? <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#FF474C] text-center rounded-lg text-[#ffffff] text-sm">Failed</p> : <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#FFFFED] text-center rounded-lg text-[#000] text-sm/[13px]">Not Send</p>}</td>
                                     </tr>
                                 )
                             })}
