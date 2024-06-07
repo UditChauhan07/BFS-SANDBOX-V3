@@ -10,7 +10,7 @@ import ModalPage from "../../components/Modal UI";
 import styles from "../../components/Modal UI/Styles.module.css";
 import { CloseButton, SearchIcon } from "../../lib/svg";
 import YearlyComparisonReportTable from "../../components/comparison report table/YearlyComparisonReport";
-import { getYearlyComparison } from "../../lib/store";
+import { getYearlyComparison, sortArrayHandler } from "../../lib/store";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 
@@ -240,6 +240,7 @@ const YearlyComparisonReport = () => {
       year: initialValues.year,
       manufacturerId: initialValues.ManufacturerId__c,
     });
+    sortArrayHandler(result?.data||[],g=>g?.AccountName)
     setApiData(result.data);
     setFilter(initialValues);
     setIsLoading(false);
@@ -248,6 +249,7 @@ const YearlyComparisonReport = () => {
   const sendApiCall = async () => {
     setIsLoading(true);
     const result = await getYearlyComparison({ ...filter });
+    sortArrayHandler(result||[],g=>g?.AccountName)
     setApiData(result);
     setIsLoading(false);
   };
