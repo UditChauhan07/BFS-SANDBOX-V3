@@ -12,6 +12,7 @@ import ModalPage from "../../components/Modal UI";
 import styles from "../../components/Modal UI/Styles.module.css";
 import { CloseButton, SearchIcon } from "../../lib/svg";
 import Styles from "./index.module.css";
+import { sortArrayHandler } from "../../lib/store";
 
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
@@ -33,7 +34,7 @@ const ComparisonReport = () => {
   const [apiData, setApiData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [status, setstatus] = useState(1)
-
+  sortArrayHandler(apiData?.data,g=>g?.AccountName)
   //csv Data
   let csvData = [];
   if (apiData?.data?.length) {

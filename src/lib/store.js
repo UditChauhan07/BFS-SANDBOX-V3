@@ -42,6 +42,12 @@ export function ShareDrive(data, remove = false) {
     return JSON.parse(strData);
   }
 }
+export const sortArrayHandler = (arr, getter, order = 'asc') =>
+  arr.sort(
+    order === 'desc'
+      ? (a, b) => getter(b).localeCompare(getter(a))
+      : (a, b) => getter(a).localeCompare(getter(b))
+  );
 
 export async function AuthCheck() {
   if (JSON.parse(localStorage.getItem("Api Data"))?.data) {

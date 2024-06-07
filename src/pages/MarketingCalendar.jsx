@@ -51,7 +51,8 @@ const MarketingCalendar = () => {
         setIsloaed(true)
         setTimeout(() => {
 
-          var element = document.getElementById("May");
+          let getMonth = new Date().getMonth();
+          var element = document.getElementById(monthNames[getMonth]);
           if (element) {
             element.scrollIntoView({ behavior: "smooth", block: "center" });
           }
