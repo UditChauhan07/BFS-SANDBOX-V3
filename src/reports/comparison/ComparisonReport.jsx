@@ -34,7 +34,7 @@ const ComparisonReport = () => {
   const [apiData, setApiData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [status, setstatus] = useState(1)
-  sortArrayHandler(apiData?.data,g=>g?.AccountName)
+  sortArrayHandler(apiData?.data||[],g=>g?.AccountName)
   //csv Data
   let csvData = [];
   if (apiData?.data?.length) {
