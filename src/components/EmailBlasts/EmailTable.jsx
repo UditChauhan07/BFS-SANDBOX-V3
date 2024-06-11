@@ -53,6 +53,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
             setAlert(true)
         }
     }
+    // console.log({aaa:emailHtml.split("?oauth_token="),ll:"00D30000001G9fh!AQEAQArkQiPdzqws050dRLspTi38Vyo_JOY0ZHZ5uuQYJ_BZyDWSKniMFCCOIQvIbTMRzhsCEC_dlWR1tNodrQ7e5pL5_oAV".length});
 
     return (
         <div>

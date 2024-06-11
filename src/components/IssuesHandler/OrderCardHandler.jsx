@@ -1,4 +1,4 @@
-import { ShareDrive, getProductImageAll, months, originAPi } from "../../lib/store";
+import { GetAuthData, ShareDrive, getProductImageAll, getProductList, months, originAPi } from "../../lib/store";
 import Styles from "../OrderList/style.module.css"
 import Styles1 from "./OrderCardHandler.module.css"
 import { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import ProductDetails from "../../pages/productDetails";
 import ErrorProductCard from "./ErrorProductCard";
 import { BiCheck, BiLeftArrow, BiLock, BiRightArrow } from "react-icons/bi";
 import ModalPage from "../Modal UI";
+import { RxEyeOpen } from "react-icons/rx";
 
 const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedStatus, files = [], desc, errorListObj, manufacturerIdObj, accountIdObj, accountList, contactIdObj,setSubject,Actual_Amount__cObj }) => {
     const { setOrderConfirmed, orderConfirmed } = orderConfirmedStatus || null;
@@ -21,6 +22,10 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
     const [productDetailId, setProductDetailId] = useState(null)
     const [errorProductCount, setErrorProductCount] = useState(0)
     const [contacts, setContacts] = useState([])
+    const [showProductList, setShowProductList] = useState(false)
+    const [productList, setProductList] = useState([]);
+    const [searchItem, setSearchItem] = useState(null);
+
     const getOrderDetails = ({ order }) => {
         if (order) {
             let data = ShareDrive();
@@ -66,6 +71,73 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
             let accountItemID = null;
             orders.map((item) => {
                 if (e.target.value == item.Id) {
+                    if (reason == "Product Overage") {
+                        let opcs = []
+                        item.OpportunityLineItems?.records?.map((e) => {
+                            opcs.push(e.Product2Id)
+                        })
+                        GetAuthData().then((user) => {
+                            let rawData = {
+                                key: user?.x_access_token,
+                                Sales_Rep__c: user.Sales_Rep__c,
+                                Manufacturer: item.ManufacturerId__c,
+                                AccountId__c: item.AccountId,
+                            }
+                            setProductList([])
+                            setShowProductList(false)
+                            getProductList({ rawData }).then((productRes) => {
+                                let productCode = "";
+                                let temp = []
+                                productRes?.data?.records?.map((product, index) => {
+                                    productCode += `'${product?.ProductCode}'`
+                                    if (productRes?.data?.records?.length - 1 != index) productCode += ', ';
+                                    if (!opcs.includes(product.Id)) {
+                                        let pDiscount = 0;
+                                        let listPrice = Number(product.usdRetail__c.replace('$', '').replace(',', ''));
+                                        if (product.Category__c === "TESTER") {
+                                            pDiscount = productRes?.discount?.testerMargin || 0
+                                        } else if (product.Category__c === "Samples") {
+                                            pDiscount = productRes?.discount?.sample || 0
+                                        } else {
+                                            pDiscount = productRes?.discount?.margin || 0
+                                        }
+                                        let salesPrice = (+listPrice - (pDiscount / 100) * +listPrice).toFixed(2)
+                                        temp.push({
+                                            Id: index + 1,
+                                            Name: product.Name,
+                                            Product2Id: product.Id,
+                                            ProductCode: product.ProductCode,
+                                            TotalPrice: salesPrice
+                                        })
+                                    }
+                                })
+                                setProductList(temp)
+                                let data = ShareDrive();
+                                if (!data) {
+                                    data = {};
+                                }
+                                getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
+                                    if (res) {
+                                        if (data[item.ManufacturerId__c]) {
+                                            data[item.ManufacturerId__c] = { ...data[item.ManufacturerId__c], ...res }
+                                        } else {
+                                            data[item.ManufacturerId__c] = res
+                                        }
+                                        ShareDrive(data)
+                                        setProductImage({ isLoaded: true, images: res });
+                                    } else {
+                                        setProductImage({ isLoaded: true, images: {} });
+                                    }
+                                }).catch((err) => {
+                                    console.log({ err });
+                                })
+                            }).catch((productErr) => {
+                                console.log({ productErr });
+                            })
+                        }).catch((err) => {
+                            console.log({ err });
+                        })
+                    }
                     getOrderDetails({ order: item })
                     setManufacturerId(item.ManufacturerId__c)
                     setAccountId(item.AccountId)
@@ -216,7 +288,9 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
             }}
           />
         ) : null}
-        <p className={Styles1.reasonTitle}><span style={{ cursor: "pointer" }} onClick={() => shakeHandler()}>Select the order you want to handle:</span> {!orderId && reason && <input type="text" placeholder='Search Order' autoComplete="off" className={Styles1.searchBox} title="You can search by PO Number, Account Name & Brand for last 3 month Orders" onKeyUp={(e) => { setSearchPO(e.target.value) }} id="poSearchInput" style={{width:'120px'}} />} {!reason && <BiLock id="lock1" style={{ float: 'right' }} />}</p>
+        <p className={Styles1.reasonTitle}><span style={{ cursor: "pointer" }} onClick={() => shakeHandler()}>Select the order you want to handle:</span> {!orderId && reason && <input type="text" placeholder='Search Order' autoComplete="off" className={Styles1.searchBox} title="You can search by PO Number, Account Name & Brand for last 3 month Orders" onKeyUp={(e) => { setSearchPO(e.target.value) }} id="poSearchInput" style={{width:'120px'}} />}{ reason && orderId ? reason == "Product Overage" && showProductList ?
+            <input type="text" placeholder='Search Product' autoComplete="off" className={Styles1.searchBox} title="You can search Product by Name,SKU or UPC" id="poductInput" onKeyUp={(e) => { setSearchItem(e.target.value) }} style={{ width: '120px' }} />:<button className={Styles1.btnHolder} onClick={() => setShowProductList(true)}><RxEyeOpen />&nbsp; All Products</button>
+        :null} {!reason && <BiLock id="lock1" style={{ float: 'right' }} />}</p>
         {reason && reason != "Update Account Info" &&
             <div className={`${Styles1.orderListHolder} ${Styles1.openListHolder}`} style={(orderId && (!searchPo || searchPo == "")) ? { overflow: 'unset', height: 'auto', border: 0 } : {}}>
                 <div>
@@ -287,7 +361,20 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                                                 return (<ErrorProductCard Styles1={Styles1} productErrorHandler={productErrorHandler} errorList={errorList} setProductDetailId={setProductDetailId} product={ele} productImage={productImage} reason={reason} AccountName={item.AccountName} ErrorProductQtyHandler={ErrorProductQtyHandler} readOnly={orderConfirmed} />)
                                                                             }
                                                                         })}
-
+{reason == "Product Overage" ? showProductList ?
+                                                                            productList.map((ele, index) => {
+                                                                                if (!searchItem || (ele.ProductCode?.toLowerCase().includes(
+                                                                                    searchItem?.toLowerCase()) || ele.Name?.toLowerCase().includes(
+                                                                                        searchItem?.toLowerCase()) || ele.ProductUPC__c?.toLowerCase().includes(
+                                                                                            searchItem?.toLowerCase()))) {
+                                                                                    return (
+                                                                                        <ErrorProductCard Styles1={Styles1} productErrorHandler={productErrorHandler} errorList={errorList} setProductDetailId={setProductDetailId} product={ele} productImage={productImage} reason={reason} AccountName={item.AccountName} ErrorProductQtyHandler={ErrorProductQtyHandler}
+                                                                                            readOnly={orderConfirmed} />
+                                                                                    )
+                                                                                }
+                                                                            }
+                                                                            ) : <p className={Styles1.listHolder} style={{display:'none'}} onClick={() => setShowProductList(true)}><RxEyeOpen />&nbsp; Product List</p>
+                                                                            : null}
                                                                 </tbody>
                                                             </table>
                                                         </>) : (

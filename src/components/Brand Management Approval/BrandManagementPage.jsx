@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BMAIHandler from "../IssuesHandler/BMAIHandler";
-import { GetAuthData, getAllAccount, postSupportAny, uploadFileSupport } from "../../lib/store";
+import { GetAuthData, postSupportAny } from "../../lib/store";
 import { useNavigate } from "react-router-dom";
-import Loading from "../Loading";
 import AccountInfo from "../IssuesHandler/AccountInfo";
 
 
-const BrandManagementPage = ({ setSubmitForm }) => {
+const BrandManagementPage = ({ accountList,setSubmitForm }) => {
     const navigate = useNavigate();
     const reasons = [{ name: "RTV Request", icon: '/assets/request.png', desc: "" }, { name: "Other", icon: '/assets/Other.png', desc: "" }];
     const [reason, setReason] = useState();
-    const [accountList, setAccountList] = useState([]);
+
     const resetHandler = () => {
     }
     function sortingList(data) {
@@ -19,20 +18,7 @@ const BrandManagementPage = ({ setSubmitForm }) => {
         });
         return data;
     }
-    useEffect(() => {
-        GetAuthData().then((user) => {
-            getAllAccount({ user })
-                .then((accounts) => {
-                    setAccountList(accounts);
-                })
-                .catch((actError) => {
-                    console.error({ actError });
-                });
-        })
-            .catch((error) => {
-                console.log({ error });
-            });
-    }, [])
+
 
     return (
         <section>

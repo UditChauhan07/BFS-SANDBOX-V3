@@ -9,7 +9,7 @@ import Select from "react-select";
 import { BiUpload } from "react-icons/bi";
 import Loading from "../Loading";
 
-const OrderStatusFormSection = ({setSubmitLoad}) => {
+const OrderStatusFormSection = ({ setSubmitLoad }) => {
   const navigate = useNavigate();
   const [prioritiesList, setPrioritiesList] = useState([]);
   const [contactList, setContactList] = useState([]);
@@ -67,11 +67,12 @@ const OrderStatusFormSection = ({setSubmitLoad}) => {
       .catch((error) => {
         console.error({ error });
       });
-    console.log("submitted", supportTicketData);
 
     GetAuthData()
       .then((user) => {
-        supportTicketData.orderStatusForm.salesRepId = user.Sales_Rep__c;
+        if (!supportTicketData.orderStatusForm.salesRepId) {
+          supportTicketData.orderStatusForm.salesRepId = user.Sales_Rep__c;
+        }
         supportTicketData.key = user.x_access_token;
         postSupport({ rawData: supportTicketData })
           .then((response) => {
@@ -105,12 +106,12 @@ const OrderStatusFormSection = ({setSubmitLoad}) => {
   const initialValues = {
     description: supportTicketData?.orderStatusForm?.desc || "",
     contact:
-      supportTicketData?.orderStatusForm?.contactId ||""
+      supportTicketData?.orderStatusForm?.contactId || ""
   };
   let [files, setFile] = useState([])
 
   function handleChange(e) {
-    let tempFile = [];
+    let tempFile = [...files];
     let reqfiles = e.target.files;
     if (reqfiles) {
       if (reqfiles.length > 0) {
@@ -125,6 +126,13 @@ const OrderStatusFormSection = ({setSubmitLoad}) => {
     }
     setFile(tempFile);
   }
+
+  const fileRemoveHandler = (index)=>{
+    let tempFile = [...files];
+    tempFile.splice(index,1)
+    setFile(tempFile);
+  }
+
   const SearchableSelect = (FieldProps) => {
     return (
       <Select
@@ -162,9 +170,12 @@ const OrderStatusFormSection = ({setSubmitLoad}) => {
               <input type="file" style={{ width: 0, height: 0 }} id="attachement" onChange={handleChange} multiple accept="image/*" />
               <div className={styles.imgHolder}>
                 {files.map((file, index) => (
-                  <a href={file?.preview} target="_blank" title="Click to Download">
-                    <img src={file?.preview} key={index} alt={file?.preview} />
-                  </a>
+                  <div style={{ position: 'relative' }}>
+                    <span style={{ position: 'absolute', right: '5px', top: '-5px', color: '#000', zIndex: 1, cursor: 'pointer', fontSize: '18px' }} onClick={()=>{fileRemoveHandler(index)}}>x</span>
+                    <a href={file?.preview} target="_blank" title="Click to Download">
+                      <img src={file?.preview} key={index} alt={file?.preview} />
+                    </a>
+                  </div>
                 ))}
               </div>
             </div>

@@ -36,6 +36,7 @@ const Filters = ({ value, onChange, resetFilter,monthHide=true }) => {
       <FilterItem
         label="MANUFACTURER"
         name="MANUFACTURER"
+          minWidth="220px"
         value={value.manufacturer}
         options={
           Array.isArray(manufacturerData?.data)
