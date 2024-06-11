@@ -118,6 +118,13 @@ const AccountInfo = ({ reason, typeId, Accounts, postSupportAny, GetAuthData, se
         }
         setFile(tempFile);
     }
+
+    const fileRemoveHandler = (index) => {
+        let tempFile = [...files];
+        tempFile.splice(index, 1)
+        setFile(tempFile);
+    }
+
     return (
         <Formik initialValues={initialValues} validationSchema={AccountInfoValidation} onSubmit={onSubmitHandler}>
             {(formProps) => (
@@ -147,9 +154,12 @@ const AccountInfo = ({ reason, typeId, Accounts, postSupportAny, GetAuthData, se
                             <input type="file" style={{ width: 0, height: 0 }} id="attachement" onChange={handleChange} multiple accept="image/*" />
                             <div className={styles.imgHolder}>
                                 {files.map((file, index) => (
-                                    <a href={file?.preview} target="_blank" title="Click to Download">
-                                        <img src={file?.preview} key={index} alt={file?.preview} />
-                                    </a>
+                                    <div style={{ position: 'relative' }}>
+                                        <span style={{ position: 'absolute', right: '5px', top: '-5px', color: '#000', zIndex: 1, cursor: 'pointer', fontSize: '18px' }} onClick={() => { fileRemoveHandler(index) }}>x</span>
+                                        <a href={file?.preview} target="_blank" title="Click to Download">
+                                            <img src={file?.preview} key={index} alt={file?.preview} />
+                                        </a>
+                                    </div>
                                 ))}
                             </div>
                         </div>

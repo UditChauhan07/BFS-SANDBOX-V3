@@ -9,7 +9,7 @@ import OrderListContent from "./components/OrderList/OrderListContent";
 import { FilterItem } from "./components/FilterItem";
 import { useEffect, useMemo, useState } from "react";
 
-let PageSize = 10;
+let PageSize = 5;
 const OrderStatusIssues = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [shipByText, setShipByText] = useState("");
@@ -116,8 +116,7 @@ const OrderStatusIssues = () => {
             user: {
                 key,
                 Sales_Rep__c,
-            },
-            month: filterValue.month,
+            }
         })
             .then((order) => {
                 let sorting = sortingList(order);
@@ -137,25 +136,38 @@ const OrderStatusIssues = () => {
     return (<CustomerSupportLayout
         filterNodes={
             <>
-              <Filters
-                onChange={handleFilterChange}
-                value={filterValue}
-                monthHide={false}
-                resetFilter={() => {
-                  onFilterChange({
-                    manufacturer: null,
-                    month: "",
-                    search: "",
-                  });
-                  setSearchShipBy("");
-                  setSelectedSalesRepId(userData.Sales_Rep__c);
-                }}
-              />
+                {(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
+                    <FilterItem
+                        minWidth="220px"
+                        label="salesRep"
+                        name="salesRep"
+                        value={selectedSalesRepId}
+                        options={salesRepList.map((salesRep) => ({
+                            label: salesRep.Id == userData.Sales_Rep__c ? 'My Orders (' + salesRep.Name + ')' : salesRep.Name,
+                            value: salesRep.Id,
+                        }))}
+                        onChange={(value) => orderListBasedOnRepHandler(value)}
+                    />
+                }
+                <Filters
+                    onChange={handleFilterChange}
+                    value={filterValue}
+                    monthHide={false}
+                    resetFilter={() => {
+                        onFilterChange({
+                            manufacturer: null,
+                            month: "",
+                            search: "",
+                        });
+                        setSearchShipBy("");
+                        setSelectedSalesRepId(userData.Sales_Rep__c);
+                    }}
+                />
             </>
-          }
+        }
     >
         {!loaded ? (
-            <Loading />
+            <Loading height={'50vh'} />
         ) : (
             <div className="">
                 <section>
