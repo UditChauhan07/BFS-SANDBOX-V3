@@ -103,7 +103,7 @@ const AccountInfo = ({ reason, typeId, Accounts, postSupportAny, GetAuthData, se
             });
     }
     function handleChange(e) {
-        let tempFile = [];
+        let tempFile = [...files];
         let reqfiles = e.target.files;
         if (reqfiles) {
             if (reqfiles.length > 0) {
