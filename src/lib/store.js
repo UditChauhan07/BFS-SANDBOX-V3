@@ -834,6 +834,7 @@ export async function getYearlyComparison({ year, ManufacturerId__c }) {
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
+  console.log({data});
   if (data.status == 300) {
     DestoryAuth();
   } else {
