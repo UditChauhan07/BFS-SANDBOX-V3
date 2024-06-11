@@ -35,7 +35,7 @@ function OrderListContent({ data,hideDetailedShow=false }) {
   const generateSuportHandler = ({ data, value }) => {
     let beg = {
       orderStatusForm: {
-        salesRepId: null,
+        salesRepId: data?.OwnerId,
         reason: value,
         contactId: null,
         accountId: data.AccountId,
