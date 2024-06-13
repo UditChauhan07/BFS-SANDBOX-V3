@@ -152,7 +152,7 @@ function LaunchCalendar({ productList, brand, month }) {
                                     </div>
                                   </div>
                                   <div className="launchBrand">
-                                    <img className="img-fluid" src={"\\assets\\images\\brandImage\\" + product.ManufacturerId__c + ".png"} alt={`${product.name} logo`} />
+                                    <img className="img-fluid" src={"\\assets\\images\\brandImage\\" + product.ManufacturerId__c + ".png"} alt={`${product.name} logo`} style={{maxWidth:'200px',height:'auto'}}/>
                                     {/* {console.log(product.ManufacturerId__c)} */}
                                   </div>
                                 </div>
