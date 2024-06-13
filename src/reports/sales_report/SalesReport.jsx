@@ -33,6 +33,7 @@ const SalesReport = () => {
   const [salesRepList, setSalesRepList] = useState([]);
   const [yearForTableSort, setYearForTableSort] = useState(2024);
   const [exportToExcelState, setExportToExcelState] = useState(false);
+  const [dateFilter,setDateFilter]= useState("Created Date")
   const filteredSalesReportData = useMemo(() => {
     let filtered = salesReportData.filter((ele) => {
       return !manufacturerFilter || !ele.ManufacturerName__c.localeCompare(manufacturerFilter);
@@ -285,6 +286,13 @@ item.Status === "Active Account" ));
               value={yearFor}
               options={yearList}
               onChange={(value) => setYearFor(value)}
+            />
+             <FilterItem
+              label="date"
+              name="date"
+              value={dateFilter}
+              options={[{label:"Created Date",value:"Created Date"},{label:"Closed Date",value:"Closed Date"}]}
+              onChange={(value) => setDateFilter(value)}
             />
             <button onClick={() => sendApiCall()} className="border px-2 py-1 leading-tight d-grid"> <SearchIcon fill="#fff" width={20} height={20} />
               <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>search</small>
