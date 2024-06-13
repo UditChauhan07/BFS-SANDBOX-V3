@@ -79,21 +79,21 @@ const TargetReport = () => {
     }
     if (searchSaleBy) {
       filtered = filtered.filter((item) => {
-        if (item.SalesRepName?.toLowerCase().includes(searchSaleBy?.toLowerCase())) {
+        if (item.SalesRepName?.toLowerCase().match(searchSaleBy?.toLowerCase())?.length) {
+          // if (item.SalesRepName?.toLowerCase().includes(searchSaleBy?.toLowerCase())) {
           return item;
         }
       });
-
-      if (activeAccounts === "Active Account") {
-        filtered = filtered?.filter((item) => {
-          if (item.Status === "Active Account") {
-
-          } else if (activeAccounts === "All Account") {
-            return filtered;
-          }
-        })
-      }
     }
+    filtered = filtered?.filter((item) => {
+      if (activeAccounts === "Active Account") {
+        if (item.Status === "Active") {
+          return item;
+        }
+      } else if (activeAccounts === "All Account") {
+        return item;
+      }
+    })
     //     if (activeAccounts === "Active Account") {
     //       filtered = filtered?.filter((ele) => 
     //      ele.Orders?.some((item) => 
@@ -330,6 +330,7 @@ const TargetReport = () => {
       return name;
     }
   };
+  console.log({ filteredTargetData, salesRepList });
   const exportToExcel = () => {
     setExportToExcelState(false);
     const ws = XLSX.utils.json_to_sheet(csvData());
@@ -858,7 +859,7 @@ const TargetReport = () => {
                       TOTAL
                     </td>
                     <td className={`${Styles.lastRow}  ${Styles.lastRowMonth}  ${Styles.stickyLastRow}`} >
-                    </td>                 
+                    </td>
                     <td className={`${Styles.lastRow}  ${Styles.lastRowMonth}  ${Styles.stickyLastRow}`}>
                     </td>
                     <td className={`${Styles.lastRow}  ${Styles.lastRowMonth}  ${Styles.stickyLastRow}`}>

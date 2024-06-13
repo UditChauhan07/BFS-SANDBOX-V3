@@ -48,7 +48,7 @@ const TopProductCard = ({ data, productImages, to = null }) => {
                     onClick={() => {
                       setProductDetailId(product.Id);
                     }}
-                    src={productImages?.images?.[product.ProductCode]?.ContentDownloadUrl ?? "/assets/images/makeup1.png"}
+                    src={productImages?.images?.[product.ProductCode]?.ContentDownloadUrl ?? "/assets/images/dummy.png"}
                   />
                      </div>
                         </div>
