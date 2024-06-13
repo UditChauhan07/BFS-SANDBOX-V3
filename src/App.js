@@ -49,17 +49,12 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/sales-report" element={<SalesReport />}></Route>
-            <Route path="/order-list" element={<OrderListPage />}></Route>
             <Route path="/newness-report" element={<NewnessReport />}></Route>
             <Route path="/Target-Report" element={<TargetReport />}></Route>
-            <Route
-              path="/comparison-report"
-              element={<ComparisonReport />}
-            ></Route>
-            <Route
-              path="/comparison"
-              element={<YearlyComparisonReport />}
-            ></Route>
+            <Route path="/comparison-report" element={<ComparisonReport />}></Route>
+            <Route path="/comparison" element={<YearlyComparisonReport />}></Route>
+            
+            <Route path="/order-list" element={<OrderListPage />}></Route>
             <Route path="/testing" element={<Testing />}></Route>
             <Route path="/top-products" element={<TopProducts />}></Route>
             <Route path="/login" element={<Login />}></Route>

@@ -6,12 +6,15 @@ import Pagination from "../Pagination/Pagination";
 import { Link } from "react-router-dom";
 import ModalPage from "../Modal UI";
 import StylesModal from "../Modal UI/Styles.module.css";
+import Loading from "../Loading";
 function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
   const [products, setProducts] = useState(productList);
   const [modalShow, setModalShow] = useState(false);
   const [productDetailId, setProductDetailId] = useState();
 
   const [isEmpty, setIsEmpty] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [loadEffect,setEffect]=useState(0)
   // ...............
   const [currentPage, setCurrentPage] = useState(1);
   const [filterData, setFilterData] = useState([]);
@@ -43,8 +46,8 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
     });
   }, [brand]);
 
-
   useEffect(() => {
+    if (loadEffect) setLoaded(true)
     if (!month) {
       setFilterData(products);
     } else {
@@ -67,7 +70,12 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
 
       setFilterData(newValues);
     }
-  }, [month, brand]);
+    setEffect(loadEffect+1)
+    setTimeout(() => {
+      setLoaded(false)
+    }, 500);
+  }, [month, brand, currentPage]);
+
 
   return (
     <>
@@ -100,7 +108,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
       <section>
         <div>
           <div className={Styles.dGrid}>
-            {allOrdersEmpty ? (
+            {loaded ? <div style={{ width: '100%' }}> <Loading height={'50%'} /></div> : allOrdersEmpty ? (
               <div className={`${Styles.NodataContent} `}>No data found</div>
             ) :
               pagination?.map((month, index) => {
@@ -166,13 +174,14 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
         </div>
         <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false} />
       </section>
-      <Pagination
-        className="pagination-bar"
-        currentPage={currentPage || 0}
-        totalCount={filterData?.flatMap((month) => month?.content)?.length || 0}
-        pageSize={PageSize || 0}
-        onPageChange={(page) => setCurrentPage(page)}
-      />
+      {!loaded &&
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage || 0}
+          totalCount={filterData?.flatMap((month) => month?.content)?.length || 0}
+          pageSize={PageSize || 0}
+          onPageChange={(page) => setCurrentPage(page)}
+        />}
     </>
   );
 }
