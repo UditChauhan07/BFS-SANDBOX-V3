@@ -33,7 +33,7 @@ const SalesReport = () => {
   const [salesRepList, setSalesRepList] = useState([]);
   const [yearForTableSort, setYearForTableSort] = useState(2024);
   const [exportToExcelState, setExportToExcelState] = useState(false);
-  const [dateFilter,setDateFilter]= useState("Created Date")
+  const [dateFilter,setDateFilter]= useState("Created-Date")
   const filteredSalesReportData = useMemo(() => {
     let filtered = salesReportData.filter((ele) => {
       return !manufacturerFilter || !ele.ManufacturerName__c.localeCompare(manufacturerFilter);
@@ -209,10 +209,10 @@ item.Status === "Active Account" ));
   };
   const navigate = useNavigate();
 
-  const getSalesData = async (yearFor) => {
+  const getSalesData = async (yearFor,dateFilter) => {
     setIsLoading(true);
     setYearForTableSort(yearFor);
-    const result = await salesReportApi.salesReportData({ yearFor });
+    const result = await salesReportApi.salesReportData({ yearFor,dateFilter });
     let salesListName = [];
     let salesList = [];
     let manuIds = [];
@@ -248,7 +248,7 @@ item.Status === "Active Account" ));
   useEffect(() => {
     const userData = localStorage.getItem("Name");
     if (userData) {
-      getSalesData(yearFor);
+      getSalesData(yearFor,dateFilter);
     } else {
       navigate("/");
     }
@@ -259,7 +259,7 @@ item.Status === "Active Account" ));
     // getSalesData(yearFor);
     // setSearchBy("");
     // setSearchBySalesRep("");
-    getSalesData(yearFor);
+    getSalesData(yearFor,dateFilter);
   };
   let yearList = [
     { value: 2024, label: 2024 },
@@ -291,7 +291,7 @@ item.Status === "Active Account" ));
               label="date"
               name="date"
               value={dateFilter}
-              options={[{label:"Created Date",value:"Created Date"},{label:"Closed Date",value:"Closed Date"}]}
+              options={[{label:"Created Date",value:"Created-Date"},{label:"Closed Date",value:"Closed-Date"}]}
               onChange={(value) => setDateFilter(value)}
             />
             <button onClick={() => sendApiCall()} className="border px-2 py-1 leading-tight d-grid"> <SearchIcon fill="#fff" width={20} height={20} />
