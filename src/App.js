@@ -98,7 +98,7 @@ function App() {
             <Route path="/customerService" element={<CustomerService />}></Route>
             <Route path="/orderStatus" element={<OrderStatusIssues />}></Route>
             <Route path="/orderStatusForm" element={<OrderStatusForm />}></Route>
-            <Route path="/emailSetting" element={<EmailSetting />}></Route>
+            {/* <Route path="/emailSetting" element={<EmailSetting />}></Route> */}
             <Route path="/brandManagementApproval" element={<BMAIssues />}></Route>
             
             {/* 1234 */}
