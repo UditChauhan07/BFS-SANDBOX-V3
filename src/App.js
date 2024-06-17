@@ -37,6 +37,7 @@ import CustomerService from "./pages/CustomerService";
 import OrderStatusIssues from "./OrderStatusIssues";
 import EmailSetting from "./pages/EmailSetting";
 import BMAIssues from "./pages/BMAIssues";
+import PageNotFound from "./pages/PageNotFound";
 
 
 function App() {
@@ -98,8 +99,9 @@ function App() {
             <Route path="/customerService" element={<CustomerService />}></Route>
             <Route path="/orderStatus" element={<OrderStatusIssues />}></Route>
             <Route path="/orderStatusForm" element={<OrderStatusForm />}></Route>
-            {/* <Route path="/emailSetting" element={<EmailSetting />}></Route> */}
+            <Route path="/emailSetting" element={<EmailSetting />}></Route>
             <Route path="/brandManagementApproval" element={<BMAIssues />}></Route>
+            <Route path="*" element={<PageNotFound />}></Route>
             
             {/* 1234 */}
           </Routes>

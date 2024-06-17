@@ -59,7 +59,6 @@ function MyBagFinal() {
             data[bagValue.Manufacturer.id] = {};
           }
           if (Object.values(data[bagValue.Manufacturer.id]).length > 0) {
-            console.log({ aaas: Object.values(data[bagValue.Manufacturer.id]).length });
             setProductImage({ isLoaded: true, images: data[bagValue.Manufacturer.id] })
           } else {
             setProductImage({ isLoaded: false, images: {} })
@@ -75,7 +74,6 @@ function MyBagFinal() {
           })
           getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
             if (res) {
-              console.log({ res });
               if (data[bagValue.Manufacturer.id]) {
                 data[bagValue.Manufacturer.id] = { ...data[bagValue.Manufacturer.id], ...res }
               } else {
