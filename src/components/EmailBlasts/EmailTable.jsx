@@ -138,7 +138,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                         </div>
                     </div>
                     <table style={{ width: '100%' }}>
-                        <thead className={Styles.table}>
+                        <thead className={Styles.table} style={{ position: 'sticky',top:'265px'}}>
                             <tr>
                                 <th style={{ width: '200px' }}>Account Name</th>
                                 <th style={{ width: '200px' }}>Brand Name</th>
