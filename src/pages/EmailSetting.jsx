@@ -29,7 +29,7 @@ const EmailSetting = () => {
             if (admins.includes(user.Sales_Rep__c)) {
                 setUser(user)
                 getEmailBlast({ key: user.access_token, Id: user.Sales_Rep__c }).then((list) => {
-                    let contactList = sortArrayHandler(JSON.parse(list.notifyMail || "[]") || [], g => g?.updatedAt)
+                    let contactList = sortArrayHandler(JSON.parse(list.notifyMail || "[]") || [], g => g?.updatedAt,'desc')
                     setContactList({ isLoaded: true, data: contactList })
                     setNotifyDate(list.notifyDate)
                 }).catch((conErr) => {
