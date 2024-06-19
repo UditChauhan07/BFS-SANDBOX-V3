@@ -87,14 +87,14 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                 content={<div className="d-flex flex-column gap-3"  style={{ maxWidth: '700px' }}>
                     <h2 className={`${Styles.warning} `}>Confirm</h2>
                     <p className={`${Styles.warningContent} `}>
-                        Are you Sure you want to {confirm == 1 ? <b>Delete</b> : confirm == 2 ? <b>Add to Queue</b> : confirm == 3 ? <b>Re-send mail to</b> : null} selected contacts?<br/> This action cannot be undone.
+                        Are you Sure you want to {confirm == 1 ? <b>Delete</b> : confirm == 2 ? <b>Add to Queue</b> : confirm == 3 ? <b>Re-send mail to</b> : null} selected contact?<br/> This action cannot be undone.
                     </p>
                     <div className="d-flex justify-content-around ">
                         <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => confirmHandler()}>
                             Yes
                         </button>
                         <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setConfirm(false)}>
-                            Cancel
+                            No
                         </button>
                     </div>
                 </div>}
@@ -106,7 +106,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                     <div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
                         <h2 className={`${Styles.warning} `}>Empty Selection</h2>
                         <p className={`${Styles.warningContent} `} style={{ lineHeight: '22px' }}>
-                            please select some value.
+                            Please select any contact.
                         </p>
                         <div className="d-flex justify-content-around ">
                             <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setAlert(false)}>
@@ -165,19 +165,19 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                             <div className="d-flex">
                                 <label for="ALL" className={Styles.checkAllHolder} title="Click to select All"><input type="checkbox" onClick={(e) => { checkedAll(!checked) }} id="ALL" /></label>
                                 <div className={Styles.checkAllHolder} onClick={() => { setContactList({ isLoaded: false, data: [] }); getDataHandler() }}>
-                                    <BiRefresh size={23} title="refersh list" />
+                                    <BiRefresh size={23} title="Refersh list" />
                                 </div>
                                 <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(2):setAlert(true)}}>
-                                    <BiAddToQueue size={23} title="add to queue" />
+                                    <BiAddToQueue size={23} title="Add to queue" />
                                 </div>
                                 <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(3):setAlert(true)}}>
-                                    <BiMailSend title="resend mail to selected" size={23} />
+                                    <BiMailSend title="Resend mail to selected" size={23} />
                                 </div>
                                 <div className={Styles.checkAllHolder} onClick={() => {resetHandler()}}>
-                                    <BiEraser size={23} title={'reset'} />
+                                    <BiEraser size={23} title={'Reset'} />
                                 </div>
                                 <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(1):setAlert(true)}}>
-                                    <BiTrash size={23} title={'delete selected rows'} />
+                                    <BiTrash size={23} title={'Delete selected rows'} />
                                 </div>
                             </div>
                             <input type="text" autoComplete="off" id="contactSearch" title="search for contact" placeholder="Search Contacts" className={Styles.searchBox} onKeyUp={(e) => { setSearchValue(e.target.value); setCurrentPage(1) }} />
