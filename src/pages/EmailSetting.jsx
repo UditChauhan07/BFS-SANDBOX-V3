@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 import AppLayout from "../components/AppLayout"
-import { DateConvert, GetAuthData, admins, getEmailBlast } from "../lib/store";
+import { DateConvert, GetAuthData, admins, getEmailBlast, sortArrayHandler } from "../lib/store";
 import { useNavigate } from "react-router-dom";
 import LoaderV2 from "../components/loader/v2";
 import { BiLoader } from "react-icons/bi";
@@ -15,21 +15,22 @@ const EmailSetting = () => {
     const [notifyDate, setNotifyDate] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const [setting, setSetting] = useState(false)
-    const [checkId,setCheckId] = useState([])
+    const [checkId, setCheckId] = useState([])
     const [searchValue, setSearchValue] = useState();
     const [checked, setChecked] = useState(false)
 
     useEffect(() => {
         getDataHandler()
     }, [])
-    const getDataHandler = ()=>{
+    const getDataHandler = () => {
         setSearchValue(null)
         setCheckId([])
         GetAuthData().then((user) => {
             if (admins.includes(user.Sales_Rep__c)) {
                 setUser(user)
                 getEmailBlast({ key: user.access_token, Id: user.Sales_Rep__c }).then((list) => {
-                    setContactList({ isLoaded: true, data: JSON.parse(list.notifyMail) })
+                    let contactList = sortArrayHandler(JSON.parse(list.notifyMail || "[]") || [], g => g?.updatedAt)
+                    setContactList({ isLoaded: true, data: contactList })
                     setNotifyDate(list.notifyDate)
                 }).catch((conErr) => {
                     console.log({ conErr });
@@ -48,17 +49,20 @@ const EmailSetting = () => {
                 ?.filter((contact) => {
                     return (
                         !searchValue?.length ||
-                        contact.Account?.toLowerCase().includes(
-                            searchValue.toLowerCase()
-                        ) || contact.Brands?.toLowerCase().includes(
-                            searchValue.toLowerCase()
-                        ) || contact.ContactEmail?.toLowerCase().includes(
-                            searchValue.toLowerCase()
-                        )
+                        [
+                            contact.Account,
+                            contact.Brands,
+                            contact.ContactEmail,
+                            contact.ContactName,
+                            DateConvert(contact.Date, true)
+                        ].some(property => {
+                            const propertyValue = property?.toLowerCase();
+                            return propertyValue.includes(searchValue);
+                        })
                     );
                 })
         );
-    }, [data,searchValue]);
+    }, [data, searchValue]);
     function checkedAll(value) {
         setChecked(!checked)
         let temp = []
@@ -78,7 +82,7 @@ const EmailSetting = () => {
                     (currentPage - 1) * PageSize,
                     currentPage * PageSize
 
-                )} setSetting={setSetting} setting={setting} setSearchValue={setSearchValue} checkIdObj={{setCheckId,checkId,checkedAll,checked}} notifyDate={notifyDate} getDataHandler={getDataHandler} setCurrentPage={setCurrentPage} setContactList={setContactList}/>
+                )} setSetting={setSetting} setting={setting} user={user} setSearchValue={setSearchValue} checkIdObj={{ setCheckId, checkId, checkedAll, checked }} notifyDate={notifyDate} getDataHandler={getDataHandler} setCurrentPage={setCurrentPage} setContactList={setContactList} />
                 {!setting && <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}
