@@ -77,6 +77,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
         let contactSearch = document.getElementById("contactSearch");
         contactSearch.value = null
         setSearchValue(null); setCurrentPage(1)
+        setCheckId([])
     }
 
     return (
@@ -166,14 +167,14 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                                 <div className={Styles.checkAllHolder} onClick={() => { setContactList({ isLoaded: false, data: [] }); getDataHandler() }}>
                                     <BiRefresh size={23} title="refersh list" />
                                 </div>
-                                <div className={Styles.checkAllHolder} onClick={() => {resetHandler()}}>
-                                    <BiReset size={23} title={'reset all rows'} />
-                                </div>
                                 <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(2):setAlert(true)}}>
                                     <BiAddToQueue size={23} title="add to queue" />
                                 </div>
                                 <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(3):setAlert(true)}}>
                                     <BiMailSend title="resend mail to selected" size={23} />
+                                </div>
+                                <div className={Styles.checkAllHolder} onClick={() => {resetHandler()}}>
+                                    <BiEraser size={23} title={'reset'} />
                                 </div>
                                 <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(1):setAlert(true)}}>
                                     <BiTrash size={23} title={'delete selected rows'} />
