@@ -1,15 +1,17 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DateConvert, deleteEmailBlast, resentEmailBlast, resetEmailBlast } from "../../lib/store"
 import SettingNotify from "./SettingNotify"
 import Styles from "./index.module.css"
-import { BiAddToQueue, BiBoltCircle, BiEraser, BiMailSend, BiRefresh } from "react-icons/bi"
+import { BiAddToQueue, BiBoltCircle, BiCross, BiEraser, BiMailSend, BiRefresh, BiReset, BiTrash } from "react-icons/bi"
 import ModalPage from "../Modal UI"
 
-const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, notifyDate, getDataHandler, setCurrentPage, setContactList }) => {
+const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, notifyDate, getDataHandler, setCurrentPage, setContactList, user }) => {
     const { checkId, setCheckId, checked, checkedAll } = checkIdObj
     const [alert, setAlert] = useState(false)
     const [emailHtml, setEmailHtml] = useState(null);
     const [mailSend, setMailSend] = useState(false)
+    const [showBrands, setShowBrands] = useState();
+    const [confirm, setConfirm] = useState(0);
     const resentHandler = () => {
         if (checkId.length) {
             setContactList({ isLoaded: false, data: [] })
@@ -53,10 +55,50 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
             setAlert(true)
         }
     }
-    // console.log({aaa:emailHtml.split("?oauth_token="),ll:"00D30000001G9fh!AQEAQArkQiPdzqws050dRLspTi38Vyo_JOY0ZHZ5uuQYJ_BZyDWSKniMFCCOIQvIbTMRzhsCEC_dlWR1tNodrQ7e5pL5_oAV".length});
+
+    useEffect(() => {
+        if (emailHtml) {
+            let temp = emailHtml?.replaceAll("{{token}}", user.x_access_token); // the-quick-brown-fox
+            setEmailHtml(temp)
+        }
+
+    }, [emailHtml])
+    const confirmHandler = () => {
+        if (confirm == 1) {
+            deleteHandler()
+        } else if (confirm == 2) {
+            addtoqueue()
+        } else if (confirm == 3) {
+            resentHandler()
+        } else {}
+        setConfirm(false)
+    }
+    const resetHandler = ()=>{
+        let contactSearch = document.getElementById("contactSearch");
+        contactSearch.value = null
+        setSearchValue(null); setCurrentPage(1)
+    }
 
     return (
         <div>
+            <ModalPage
+                open={confirm}
+                content={<div className="d-flex flex-column gap-3"  style={{ maxWidth: '700px' }}>
+                    <h2 className={`${Styles.warning} `}>Confirm</h2>
+                    <p className={`${Styles.warningContent} `}>
+                        Are you Sure you want to {confirm == 1 ? <b>Delete</b> : confirm == 2 ? <b>Add to Queue</b> : confirm == 3 ? <b>Re-send mail to</b> : null} selected contacts?<br/> This action cannot be undone.
+                    </p>
+                    <div className="d-flex justify-content-around ">
+                        <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => confirmHandler()}>
+                            Yes
+                        </button>
+                        <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setConfirm(false)}>
+                            Cancel
+                        </button>
+                    </div>
+                </div>}
+                onClose={() => setConfirm(false)}
+            />
             <ModalPage
                 open={alert}
                 content={
@@ -98,7 +140,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
             <ModalPage
                 open={emailHtml ? true : false}
                 content={
-                    <div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
+                    <div className="d-flex flex-column gap-3">
                         <h2 className={`${Styles.warning} `}>Email Content</h2>
                         <p className={`${Styles.warningContent} `} style={{ lineHeight: '22px' }}>
                             <div dangerouslySetInnerHTML={{ __html: emailHtml }} />
@@ -116,7 +158,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
             />
             {setting ? <SettingNotify setSetting={setSetting} notifyDate={notifyDate} getDataHandler={getDataHandler} /> :
                 <>
-                    <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0' }}>
+                    <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
                         <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}><h2>NewLetter List</h2><div className="d-flex"><div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} onClick={() => { setSetting(true) }}><BiBoltCircle />&nbsp;Setting</div></div></div>
                         <div className="d-flex justify-content-between align-items-center" style={{ margin: '4px 0 27px 0' }}>
                             <div className="d-flex">
@@ -124,21 +166,24 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                                 <div className={Styles.checkAllHolder} onClick={() => { setContactList({ isLoaded: false, data: [] }); getDataHandler() }}>
                                     <BiRefresh size={23} title="refersh list" />
                                 </div>
-                                <div className={Styles.checkAllHolder} onClick={() => { addtoqueue() }}>
+                                <div className={Styles.checkAllHolder} onClick={() => {resetHandler()}}>
+                                    <BiReset size={23} title={'reset all rows'} />
+                                </div>
+                                <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(2):setAlert(true)}}>
                                     <BiAddToQueue size={23} title="add to queue" />
                                 </div>
-                                <div className={Styles.checkAllHolder} onClick={() => { resentHandler() }}>
+                                <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(3):setAlert(true)}}>
                                     <BiMailSend title="resend mail to selected" size={23} />
                                 </div>
-                                <div className={Styles.checkAllHolder} onClick={() => { deleteHandler() }}>
-                                    <BiEraser size={23} title={'delete selected rows'} />
+                                <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(1):setAlert(true)}}>
+                                    <BiTrash size={23} title={'delete selected rows'} />
                                 </div>
                             </div>
-                            <input type="text" autoComplete="off" placeholder="Search Contacts" className={Styles.searchBox} onKeyUp={(e) => { setSearchValue(e.target.value); setCurrentPage(1) }} />
+                            <input type="text" autoComplete="off" id="contactSearch" title="search for contact" placeholder="Search Contacts" className={Styles.searchBox} onKeyUp={(e) => { setSearchValue(e.target.value); setCurrentPage(1) }} />
                         </div>
                     </div>
                     <table style={{ width: '100%' }}>
-                        <thead className={Styles.table} style={{ position: 'sticky',top:'265px'}}>
+                        <thead className={Styles.table} style={{ position: 'sticky', top: '265px', zIndex: 11 }}>
                             <tr>
                                 <th style={{ width: '200px' }}>Account Name</th>
                                 <th style={{ width: '200px' }}>Brand Name</th>
@@ -149,7 +194,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map((contact, index) => {
+                            {data.length > 0 ? data.map((contact, index) => {
                                 return (
                                     <tr key={index} className={Styles.tableRow}>
                                         <td style={{ width: '200px' }}>
@@ -158,14 +203,14 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                                                 &nbsp;{contact.Account}
                                             </label>
                                         </td>
-                                        <td style={{ width: '200px' }}>{contact.Brands.length > 50 ? contact.Brands.slice(0, 50) + "..." : contact.Brands}</td>
+                                        <td style={{ width: '200px' }} onMouseEnter={() => setShowBrands(index)} onMouseLeave={() => setShowBrands(null)}>{(contact.Brands.length < 50 || showBrands == index) ? contact.Brands : contact.Brands.slice(0, 50) + "..."}</td>
                                         <td>{contact.ContactName}</td>
                                         <td>{contact.ContactEmail}</td>
                                         <td>{DateConvert(contact.Date, true)}</td>
-                                        <td>{contact.mailStatus == 1 ? <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#90EE90] text-center rounded-lg text-[#ffffff] text-sm cursor">Send</p> : contact.mailStatus == 2 ? <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#FF474C] text-center rounded-lg text-[#ffffff] text-sm">Failed</p> : <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#FFFFED] text-center rounded-lg text-[#000] text-sm/[13px]">Not Send</p>}</td>
+                                        <td>{contact.mailStatus == 1 ? <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#90EE90] text-center rounded-lg text-[#ffffff] text-sm cursor-pointer">Send</p> : contact.mailStatus == 2 ? <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#FF474C] text-center rounded-lg text-[#ffffff] text-sm cursor-pointer">Failed</p> : <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#efef68] text-center rounded-lg text-[#000] text-sm cursor-pointer">Not Send</p>}</td>
                                     </tr>
                                 )
-                            })}
+                            }) : <tr className="text-center" style={{ height: '200px' }}><td colSpan={6}>No data found.</td></tr>}
                         </tbody>
                     </table></>}</div>)
 
