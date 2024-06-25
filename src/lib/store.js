@@ -12,7 +12,7 @@ const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
 export const salesRepIdKey = "BzQIEAjzCEHmlXc";
-export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3","0053b00000CwOnLAAV"]; //,"0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
+export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3"]; //,"0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
 
 export const months = [
   "January",
@@ -707,6 +707,24 @@ export async function getEmailBlast({ key, Id }) {
     return data.data;
   }
 }
+export async function getEmailBody({ key, id }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/sGvrHyHtuLuQfis", {
+    method: "POST",
+    body: JSON.stringify({ key, id }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
 export async function deleteEmailBlast({ key, ids }) {
   let headersList = {
     Accept: "*/*",
@@ -733,7 +751,7 @@ export async function resetEmailBlast({ key, ids }) {
 
   let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/8XoSdoqMZ2dAiqh", {
     method: "POST",
-    body: JSON.stringify({ key, ids }),
+    body: JSON.stringify({ key, ids, status: true }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -834,7 +852,7 @@ export async function getYearlyComparison({ year, ManufacturerId__c }) {
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
-  console.log({data});
+  console.log({ data });
   if (data.status == 300) {
     DestoryAuth();
   } else {
