@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { DateConvert, deleteEmailBlast, resentEmailBlast, resetEmailBlast } from "../../lib/store"
+import { DateConvert, deleteEmailBlast, getEmailBody, resentEmailBlast, resetEmailBlast } from "../../lib/store"
 import SettingNotify from "./SettingNotify"
 import Styles from "./index.module.css"
 import { BiAddToQueue, BiBoltCircle, BiCross, BiEraser, BiMailSend, BiRefresh, BiReset, BiTrash } from "react-icons/bi"
@@ -16,10 +16,9 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
         if (checkId.length) {
             setContactList({ isLoaded: false, data: [] })
             resetEmailBlast({ key: "8XoSdoqMZ2dAiqh", ids: JSON.stringify(checkId) }).then((res) => {
-                console.log({ res });
                 resentEmailBlast({ key: "8XoSdoqMZ2dAiqh", ids: JSON.stringify(checkId) }).then((result) => {
                     setMailSend(true);
-                    // getDataHandler()
+                    getDataHandler()
                 }).catch((err1) => {
                     console.log({ err1 });
                 })
@@ -78,6 +77,13 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
         contactSearch.value = null
         setSearchValue(null); setCurrentPage(1)
         setCheckId([])
+    }
+    const getEmailBodyHandler = (id)=>{
+        getEmailBody({key:"8XoSdoqMZ2dAiqh",id:id}).then((result)=>{
+            setEmailHtml(result.body)
+        }).catch((err)=>{
+            console.log({err});
+        })
     }
 
     return (
@@ -208,7 +214,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                                         <td>{contact.ContactName}</td>
                                         <td>{contact.ContactEmail}</td>
                                         <td>{DateConvert(contact.Date, true)}</td>
-                                        <td>{contact.mailStatus == 1 ? <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#90EE90] text-center rounded-lg text-[#ffffff] text-sm cursor-pointer">Send</p> : contact.mailStatus == 2 ? <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#FF474C] text-center rounded-lg text-[#ffffff] text-sm cursor-pointer">Failed</p> : <p onClick={() => { setEmailHtml(contact.body) }} className="bg-[#efef68] text-center rounded-lg text-[#000] text-sm cursor-pointer">Not Send</p>}</td>
+                                        <td>{contact.mailStatus == 1 ? <p onClick={() => { getEmailBodyHandler(contact.id) }} className="bg-[#90EE90] text-center rounded-lg text-[#ffffff] text-sm cursor-pointer">Send</p> : contact.mailStatus == 2 ? <p onClick={() => { getEmailBodyHandler(contact.id) }} className="bg-[#FF474C] text-center rounded-lg text-[#ffffff] text-sm cursor-pointer">Failed</p> : <p onClick={() => { getEmailBodyHandler(contact.id) }} className="bg-[#efef68] text-center rounded-lg text-[#000] text-sm cursor-pointer">Not Send</p>}</td>
                                     </tr>
                                 )
                             }) : <tr className="text-center" style={{ height: '200px' }}><td colSpan={6}>No data found.</td></tr>}
