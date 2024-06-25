@@ -146,6 +146,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
             />
             <ModalPage
                 open={emailHtml ? true : false}
+                styles={{width:'calc(100% - 100px)',maxWidth:'1200px'}}
                 content={
                     <div className="d-flex flex-column gap-3">
                         <h2 className={`${Styles.warning} `}>Email Content</h2>
