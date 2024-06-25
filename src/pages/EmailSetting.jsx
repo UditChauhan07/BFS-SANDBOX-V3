@@ -2,8 +2,6 @@ import { useEffect, useMemo, useState } from "react"
 import AppLayout from "../components/AppLayout"
 import { DateConvert, GetAuthData, admins, getEmailBlast, sortArrayHandler } from "../lib/store";
 import { useNavigate } from "react-router-dom";
-import LoaderV2 from "../components/loader/v2";
-import { BiLoader } from "react-icons/bi";
 import Pagination from "../components/Pagination/Pagination";
 import EmailTable from "../components/EmailBlasts/EmailTable";
 import Loading from "../components/Loading";
