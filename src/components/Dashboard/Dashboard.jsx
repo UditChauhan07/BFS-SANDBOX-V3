@@ -957,7 +957,7 @@ function Dashboard({ dashboardData }) {
                       Achieved Sales: <span className={Styles.Tabletext_head}>{formatNumber(achievedSales) || 0}</span>
                     </p>
                     <div className={Styles.donutbox}>
-                      <PieChart width={400} height={400}>
+                      <PieChart width={320} height={400}>
                         <Pie dataKey="value" startAngle={180} endAngle={0} data={needle_data} cx={cx} cy={cy} innerRadius={iR} outerRadius={oR} fill="#8884d8" stroke="none">
                           {needle_data.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
