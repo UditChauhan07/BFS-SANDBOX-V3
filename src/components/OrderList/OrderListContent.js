@@ -196,7 +196,7 @@ function OrderListContent({ data,hideDetailedShow=false }) {
                     <div className={Styles.TicketWidth} style={hideDetailedShow?{display:'none'}:null}>
                       {/* <button className="me-4">View Ticket</button> */}
                       <Link to="/orderDetails">
-                        <button onClick={() => MyBagId(item.Id)}>
+                        <button title="View Order Information" onClick={() => MyBagId(item.Id)}>
                           View Order Details
                         </button>
                       </Link>
@@ -206,17 +206,9 @@ function OrderListContent({ data,hideDetailedShow=false }) {
 
                 <div className={Styles.StatusOrder}>
                   <div className={Styles.Status1}>
-                    {/* <h2
-                      onClick={(e) =>
-                        generateSuportHandler({
-                          data: item,
-                          value: "Charges",
-                        })
-                      }
-                    >
-                      Charges
-                    </h2> */}
+                    {!item.Order_Number__c &&
                     <h3
+                    title="Raise a Support Ticket for this Order on Status"
                       onClick={(e) =>
                         generateSuportHandler({
                           data: item,
@@ -226,8 +218,9 @@ function OrderListContent({ data,hideDetailedShow=false }) {
                     >
                       {" "}
                       Status of Order
-                    </h3>
+                    </h3>}
                     <h4
+                    title="Support Inquiry for this Order on Invoice"
                       onClick={(e) =>
                         generateSuportHandler({
                           data: item,
@@ -237,7 +230,9 @@ function OrderListContent({ data,hideDetailedShow=false }) {
                     >
                       Invoice{" "}
                     </h4>
+                    {!item.Tracking_URL__c&&
                     <h4
+                    title="Get Help with Tracking Status"
                       onClick={(e) =>
                         generateSuportHandler({
                           data: item,
@@ -246,7 +241,7 @@ function OrderListContent({ data,hideDetailedShow=false }) {
                       }
                     >
                       Tracking Status{" "}
-                    </h4>
+                    </h4>}
                   </div>
 
                   <div className={Styles.Status2}>

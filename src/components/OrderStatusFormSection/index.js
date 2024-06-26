@@ -8,6 +8,7 @@ import TextError from "../../validation schema/TextError";
 import Select from "react-select";
 import { BiUpload } from "react-icons/bi";
 import Loading from "../Loading";
+import ModalPage from "../Modal UI";
 
 const OrderStatusFormSection = ({ setSubmitLoad }) => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
   const [contactList, setContactList] = useState([]);
   const [supportTicketData, setTicket] = useState();
   const [activeBtn, setActive] = useState(false);
+  const [confirm, setConfirm] = useState(false);
 
   useEffect(() => {
     let data = supportDriveBeg();
@@ -127,9 +129,9 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
     setFile(tempFile);
   }
 
-  const fileRemoveHandler = (index)=>{
+  const fileRemoveHandler = (index) => {
     let tempFile = [...files];
-    tempFile.splice(index,1)
+    tempFile.splice(index, 1)
     setFile(tempFile);
   }
 
@@ -148,38 +150,65 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
     );
   };
   return (
-    <Formik initialValues={initialValues} validationSchema={OrderStatusSchema} onSubmit={onSubmitHandler}>
-      {(formProps) => (
-        <div className={styles.container}>
-          <Form className={styles.formContainer}>
-            <b className={styles.containerTitle}>Order Status : {supportTicketData?.orderStatusForm?.reason}</b>
-            <label className={styles.labelHolder}>
-              Contact Name
-              <Field name="contact.value" className="contact" options={contactList.map((contact) => ({ label: contact.Name, value: contact.Id }))} component={SearchableSelect} />
-            </label>
-            <ErrorMessage component={TextError} name="contact" />
-
-            <label className={styles.labelHolder}>
-              Describe your issues
-              <Field component="textarea" placeholder="Description" rows={4} name="description" defaultValue={initialValues.description}></Field>
-            </label>
-            <ErrorMessage component={TextError} name="description" />
-            <div className={styles.attachHolder}>
-              <p className={styles.subTitle}>upload some attachments</p>
-              <label className={styles.attachLabel} for="attachement"><div><div className={styles.attachLabelDiv}><BiUpload /></div></div></label>
-              <input type="file" style={{ width: 0, height: 0 }} id="attachement" onChange={handleChange} multiple accept="image/*" />
-              <div className={styles.imgHolder}>
-                {files.map((file, index) => (
-                  <div style={{ position: 'relative' }}>
-                    <span style={{ position: 'absolute', right: '5px', top: '-5px', color: '#000', zIndex: 1, cursor: 'pointer', fontSize: '18px' }} onClick={()=>{fileRemoveHandler(index)}}>x</span>
-                    <a href={file?.preview} target="_blank" title="Click to Download">
-                      <img src={file?.preview} key={index} alt={file?.preview} />
-                    </a>
-                  </div>
-                ))}
-              </div>
+    <>
+      <ModalPage
+        open={confirm || false}
+        content={
+          <div className="d-flex flex-column gap-3">
+            <h2>
+              Confirm  
+            </h2>
+            <p>
+              Are you sure you want to generate a ticket?<br/> This action cannot be undone.<br/> You will be redirected to the ticket page after the ticket is generated.
+            </p>
+            <div className="d-flex justify-content-around ">
+              <button className={styles.btn} onClick={() => onSubmitHandler(confirm)}>
+                Submit
+              </button>
+              <button className={styles.btn} onClick={() => setConfirm(false)}>
+                Cancel
+              </button>
             </div>
-            {/* <label className="mt-2">
+          </div>
+        }
+        onClose={() => {
+          setConfirm(false);
+        }}
+      />
+
+      <Formik initialValues={initialValues} validationSchema={OrderStatusSchema} onSubmit={(values) => { setConfirm(values) }}>
+
+        {(formProps) => (
+          <div className={styles.container}>
+            <Form className={styles.formContainer}>
+              <b className={styles.containerTitle}>{supportTicketData?.orderStatusForm?.reason}</b>
+              <label className={styles.labelHolder}>
+                Contact Name
+                <Field name="contact.value" className="contact" options={contactList.map((contact) => ({ label: contact.Name, value: contact.Id }))} component={SearchableSelect} />
+              </label>
+              <ErrorMessage component={TextError} name="contact" />
+
+              <label className={styles.labelHolder}>
+                Describe your issues
+                <Field component="textarea" placeholder="Description" rows={4} name="description" defaultValue={initialValues.description}></Field>
+              </label>
+              <ErrorMessage component={TextError} name="description" />
+              <div className={styles.attachHolder}>
+                <p className={styles.subTitle}>upload some attachments</p>
+                <label className={styles.attachLabel} for="attachement"><div><div className={styles.attachLabelDiv}><BiUpload /></div></div></label>
+                <input type="file" style={{ width: 0, height: 0 }} id="attachement" onChange={handleChange} multiple accept="image/*" />
+                <div className={styles.imgHolder}>
+                  {files.map((file, index) => (
+                    <div style={{ position: 'relative' }}>
+                      <span style={{ position: 'absolute', right: '5px', top: '-5px', color: '#000', zIndex: 1, cursor: 'pointer', fontSize: '18px' }} onClick={() => { fileRemoveHandler(index) }}>x</span>
+                      <a href={file?.preview} target="_blank" title="Click to Download">
+                        <img src={file?.preview} key={index} alt={file?.preview} />
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* <label className="mt-2">
               <input
                 type="checkbox"
                 checked={supportTicketData?.orderStatusForm?.sendEmail}
@@ -189,17 +218,18 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
               />
               &nbsp;Send Updates via email
             </label> */}
-            <div className={styles.dFlex}>
-              {" "}
-              <Link to={"/orderStatus"} className={styles.btn}>
-                Cancel
-              </Link>
-              <input type="submit" className={styles.btn} value={"Submit"} disabled={activeBtn} />
-            </div>
-          </Form>
-        </div>
-      )}
-    </Formik>
+              <div className={styles.dFlex}>
+                {" "}
+                <Link to={"/orderStatus"} className={styles.btn}>
+                  Cancel
+                </Link>
+                <input type="submit" className={styles.btn} value={"Submit"} disabled={activeBtn} />
+              </div>
+            </Form>
+          </div>
+        )}
+      </Formik>
+    </>
   );
 };
 export default OrderStatusFormSection;
