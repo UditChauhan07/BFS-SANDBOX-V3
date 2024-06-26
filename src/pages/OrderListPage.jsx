@@ -121,6 +121,7 @@ const OrderListPage = () => {
     })
       .then((order) => {
         let sorting = sortingList(order);
+        console.log({sorting});
         setOrders(sorting);
         setLoaded(true);
       })

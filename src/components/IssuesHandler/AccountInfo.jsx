@@ -7,9 +7,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BiUpload } from "react-icons/bi";
 import { uploadFileSupport } from "../../lib/store";
+import ModalPage from "../Modal UI";
 const AccountInfo = ({ reason, typeId, Accounts, postSupportAny, GetAuthData, setSubmitForm }) => {
     const navigate = useNavigate();
     const [contactList, setContactList] = useState([]);
+    const [confirm, setConfirm] = useState(false);
     let [files, setFile] = useState([])
 
     const initialValues = {
@@ -126,7 +128,33 @@ const AccountInfo = ({ reason, typeId, Accounts, postSupportAny, GetAuthData, se
     }
 
     return (
-        <Formik initialValues={initialValues} validationSchema={AccountInfoValidation} onSubmit={onSubmitHandler}>
+        <>
+        <ModalPage
+            open={confirm || false}
+            content={
+                <div className="d-flex flex-column gap-3">
+                    <h2>
+                        Confirm
+                    </h2>
+                    <p>
+                        Are you sure you want to generate a ticket?<br /> This action cannot be undone.<br /> You will be redirected to the ticket page after the ticket is generated.
+                    </p>
+                    <div className="d-flex justify-content-around ">
+                        <button className={styles.btn} onClick={()=>{onSubmitHandler(confirm)}}>
+                            Submit
+                        </button>
+                        <button className={styles.btn} onClick={() => setConfirm(false)}>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            }
+            onClose={() => {
+                setConfirm(false);
+            }}
+        />
+ 
+        <Formik initialValues={initialValues} validationSchema={AccountInfoValidation} onSubmit={(value)=>setConfirm(value)}>
             {(formProps) => (
                 <div className={styles.container}>
                     <Form className={styles.formContainer}>
@@ -174,6 +202,7 @@ const AccountInfo = ({ reason, typeId, Accounts, postSupportAny, GetAuthData, se
                 </div>
             )}
         </Formik>
+        </>
     );
 }
 export default AccountInfo

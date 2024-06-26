@@ -28,6 +28,7 @@ function MyBagFinal() {
   const [userData, setUserData] = useState(null)
   const [salesRepData, setSalesRepData] = useState({ Name: null, Id: null })
   const [limitInput, setLimitInput] = useState("");
+  const [confirm, setConfirm] = useState(false);
   const handleNameChange = (event) => {
     const limit = 10;
     setLimitInput(event.target.value.slice(0, limit));
@@ -206,6 +207,30 @@ function MyBagFinal() {
   return (
     <div className="mt-4">
       <section>
+        <ModalPage
+          open={confirm || false}
+          content={
+            <div className="d-flex flex-column gap-3">
+              <h2 style={{textDecoration:'underline'}}>
+                Confirm
+              </h2>
+              <p>
+                Are you sure you want to generate a ticket?<br /> This action cannot be undone.<br /> You will be redirected to the ticket page after the ticket is generated.
+              </p>
+              <div className="d-flex justify-content-around ">
+                <button className={Styles.btnHolder} onClick={orderPlaceHandler}>
+                  Submit
+                </button>
+                <button className={Styles.btnHolder} onClick={() => setConfirm(false)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          }
+          onClose={() => {
+            setConfirm(false);
+          }}
+        />
         {clearConfim ? (
           <ModalPage
             open
@@ -216,10 +241,10 @@ function MyBagFinal() {
                   Are you Sure you want to clear bag?
                 </p>
                 <div className="d-flex justify-content-around ">
-                  <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={deleteBag}>
+                  <button className={Styles.btnHolder} onClick={deleteBag}>
                     Yes
                   </button>
-                  <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setClearConfim(false)}>
+                  <button className={Styles.btnHolder} onClick={() => setClearConfim(false)}>
                     Cancel
                   </button>
                 </div>
@@ -443,7 +468,7 @@ function MyBagFinal() {
                         onClick={() => {
                           if (Object.keys(orders).length) {
                             if (PONumber.length) {
-                              orderPlaceHandler();
+                              setConfirm(true)
                             } else {
                               setPONumberFilled(false);
                             }

@@ -8,12 +8,18 @@ import { DestoryAuth, ShareDrive, getOrderDetailsBasedId, getOrderDetailsInvoice
 import { MdOutlineDownload } from "react-icons/md";
 import LoaderV2 from "../../loader/v2";
 import ProductDetails from "../../../pages/productDetails";
+import { VscGitPullRequestNewChanges } from "react-icons/vsc";
+import { RxEyeOpen } from "react-icons/rx";
+import { TbEyeClosed } from "react-icons/tb";
+import ModalPage from "../../Modal UI";
 
 function MyBagFinal({ setOrderDetail }) {
   let Img1 = "/assets/images/dummy.png";
   const [OrderData, setOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showTracking, setShowTracking] = useState(false)
   const navigate = useNavigate();
+  const [confirm, setConfirm] = useState(false);
 
   const OrderId = JSON.parse(localStorage.getItem("OpportunityId"));
   const Key = JSON.parse(localStorage.getItem("Api Data"));
@@ -64,7 +70,7 @@ function MyBagFinal({ setOrderDetail }) {
       BodyContent,
       headersList
     );
-    console.log({response});
+    console.log({ response });
     if (Object.values(data).length > 0) {
       if (response.data.data?.ManufacturerId__c) {
         if (data[response.data.data?.ManufacturerId__c]) {
@@ -137,9 +143,8 @@ function MyBagFinal({ setOrderDetail }) {
   const handleback = () => {
     navigate("/order-list");
   };
-  const invoiceHandler = () => {
-    if (false) {
-    } else {
+  const invoiceHandler = (reason) => {
+    if (reason) {
       let ticket = {
         orderStatusForm: {
           accountId: OrderData?.AccountId,
@@ -150,12 +155,12 @@ function MyBagFinal({ setOrderDetail }) {
           orderNumber: null,
           poNumber: OrderData.PO_Number__c,
           priority: "Medium",
-          reason: "Invoice",
+          reason,
           salesRepId: null,
           sendEmail: false,
         },
       };
-      let statusOfSupport = supportShare(ticket)
+      supportShare(ticket)
         .then((response) => {
           if (response) navigate("/orderStatusForm");
         })
@@ -165,9 +170,36 @@ function MyBagFinal({ setOrderDetail }) {
     }
   };
   if (!isLoading) return <Loading />;
+  const openInNewTab = (url) => {
+    window.open(url, "_blank", "noreferrer");
+  };
 
   return (
     <div>
+      <ModalPage
+          open={confirm || false}
+          content={
+            <div className="d-flex flex-column gap-3">
+              <h2 style={{textDecoration:'underline'}}>
+                Confirm
+              </h2>
+              <p>
+                Are you sure you want to generate a ticket?<br /> This action cannot be undone.
+              </p>
+              <div className="d-flex justify-content-around ">
+                <button className={Styles.btnHolder} onClick={()=>invoiceHandler(confirm)}>
+                  Submit
+                </button>
+                <button className={Styles.btnHolder} onClick={() => setConfirm(false)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          }
+          onClose={() => {
+            setConfirm(false);
+          }}
+        />
       <style>
         {`@media print {
   .MainInnerPrint {
@@ -229,13 +261,13 @@ function MyBagFinal({ setOrderDetail }) {
                                   <div className={Styles.Mainbox1M}>
                                     <div className={Styles.Mainbox2} style={{ cursor: 'pointer' }}>
                                       {
-                                        item?.ContentDownloadUrl ? <img src={item.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />:
-                                        !productImage.isLoaded ? <LoaderV2 /> :
-                                          productImage.images?.[item.ProductCode] ?
-                                            productImage.images[item.ProductCode]?.ContentDownloadUrl ?
-                                              <img src={productImage.images[item.ProductCode]?.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
-                                              : <img src={productImage.images[item.ProductCode]} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
-                                            : <img src={Img1} className="zoomInEffect" alt="img" onClick={() => { setProductDetailId(item?.Product2Id) }} width={25} />
+                                        item?.ContentDownloadUrl ? <img src={item.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} /> :
+                                          !productImage.isLoaded ? <LoaderV2 /> :
+                                            productImage.images?.[item.ProductCode] ?
+                                              productImage.images[item.ProductCode]?.ContentDownloadUrl ?
+                                                <img src={productImage.images[item.ProductCode]?.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
+                                                : <img src={productImage.images[item.ProductCode]} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
+                                              : <img src={Img1} className="zoomInEffect" alt="img" onClick={() => { setProductDetailId(item?.Product2Id) }} width={25} />
                                       }
                                     </div>
                                     <div className={Styles.Mainbox3}>
@@ -311,12 +343,14 @@ function MyBagFinal({ setOrderDetail }) {
                           {OrderData.Order_Number__c}
                         </p>
                       </div></>}
-                    {OrderData.Tracking__c && <>
+                    {showTracking && OrderData.Tracking__c && <>
                       <h2>Tracking Number</h2>
-                      <div className={Styles.ShipAdress}>
-                        <p>
-                          {OrderData.Tracking__c}
-                        </p>
+                      <div className={Styles.ShipAdress} style={{ transition: 'all 250s linear' }}>
+                        {OrderData.Tracking_URL__c ? <button role="link"
+                          onClick={() => openInNewTab(OrderData.Tracking_URL__c)}>{OrderData.Tracking__c}</button> :
+                          <p>
+                            {OrderData.Tracking__c}
+                          </p>}
                       </div></>}
 
                     <div className={Styles.ShipAdress2}>
@@ -330,14 +364,24 @@ function MyBagFinal({ setOrderDetail }) {
                     </div>
                   </div>
 
-                  {invoices?.length > 0 && (
-                    <div className={Styles.ShipBut} data-html2canvas-ignore>
-                      {/* invoiceHandler() */}
+                  <div className={Styles.ShipBut} data-html2canvas-ignore>
+                    {invoices?.length > 0 ? (
                       <button className="py-1 d-flex justify-content-center" onClick={() => downloadFiles(invoices)}>
-                        <span style={{ margin: 'auto 0' }}><MdOutlineDownload size={16} /></span>&nbsp;INVOICE
+                        <span style={{ margin: 'auto 0' }}><MdOutlineDownload size={16} /></span>&nbsp;Download INVOICE
                       </button>
-                    </div>
-                  )}
+                    ) : <button className="py-1 d-flex justify-content-center" onClick={() => setConfirm("Invoice")}>
+                      <span style={{ margin: 'auto 0' }}><VscGitPullRequestNewChanges size={16} /></span>&nbsp;Request Invoice
+                    </button>}
+                  </div>
+                  <div className={Styles.ShipBut} data-html2canvas-ignore>
+                    {OrderData.Tracking__c ? (
+                      <button className="py-1 d-flex justify-content-center" onClick={() => setShowTracking(!showTracking)}>
+                        <span style={{ margin: 'auto 0' }} >{showTracking ? <RxEyeOpen size={16} style={{ transition: 'all 500s linear' }} /> : <TbEyeClosed size={16} style={{ transition: 'all 250s linear' }} />}</span>&nbsp;Tracking Status
+                      </button>
+                    ) : <button className="py-1 d-flex justify-content-center" onClick={() => setConfirm("Tracking Status")}>
+                      <span style={{ margin: 'auto 0' }}><VscGitPullRequestNewChanges size={16} /></span>&nbsp;Request Tracking
+                    </button>}
+                  </div>
                 </div>
               </div>
             </div>

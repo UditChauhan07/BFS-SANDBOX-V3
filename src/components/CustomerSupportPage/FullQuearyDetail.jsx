@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import Detail from './Detail.module.css'
 import { SupportStatusGreen, SupportStatusRed, SupportStatusYellow, UserChecked } from '../../lib/svg'
-import { GetAuthData, getStrCode, postSupportComment } from '../../lib/store'
+import { DateConvert, GetAuthData, getStrCode, postSupportComment } from '../../lib/store'
 import { Link } from 'react-router-dom';
 import ModalPage from '../Modal UI';
+import Loading from '../Loading';
 const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 ];
@@ -11,6 +12,7 @@ function FullQuearyDetail({ data, setRest }) {
     const [orderStatus, setorderStatus] = useState({ status: false, message: "" })
     const date = new Date(data.Date_Opened__c);
     const [comment, setComment] = useState('');
+    const [btnAct, setBtnAct] = useState(true)
     function formatAMPM(date) {
         var hours = date.getHours();
         var minutes = date.getMinutes();
@@ -22,7 +24,9 @@ function FullQuearyDetail({ data, setRest }) {
         return strTime;
     }
     const CommentPostHandler = () => {
+        setComment('');
         if (comment.trim() != '') {
+            setBtnAct(false)
             GetAuthData().then((user) => {
                 let rawData = {
                     key: user.x_access_token,
@@ -34,8 +38,8 @@ function FullQuearyDetail({ data, setRest }) {
                 postSupportComment({ rawData }).then((response) => {
                     if (response?.success) {
                         // window.location.reload()
-                        setComment('');
                         setRest(true);
+                        setBtnAct(true)
                     } else {
                         if (response.length) {
                             setorderStatus({ status: true, message: response[0].message })
@@ -89,7 +93,7 @@ function FullQuearyDetail({ data, setRest }) {
                             <div className={Detail.LeftMainTopBox}>
                                 <p>
                                     <UserChecked />
-                                    <span>{data.Account?.Name}</span>&nbsp; raised this on{date.getDate()}/{monthNames[date.getMonth()]}/{date.getFullYear()} {formatAMPM(date)}
+                                    <span>{data.Account?.Name}</span>&nbsp; raised this on {DateConvert(data.Date_Opened__c)}
                                 </p>
                             </div>
                             <p style={{ marginTop: "1rem" }}>{data.Description}</p>
@@ -112,7 +116,7 @@ function FullQuearyDetail({ data, setRest }) {
                                                     <p className={Detail.Para2} dangerouslySetInnerHTML={{ __html: desc[1] }} /></> : <p className={Detail.Para2} dangerouslySetInnerHTML={{ __html: activity?.CommentBody }} />}
                                             </div>
                                             <div className={Detail.ActivityDate}>
-                                                <p>{itemDate.getDate()}/{monthNames[itemDate.getMonth()]}/{itemDate.getFullYear()} {formatAMPM(itemDate)}</p>
+                                                <p>{DateConvert(activity.CreatedDate,true)} {formatAMPM(itemDate)}</p>
                                             </div>
                                         </div>)
                                     })}
@@ -144,10 +148,11 @@ function FullQuearyDetail({ data, setRest }) {
                                     </div>
                                     <div className={`${Detail.ActivityContentImform} ${Detail.SendFlex}`}>
                                         <textarea placeholder='Add a comment...' rows="4" cols="50" value={comment} onChange={(e) => { setComment(e.target.value) }}></textarea>
-                                        <div className={Detail.SendButtonChat} onClick={() => CommentPostHandler()}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="58" height="58" viewBox="0 0 58 58" fill="none">
-                                                <path d="M40.5327 21.9402C40.7375 21.6765 40.8382 21.3451 40.8151 21.0105C40.7921 20.6758 40.647 20.3618 40.408 20.1293C40.1691 19.8968 39.8532 19.7624 39.5219 19.7523C39.1905 19.7421 38.8672 19.8568 38.6147 20.0743L14.6397 40.712L1.97907 35.7578C1.42832 35.5445 0.949652 35.1758 0.599955 34.6953C0.250258 34.2149 0.0442326 33.643 0.00635955 33.0476C-0.0315135 32.4522 0.100358 31.8582 0.386305 31.3364C0.672252 30.8146 1.10025 30.3868 1.61945 30.1039L54.18 0.313574C54.5931 0.088433 55.0588 -0.0189959 55.5276 0.00275323C55.9963 0.0245024 56.4503 0.174613 56.8413 0.437064C57.2323 0.699515 57.5455 1.06446 57.7475 1.49294C57.9496 1.92142 58.0328 2.39736 57.9884 2.86996L53.3778 51.4973C53.3316 51.996 53.171 52.477 52.9088 52.9019C52.6466 53.3268 52.29 53.6839 51.8674 53.9448C51.4447 54.2057 50.9678 54.3632 50.4744 54.4048C49.981 54.4464 49.4849 54.3709 49.0254 54.1843L33.6168 48.1479L23.9439 57.3191C23.5869 57.6566 23.1399 57.8808 22.6583 57.964C22.1767 58.0471 21.6816 57.9856 21.2342 57.7871C20.7867 57.5885 20.4066 57.2616 20.1409 56.8468C19.8752 56.432 19.7354 55.9475 19.739 55.4532V48.2505L40.5327 21.9402Z" fill="black" />
-                                            </svg>
+                                        <div className={Detail.SendButtonChat} style={{ cursor: "pointer" }} onClick={() => { if (btnAct) { CommentPostHandler() } }}>
+                                            {!btnAct ? <Loading /> :
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="58" height="58" viewBox="0 0 58 58" fill="none">
+                                                    <path d="M40.5327 21.9402C40.7375 21.6765 40.8382 21.3451 40.8151 21.0105C40.7921 20.6758 40.647 20.3618 40.408 20.1293C40.1691 19.8968 39.8532 19.7624 39.5219 19.7523C39.1905 19.7421 38.8672 19.8568 38.6147 20.0743L14.6397 40.712L1.97907 35.7578C1.42832 35.5445 0.949652 35.1758 0.599955 34.6953C0.250258 34.2149 0.0442326 33.643 0.00635955 33.0476C-0.0315135 32.4522 0.100358 31.8582 0.386305 31.3364C0.672252 30.8146 1.10025 30.3868 1.61945 30.1039L54.18 0.313574C54.5931 0.088433 55.0588 -0.0189959 55.5276 0.00275323C55.9963 0.0245024 56.4503 0.174613 56.8413 0.437064C57.2323 0.699515 57.5455 1.06446 57.7475 1.49294C57.9496 1.92142 58.0328 2.39736 57.9884 2.86996L53.3778 51.4973C53.3316 51.996 53.171 52.477 52.9088 52.9019C52.6466 53.3268 52.29 53.6839 51.8674 53.9448C51.4447 54.2057 50.9678 54.3632 50.4744 54.4048C49.981 54.4464 49.4849 54.3709 49.0254 54.1843L33.6168 48.1479L23.9439 57.3191C23.5869 57.6566 23.1399 57.8808 22.6583 57.964C22.1767 58.0471 21.6816 57.9856 21.2342 57.7871C20.7867 57.5885 20.4066 57.2616 20.1409 56.8468C19.8752 56.432 19.7354 55.9475 19.739 55.4532V48.2505L40.5327 21.9402Z" fill="black" />
+                                                </svg>}
                                         </div>
                                     </div>
                                 </div>}
@@ -160,13 +165,13 @@ function FullQuearyDetail({ data, setRest }) {
                                 <h3>Status</h3>
                                 <p>{data.Status}</p>
                             </div>
-                            <div className={Detail.ControlPriority}>
+                            {/* <div className={Detail.ControlPriority}>
                                 <h3>Priority</h3>
                                 <p>
                                     {data.Priority == "High" ? <SupportStatusRed /> : data.Priority == "Medium" ? <SupportStatusYellow /> : <SupportStatusGreen />}
                                     {data.Priority} Priority
                                 </p>
-                            </div>
+                            </div> */}
                             {data.ManufacturerName__c && <div className={Detail.ManufactureID}>
                                 <h3>Manufacture ID</h3>
                                 <p>{data.ManufacturerName__c}</p>
