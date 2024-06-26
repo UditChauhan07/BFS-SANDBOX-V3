@@ -29,7 +29,8 @@ export const FilterItem = ({ label, options, onChange, minWidth, value, name = '
         <div className="absolute" style={{ minWidth: minWidth || "120px", maxHeight: "450px", top: "5px" }}>
           <div className={Page.upArrow}></div>
           <ul
-            className="bg-white z-10 rounded-[5px] shadow-sm text-black absolute py-2 pr-2 flex flex-col  list-disc"
+            className="bg-white z-10 rounded-[5px] shadow-sm text-black absolute py-2 pr-2 flex flex-col list-disc"
+            style={{maxHeight:'350px',overflowY:'scroll'}}
           >
             {options?.map((option, index) => (
               <li
