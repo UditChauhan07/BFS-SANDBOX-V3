@@ -1,4 +1,4 @@
-import { GetAuthData, ShareDrive, getProductImageAll, getProductList, months, originAPi } from "../../lib/store";
+import { GetAuthData, ShareDrive, getProductImageAll, getProductList, months, originAPi, sortArrayHandler } from "../../lib/store";
 import Styles from "../OrderList/style.module.css"
 import Styles1 from "./OrderCardHandler.module.css"
 import { useEffect, useState } from "react";
@@ -8,9 +8,10 @@ import { BiCheck, BiLeftArrow, BiLock, BiRightArrow } from "react-icons/bi";
 import ModalPage from "../Modal UI";
 import { RxEyeOpen } from "react-icons/rx";
 
-const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedStatus, files = [], desc, errorListObj, manufacturerIdObj, accountIdObj, accountList, contactIdObj,setSubject,Actual_Amount__cObj }) => {
+const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedStatus, files = [], desc, errorListObj, manufacturerIdObj, accountIdObj, accountList, contactIdObj, setSubject, Actual_Amount__cObj }) => {
     const { setOrderConfirmed, orderConfirmed } = orderConfirmedStatus || null;
     const { accountId, setAccountId } = accountIdObj || null;
+    const [productAllList, setProductAllList] = useState([])
     const { manufacturerId, setManufacturerId } = manufacturerIdObj || null;
     const { errorList, setErrorList } = errorListObj || null;
     const { contactId, setContactId } = contactIdObj || null;
@@ -111,7 +112,9 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                         })
                                     }
                                 })
-                                setProductList(temp)
+                                // setProductList(temp)
+                                sortArrayHandler(temp, g => g.Name)
+                                setProductAllList(temp)
                                 let data = ShareDrive();
                                 if (!data) {
                                     data = {};
@@ -184,39 +187,53 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
         let pCOunt = Object.values(errorList).length;
         setErrorProductCount(pCOunt);
     }
+    const productSelectHandler = (element) => {
+        //can i use memo for errorlist?
+        let temp = productList;
+        if (temp.hasOwnProperty(element.Id)) {
+            delete temp[element.Id]; // remove the property from the object
+        } else {
+            element.issue = 0;
+            temp[element.Id] = element;
+        }
+        setErrorList(temp)
+        setProductList(temp)
+        let pCOunt = Object.values(errorList).length;
+        setErrorProductCount(pCOunt);
+    }
 
     const ErrorProductQtyHandler = (id, value) => {
-            let temp = errorList;
-            if (temp.hasOwnProperty(id)) {
-                // if (parseInt(value) <= temp[id].Quantity) {
-                temp[id].issue = parseInt(value)
-                setErrorList(temp)
-                // }
-            }
+        let temp = errorList;
+        if (temp.hasOwnProperty(id)) {
+            // if (parseInt(value) <= temp[id].Quantity) {
+            temp[id].issue = parseInt(value)
+            setErrorList(temp)
+            // }
+        }
     }
-    const [emptyProduct,setemptyProduct]= useState(false);
+    const [emptyProduct, setemptyProduct] = useState(false);
 
     const orderConfirmationHandler = () => {
         let error = Object.keys(errorList)
-        console.log({error});
+        console.log({ error });
         if (error.length) {
             let confimationStatus = true;
             if (reason != "Charges") {
 
                 error.map((id) => {
-                    if ((errorList[id].issue == 0 || !errorList[id].issue) || errorList[id].issue > errorList[id].Quantity) {
+                    if ((errorList[id].issue == 0 || !errorList[id].issue) || (reason != "Product Overage" && errorList[id].issue > errorList[id].Quantity)) {
                         confimationStatus = false;
                         const myElement = document.getElementById(`oP${id}`);
-                        if(myElement){
-                            console.warn({myElement});
+                        if (myElement) {
+                            console.warn({ myElement });
                             myElement.scrollIntoView({ behavior: "smooth", block: "center" });
                             myElement.style.borderBottom = "1px solid red";
                             shakeHandler(`oP${id}`)
                         }
                     } else {
                         const myElement = document.getElementById(`oP${id}`);
-                       if(myElement){
-                           myElement.style.borderBottom = "1px solid #00FF00"
+                        if (myElement) {
+                            myElement.style.borderBottom = "1px solid #00FF00"
                         }
                     }
                 })
@@ -224,24 +241,24 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
             if (confimationStatus) {
                 error.map((id) => {
                     const myElement = document.getElementById(`oP${id}`);
-                    if(myElement){
+                    if (myElement) {
                         myElement.style.borderBottom = "1px solid #ccc"
                     }
                 })
-                if(!contactId){
+                if (!contactId) {
                     const myElement = document.getElementById("contactSelector");
-                    if(myElement){
-                        console.error({myElement});
+                    if (myElement) {
+                        console.error({ myElement });
                         myElement.scrollIntoView({ behavior: "smooth", block: "center" });
                         myElement.style.borderBottom = "1px solid red"
                         shakeHandler(`contactSelector`)
-                        
+
                     }
-                    
-                }else{
+
+                } else {
                     document.getElementById("AttachementSection")?.scrollIntoView({ behavior: "smooth", block: "center" });
                     const myElement = document.getElementById("contactSelector");
-                    if(myElement){
+                    if (myElement) {
                         myElement.style.borderBottom = "1px solid #ccc"
                     }
                     setOrderConfirmed(true)
@@ -250,8 +267,8 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
         } else {
             setemptyProduct(true)
             var element = document.getElementsByTagName("checkbox");
-            if (element.length>0) {
-              element[0].scrollIntoView({ behavior: "smooth", block: "center" });
+            if (element.length > 0) {
+                element[0].scrollIntoView({ behavior: "smooth", block: "center" });
             }
             // alert("please select any product...")
         }
@@ -266,208 +283,255 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
             lock1.classList.add(Styles1.shake)
         }
     }
+    let show = 0;
     return (<section style={{ borderBottom: '1px solid #ccc' }}>
         {emptyProduct ? (
-          <ModalPage
-            open
+            <ModalPage
+                open
+                content={
+                    <div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
+                        <h2 className={`${Styles.warning} `}>Product Empty</h2>
+                        <p className={`${Styles.warningContent} `} style={{ lineHeight: '22px' }}>
+                            Please select Product before processing further
+                        </p>
+                        <div className="d-flex justify-content-around ">
+                            <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setemptyProduct(false)}>
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                }
+                onClose={() => {
+                    setemptyProduct(false);
+                }}
+            />
+        ) : null}
+        <ModalPage
+            open={showProductList ?? false}
             content={
-              <div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
-                <h2 className={`${Styles.warning} `}>Product Empty</h2>
-                <p className={`${Styles.warningContent} `} style={{ lineHeight: '22px' }}>
-                  Please select Product before processing further
-                </p>
-                <div className="d-flex justify-content-around ">
-                  <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setemptyProduct(false)}>
-                    OK
-                  </button>
+                <div className="d-flex flex-column gap-3">
+                    <h2 className={`${Styles.warning} `}>Select other product of the Brand</h2>
+                    <div>
+                        <div><input type="text" placeholder='Search Product' autoComplete="off" className={Styles1.searchBox} title="You can search Product by Name,SKU or UPC" id="poductInput" onKeyUp={(e) => { setSearchItem(e.target.value) }} style={{ width: '150px', marginBottom: '10px' }} /></div>
+                        <div style={{ maxHeight: '500px', overflow: 'scroll', width: '900px' }}>
+                            <table style={{ width: '100%' }}>
+                                <thead>
+                                    <tr>
+                                        <th style={{ width: '225px' }}>Name</th>
+                                        <th style={{ width: '75px' }}>Code</th>
+                                        <th style={{ width: '75px' }}>Qty</th>
+                                        <th style={{ width: '75px' }}>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {productAllList.map((ele, index) => {
+                                        if (!searchItem || (ele.ProductCode?.toLowerCase().includes(
+                                            searchItem?.toLowerCase()) || ele.Name?.toLowerCase().includes(
+                                                searchItem?.toLowerCase()) || ele.ProductUPC__c?.toLowerCase().includes(
+                                                    searchItem?.toLowerCase()))) {
+                                            return (
+                                                <ErrorProductCard Styles1={Styles1} productErrorHandler={productSelectHandler} errorList={productList} setProductDetailId={setProductDetailId} product={ele} productImage={productImage} reason={reason} AccountName={""} ErrorProductQtyHandler={ErrorProductQtyHandler}
+                                                    readOnly={orderConfirmed} style={{ cardHolder: { backgroundColor: '#67f5f533', borderBottom: '1px solid #fff' }, nameHolder: { width: '300px', textAlign: 'start' } }} showQTyHandler={false} />
+                                            )
+                                        }
+                                    })
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div className="d-flex justify-content-around ">
+                        <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '250px' }} onClick={() => setShowProductList(false)}>
+                            Add to Support Ticket
+                        </button>
+                        <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setShowProductList(false)}>
+                            Cancel
+                        </button>
+                    </div>
                 </div>
-              </div>
             }
             onClose={() => {
-              setemptyProduct(false);
+                setShowProductList(false);
             }}
-          />
-        ) : null}
-        <p className={Styles1.reasonTitle}><span style={{ cursor: "pointer" }} onClick={() => shakeHandler()}>Select the order you want to handle:</span> {!orderId && reason && <input type="text" placeholder='Search Order' autoComplete="off" className={Styles1.searchBox} title="You can search by PO Number, Account Name & Brand for last 3 month Orders" onKeyUp={(e) => { setSearchPO(e.target.value) }} id="poSearchInput" style={{width:'120px'}} />}{ reason && orderId ? reason == "Product Overage" && showProductList ?
-            <input type="text" placeholder='Search Product' autoComplete="off" className={Styles1.searchBox} title="You can search Product by Name,SKU or UPC" id="poductInput" onKeyUp={(e) => { setSearchItem(e.target.value) }} style={{ width: '120px' }} />:<button className={Styles1.btnHolder} onClick={() => setShowProductList(true)}><RxEyeOpen />&nbsp; All Products</button>
-        :null} {!reason && <BiLock id="lock1" style={{ float: 'right' }} />}</p>
+        />
+        <p className={Styles1.reasonTitle}><span style={{ cursor: "pointer" }} onClick={() => shakeHandler()}>Select the order you want to handle:</span> {!orderId && reason && <input type="text" placeholder='Search Order' autoComplete="off" className={Styles1.searchBox} title="You can search by PO Number, Account Name & Brand for last 3 month Orders" onKeyUp={(e) => { setSearchPO(e.target.value) }} id="poSearchInput" style={{ width: '120px' }} />}{reason && orderId&& !orderConfirmed ? reason == "Product Overage" && showProductList ?null: <button className={Styles1.btnHolder} onClick={() => setShowProductList(true)}><RxEyeOpen />&nbsp; Other Products</button>
+            : null} {!reason && <BiLock id="lock1" style={{ float: 'right' }} />}</p>
         {reason && reason != "Update Account Info" &&
             <div className={`${Styles1.orderListHolder} ${Styles1.openListHolder}`} style={(orderId && (!searchPo || searchPo == "")) ? { overflow: 'unset', height: 'auto', border: 0 } : {}}>
                 <div>
-                    {orders.length>0 ?
-                    orders.map((item, index) => {
-                        let date = new Date(item.CreatedDate);
-                        let cdate = `${date.getDate()} ${months[date.getMonth()]
-                            } ${date.getFullYear()}`;
-                        let datemonth = `${date.getDate()} ${months[date.getMonth()]
-                            }`;
-                        if (((searchPo && searchPo != "") ? (item.PO_Number__c?.toLowerCase().includes(
-                            searchPo?.toLowerCase()) || item.AccountName?.toLowerCase().includes(
-                                searchPo?.toLowerCase()) || item.ManufacturerName__c?.toLowerCase().includes(
-                                    searchPo?.toLowerCase())) : !orderId) || orderId == item.Id) {
-                            return (
-                                <div className={` ${Styles.orderStatement} cardHover ${orderId == item.Id ? Styles1.selOrder : ''}`} style={{ paddingBottom: '15px' }} key={index}>
-                                    <div style={{position: 'relative' }} className={(index % 2 == 0) ? Styles1.cardEnterRight : Styles1.cardEnterLeft}>
-                                        <input type="radio" id={`order${item.Id}`} value={item.Id} onClick={(e) => { orderSelectHandler(e) }} name="order" className={Styles1.inputHolder} checked={item.Id == orderId} />
-                                        <label for={`order${item.Id}`}  title={!orderId ? "click to select" : null} className={Styles.poNumber} style={item.Id == orderId ? { background: 'linear-gradient(90deg, #FFFFFF 0%,#000000 100%)' } : {}}>
-                                            <div className={Styles1.dFlex}>
-                                                <div className={Styles.poNumb1}>
-                                                    <h3>PO Number</h3>
-                                                    <p>{item.PO_Number__c}</p>
-                                                </div>
-                                            </div>
-
-                                            <div className={Styles.poNumb1}>
-                                                <h3 style={item.Id == orderId ? { color: '#fff' } : {}}>Brand</h3>
-                                                <p style={item.Id == orderId ? { color: '#fff' } : {}}>{item.ManufacturerName__c}</p>
-                                            </div>
-
-                                            <div className={Styles.PoOrderLast}>
-                                                <h3 style={item.Id == orderId ? { color: '#fff' } : {}}>Ship To </h3>
-                                                <p style={item.Id == orderId ? { color: '#fff' } : {}}>{item.AccountName}</p>
-                                            </div>
-                                        </label>
-
-                                        <div className={`${Styles.productDetail} ${item.Id == orderId ? Styles.warp : null}`} style={{padding:'0 30px'}}>
-                                            <div className={Styles.Prod1}>
-                                                <div className={Styles.ProtuctInnerBox}>
-                                                    <div className={Styles.BoxBlack}>
-                                                        <div className={Styles.Boxwhite}>
-                                                            <h1>
-                                                                {item.ProductCount} <span>Products</span>
-                                                            </h1>
-                                                        </div>
+                    {orders.length > 0 ?
+                        orders.map((item, index) => {
+                            let date = new Date(item.CreatedDate);
+                            let cdate = `${date.getDate()} ${months[date.getMonth()]
+                                } ${date.getFullYear()}`;
+                            let datemonth = `${date.getDate()} ${months[date.getMonth()]
+                                }`;
+                            if (((searchPo && searchPo != "") ? (item.PO_Number__c?.toLowerCase().includes(
+                                searchPo?.toLowerCase()) || item.AccountName?.toLowerCase().includes(
+                                    searchPo?.toLowerCase()) || item.ManufacturerName__c?.toLowerCase().includes(
+                                        searchPo?.toLowerCase())) : !orderId) || orderId == item.Id) {
+                                show++;
+                                return (
+                                    <div className={` ${Styles.orderStatement} cardHover ${orderId == item.Id ? Styles1.selOrder : ''}`} style={{ paddingBottom: '15px' }} key={index}>
+                                        <div style={{ position: 'relative' }} className={(index % 2 == 0) ? Styles1.cardEnterRight : Styles1.cardEnterLeft}>
+                                            <input type="radio" id={`order${item.Id}`} value={item.Id} onClick={(e) => { orderSelectHandler(e) }} name="order" className={Styles1.inputHolder} checked={item.Id == orderId} />
+                                            <label for={`order${item.Id}`} title={!orderId ? "click to select" : null} className={Styles.poNumber} style={item.Id == orderId ? { background: 'linear-gradient(90deg, #FFFFFF 0%,#000000 100%)' } : {}}>
+                                                <div className={Styles1.dFlex}>
+                                                    <div className={Styles.poNumb1}>
+                                                        <h3>PO Number</h3>
+                                                        <p>{item.PO_Number__c}</p>
                                                     </div>
                                                 </div>
 
-                                                <div className={Styles.ProtuctInnerBox1}>
-                                                    {item.OpportunityLineItems && item.OpportunityLineItems?.records.length > 0 ? (
-                                                        orderId == item.Id ? (<>
-                                                            <table>
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th style={{ width: '225px' }}>Name</th>
-                                                                        <th style={{ width: '75px' }}>Code</th>
-                                                                        <th style={{ width: '75px' }}>Qty</th>
-                                                                        <th style={{ width: '75px' }}>Price</th>
-                                                                        {reason && reason != "Charges" && <th>{reason}</th>}
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
+                                                <div className={Styles.poNumb1}>
+                                                    <h3 style={item.Id == orderId ? { color: '#fff' } : {}}>Brand</h3>
+                                                    <p style={item.Id == orderId ? { color: '#fff' } : {}}>{item.ManufacturerName__c}</p>
+                                                </div>
 
-                                                                    {item.OpportunityLineItems?.records
-                                                                        .map((ele, index) => {
-                                                                            if (!orderConfirmed || (orderConfirmed && Object.keys(errorList).includes(ele.Id))) {
-                                                                                return (<ErrorProductCard Styles1={Styles1} productErrorHandler={productErrorHandler} errorList={errorList} setProductDetailId={setProductDetailId} product={ele} productImage={productImage} reason={reason} AccountName={item.AccountName} ErrorProductQtyHandler={ErrorProductQtyHandler} readOnly={orderConfirmed} />)
-                                                                            }
-                                                                        })}
-{reason == "Product Overage" ? showProductList ?
-                                                                            productList.map((ele, index) => {
+                                                <div className={Styles.PoOrderLast}>
+                                                    <h3 style={item.Id == orderId ? { color: '#fff' } : {}}>Ship To </h3>
+                                                    <p style={item.Id == orderId ? { color: '#fff' } : {}}>{item.AccountName}</p>
+                                                </div>
+                                            </label>
+
+                                            <div className={`${Styles.productDetail} ${item.Id == orderId ? Styles.warp : null}`} style={{ padding: '0 30px' }}>
+                                                <div className={Styles.Prod1}>
+                                                    <div className={Styles.ProtuctInnerBox}>
+                                                        <div className={Styles.BoxBlack}>
+                                                            <div className={Styles.Boxwhite}>
+                                                                <h1>
+                                                                    {item.ProductCount} <span>Products</span>
+                                                                </h1>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className={Styles.ProtuctInnerBox1}>
+                                                        {item.OpportunityLineItems && item.OpportunityLineItems?.records.length > 0 ? (
+                                                            orderId == item.Id ? (<>
+                                                                <table>
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style={{ width: '225px' }}>Name</th>
+                                                                            <th style={{ width: '75px' }}>Code</th>
+                                                                            <th style={{ width: '75px' }}>Qty</th>
+                                                                            <th style={{ width: '75px' }}>Price</th>
+                                                                            {reason && reason != "Charges" && <th>{reason}</th>}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+
+                                                                        {item.OpportunityLineItems?.records
+                                                                            .map((ele, index) => {
+                                                                                if (!orderConfirmed || (orderConfirmed && Object.keys(errorList).includes(ele.Id))) {
+                                                                                    return (<ErrorProductCard Styles1={Styles1} productErrorHandler={productErrorHandler} errorList={errorList} setProductDetailId={setProductDetailId} product={ele} productImage={productImage} reason={reason} AccountName={item.AccountName} ErrorProductQtyHandler={ErrorProductQtyHandler} readOnly={orderConfirmed} />)
+                                                                                }
+                                                                            })}
+                                                                        {reason == "Product Overage" && productList.map((ele, index) => {
                                                                                 if (!searchItem || (ele.ProductCode?.toLowerCase().includes(
                                                                                     searchItem?.toLowerCase()) || ele.Name?.toLowerCase().includes(
                                                                                         searchItem?.toLowerCase()) || ele.ProductUPC__c?.toLowerCase().includes(
                                                                                             searchItem?.toLowerCase()))) {
                                                                                     return (
                                                                                         <ErrorProductCard Styles1={Styles1} productErrorHandler={productErrorHandler} errorList={errorList} setProductDetailId={setProductDetailId} product={ele} productImage={productImage} reason={reason} AccountName={item.AccountName} ErrorProductQtyHandler={ErrorProductQtyHandler}
-                                                                                            readOnly={orderConfirmed} />
+                                                                                            readOnly={orderConfirmed} style={{ cardHolder: { backgroundColor: '#67f5f533', borderBottom: '1px solid #fff' }, nameHolder: { width: '300px' } }} />
                                                                                     )
                                                                                 }
                                                                             }
-                                                                            ) : <p className={Styles1.listHolder} style={{display:'none'}} onClick={() => setShowProductList(true)}><RxEyeOpen />&nbsp; Product List</p>
-                                                                            : null}
-                                                                </tbody>
-                                                            </table>
-                                                        </>) : (
-                                                            <ul>{item.OpportunityLineItems?.records
-                                                                .slice(0, size)
-                                                                .map((ele, index) => {
-                                                                    return (<li>
-                                                                        {(Viewmore)
-                                                                            ? ele.Name.split(item.AccountName)[1]
-                                                                            : ele.Name.split(item.AccountName)
-                                                                                .length > 1
+                                                                            )}
+                                                                    </tbody>
+                                                                </table>
+                                                            </>) : (
+                                                                <ul>{item.OpportunityLineItems?.records
+                                                                    .slice(0, size)
+                                                                    .map((ele, index) => {
+                                                                        return (<li>
+                                                                            {(Viewmore)
                                                                                 ? ele.Name.split(item.AccountName)[1]
-                                                                                    .length >= 31
-                                                                                    ? `${ele.Name.split(
-                                                                                        item.AccountName
-                                                                                    )[1].substring(0, 28)}...`
-                                                                                    : `${ele.Name.split(
-                                                                                        item.AccountName
-                                                                                    )[1].substring(0, 31)}`
-                                                                                : ele.Name.split(item.AccountName)[0]
-                                                                                    .length >= 31
-                                                                                    ? `${ele.Name.split(
-                                                                                        item.AccountName
-                                                                                    )[0].substring(0, 28)}...`
-                                                                                    : `${ele.Name.split(
-                                                                                        item.AccountName
-                                                                                    )[0].substring(0, 31)}`}
-                                                                    </li>)
-                                                                })}</ul>)
-                                                    ) : (
-                                                        <p className={Styles.noProductLabel}>No Product</p>
-                                                    )}
+                                                                                : ele.Name.split(item.AccountName)
+                                                                                    .length > 1
+                                                                                    ? ele.Name.split(item.AccountName)[1]
+                                                                                        .length >= 31
+                                                                                        ? `${ele.Name.split(
+                                                                                            item.AccountName
+                                                                                        )[1].substring(0, 28)}...`
+                                                                                        : `${ele.Name.split(
+                                                                                            item.AccountName
+                                                                                        )[1].substring(0, 31)}`
+                                                                                    : ele.Name.split(item.AccountName)[0]
+                                                                                        .length >= 31
+                                                                                        ? `${ele.Name.split(
+                                                                                            item.AccountName
+                                                                                        )[0].substring(0, 28)}...`
+                                                                                        : `${ele.Name.split(
+                                                                                            item.AccountName
+                                                                                        )[0].substring(0, 31)}`}
+                                                                        </li>)
+                                                                    })}</ul>)
+                                                        ) : (
+                                                            <p className={Styles.noProductLabel}>No Product</p>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className={Styles1.totalProductPrice}>
-                                                <div className={Styles1.Margitotal}>
-                                                    <p className={Styles1.detailsTitleHolder}>Total</p>
-                                                    <p className={Styles1.detailsDescHolder}>${Number(item.Amount).toFixed(2)}</p>
-                                                </div>
-                                                <div className={Styles1.Margitotal}>
-                                                    <p className={Styles1.detailsTitleHolder}>Order Placed</p>
-                                                    <p className={Styles1.detailsDescHolder}>{cdate}</p>
-                                                </div>
-                                                {(orderId && (!searchPo || searchPo == "")) && <>
+                                                <div className={Styles1.totalProductPrice}>
                                                     <div className={Styles1.Margitotal}>
-                                                        <p className={Styles1.detailsTitleHolder}>Customer Support For</p>
-                                                        <p className={Styles1.detailsDescHolder}>Customer Service</p>
+                                                        <p className={Styles1.detailsTitleHolder}>Total</p>
+                                                        <p className={Styles1.detailsDescHolder}>${Number(item.Amount).toFixed(2)}</p>
                                                     </div>
                                                     <div className={Styles1.Margitotal}>
-                                                        <p className={Styles1.detailsTitleHolder}>Customer Service Issue</p>
-                                                        <p className={Styles1.detailsDescHolder}>{reason}</p>
+                                                        <p className={Styles1.detailsTitleHolder}>Order Placed</p>
+                                                        <p className={Styles1.detailsDescHolder}>{cdate}</p>
                                                     </div>
-                                                    <div className={Styles1.Margitotal}>
-                                                        <p className={Styles1.detailsTitleHolder}>Subject</p>
-                                                        <p className={Styles1.detailsDescHolder}>{setSubject(`Customer Service for ${reason} having PO# ${item.PO_Number__c} Created on ${datemonth}`)}Customer Service for {reason} having <br /> PO# {item.PO_Number__c} Created on {datemonth}</p>
-                                                    </div>
-                                                </>}
+                                                    {(orderId && (!searchPo || searchPo == "")) && <>
+                                                        <div className={Styles1.Margitotal}>
+                                                            <p className={Styles1.detailsTitleHolder}>Customer Support For</p>
+                                                            <p className={Styles1.detailsDescHolder}>Customer Service</p>
+                                                        </div>
+                                                        <div className={Styles1.Margitotal}>
+                                                            <p className={Styles1.detailsTitleHolder}>Customer Service Issue</p>
+                                                            <p className={Styles1.detailsDescHolder}>{reason}</p>
+                                                        </div>
+                                                        <div className={Styles1.Margitotal}>
+                                                            <p className={Styles1.detailsTitleHolder}>Subject</p>
+                                                            <p className={Styles1.detailsDescHolder}>{setSubject(`Customer Service for ${reason} having PO# ${item.PO_Number__c} Created on ${datemonth}`)}Customer Service for {reason} having <br /> PO# {item.PO_Number__c} Created on {datemonth}</p>
+                                                        </div>
+                                                    </>}
 
-                                                {(orderId && (!searchPo || searchPo == "")) && <>
-                                                    {item.StageName && <div className={Styles1.Margitotal}>
-                                                        <p className={Styles1.detailsTitleHolder}>Stage Name</p>
-                                                        <p className={Styles1.detailsDescHolder}>{item.StageName}</p>
-                                                    </div>}
-                                                    {item.Description && <div className={Styles1.Margitotal}>
-                                                        <p className={Styles1.detailsTitleHolder}>Notes</p>
-                                                        <p className={Styles1.detailsDescHolder}>{item.Description}</p>
-                                                    </div>}
-                                                    <div className={Styles1.Margitotal}>
-                                                        <p className={Styles1.detailsTitleHolder}>Shipping Address</p>
-                                                        <p className={Styles1.detailsDescHolder}>{item.Shipping_Street__c}{item.Shipping_City__c && <>,<br /> {item.Shipping_City__c}</>}{item.Shipping_State__c && `, ${item.Shipping_State__c}`}{item.Shipping_Country__c && <>,<br /> {item.Shipping_Country__c}</>}{item.Shipping_Zip__c && `, ${item.Shipping_Zip__c}`}</p>
-                                                    </div>
-                                                    {item.Order_Number__c && <div className={Styles1.Margitotal}>
-                                                        <p className={Styles1.detailsTitleHolder}>Order Number</p>
-                                                        <p className={Styles1.detailsDescHolder}>{item.Order_Number__c}</p>
-                                                    </div>}
-                                                    {files.length > 0 && <div className={Styles1.Margitotal}>
-                                                        <p className={Styles1.detailsDescHolder}>
-                                                            <p className={Styles1.detailsTitleHolder}>Attachements</p>
-                                                            <div className={Styles1.imgHolder}>
-                                                                {files.map((file, index) => (
-                                                                    <img src={file} key={index} />
-                                                                ))}
-                                                            </div>
-                                                        </p>
-                                                    </div>}
-                                                    {desc && <div className={Styles1.Margitotal}>
-                                                        <p className={Styles1.detailsTitleHolder}>Description</p>
-                                                        <p className={Styles1.detailsDescHolder}>{desc}</p>
-                                                    </div>}
-                                                    <div className={Styles1.Margitotal}>
-                                                        <p className={Styles1.detailsTitleHolder}>Contact Person</p>
-                                                        <p className={Styles1.detailsDescHolder} style={{display:'flex',justifyContent:'end',marginTop:'5px'}}>
-                                                            {/* <Select
+                                                    {(orderId && (!searchPo || searchPo == "")) && <>
+                                                        {item.StageName && <div className={Styles1.Margitotal}>
+                                                            <p className={Styles1.detailsTitleHolder}>Stage Name</p>
+                                                            <p className={Styles1.detailsDescHolder}>{item.StageName}</p>
+                                                        </div>}
+                                                        {item.Description && <div className={Styles1.Margitotal}>
+                                                            <p className={Styles1.detailsTitleHolder}>Notes</p>
+                                                            <p className={Styles1.detailsDescHolder}>{item.Description}</p>
+                                                        </div>}
+                                                        <div className={Styles1.Margitotal}>
+                                                            <p className={Styles1.detailsTitleHolder}>Shipping Address</p>
+                                                            <p className={Styles1.detailsDescHolder}>{item.Shipping_Street__c}{item.Shipping_City__c && <>,<br /> {item.Shipping_City__c}</>}{item.Shipping_State__c && `, ${item.Shipping_State__c}`}{item.Shipping_Country__c && <>,<br /> {item.Shipping_Country__c}</>}{item.Shipping_Zip__c && `, ${item.Shipping_Zip__c}`}</p>
+                                                        </div>
+                                                        {item.Order_Number__c && <div className={Styles1.Margitotal}>
+                                                            <p className={Styles1.detailsTitleHolder}>Order Number</p>
+                                                            <p className={Styles1.detailsDescHolder}>{item.Order_Number__c}</p>
+                                                        </div>}
+                                                        {files.length > 0 && <div className={Styles1.Margitotal}>
+                                                            <p className={Styles1.detailsDescHolder}>
+                                                                <p className={Styles1.detailsTitleHolder}>Attachements</p>
+                                                                <div className={Styles1.imgHolder}>
+                                                                    {files.map((file, index) => (
+                                                                        <img src={file} key={index} />
+                                                                    ))}
+                                                                </div>
+                                                            </p>
+                                                        </div>}
+                                                        {desc && <div className={Styles1.Margitotal}>
+                                                            <p className={Styles1.detailsTitleHolder}>Description</p>
+                                                            <p className={Styles1.detailsDescHolder}>{desc}</p>
+                                                        </div>}
+                                                        <div className={Styles1.Margitotal}>
+                                                            <p className={Styles1.detailsTitleHolder}>Contact Person</p>
+                                                            <p className={Styles1.detailsDescHolder} style={{ display: 'flex', justifyContent: 'end', marginTop: '5px' }}>
+                                                                {/* <Select
                                                                 options={contacts}
                                                                 defaultValue={{
                                                                     value: null,
@@ -484,29 +548,30 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                                 menuPosition={"fixed"}
                                                                 menuShouldScrollIntoView={false}
                                                             /> */}
-                                                            <select id="contactSelector" style={{width:'200px'}} className="form-control" onChange={(e) => { setContactId(e.target.value) }} title={!contactId ? "Please select Contact":null}>
-                                                                <option>Select Contact</option>
-                                                                {contacts.map(element => (
-                                                                    <option value={element.value}>{element.label}</option>
-                                                                ))}
-                                                            </select>
-                                                        </p>
-                                                    </div>
-                                                    {(orderId == item.Id && !orderConfirmed) && <div className={Styles1.Margitotal}>
-                                                        <div className={Styles1.btnHolder} title="Click here to Continue" onClick={() => orderConfirmationHandler()}>I'M Done<BiCheck /></div>
-                                                    </div>}
-                                                    {(orderId == item.Id && orderConfirmed) && <div className={Styles1.Margitotal}>
-                                                        <div className={Styles1.btnHolder} title="Click here to Change in Products" onClick={() =>{ setOrderConfirmed(false);}}>Wanna Change?</div>
-                                                    </div>}
-                                                </>}
+                                                                <select id="contactSelector" style={{ width: '200px' }} className="form-control" onChange={(e) => { setContactId(e.target.value) }} title={!contactId ? "Please select Contact" : null}>
+                                                                    <option>Select Contact</option>
+                                                                    {contacts.map(element => (
+                                                                        <option value={element.value}>{element.label}</option>
+                                                                    ))}
+                                                                </select>
+                                                            </p>
+                                                        </div>
+                                                        {(orderId == item.Id && !orderConfirmed) && <div className={Styles1.Margitotal}>
+                                                            <div className={Styles1.btnHolder} title="Click here to Continue" onClick={() => orderConfirmationHandler()}>I'M Done<BiCheck /></div>
+                                                        </div>}
+                                                        {(orderId == item.Id && orderConfirmed) && <div className={Styles1.Margitotal}>
+                                                            <div className={Styles1.btnHolder} title="Click here to Change in Products" onClick={() => { setOrderConfirmed(false); }}>Wanna Change?</div>
+                                                        </div>}
+                                                    </>}
+                                                </div>
                                             </div>
                                         </div>
+                                        {orderId && <b aria-label="Click Here" title="Click here" onClick={() => { resetForm() }} style={{ cursor: 'pointer', marginLeft: '15px', textDecoration: 'underline' }}>Wrong Order. Want to Change Order?</b>}
                                     </div>
-                                    {orderId && <b aria-label="Click Here" title="Click here" onClick={() => { resetForm() }} style={{ cursor: 'pointer', marginLeft: '15px', textDecoration: 'underline' }}>Wrong Order. Want to Change Order?</b>}
-                                </div>
-                            )
-                        }
-                    }):<p style={{textAlign:'center'}}>No Order Found</p>}
+                                )
+                            }
+                        }) : <p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh' }}>No Order Found</p>}
+                    {orders.length != 0 && show == 0 && <p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh' }}>No Order Found</p>}
                 </div >
             </div >}
         <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false} AccountId={accountId} ManufacturerId={manufacturerId} />
