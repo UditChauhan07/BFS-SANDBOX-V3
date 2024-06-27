@@ -1,21 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { CustomerServiceIcon, NeedHelp, OrderStatusIcon } from "../../../lib/svg";
+import { CustomerServiceIcon, OrderStatusIcon } from "../../../lib/svg";
 import styles from "./index.module.css";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { BiMailSend } from "react-icons/bi";
+import { GetAuthData, admins, getSessionStatus } from "../../../lib/store";
 
 const MobileHeader = () => {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(null);
+  const [show, setShow] = useState(false);
+  const [userName, setUserName] = useState(localStorage.getItem("Name"));
 
+
+  useEffect(() => {
+    GetAuthData().then((user) => {
+      getSessionStatus({ key: user?.x_access_token, salesRepId: user?.Sales_Rep__c }).then((status) => {
+        if (admins.includes(status.data.Id)) {
+
+        }
+        setUserName(status?.data?.Name)
+      }).catch((statusErr) => {
+        console.log({ statusErr });
+      })
+    }).catch((userErr) => {
+      console.log({ userErr });
+    })
+  }, [])
   const togglePanel = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
-
-  const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
@@ -63,7 +78,7 @@ const MobileHeader = () => {
                   <div className={styles.welcomeAdmin}>
                     <p className={`m-0 ${styles.welcomeText}`}>
                       Welcome,
-                      <span className={`m-0 ${styles.nameText}`}>User</span>
+                      <span className={`m-0 ${styles.nameText}`}>{userName ?? "User"}</span>
                     </p>
                   </div>
 
@@ -104,20 +119,20 @@ const MobileHeader = () => {
                   </div>
                   {/* accordian need end */}
 
-{/* accordian admin start */}
-<div className={styles.accordion}>
+                  {/* accordian admin start */}
+                  <div className={styles.accordion}>
                     <div className={styles.panel}>
                       <div className={styles.panelHeader} onClick={() => togglePanel(1)}>
-                      Admin
+                        Admin
                         <span className={`${styles.arrow} ${activeIndex === 1 ? styles.arrowUp : ''}`}><MdKeyboardArrowRight /></span>
                       </div>
                       {activeIndex === 1 && (
                         <div className={styles.panelContent}>
                           <ul>
-                          <li onClick={() => navigate("/emailSetting")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
-                      <BiMailSend />&nbsp;Email Blast
-                    </li>
-                           
+                            <li onClick={() => navigate("/emailSetting")} className={`dropdown-item rounded ${styles.text} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
+                              <BiMailSend />&nbsp;Email Blast
+                            </li>
+
                           </ul>
 
                         </div>
@@ -125,32 +140,86 @@ const MobileHeader = () => {
                     </div>
 
                   </div>
-{/* accordian admin end  */}
+                  {/* accordian admin end  */}
+
+                  {/* accordian Reports Start*/}
+                  <div className={styles.accordion}>
+                    <div className={styles.panel}>
+                      <div className={styles.panelHeader} onClick={() => togglePanel(2)}>
+                        REPORTS
+                        <span className={`${styles.arrow} ${activeIndex === 2 ? styles.arrowUp : ''}`}><MdKeyboardArrowRight /></span>
+                      </div>
+                      {activeIndex === 2 && (
+                        <div className={styles.panelContent2}>
+                          <ul>
+                         <li>
+                        <Link to="/sales-report" className={` linkStyle ${styles.text}`}>
+                          Sales Report
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/newness-report" className={` linkStyle ${styles.text}`}>
+                          Newness Report
+                        </Link>
+                      </li>
+                      <li>
+                  <Link
+                    to="/comparison-report"
+                    className={` linkStyle ${styles.text}`}
+                    // onClick={() => {
+                    //   navigate("/comparison-report");
+                    // }}
+                  >
+                    Comparison Report
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/comparison-report"
+                    className={` linkStyle ${styles.text}`}
+                    // onClick={() => {
+                    //   navigate("/comparison");
+                    // }}
+                   style={{lineHeight: "1px"}}>Yearly Comparison Report
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/Target-Report"
+                    className={` linkStyle ${styles.text}`}
+                    // onClick={() => {
+                    //   navigate("/Target-Report");
+                    // }}
+                  >
+                    Target Report
+                  </Link>
+                </li>
+
+                          </ul>
+
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
+                  {/* accordian Reports End*/}
+
 
                   <Offcanvas.Body className={styles.offcanvasBody}>
 
                     <ul>
                       <li>
-                      <Link to="/order-list" className={`p-1 px-2 linkStyle ${styles.text}`}>
-                  My Orders{" "}
-                </Link>
+                        <Link to="/order-list" className={`p-1 px-2 linkStyle ${styles.text}`}>
+                          My Orders{" "}
+                        </Link>
                       </li>
-                  
+
                       <li>
                         <Link to="/top-products" className={`p-1 px-2 linkStyle ${styles.text}`}>
                           Top Products
                         </Link>
                       </li>
-                      <li>
-                        <Link to="/sales-report" className={`p-1 px-2 linkStyle ${styles.text}`}>
-                          Sales Report
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/newness-report" className={`p-1 px-2 linkStyle ${styles.text}`}>
-                          Newness Report
-                        </Link>
-                      </li>
+                    
                       <li>
                         <Link to="/marketing-calendar" className={`p-1 px-2 linkStyle ${styles.text}`}>
                           Marketing Calendar
