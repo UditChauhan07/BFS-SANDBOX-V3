@@ -215,7 +215,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                                         <td>{contact.ContactName}</td>
                                         <td>{contact.ContactEmail}</td>
                                         <td>{DateConvert(contact.Date, true)}</td>
-                                        <td>{contact.mailStatus == 1 ? <p onClick={() => { getEmailBodyHandler(contact.id) }} className="bg-[#90EE90] text-center rounded-lg text-[#ffffff] text-sm cursor-pointer">Sent</p> : contact.mailStatus == 2 ? <p onClick={() => { getEmailBodyHandler(contact.id) }} className="bg-[#FF474C] text-center rounded-lg text-[#ffffff] text-sm cursor-pointer">Failed</p> : <p onClick={() => { getEmailBodyHandler(contact.id) }} className="bg-[#efef68] text-center rounded-lg text-[#000] text-sm cursor-pointer">Not Send</p>}</td>
+                                        <td>{contact.mailStatus == 1 ? <p onClick={() => { getEmailBodyHandler(contact.id) }} className="bg-[#90EE90] text-center rounded-lg text-[#ffffff] text-sm cursor-pointer">Send</p> : contact.mailStatus == 2 ? <p onClick={() => { getEmailBodyHandler(contact.id) }} className="bg-[#FF474C] text-center rounded-lg text-[#ffffff] text-sm cursor-pointer">Failed</p> : <p onClick={() => { getEmailBodyHandler(contact.id) }} className="bg-[#efef68] text-center rounded-lg text-[#000] text-sm cursor-pointer">Not Sent</p>}</td>
                                     </tr>
                                 )
                             }) : <tr className="text-center" style={{ height: '200px' }}><td colSpan={6}>No data found.</td></tr>}

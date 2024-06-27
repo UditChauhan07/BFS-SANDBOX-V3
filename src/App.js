@@ -38,6 +38,7 @@ import OrderStatusIssues from "./OrderStatusIssues";
 import EmailSetting from "./pages/EmailSetting";
 import BMAIssues from "./pages/BMAIssues";
 import PageNotFound from "./pages/PageNotFound";
+import PublicProduct from "./pages/public/Product";
 
 
 function App() {
@@ -101,6 +102,7 @@ function App() {
             <Route path="/orderStatusForm" element={<OrderStatusForm />}></Route>
             <Route path="/emailSetting" element={<EmailSetting />}></Route>
             <Route path="/brandManagementApproval" element={<BMAIssues />}></Route>
+            <Route path="/public/product/:id/:token/details" element={<PublicProduct />}></Route>
             <Route path="*" element={<PageNotFound />}></Route>
             
             {/* 1234 */}

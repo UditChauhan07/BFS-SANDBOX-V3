@@ -57,6 +57,13 @@ export async function AuthCheck() {
     return false;
   }
 }
+export function PublicCheck() {
+  if (JSON.parse(localStorage.getItem("Api Data"))?.data) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 export function POGenerator() {
   let count = parseInt(localStorage.getItem(POCount)) || 1;
@@ -707,6 +714,23 @@ export async function getEmailBlast({ key, Id }) {
     return data.data;
   }
 }
+
+export async function publicProductDetails({ token, id }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/VxkG0B5ODZxz1Cb", {
+    method: "POST",
+    body: JSON.stringify({ token, id }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  return data;
+}
+
+
 export async function getEmailBody({ key, id }) {
   let headersList = {
     Accept: "*/*",
