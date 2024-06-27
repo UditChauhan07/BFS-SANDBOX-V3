@@ -109,7 +109,10 @@ a {
   max-width: 90% !important;
   margin: auto !important;
 }
-
+.productDetailContainer {
+  width: 70%;
+  margin: auto;
+}
 /* Search bar of nav start */
 /* Search bar of nav start */
 /* Search bar of nav start */
@@ -408,4 +411,14 @@ input#searchright {
   /* text-shadow: 4px 4px 0px #d5d5d5, 4px -4px 0px rgba(0, 0, 0, 0.2); */
   /* transform: scale(1.05); */
   text-decoration: underline;
+}
+@media (max-width: 1024.98px) {
+  .productDetailContainer {
+    width: 90%;
+  }
+}
+@media (max-width: 784.98px) {
+  .productDetailContainer {
+    width: 100%;
+  }
 }

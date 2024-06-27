@@ -34,11 +34,11 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
   ];
   return (
     <div className="container mt-4 product-card-element">
-      <div className="d-flex">
-        <div className={`${Styles.productimage} col-4`}>
-          {product?.data?.imgSrc.length > 0 ? <Slider data={product?.data?.imgSrc} /> : <Slider data={fakeProductSlider} />}
+      <div className="d-flex" style={{flexWrap:'wrap'}}>
+        <div className={`${Styles.productimage}`} style={{flex:'40% 1'}}>
+          {product?.data?.imgSrc?.length > 0 ? <Slider data={product?.data?.imgSrc} /> : <Slider data={fakeProductSlider} />}
         </div>
-        <div className="col-8 ml-4 product-card-element-holder">
+        <div className=" product-card-element-holder" style={{flex:'60% 1'}}>
           <p style={{ textAlign: "start" }}>
             <b>By</b>, <b>{product?.data?.ManufacturerName__c}</b>
           </p>
@@ -55,34 +55,35 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
             </p>
           )}
           {product?.data?.Description && (
-    <p style={{ textAlign: 'start', color: "#898989" }}>
-        {product.data.Description.length > 750 ? (
-            isDescriptionExpanded ? (
+            <p style={{ textAlign: 'start', color: "#898989" }}>
+              {product.data.Description.length > 750 ? (
+                isDescriptionExpanded ? (
+                  product.data.Description
+                ) : (
+                  product.data.Description.substring(0, 750) + "..."
+                )
+              ) : (
                 product.data.Description
-            ) : (
-                product.data.Description.substring(0, 750) + "..."
-            )
-        ) : (
-            product.data.Description
-        )}
-        {product.data.Description.length > 750 && (
-            <button style={{ textDecoration: 'underline' }} onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}>
-                {isDescriptionExpanded ? 'Learn Less' : 'Learn More'}
-            </button>
-        )}
-    </p>
-)}
+              )}
+              {product.data.Description.length > 750 && (
+                <button style={{ textDecoration: 'underline' }} onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}>
+                  {isDescriptionExpanded ? 'Learn Less' : 'Learn More'}
+                </button>
+              )}
+            </p>
+          )}
           {/* {product?.data?.Description && <p style={{ textAlign: 'start', color: "#898989" }}>{product?.data?.Description}</p>} */}
           <hr style={{ borderTop: "1px dashed ", fontSize: "20px", color: "black" }}></hr>
-          <p style={{ textAlign: "start", color: "#898989" }}>
+          {product?.data?.ProductCode && <p style={{ textAlign: "start", color: "#898989" }}>
             Product Code: <b style={{ color: "black" }}>{product?.data?.ProductCode}</b>
-          </p>
-          <p style={{ textAlign: "start", color: "#898989" }}>
+          </p>}
+          {product?.data?.ProductUPC__c && <p style={{ textAlign: "start", color: "#898989" }}>
             Product UPC: <b style={{ color: "black" }}>{product?.data?.ProductUPC__c}</b>
-          </p>
-          <p style={{ textAlign: "start", color: "#898989" }}>
-            Min Order QTY: <b style={{ color: "black" }}>{product?.data?.Min_Order_QTY__c}</b>
-          </p>
+          </p>}
+          {product?.data?.Min_Order_QTY__c &&
+            <p style={{ textAlign: "start", color: "#898989" }}>
+              Min Order QTY: <b style={{ color: "black" }}>{product?.data?.Min_Order_QTY__c}</b>
+            </p>}
           {product?.data?.Category__c && (
             <p style={{ textAlign: "start", color: "#898989" }}>
               Category: <b style={{ color: "black" }}>{product?.data?.Category__c}</b>
@@ -149,9 +150,9 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
             </>
           ) : (
             <div className="d-flex gap-4">
-              <Link to={toRedirect} className={Styles.button}>
+              {toRedirect && <Link to={toRedirect} className={Styles.button}>
                 Add to cart
-              </Link>
+              </Link>}
             </div>
           )}
         </div>

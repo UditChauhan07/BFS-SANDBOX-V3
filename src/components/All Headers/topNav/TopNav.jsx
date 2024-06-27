@@ -10,7 +10,7 @@ import { BiMailSend } from "react-icons/bi";
 const TopNav = () => {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
-  const [userName, setUserName] = useState(localStorage.getItem("Name"));
+  const [userName, setUserName] = useState(localStorage.getItem("Name")); 
   const [showSetting, setShowSetting] = useState(false)
 
   useEffect(() => {

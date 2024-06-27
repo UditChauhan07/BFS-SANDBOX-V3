@@ -560,13 +560,13 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                             <div className={Styles1.btnHolder} title="Click here to Continue" onClick={() => orderConfirmationHandler()}>I'M Done<BiCheck /></div>
                                                         </div>}
                                                         {(orderId == item.Id && orderConfirmed) && <div className={Styles1.Margitotal}>
-                                                            <div className={Styles1.btnHolder} title="Click here to Change in Products" onClick={() => { setOrderConfirmed(false); }}>Wanna Change?</div>
+                                                            <div className={Styles1.btnHolder} title="Click here to Change in Products" onClick={() => { setOrderConfirmed(false); }}>Click to edit</div>
                                                         </div>}
                                                     </>}
                                                 </div>
                                             </div>
                                         </div>
-                                        {orderId && <b aria-label="Click Here" title="Click here" onClick={() => { resetForm() }} style={{ cursor: 'pointer', marginLeft: '15px', textDecoration: 'underline' }}>Wrong Order. Want to Change Order?</b>}
+                                        {orderId && <p aria-label="Click Here" title="Click here" onClick={() => { resetForm() }} style={{ cursor: 'pointer', marginLeft: '15px', textDecoration: 'underline' }}><b>Wrong order?</b> Click here to change selection</p>}
                                     </div>
                                 )
                             }
