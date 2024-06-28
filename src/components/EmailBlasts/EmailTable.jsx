@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { DateConvert, deleteEmailBlast, getEmailBody, resentEmailBlast, resetEmailBlast } from "../../lib/store"
 import SettingNotify from "./SettingNotify"
 import Styles from "./index.module.css"
-import { BiAddToQueue, BiBoltCircle, BiCross, BiEraser, BiMailSend, BiRefresh, BiReset, BiTrash } from "react-icons/bi"
+import { BiAddToQueue, BiBoltCircle, BiCross, BiDice1, BiDice2, BiEraser, BiMailSend, BiRefresh, BiReset, BiTrash } from "react-icons/bi"
 import ModalPage from "../Modal UI"
 
 const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, notifyDate, getDataHandler, setCurrentPage, setContactList, user }) => {
@@ -164,7 +164,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                     setEmailHtml(null);
                 }}
             />
-            {setting ? <SettingNotify setSetting={setSetting} notifyDate={notifyDate} getDataHandler={getDataHandler} /> :
+            {setting ? <SettingNotify setSetting={setSetting} notifyDate={notifyDate} getDataHandler={getDataHandler} setContactList={setContactList} /> :
                 <>
                     <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
                         <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}><h2>NewLetter List</h2><div className="d-flex"><div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} onClick={() => { setSetting(true) }}><BiBoltCircle />&nbsp;Setting</div></div></div>
