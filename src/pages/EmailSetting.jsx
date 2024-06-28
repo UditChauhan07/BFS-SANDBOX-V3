@@ -23,6 +23,7 @@ const EmailSetting = () => {
     const getDataHandler = () => {
         setSearchValue(null)
         setCheckId([])
+        setNotifyDate([])
         GetAuthData().then((user) => {
             if (admins.includes(user.Sales_Rep__c)) {
                 setUser(user)

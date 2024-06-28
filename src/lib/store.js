@@ -826,6 +826,45 @@ export async function storeDatesHandler({ key, dates }) {
   }
 }
 
+export async function storeRandomHandler({ key, random }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/GRoeMb363MtQs8B", {
+    method: "POST",
+    body: JSON.stringify({ key, random }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    if (data.status == 200) {
+      return true;
+    } else {
+      return false
+    }
+  }
+}
+
+export async function createRandomHandler() {;
+
+  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/vUbxDTnfunVyde9");
+  let data = JSON.parse(await response.text());
+  console.log({data});
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    if (data.status == 200) {
+      return true;
+    } else {
+      return false
+    }
+  }
+}
+
 export async function getSessionStatus({ key, salesRepId }) {
   let headersList = {
     Accept: "*/*",

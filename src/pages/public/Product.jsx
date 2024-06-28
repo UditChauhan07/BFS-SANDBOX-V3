@@ -5,6 +5,8 @@ import { publicProductDetails } from "../../lib/store";
 import ProductDetailCard from "../../components/ProductDetailCard";
 import Loading from "../../components/Loading";
 import ModalPage from "../../components/Modal UI";
+import HelpSection from "../../components/Footer/HelpSection";
+import Footer from "../../components/Footer/Footer";
 
 const PublicProduct = () => {
     const { id, token } = useParams();
@@ -37,10 +39,10 @@ const PublicProduct = () => {
                 open
                 content={
                     <div className="d-flex flex-column gap-3">
-                        <h2 style={{textDecoration:'underline'}}>Warning</h2>
+                        <h2 style={{ textDecoration: 'underline' }}>Warning</h2>
                         <p>
                             {alert}
-                            <br/>
+                            <br />
                             Rediecting to home page.
                         </p>
                         <div className="d-flex justify-content-around ">
@@ -63,6 +65,8 @@ const PublicProduct = () => {
                         {product.data?.Id ?
                             <ProductDetailCard product={product} orders={{}} isAddtoCart={false} /> : null}
                     </div> : <Loading height={'70%'} />}
+                    <HelpSection />
+                    <Footer />
         </section>
     )
 }
