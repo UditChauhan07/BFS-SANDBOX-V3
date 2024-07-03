@@ -1,6 +1,6 @@
 export const originAPi = "https://b2b.beautyfashionsales.com"
 // export const originAPi = "https://dev.beautyfashionsales.com"
-// export const originAPi = "http://localhost:3001"
+// export const originAPi = "http://localhost:6194"
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
 const orderKey = "orders";
@@ -696,7 +696,7 @@ export async function getSalesRepList({ key }) {
   }
 }
 
-export async function getEmailBlast({ key, Id }) {
+export async function getEmailBlast({ key, Id,day=null,month=null }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -704,7 +704,7 @@ export async function getEmailBlast({ key, Id }) {
 
   let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/m9w6uFie8U3EGuC", {
     method: "POST",
-    body: JSON.stringify({ key, Id }),
+    body: JSON.stringify({ key, Id,day,month }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
