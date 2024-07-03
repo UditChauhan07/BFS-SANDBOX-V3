@@ -70,7 +70,6 @@ function MyBagFinal({ setOrderDetail }) {
       BodyContent,
       headersList
     );
-    console.log({ response });
     if (Object.values(data).length > 0) {
       if (response.data.data?.ManufacturerId__c) {
         if (data[response.data.data?.ManufacturerId__c]) {

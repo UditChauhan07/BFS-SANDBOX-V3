@@ -6,13 +6,17 @@ import { Link } from "react-router-dom";
 import { GetAuthData, supportShare } from "../../lib/store";
 import { useNavigate } from "react-router-dom";
 import ProductDetails from "../../pages/productDetails";
-function OrderListContent({ data,hideDetailedShow=false }) {
+import { BiExit, BiSave } from "react-icons/bi";
+import ModalPage from "../Modal UI";
+function OrderListContent({ data, hideDetailedShow = false }) {
   const navigate = useNavigate();
   const [Viewmore, setviewmore] = useState(false);
   const [modalData, setModalData] = useState({});
-  const [ productDetailId, setProductDetailId] = useState(null)
-  const [accountId,setAccountId] = useState();
-  const [manufacturerId,setManufacturerId] = useState();
+  const [modalType, setModalType] = useState(false)
+  const [productDetailId, setProductDetailId] = useState(null)
+  const [accountId, setAccountId] = useState();
+  const [manufacturerId, setManufacturerId] = useState();
+  const [confirm,setConfirm]= useState({});
   const months = [
     "January",
     "February",
@@ -58,54 +62,50 @@ function OrderListContent({ data,hideDetailedShow=false }) {
       });
 
   };
+  function downloadFiles(invoices) {
+    GetAuthData().then((user) => {
+      invoices.forEach(file => {
+        const link = document.createElement("a");
+        link.href = `${file.VersionDataUrl}?oauth_token=${user.access_token}`;
+        link.download = `${file.VersionDataUrl}?oauth_token=${user.access_token}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+    }).catch((userErr) => {
+      console.log({ userErr });
+    })
+  }
 
   return (
     <>
-      {/* TRACKING MODAL */}
-
-      <div
-        className="modal fade"
-        id="exampleModal1"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-xl modal-lg">
-          <div className={`${Styles.modalContrlWidth} modal-content`}>
-            <div className="modal-body  ">
-              <TrackingStatus data={modalData} />
-            </div>
+      {modalType == 1 && <Orderstatus data={modalData} onClose={() => { setModalData({}); setModalType(false) }} />}
+      {modalType == 3 && <TrackingStatus data={modalData} onClose={() => { setModalData({}); setModalType(false) }} />}
+      <ModalPage
+        open={confirm.data&&confirm.value?true : false}
+        content={<div className="d-flex flex-column gap-3">
+          <h2>
+            Confirm  
+          </h2>
+          <p className={Styles.modalContent}>
+            Are you sure you want to generate a ticket?<br/> This action cannot be undone.<br/> You will be redirected to the ticket page after the ticket is generated.
+          </p>
+          <div className="d-flex justify-content-around">
+            <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => generateSuportHandler(confirm)}>
+            <BiSave/>&nbsp;generate
+            </button>
+            <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => setConfirm(false)}>
+              <BiExit/> &nbsp;Cancel
+            </button>
           </div>
-        </div>
-      </div>
-
-      {/* ORDER STATUS MODAL */}
-
-      <div
-        className="modal fade"
-        id="exampleModal2"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-xl modal-lg">
-          <div className={`${Styles.modalContrlWidth} modal-content`}>
-            {/* <div className="modal-header">
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div> */}
-            <div className="modal-body ">
-              <Orderstatus data={modalData} />
-            </div>
-          </div>
-        </div>
-      </div>
-
+        </div>}
+        onClose={()=>{setConfirm({})}}
+        />
       {data?.length ? (
         data?.map((item, index) => {
           let date = new Date(item.CreatedDate);
-          let cdate = `${date.getDate()} ${
-            months[date.getMonth()]
-          } ${date.getFullYear()}`;
+          let cdate = `${date.getDate()} ${months[date.getMonth()]
+            } ${date.getFullYear()}`;
 
           return (
             <div className={` ${Styles.orderStatement} cardHover`} key={index}>
@@ -147,27 +147,27 @@ function OrderListContent({ data,hideDetailedShow=false }) {
                             .map((ele, index) => {
                               return (
                                 <>
-                                  <li key={index} onClick={()=>{setProductDetailId(ele.Product2Id);setAccountId(item.AccountId);setManufacturerId(item.ManufacturerId__c);}} style={{cursor:'pointer'}} className="linkEffect">
+                                  <li key={index} onClick={() => { setProductDetailId(ele.Product2Id); setAccountId(item.AccountId); setManufacturerId(item.ManufacturerId__c); }} style={{ cursor: 'pointer' }} className="linkEffect">
                                     {Viewmore
                                       ? ele.Name.split(item.AccountName)[1]
                                       : ele.Name.split(item.AccountName)
-                                          .length > 1
-                                      ? ele.Name.split(item.AccountName)[1]
+                                        .length > 1
+                                        ? ele.Name.split(item.AccountName)[1]
                                           .length >= 31
-                                        ? `${ele.Name.split(
+                                          ? `${ele.Name.split(
                                             item.AccountName
                                           )[1].substring(0, 28)}...`
-                                        : `${ele.Name.split(
+                                          : `${ele.Name.split(
                                             item.AccountName
                                           )[1].substring(0, 31)}`
-                                      : ele.Name.split(item.AccountName)[0]
+                                        : ele.Name.split(item.AccountName)[0]
                                           .length >= 31
-                                      ? `${ele.Name.split(
-                                          item.AccountName
-                                        )[0].substring(0, 28)}...`
-                                      : `${ele.Name.split(
-                                          item.AccountName
-                                        )[0].substring(0, 31)}`}
+                                          ? `${ele.Name.split(
+                                            item.AccountName
+                                          )[0].substring(0, 28)}...`
+                                          : `${ele.Name.split(
+                                            item.AccountName
+                                          )[0].substring(0, 31)}`}
                                   </li>
                                 </>
                               );
@@ -179,10 +179,10 @@ function OrderListContent({ data,hideDetailedShow=false }) {
                       <span>
                         <Link to="/orderDetails" className="linkStyling">
                           <button onClick={() => MyBagId(item.Id)}>
-                          {item.OpportunityLineItems?.records?.length &&
-                            item.OpportunityLineItems?.records?.length > 3 &&
-                            `+${item.OpportunityLineItems?.totalSize - 3} More`}
-                            </button>
+                            {item.OpportunityLineItems?.records?.length &&
+                              item.OpportunityLineItems?.records?.length > 3 &&
+                              `+${item.OpportunityLineItems?.totalSize - 3} More`}
+                          </button>
                         </Link>
                       </span>
                     </div>
@@ -193,7 +193,7 @@ function OrderListContent({ data,hideDetailedShow=false }) {
                       <h3>Total</h3>
                       <p>${Number(item.Amount).toFixed(2)}</p>
                     </div>
-                    <div className={Styles.TicketWidth} style={hideDetailedShow?{display:'none'}:null}>
+                    <div className={Styles.TicketWidth} style={hideDetailedShow ? { display: 'none' } : null}>
                       {/* <button className="me-4">View Ticket</button> */}
                       <Link to="/orderDetails">
                         <button title="View Order Information" onClick={() => MyBagId(item.Id)}>
@@ -206,42 +206,68 @@ function OrderListContent({ data,hideDetailedShow=false }) {
 
                 <div className={Styles.StatusOrder}>
                   <div className={Styles.Status1}>
-                    {!item.Order_Number__c &&
-                    <h3
-                    title="Raise a Support Ticket for this Order on Status"
-                      onClick={(e) =>
-                        generateSuportHandler({
-                          data: item,
-                          value: "Status of Order",
-                        })
-                      }
-                    >
-                      {" "}
-                      Status of Order
-                    </h3>}
-                    <h4
-                    title="Support Inquiry for this Order on Invoice"
-                      onClick={(e) =>
-                        generateSuportHandler({
-                          data: item,
-                          value: "Invoice",
-                        })
-                      }
-                    >
-                      Invoice{" "}
-                    </h4>
-                    {!item.Tracking_URL__c&&
-                    <h4
-                    title="Get Help with Tracking Status"
-                      onClick={(e) =>
-                        generateSuportHandler({
-                          data: item,
-                          value: "Tracking Status",
-                        })
-                      }
-                    >
-                      Tracking Status{" "}
-                    </h4>}
+                    {!item.Order_Number__c ?
+                      <h3
+                        title="Raise a Support Ticket for this Order on Status"
+                        onClick={(e) =>
+                          setConfirm({
+                            data: item,
+                            value: "Status of Order",
+                          })
+                        }
+                      >
+                        {" "}
+                        Request status update
+                      </h3> : <h3
+                        title="Click to see order Status"
+                        onClick={(e) => {
+                          setModalData(item);
+                          setModalType(1)
+                        }
+                        }
+                      >
+                        {" "}
+                        View Order Status
+                      </h3>}
+                    {item?.Attachment && item.Attachment?.length ?
+                      <h4
+                        title="click to download invoice"
+                        onClick={(e) =>
+                          downloadFiles(item.Attachment)
+                        }
+                      >
+                        Download Invoice
+                      </h4>
+                      :
+                      <h4
+                        title="Support Inquiry for this Order on Invoice"
+                        onClick={(e) =>
+                          setConfirm({
+                            data: item,
+                            value: "Invoice",
+                          })
+                        }
+                      >
+                        Request invoice
+                      </h4>}
+                    {!item.Tracking_URL__c ?
+                      <h4
+                        title="Get Help with Tracking Status"
+                        onClick={(e) =>
+                          setConfirm({
+                            data: item,
+                            value: "Tracking Status",
+                          })
+                        }
+                      >
+                        Request tracking number
+                      </h4> : <h4
+                        title="Click to see the tracking status"
+                        onClick={(e) => { setModalData(item); setModalType(3) }
+                        }
+                      >
+                        View Tracking
+                      </h4>}
                   </div>
 
                   <div className={Styles.Status2}>
@@ -259,7 +285,7 @@ function OrderListContent({ data,hideDetailedShow=false }) {
           No data found
         </div>
       )}
-      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} AccountId={accountId} ManufacturerId={manufacturerId} isAddtoCart={false}/>
+      <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} AccountId={accountId} ManufacturerId={manufacturerId} isAddtoCart={false} />
     </>
   );
 }
