@@ -3,7 +3,7 @@ import Styles from "./style.module.css";
 import TrackingStatus from "./TrackingStatus/TrackingStatus";
 import Orderstatus from "./OrderStatus/Orderstatus";
 import { Link } from "react-router-dom";
-import { GetAuthData, supportShare } from "../../lib/store";
+import { DateConvert, GetAuthData, supportShare } from "../../lib/store";
 import { useNavigate } from "react-router-dom";
 import ProductDetails from "../../pages/productDetails";
 import { BiExit, BiSave } from "react-icons/bi";
@@ -103,10 +103,6 @@ function OrderListContent({ data, hideDetailedShow = false }) {
         />
       {data?.length ? (
         data?.map((item, index) => {
-          let date = new Date(item.CreatedDate);
-          let cdate = `${date.getDate()} ${months[date.getMonth()]
-            } ${date.getFullYear()}`;
-
           return (
             <div className={` ${Styles.orderStatement} cardHover`} key={index}>
               <div>
@@ -272,7 +268,7 @@ function OrderListContent({ data, hideDetailedShow = false }) {
 
                   <div className={Styles.Status2}>
                     <h6>
-                      Order Placed <span>: {cdate}</span>
+                      Order Placed <span>: {DateConvert(item.CreatedDate,true)}</span>
                     </h6>
                   </div>
                 </div>
