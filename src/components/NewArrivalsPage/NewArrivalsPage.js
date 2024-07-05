@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import ModalPage from "../Modal UI";
 import StylesModal from "../Modal UI/Styles.module.css";
 import Loading from "../Loading";
+import LoaderV2 from "../loader/v2";
 function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
   const [products, setProducts] = useState(productList);
   const [modalShow, setModalShow] = useState(false);
@@ -74,9 +75,12 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
     setTimeout(() => {
       setLoaded(false)
     }, 500);
-  }, [month, brand, currentPage]);
+  }, [month, brand]);
 
-
+  const [imageLoading, setImageLoading] = useState({});
+  const handleImageLoad = (imageId) => {
+    setImageLoading((prevLoading) => ({ ...prevLoading, [imageId]: false }));
+  };
   return (
     <>
       {modalShow ? (
@@ -135,7 +139,13 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                           <div className={`last:mb-0 mb-4 ${Styles.HoverArrow}`}>
                             <div className={` border-[#D0CFCF] flex flex-col gap-4   ${Styles.ImgHover1}`}>
                               {/* {isLoaded ? <img className={Styles.imgHolder} onClick={() => { setProductDetailId(product.Id) }} src={product?.[product.ProductCode]?.ContentDownloadUrl ?? product.image} /> : <LoaderV2 />} */}
-                              <img src={product.ProductImage ?? "\\assets\\images\\dummy.png"} className="zoomInEffect" alt={product.Name} />
+                              {imageLoading[product.id] ? (
+                                <LoaderV2 width={100} height={100} />
+                              ) : (
+                                <img key={product.Id} src={product.ProductImage ?? "\\assets\\images\\dummy.png"} alt={product.Name} height={212} width={212} onClick={() => {
+                                  setProductDetailId(product.Id);
+                                }} onLoad={() => handleImageLoad(product.Id)} />
+                              )}
                             </div>
                           </div>
                           <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
