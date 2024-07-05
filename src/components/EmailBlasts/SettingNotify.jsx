@@ -2,12 +2,25 @@ import { useEffect, useState } from "react";
 import StyleSheet from "./SettingNotify.module.css"
 import { BiArrowBack, BiSave } from "react-icons/bi";
 import ModalPage from "../Modal UI";
-import { GetAuthData, createRandomHandler, storeDatesHandler, storeRandomHandler } from "../../lib/store";
+import { GetAuthData, getEmailBlastFromData, storeDatesHandler, storeRandomHandler } from "../../lib/store";
 import Loading from "../Loading";
 import Switch from "react-switch";
 
-const SettingNotify = ({ setSetting, notifyDate, getDataHandler ,setContactList}) => {
-    const [size, setSize] = useState(notifyDate.length ?? 0);
+const SettingNotify = ({ setSetting, getDataHandler ,setContactList}) => {
+    const [notifyFrom,setNotifyDate] = useState({isLoaded:false,data:{notifyDate:[],random:false}})
+    useEffect(()=>{
+        getEmailBlastFromData({key:"qsjwijufhudeyvdwud"}).then((form)=>{
+            setSize(form.notifyDate.length??0)
+            setIsTab(form.random?2:1)
+            setRandom(form.random?true:false)
+            setNotifyDate({isLoaded:true,data:{notifyDate:form.notifyDate,random:form.random?true:false}})
+        }).catch((fromErr)=>{
+            console.log({fromErr});
+        })
+    },[])
+    const {data,isLoaded} =notifyFrom;
+    const {notifyDate,random} = data;
+    const [size, setSize] = useState();
     const [isTab, setIsTab] = useState(1);
     const [loader, setLoaded] = useState(false)
     let option = [{ lable: "Select Date for Notification", value: 0 }, { lable: 1, value: 1 }, { lable: 2, value: 2 }, { lable: 3, value: 3 }, { lable: 4, value: 4 }, { lable: 5, value: 5 }, { lable: 6, value: 6 }, { lable: 7, value: 7 }, { lable: 8, value: 8 }, { lable: 9, value: 9 }, { lable: 10, value: 10 }, { lable: 11, value: 11 }, { lable: 12, value: 12 }, { lable: 13, value: 13 }, { lable: 14, value: 14 }, { lable: 15, value: 15 }, { lable: 16, value: 16 }, { lable: 17, value: 17 }, { lable: 18, value: 18 }, { lable: 19, value: 19 }, { lable: 20, value: 20 }, { lable: 21, value: 21 }, { lable: 22, value: 22 }, { lable: 23, value: 23 }, { lable: 24, value: 24 }, { lable: 25, value: 25 }, { lable: 26, value: 26 }, { lable: 27, value: 27 }, { lable: 28, value: 28 }]
@@ -36,7 +49,7 @@ const SettingNotify = ({ setSetting, notifyDate, getDataHandler ,setContactList}
             freqElement.value = notifyDate.length
             filledValue();
         }
-    }, [isTab])
+    }, [isTab,notifyDate])
     const filledValue = () => {
         notifyDate.map((element, _i) => {
             let freqSelElement = document.getElementById("freq" + _i)
@@ -47,7 +60,6 @@ const SettingNotify = ({ setSetting, notifyDate, getDataHandler ,setContactList}
     }
     const submitHandler = () => {
         let values = [];
-        setContactList({ isLoaded: false, data: [] })
         new Array(size).fill(1).map((element, index) => {
             let elementId = document.getElementById("freq" + index);
             let elementEId = document.getElementById("freq" + index + "E");
@@ -64,6 +76,7 @@ const SettingNotify = ({ setSetting, notifyDate, getDataHandler ,setContactList}
             }
         })
         if (values.length == size) {
+            setContactList({ isLoaded: false, data: [] })
             setLoaded(true)
             GetAuthData().then((user) => {
                 storeDatesHandler({ key: user.x_access_token, dates: values }).then((resposne) => {
@@ -84,14 +97,9 @@ const SettingNotify = ({ setSetting, notifyDate, getDataHandler ,setContactList}
     }
     const randomSubmitHandler = ()=>{
         storeRandomHandler({key:'12dffsw33rffd',random:isRandom}).then((result)=>{
-            console.log({result});
-            if(result){
-                createRandomHandler().then((res)=>{
-                    console.log({res});
-                }).catch((err)=>{
-                    console.log({err});
-                })
-            }
+            setSetting(false)
+            setContactList({ isLoaded: false, data: [] })
+            getDataHandler()
         }).catch((error)=>{
             console.log({error});
         })
@@ -99,6 +107,7 @@ const SettingNotify = ({ setSetting, notifyDate, getDataHandler ,setContactList}
     function ordinal_suffix_of(i) {
         return i + (i === 1 ? 'st' : i === 2 ? 'nd' : i === 3 ? 'rd' : 'th');
     }
+    if(!isLoaded) return <Loading height={'70vh'} />
     return (
         <div className={StyleSheet.container}>
             {loader ? <Loading height={'70vh'} /> :
@@ -143,9 +152,9 @@ const SettingNotify = ({ setSetting, notifyDate, getDataHandler ,setContactList}
                     />
                     <div className={StyleSheet.formContainer}>
                         <b className={StyleSheet.containerTitle}>Set Frequency of the email</b>
-                        <div className="d-flex gap-2">
-                            <p style={isTab == 1 ? { textDecoration: 'underline' } : {}} onClick={() => { setIsTab(1) }}>Manual</p>
-                            <p style={isTab == 2 ? { textDecoration: 'underline' } : {}} onClick={() => { setIsTab(2) }}>Random</p>
+                        <div className={StyleSheet.accordingHolder}>
+                            <p className={isTab == 1 ?  StyleSheet.active :null } onClick={() => { setIsTab(1) }}>Manual</p>
+                            <p className={isTab == 2 ?  StyleSheet.active :null  } onClick={() => { setIsTab(2) }}>Random</p>
                         </div>
                         {isTab == 1 ? <>
                             <div className="">
@@ -155,7 +164,7 @@ const SettingNotify = ({ setSetting, notifyDate, getDataHandler ,setContactList}
                             </div>
                             {size > 0 ? new Array(size).fill(1).map((item, i) => {
                                 return (
-                                    <div className="">
+                                    <div className="" key={i}>
                                         <label for={"freq-" + i} className={StyleSheet.labelHolder}>Set date for the {ordinal_suffix_of(i + 1)} email
                                             <select className="form-control" id={"freq" + i} name={"freq" + i}>
                                                 {option.map((Element) => (
@@ -177,7 +186,7 @@ const SettingNotify = ({ setSetting, notifyDate, getDataHandler ,setContactList}
                                 <label className={StyleSheet.labelHolder}>
                                     Select box for Random Dates:
                                     &nbsp;
-                                    <Switch onChange={(e) => setRandom(e)} checked={isRandom} />
+                                    <Switch onChange={(e) => setRandom(e)} checked={isRandom} onColor={"#000"}/>
                                 </label>
                                 <div className="mt-4 d-flex">
                                     <button className={`${StyleSheet.submitButton} d-flex  justify-content-center align-items-center`} onClick={() => setSetting(false)}><BiArrowBack />&nbsp;Back</button>
