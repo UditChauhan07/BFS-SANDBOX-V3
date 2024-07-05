@@ -152,9 +152,9 @@ const YearlyComparisonReport = () => {
         monthTotalAmount.total.wholesale += totalwholesale
 
         csvData.push({
-          AccountName: ele.AccountName,
-          Estee_Lauder_Number__c: ele.Estee_Lauder_Number__c,
-          Sales_Rep__c: ele.Sales_Rep__c,
+          "Retail Store": ele.AccountName,
+          "Estee Lauder Number": ele.Estee_Lauder_Number__c,
+          "Sales Rep": ele.Sales_Rep__c,
           Status: ele.Status,
           "Jan Retail Revenue": `$${Number(ele.Jan.retail_revenue__c).toFixed(2)}`,
           "Jan Wholesale Amount": `$${Number(ele.Jan.Whole_Sales_Amount).toFixed(2)}`,
