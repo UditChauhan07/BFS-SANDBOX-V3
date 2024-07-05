@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import "./Style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { hexabrand, hexabrandText } from "../../lib/store";
 import ProductDetails from "../../pages/productDetails";
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 function LaunchCalendar({ productList, brand, month }) {
@@ -104,18 +103,20 @@ function LaunchCalendar({ productList, brand, month }) {
                         <span className={`timelineHolder0${(index % 3) + 1}`} id={month.month}>{month.month}</span>
                         {month.content.map((product, productIndex) => {
                           if (!brand || brand == product.brand || brand == product.ManufacturerName__c) {
-                            let price = 'NA';
+                            let price = 'TBD';
                             if (product.usdRetail__c) {
-                              if (product.usdRetail__c.includes("$")) {
-                                let priceSplit = product.usdRetail__c.split('$')
-                                if (priceSplit.length == 2) {
-                                  priceSplit = priceSplit[1].trim();
-                                  price = "$" + parseFloat(priceSplit).toFixed(2);
+                              if(product.usdRetail__c !="TBD"){
+                                if (product.usdRetail__c.includes("$")) {
+                                  let priceSplit = product.usdRetail__c.split('$')
+                                  if (priceSplit.length == 2) {
+                                    priceSplit = priceSplit[1].trim();
+                                    price = "$" + parseFloat(priceSplit).toFixed(2);
+                                  } else {
+                                    price = product.usdRetail__c;
+                                  }
                                 } else {
-                                  price = product.usdRetail__c;
+                                  price = "$" + parseFloat(product.usdRetail__c).toFixed(2);
                                 }
-                              } else {
-                                price = "$" + parseFloat(product.usdRetail__c).toFixed(2);
                               }
                             }
                             return (

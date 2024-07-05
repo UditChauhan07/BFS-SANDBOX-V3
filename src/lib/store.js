@@ -695,7 +695,24 @@ export async function getSalesRepList({ key }) {
     return data;
   }
 }
+export async function getEmailBlastFromData({ key }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
 
+  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M", {
+    method: "POST",
+    body: JSON.stringify({ key}),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
 export async function getEmailBlast({ key, Id,day=null,month=null }) {
   let headersList = {
     Accept: "*/*",
