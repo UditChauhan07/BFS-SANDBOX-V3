@@ -260,6 +260,7 @@ function MyBagFinal({ setOrderDetail }) {
                                   <div className={Styles.Mainbox1M}>
                                     <div className={Styles.Mainbox2} style={{ cursor: 'pointer' }}>
                                       {
+                                        item?.ProductImage?<img src={item.ProductImage} className="zoomInEffect 1111" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />:
                                         item?.ContentDownloadUrl ? <img src={item.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} /> :
                                           !productImage.isLoaded ? <LoaderV2 /> :
                                             productImage.images?.[item.ProductCode] ?

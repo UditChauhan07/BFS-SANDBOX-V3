@@ -10,7 +10,7 @@ import { FilterItem } from "../FilterItem";
 import FilterSearch from "../FilterSearch";
 import ModalPage from "../Modal UI";
 import { useBag } from "../../context/BagContext";
-import { GetAuthData, ShareDrive, fetchBeg, getProductImageAll, getProductList, salesRepIdKey } from "../../lib/store";
+import { GetAuthData, ShareDrive, fetchBeg, getProductImageAll, getProductList, salesRepIdKey, sortArrayHandler } from "../../lib/store";
 import Styles from "../Modal UI/Styles.module.css";
 import { BackArrow, CloseButton } from "../../lib/svg";
 import AppLayout from "../AppLayout";
@@ -106,22 +106,35 @@ function Product() {
       finalFilteredProducts = { ...newData };
     }
 
-    if (sortBy === "Price: Low To High") {
-      let newData = {};
-      Object.keys(finalFilteredProducts)?.forEach((key) => {
-        const value = finalFilteredProducts[key];
 
-        value?.sort((a, b) => {
-          return +a?.usdRetail__c?.replace("$", "") - +b?.usdRetail__c?.replace("$", "");
+
+
+    if (sortBy) {
+      if (sortBy === "Price: Low To High") {
+        let newData = {};
+        Object.keys(finalFilteredProducts)?.forEach((key) => {
+          const value = finalFilteredProducts[key];
+
+          value?.sort((a, b) => {
+            return +a?.usdRetail__c?.replace("$", "") - +b?.usdRetail__c?.replace("$", "");
+          });
         });
-      });
-    }
-
-    if (sortBy === "Price: High To Low") {
-      let newData = {};
+      } else if (sortBy === "Price: High To Low") {
+        let newData = {};
+        Object.keys(finalFilteredProducts)?.forEach((key) => {
+          const value = finalFilteredProducts[key];
+          value?.sort((a, b) => +b?.usdRetail__c?.replace("$", "") - +a?.usdRetail__c?.replace("$", ""));
+        });
+      } else {
+        Object.keys(finalFilteredProducts)?.forEach((key) => {
+          const value = finalFilteredProducts[key];
+          sortArrayHandler(value, g => g.Name)
+        });
+      }
+    } else {
       Object.keys(finalFilteredProducts)?.forEach((key) => {
         const value = finalFilteredProducts[key];
-        value?.sort((a, b) => +b?.usdRetail__c?.replace("$", "") - +a?.usdRetail__c?.replace("$", ""));
+        sortArrayHandler(value, g => g.Name)
       });
     }
 
@@ -149,15 +162,15 @@ function Product() {
     GetAuthData().then((user) => {
       let rawData = {
         key: user.access_token,
-        Sales_Rep__c: localStorage.getItem(salesRepIdKey)??user?.Sales_Rep__c,
+        Sales_Rep__c: localStorage.getItem(salesRepIdKey) ?? user?.Sales_Rep__c,
         Manufacturer: localStorage.getItem("ManufacturerId__c"),
         AccountId__c: localStorage.getItem("AccountId__c"),
       }
       getProductList({ rawData }).then((productRes) => {
         let productData = productRes.data.records || []
-        productData.map((element)=>{
-          if(element.AttachedContentDocuments){
-            console.log({element});
+        productData.map((element) => {
+          if (element.AttachedContentDocuments) {
+            console.log({ element });
           }
         })
         let discount = productRes.discount;
@@ -213,7 +226,7 @@ function Product() {
   };
   const generateOrderHandler = () => {
     let begValue = fetchBeg();
-    if(begValue.Account.id == localStorage.getItem("AccountId__c")&&begValue.Manufacturer.id == localStorage.getItem("ManufacturerId__c")){
+    if (begValue.Account.id == localStorage.getItem("AccountId__c") && begValue.Manufacturer.id == localStorage.getItem("ManufacturerId__c")) {
       if (begValue?.Account?.id && begValue?.Manufacturer?.id && Object.values(begValue.orderList).length > 0) {
         let bagPrice = 0;
         Object.values(begValue.orderList).map((product) => {
@@ -237,7 +250,7 @@ function Product() {
         setEmptyBag(true);
         setAlert(0);
       }
-    }else{
+    } else {
       navigate("/my-bag");
     }
   };
@@ -434,12 +447,12 @@ function Product() {
                       setProductTypeFilter("Wholesale");
                     }}
                   >
-                     <CloseButton crossFill={'#fff'} height={20} width={20} />
-                    <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
+                    <CloseButton crossFill={'#fff'} height={20} width={20} />
+                    <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
                   </button>
                   <button className="border px-2 py-1 leading-tight uppercase tracking-[1.2px] d-grid" onClick={() => setOrderFromModal(true)}>
-                    <MdOutlineUpload size={20} className="m-auto"/>
-                    <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>Order Form</small>
+                    <MdOutlineUpload size={20} className="m-auto" />
+                    <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Order Form</small>
                   </button></>}
 
               </>
