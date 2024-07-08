@@ -15,7 +15,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
 
   const [isEmpty, setIsEmpty] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [loadEffect,setEffect]=useState(0)
+  const [loadEffect, setEffect] = useState(0)
   // ...............
   const [currentPage, setCurrentPage] = useState(1);
   const [filterData, setFilterData] = useState([]);
@@ -71,7 +71,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
 
       setFilterData(newValues);
     }
-    setEffect(loadEffect+1)
+    setEffect(loadEffect + 1)
     setTimeout(() => {
       setLoaded(false)
     }, 500);
@@ -111,11 +111,17 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
       ) : null}
       <section>
         <div>
-          <div className={Styles.dGrid}>
-            {loaded ? <div style={{ width: '100%' }}> <Loading height={'50%'} /></div> : allOrdersEmpty ? (
-              <div className={`${Styles.NodataContent} `}>No data found</div>
-            ) :
-              pagination?.map((month, index) => {
+          {loaded ? <Loading height={"70vh"} /> : allOrdersEmpty ? (
+            <div className="row d-flex flex-column justify-content-center align-items-center lg:min-h-[300px] xl:min-h-[400px]">
+              <div className="col-4">
+                <p className="m-0 fs-2 text-center font-[Montserrat-400] text-[14px] tracking-[2.20px] text-center">
+                  No data found
+                </p>
+              </div>
+            </div>
+          ) :
+            <div className={Styles.dGrid}>
+              {pagination?.map((month, index) => {
                 if (month.content.length) {
                   return month.content.map((product) => {
                     if (!brand || brand == product.ManufacturerName__c) {
@@ -178,9 +184,9 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                     }
                   });
                 }
-              })
-            }
-          </div>
+              })}
+            </div>
+          }
         </div>
         <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false} />
       </section>
