@@ -33,7 +33,7 @@ const SalesReport = () => {
   const [salesRepList, setSalesRepList] = useState([]);
   const [yearForTableSort, setYearForTableSort] = useState(2024);
   const [exportToExcelState, setExportToExcelState] = useState(false);
-  const [dateFilter,setDateFilter]= useState("Created-Date")
+  const [dateFilter, setDateFilter] = useState("Created-Date")
   const filteredSalesReportData = useMemo(() => {
     let filtered = salesReportData.filter((ele) => {
       return !manufacturerFilter || !ele.ManufacturerName__c.localeCompare(manufacturerFilter);
@@ -64,8 +64,29 @@ const SalesReport = () => {
         };
       });
     }
+    // if (activeAccounts === "Active Account") {
+    //   filtered = filtered?.filter((ele) =>
+    //     ele.Orders.find((item) => item.Status === "Active Account"));
+    //   // i need only active account in this function but is not working?
+    // }
+    
+    if (activeAccounts === "Active Account") {
+      filtered = filtered?.map((ele) => {
+        const Orders = ele.Orders.filter((item) => {
+          if (item.Status === "Active Account") {
+            return item;
+          }
+        });
+        return {
+          ...ele,
+          Orders,
+        };
+      });
+    }else {
+      filtered = filtered;
+    };
     // ..........
-     if (highestOrders) {
+    if (highestOrders) {
       filtered = filtered?.map((ele) => {
         const Orders = ele.Orders.sort((a, b) => b.totalOrders - a.totalOrders);
         return {
@@ -82,23 +103,10 @@ const SalesReport = () => {
         };
       });
     }
-    // ...
-    if (activeAccounts === "Active Account") {
-      filtered = filtered?.filter((ele) => 
-     ele.Orders.some((item) => 
-item.Status === "Active Account" ));
-    }else if(activeAccounts === "All Account"){
-      filtered=filtered;
-        };
-      
-    
-    // ........
-
-    // ...........
     return filtered;
   }, [manufacturerFilter, salesReportData, highestOrders, searchBy, searchBySalesRep, activeAccounts]);
 
- 
+
   // ................
   const csvData = useMemo(() => {
     const dataWithTotals = filteredSalesReportData?.map((ele) =>
@@ -137,12 +145,12 @@ item.Status === "Active Account" ));
         TotalAmount: item.totalorderPrice,
       }))
     ).flat();
-  
- const totals = {
-      ManufacturerName: "Total", 
+
+    const totals = {
+      ManufacturerName: "Total",
       JanOrders: dataWithTotals.reduce((total, item) => total + (item.JanOrders || 0), 0),
       JanAmount: dataWithTotals.reduce((total, item) => total + (item.JanAmount || 0), 0),
-      
+
       FebOrders: dataWithTotals.reduce((total, item) => total + (item.FebOrders || 0), 0),
       FebAmount: dataWithTotals.reduce((total, item) => total + (item.FebAmount || 0), 0),
 
@@ -151,7 +159,7 @@ item.Status === "Active Account" ));
 
       AprOrders: dataWithTotals.reduce((total, item) => total + (item.AprOrders || 0), 0),
       AprAmount: dataWithTotals.reduce((total, item) => total + (item.AprAmount || 0), 0),
-      
+
       MayOrders: dataWithTotals.reduce((total, item) => total + (item.MayOrders || 0), 0),
       MayAmount: dataWithTotals.reduce((total, item) => total + (item.MayAmount || 0), 0),
 
@@ -173,21 +181,21 @@ item.Status === "Active Account" ));
       NovOrders: dataWithTotals.reduce((total, item) => total + (item.NovOrders || 0), 0),
       NovAmount: dataWithTotals.reduce((total, item) => total + (item.NovAmount || 0), 0),
 
-    DecOrders: dataWithTotals.reduce((total, item) => total + (item.DecOrders || 0), 0),
-     DecAmount: dataWithTotals.reduce((total, item) => total + (item.DceAmount || 0), 0),
+      DecOrders: dataWithTotals.reduce((total, item) => total + (item.DecOrders || 0), 0),
+      DecAmount: dataWithTotals.reduce((total, item) => total + (item.DceAmount || 0), 0),
 
-     TotalOrders: dataWithTotals.reduce((total, item) => total + (item.TotalOrders || 0), 0),
+      TotalOrders: dataWithTotals.reduce((total, item) => total + (item.TotalOrders || 0), 0),
       TotalAmount: dataWithTotals.reduce((total, item) => total + (item.TotalAmount || 0), 0),
-  
-    
+
+
     };
-  
+
     const dataWithTotalRow = [...dataWithTotals, totals];
-  
+
     return dataWithTotalRow;
   }, [filteredSalesReportData, manufacturerFilter]);
-  
- const handleExportToExcel = () => {
+
+  const handleExportToExcel = () => {
     setExportToExcelState(true);
   };
   const exportToExcel = () => {
@@ -201,7 +209,7 @@ item.Status === "Active Account" ));
   const resetFilter = () => {
     setManufacturerFilter(null);
     setHighestOrders(true);
-    setActiveAccounts("Active Account"); 
+    setActiveAccounts("Active Account");
     setYearFor(2024);
     setSearchBy("");
     setSearchBySalesRep("");
@@ -209,10 +217,10 @@ item.Status === "Active Account" ));
   };
   const navigate = useNavigate();
 
-  const getSalesData = async (yearFor,dateFilter) => {
+  const getSalesData = async (yearFor, dateFilter) => {
     setIsLoading(true);
     setYearForTableSort(yearFor);
-    const result = await salesReportApi.salesReportData({ yearFor,dateFilter });
+    const result = await salesReportApi.salesReportData({ yearFor, dateFilter });
     let salesListName = [];
     let salesList = [];
     let manuIds = [];
@@ -248,7 +256,7 @@ item.Status === "Active Account" ));
   useEffect(() => {
     const userData = localStorage.getItem("Name");
     if (userData) {
-      getSalesData(yearFor,dateFilter);
+      getSalesData(yearFor, dateFilter);
     } else {
       navigate("/");
     }
@@ -259,7 +267,7 @@ item.Status === "Active Account" ));
     // getSalesData(yearFor);
     // setSearchBy("");
     // setSearchBySalesRep("");
-    getSalesData(yearFor,dateFilter);
+    getSalesData(yearFor, dateFilter);
   };
   let yearList = [
     { value: 2024, label: 2024 },
@@ -273,7 +281,7 @@ item.Status === "Active Account" ));
     { value: 2016, label: 2016 },
     { value: 2015, label: 2015 },
   ]
-  
+
 
   return (
     <AppLayout
@@ -287,11 +295,11 @@ item.Status === "Active Account" ));
               options={yearList}
               onChange={(value) => setYearFor(value)}
             />
-             <FilterItem
+            <FilterItem
               label="date"
               name="date"
               value={dateFilter}
-              options={[{label:"Created Date",value:"Created-Date"},{label:"Closed Date",value:"Closed-Date"}]}
+              options={[{ label: "Created Date", value: "Created-Date" }, { label: "Closed Date", value: "Closed-Date" }]}
               onChange={(value) => setDateFilter(value)}
             />
             <button onClick={() => sendApiCall()} className="border px-2 py-1 leading-tight d-grid"> <SearchIcon fill="#fff" width={20} height={20} />
@@ -328,25 +336,25 @@ item.Status === "Active Account" ));
               onChange={(value) => setHighestOrders(value)}
             />
             <FilterItem
-  minWidth="220px"
-  label="Status"
-  name="Status"
-  value={activeAccounts}
-  options={[
-    {
-      label: "Active Account",
-      value: "Active Account",
-    },
-    {
-      label: "All Account",
-      value: "All Account",
-    },
-  ]}
-  onChange={(value) => {
-    setActiveAccounts(value);
-  }}
-/>
-           
+              minWidth="220px"
+              label="Status"
+              name="Status"
+              value={activeAccounts}
+              options={[
+                {
+                  label: "Active Account",
+                  value: "Active Account",
+                },
+                {
+                  label: "All Account",
+                  value: "All Account",
+                },
+              ]}
+              onChange={(value) => {
+                setActiveAccounts(value);
+              }}
+            />
+
             {/* First Calender Filter-- start date */}
             <FilterSearch onChange={(e) => setSearchBy(e.target.value)} value={searchBy} placeholder={"Search by account"} minWidth={"167px"} />
             <div className="d-flex gap-3">
@@ -434,14 +442,14 @@ item.Status === "Active Account" ));
         </div>
       </div>
 
-      {filteredSalesReportData?.length   && !isLoading ?(
+      {filteredSalesReportData?.length && !isLoading ? (
         <SalesReportTable salesData={filteredSalesReportData} year={yearForTableSort} ownerPermission={ownerPermission} />
-      ) : filteredSalesReportData.length ===0 && !isLoading ? (
+      ) : filteredSalesReportData.length === 0 && !isLoading ? (
         <div className="flex justify-center items-center py-4 w-full lg:min-h-[300px] xl:min-h-[380px]">No data found</div>
       ) : (
         <Loading height={"70vh"} />
       )}
-      
+
     </AppLayout>
   );
 };
