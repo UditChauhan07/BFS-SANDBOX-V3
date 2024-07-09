@@ -1,9 +1,9 @@
 .carouselWrapperElement{
-    height: 500px;
-    width: auto;
-  }
-  .carouselWrapperElement img{
-    height: 500px;
-    width: auto;
-    object-fit: contain;
-  }
+  height: 500px;
+  width: auto;
+}
+.carouselWrapperElement img{
+  height: 500px;
+  width: auto;
+  object-fit: contain;
+}
