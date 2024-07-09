@@ -55,7 +55,6 @@ function App() {
             <Route path="/Target-Report" element={<TargetReport />}></Route>
             <Route path="/comparison-report" element={<ComparisonReport />}></Route>
             <Route path="/comparison" element={<YearlyComparisonReport />}></Route>
-            
             <Route path="/order-list" element={<OrderListPage />}></Route>
             <Route path="/testing" element={<Testing />}></Route>
             <Route path="/top-products" element={<TopProducts />}></Route>
