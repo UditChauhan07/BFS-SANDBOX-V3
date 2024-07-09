@@ -34,11 +34,11 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
   ];
   return (
     <div className="container mt-4 product-card-element">
-      <div className="d-flex" style={{flexWrap:'wrap'}}>
-        <div className={`${Styles.productimage}`} style={{flex:'40% 1'}}>
+      <div className="d-flex">
+        <div className={`${Styles.productimage} col-4`} style={{flex:'40% 1'}}>
           {product?.data?.imgSrc?.length > 0 ? <Slider data={product?.data?.imgSrc} /> : <Slider data={fakeProductSlider} />}
         </div>
-        <div className=" product-card-element-holder" style={{flex:'60% 1'}}>
+        <div className="col-8 ml-4 product-card-element-holder" style={{flex:'60% 1'}}>
           <p style={{ textAlign: "start" }}>
             <b>By</b>, <b>{product?.data?.ManufacturerName__c}</b>
           </p>
