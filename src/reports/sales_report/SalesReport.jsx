@@ -262,6 +262,8 @@ const SalesReport = () => {
     }
   }, []);
   const sendApiCall = () => {
+    setManufacturerFilter(null);
+    setSearchBySalesRep("");
     // setManufacturerFilter(null);
     // setHighestOrders(true);
     // getSalesData(yearFor);
