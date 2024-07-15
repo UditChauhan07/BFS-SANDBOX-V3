@@ -154,7 +154,9 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                               )}
                             </div>
                           </div>
+                          <Link to={'/Brand/'+product.ManufacturerId__c} style={{color:'#000'}}>
                           <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
+                          </Link>
 
                           <p
                             className={`${Styles.titleHolder} linkEffect`}

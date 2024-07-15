@@ -16,7 +16,7 @@ function OrderListContent({ data, hideDetailedShow = false }) {
   const [productDetailId, setProductDetailId] = useState(null)
   const [accountId, setAccountId] = useState();
   const [manufacturerId, setManufacturerId] = useState();
-  const [confirm,setConfirm]= useState({});
+  const [confirm, setConfirm] = useState({});
   const months = [
     "January",
     "February",
@@ -82,25 +82,25 @@ function OrderListContent({ data, hideDetailedShow = false }) {
       {modalType == 1 && <Orderstatus data={modalData} onClose={() => { setModalData({}); setModalType(false) }} />}
       {modalType == 3 && <TrackingStatus data={modalData} onClose={() => { setModalData({}); setModalType(false) }} />}
       <ModalPage
-        open={confirm.data&&confirm.value?true : false}
+        open={confirm.data && confirm.value ? true : false}
         content={<div className="d-flex flex-column gap-3">
           <h2>
-            Confirm  
+            Confirm
           </h2>
           <p className={Styles.modalContent}>
-            Are you sure you want to generate a ticket?<br/> This action cannot be undone.<br/> You will be redirected to the ticket page after the ticket is generated.
+            Are you sure you want to generate a ticket?<br /> This action cannot be undone.<br /> You will be redirected to the ticket page after the ticket is generated.
           </p>
           <div className="d-flex justify-content-around">
             <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => generateSuportHandler(confirm)}>
-            <BiSave/>&nbsp;generate
+              <BiSave />&nbsp;generate
             </button>
             <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => setConfirm(false)}>
-              <BiExit/> &nbsp;Cancel
+              <BiExit /> &nbsp;Cancel
             </button>
           </div>
         </div>}
-        onClose={()=>{setConfirm({})}}
-        />
+        onClose={() => { setConfirm({}) }}
+      />
       {data?.length ? (
         data?.map((item, index) => {
           return (
@@ -109,17 +109,22 @@ function OrderListContent({ data, hideDetailedShow = false }) {
                 <div className={Styles.poNumber}>
                   <div className={Styles.poNumb1}>
                     <h3>PO Number</h3>
-                    <p>{item.PO_Number__c}</p>
+                    <Link to="/orderDetails">
+                      <p onClick={() => MyBagId(item.Id)}>{item.PO_Number__c}</p>
+                    </Link>
                   </div>
-
                   <div className={Styles.poNumb1}>
                     <h3>Brand</h3>
-                    <p>{item.ManufacturerName__c}</p>
+                    <Link to={'/Brand/' + item.ManufacturerId__c} style={{ color: '#000' }}>
+                      <p>{item.ManufacturerName__c}</p>
+                    </Link>
                   </div>
 
                   <div className={Styles.PoOrderLast}>
                     <h3>Ship To </h3>
-                    <p>{item.AccountName}</p>
+                    <Link to={'/store/' + item.AccountId} style={{ color: '#000' }}>
+                      <p>{item.AccountName}</p>
+                    </Link>
                   </div>
                 </div>
 
@@ -268,7 +273,7 @@ function OrderListContent({ data, hideDetailedShow = false }) {
 
                   <div className={Styles.Status2}>
                     <h6>
-                      Order Placed <span>: {DateConvert(item.CreatedDate,true)}</span>
+                      Order Placed <span>: {DateConvert(item.CreatedDate, true)}</span>
                     </h6>
                   </div>
                 </div>

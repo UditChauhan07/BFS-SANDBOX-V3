@@ -854,22 +854,23 @@ function Dashboard({ dashboardData }) {
                           <div className="col-lg-6 col-md-6 col-sm-12 onHoverCursor cardHover">
                             <div
                               className={Styles.top_perform}
-                              onClick={() => {
-                                setModalOpen(true);
-                                setBrandData(ele.ManufacturerList);
-                                localStorage.setItem("Account", ele.Name);
-                                localStorage.setItem("AccountId__c", ele.AccountId);
-                              }}
                               id={index}
                             >
-                              <div className={Styles.top_accnew}>
-                                <p className={Styles.top_accounttext}>{ele.Name}</p>
-                              </div>
+                              <Link to={'/store/' + ele.AccountId}>
+                                <div className={Styles.top_accnew}>
+                                  <p className={Styles.top_accounttext}>{ele.Name}</p>
+                                </div>
+                              </Link>
 
                               <div className={` ${Styles.scrollbar}`}>
                                 {ele.ManufacturerList.map((itemm) => {
                                   const bgcolor = bgColors[itemm.Name];
-                                  return <span className={`${Styles.account} ${Styles[bgcolor]}`}>{itemm.Name}</span>;
+                                  return <span className={`${Styles.account} ${Styles[bgcolor]}`} onClick={() => {
+                                    setModalOpen(true);
+                                    setBrandData(ele.ManufacturerList);
+                                    localStorage.setItem("Account", ele.Name);
+                                    localStorage.setItem("AccountId__c", ele.AccountId);
+                                  }}>{itemm.Name}</span>;
                                 })}
                               </div>
                             </div>
@@ -896,21 +897,23 @@ function Dashboard({ dashboardData }) {
                           <div className="col-lg-6 col-md-6 col-sm-12 onHoverCursor cardHover">
                             <div
                               className={Styles.top_perform2}
-                              onClick={() => {
-                                setModalOpen(true);
-                                setBrandData(ele.ManufacturerList);
-                                localStorage.setItem("Account", ele.Name);
-                                localStorage.setItem("AccountId__c", ele.AccountId);
-                              }}
                             >
-                              <div className={Styles.top_account}>
-                                <p className={Styles.top_accounttext}>{ele.Name}</p>
-                              </div>
+                              <Link to={'/store/' + ele.AccountId}>
+
+                                <div className={Styles.top_account}>
+                                  <p className={Styles.top_accounttext}>{ele.Name}</p>
+                                </div>
+                              </Link>
 
                               <div className={` ${Styles.scrollbar}`}>
                                 {ele.ManufacturerList.map((item) => {
                                   const bgcolor = bgColors[item.Name];
-                                  return <span className={`${Styles.account22} ${Styles[bgcolor]}`}>{item.Name}</span>;
+                                  return <span className={`${Styles.account22} ${Styles[bgcolor]}`}                     onClick={() => {
+                                    setModalOpen(true);
+                                    setBrandData(ele.ManufacturerList);
+                                    localStorage.setItem("Account", ele.Name);
+                                    localStorage.setItem("AccountId__c", ele.AccountId);
+                                  }}>{item.Name}</span>;
                                 })}
                               </div>
                             </div>
@@ -996,7 +999,7 @@ function Dashboard({ dashboardData }) {
                     <img src={img2} alt="" className={`text-center ${Styles.iconactive}`} />
                   </div>
                   <div className="">
-                    <p className={`text-end ${Styles.activetext}`}>GROWTH {selectYear-1} VS {selectYear}</p>
+                    <p className={`text-end ${Styles.activetext}`}>GROWTH {selectYear - 1} VS {selectYear}</p>
                     <h1 className={`text-end ${Styles.activetext1}`}>
                       {box.GROWTH}<span>%</span>
                     </h1>

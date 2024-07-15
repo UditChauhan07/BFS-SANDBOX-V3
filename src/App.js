@@ -39,6 +39,9 @@ import EmailSetting from "./pages/EmailSetting";
 import BMAIssues from "./pages/BMAIssues";
 import PageNotFound from "./pages/PageNotFound";
 import PublicProduct from "./pages/public/Product";
+import TargetRollOver from "./reports/targetRollOver";
+import StoreDetails from "./pages/StoreDetails";
+import BrandDetails from "./pages/BrandDetails";
 
 
 function App() {
@@ -52,7 +55,8 @@ function App() {
           <Routes>
             <Route path="/sales-report" element={<SalesReport />}></Route>
             <Route path="/newness-report" element={<NewnessReport />}></Route>
-            <Route path="/Target-Report" element={<TargetReport />}></Route>
+            {/* <Route path="/Target-Report" element={<TargetReport />}></Route> */}
+            <Route path="/Target-Report" element={<TargetRollOver />}></Route>
             <Route path="/comparison-report" element={<ComparisonReport />}></Route>
             <Route path="/comparison" element={<YearlyComparisonReport />}></Route>
             <Route path="/order-list" element={<OrderListPage />}></Route>
@@ -102,6 +106,8 @@ function App() {
             <Route path="/emailSetting" element={<EmailSetting />}></Route>
             <Route path="/brandManagementApproval" element={<BMAIssues />}></Route>
             <Route path="/public/product/:id/:token/details" element={<PublicProduct />}></Route>
+            <Route path="/store/:id" element={<StoreDetails/>}/>
+            <Route path="/Brand/:id" element={<BrandDetails/>}/>
             <Route path="*" element={<PageNotFound />}></Route>
             
             {/* 1234 */}

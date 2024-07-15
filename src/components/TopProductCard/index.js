@@ -55,7 +55,9 @@ const TopProductCard = ({ data, productImages, to = null }) => {
                 ) : (
                   <LoaderV2 />
                 )}
+                <Link to={'/Brand/'+product.ManufacturerId__c} style={{color:'#000'}}>
                 <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
+                </Link>
                 <p
                   className={`${Styles.titleHolder} linkEffect`}
                   onClick={() => {
