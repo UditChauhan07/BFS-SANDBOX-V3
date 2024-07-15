@@ -40,7 +40,7 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
         </div>
         <div className="col-8 ml-4 product-card-element-holder" style={{flex:'60% 1'}}>
           <p style={{ textAlign: "start" }}>
-            <b>By</b>, <b>{product?.data?.ManufacturerName__c}</b>
+            <b>By</b>, <Link to={'/Brand/'+product.data.ManufacturerId__c} style={{color:'#000'}}><b>{product?.data?.ManufacturerName__c}</b></Link>
           </p>
           <h2 style={{ textAlign: "start" }}>
             <b>{product?.data?.Name}</b>

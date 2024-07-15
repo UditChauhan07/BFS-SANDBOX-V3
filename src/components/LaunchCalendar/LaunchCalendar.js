@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProductDetails from "../../pages/productDetails";
+import { Link } from "react-router-dom";
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 function LaunchCalendar({ productList, brand, month }) {
   const products = productList;
@@ -153,8 +154,10 @@ function LaunchCalendar({ productList, brand, month }) {
                                     </div>
                                   </div>
                                   <div className="launchBrand">
+                                    <Link to={'/Brand/'+product.ManufacturerId__c}>
                                     <img className="img-fluid" src={"\\assets\\images\\brandImage\\" + product.ManufacturerId__c + ".png"} alt={`${product.name} logo`} style={{maxWidth:'200px',height:'auto'}}/>
                                     {/* {console.log(product.ManufacturerId__c)} */}
+                                    </Link>
                                   </div>
                                 </div>
                               </>
