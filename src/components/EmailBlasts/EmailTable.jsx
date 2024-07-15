@@ -69,20 +69,20 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
             addtoqueue()
         } else if (confirm == 3) {
             resentHandler()
-        } else {}
+        } else { }
         setConfirm(false)
     }
-    const resetHandler = ()=>{
+    const resetHandler = () => {
         let contactSearch = document.getElementById("contactSearch");
         contactSearch.value = null
         setSearchValue(null); setCurrentPage(1)
         setCheckId([])
     }
-    const getEmailBodyHandler = (id)=>{
-        getEmailBody({key:"8XoSdoqMZ2dAiqh",id:id}).then((result)=>{
+    const getEmailBodyHandler = (id) => {
+        getEmailBody({ key: "8XoSdoqMZ2dAiqh", id: id }).then((result) => {
             setEmailHtml(result.body)
-        }).catch((err)=>{
-            console.log({err});
+        }).catch((err) => {
+            console.log({ err });
         })
     }
 
@@ -90,10 +90,10 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
         <div>
             <ModalPage
                 open={confirm}
-                content={<div className="d-flex flex-column gap-3"  style={{ maxWidth: '700px' }}>
+                content={<div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
                     <h2 className={`${Styles.warning} `}>Confirm</h2>
                     <p className={`${Styles.warningContent} `}>
-                        Are you Sure you want to {confirm == 1 ? <b>Delete</b> : confirm == 2 ? <b>Add to Queue</b> : confirm == 3 ? <b>Re-send mail to</b> : null} selected contact?<br/> This action cannot be undone.
+                        Are you Sure you want to {confirm == 1 ? <b>Delete</b> : confirm == 2 ? <b>Add to Queue</b> : confirm == 3 ? <b>Re-send mail to</b> : null} selected contact?<br /> This action cannot be undone.
                     </p>
                     <div className="d-flex justify-content-around ">
                         <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => confirmHandler()}>
@@ -146,7 +146,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
             />
             <ModalPage
                 open={emailHtml ? true : false}
-                styles={{width:'calc(100% - 100px)',maxWidth:'1200px'}}
+                styles={{ width: 'calc(100% - 100px)', maxWidth: '1200px' }}
                 content={
                     <div className="d-flex flex-column gap-3">
                         <h2 className={`${Styles.warning} `}>Email Content</h2>
@@ -167,23 +167,34 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
             {setting ? <SettingNotify setSetting={setSetting} notifyDate={notifyDate} getDataHandler={getDataHandler} setContactList={setContactList} /> :
                 <>
                     <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
-                        <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}><h2>NewLetter List</h2><div className="d-flex"><div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} onClick={() => { setSetting(true) }}><BiBoltCircle />&nbsp;Setting</div></div></div>
+                        <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}>
+                            <h2>NewLetter List</h2>
+                            <div className="d-flex">
+                                {checkId.length ?
+                                    <>
+                                        <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} style={{width:'300px'}} onClick={() => { setConfirm(2) }}>
+                                            <BiAddToQueue size={23} title="Add to queue" />&nbsp;Add to Next Schedule
+                                        </div>   &nbsp;
+                                        <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} style={{width:'200px'}} onClick={() => { setConfirm(3) }}>
+                                            <BiMailSend title="Resend mail to selected" size={23} />&nbsp;Resend Now
+                                        </div>
+                                    </>:null}
+                                &nbsp;
+                                <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} onClick={() => { setSetting(true) }}>
+                                    <BiBoltCircle />&nbsp;Setting
+                                </div>
+                            </div>
+                        </div>
                         <div className="d-flex justify-content-between align-items-center" style={{ margin: '4px 0 27px 0' }}>
                             <div className="d-flex">
                                 <label for="ALL" className={Styles.checkAllHolder} title="Click to select All"><input type="checkbox" onClick={(e) => { checkedAll(!checked) }} id="ALL" /></label>
                                 <div className={Styles.checkAllHolder} onClick={() => { setContactList({ isLoaded: false, data: [] }); getDataHandler() }}>
                                     <BiRefresh size={23} title="Refersh list" />
                                 </div>
-                                <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(2):setAlert(true)}}>
-                                    <BiAddToQueue size={23} title="Add to queue" />
-                                </div>
-                                <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(3):setAlert(true)}}>
-                                    <BiMailSend title="Resend mail to selected" size={23} />
-                                </div>
-                                <div className={Styles.checkAllHolder} onClick={() => {resetHandler()}}>
+                                <div className={Styles.checkAllHolder} onClick={() => { resetHandler() }}>
                                     <BiEraser size={23} title={'Reset'} />
                                 </div>
-                                <div className={Styles.checkAllHolder} onClick={() => { checkId.length ?setConfirm(1):setAlert(true)}}>
+                                <div className={Styles.checkAllHolder} onClick={() => { checkId.length ? setConfirm(1) : setAlert(true) }}>
                                     <BiTrash size={23} title={'Delete selected rows'} />
                                 </div>
                             </div>

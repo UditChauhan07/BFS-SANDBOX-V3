@@ -1,5 +1,3 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import AppLayout from "../components/AppLayout";
 import { useEffect, useState } from "react";
 import { GetAuthData, getProductDetails } from "../lib/store";
 import Loading from "../components/Loading";
