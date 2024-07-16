@@ -1,7 +1,7 @@
 import styles from "./stylev2.module.css";
-const LoaderV2 = () => {
+const LoaderV2 = ({mods}) => {
     return (
-        <div className={styles.gearbox}>
+        <div className={styles.gearbox} style={{...mods}}>
             <div className={styles.overlay}></div>
             <div className={`${styles.gear} ${styles.one}`}>
                 <div className={styles.gearInner}>
