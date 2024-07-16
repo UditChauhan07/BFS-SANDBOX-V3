@@ -6,7 +6,7 @@ import { GetAuthData, getEmailBlastFromData, storeDatesHandler, storeRandomHandl
 import Loading from "../Loading";
 import Switch from "react-switch";
 
-const SettingNotify = ({ setSetting, getDataHandler ,setContactList}) => {
+const SettingNotify = ({ setSetting}) => {
     const [notifyFrom,setNotifyDate] = useState({isLoaded:false,data:{notifyDate:[],random:false}})
     useEffect(()=>{
         getEmailBlastFromData({key:"qsjwijufhudeyvdwud"}).then((form)=>{
@@ -76,14 +76,11 @@ const SettingNotify = ({ setSetting, getDataHandler ,setContactList}) => {
             }
         })
         if (values.length == size) {
-            setContactList({ isLoaded: false, data: [] })
             setLoaded(true)
             GetAuthData().then((user) => {
                 storeDatesHandler({ key: user.x_access_token, dates: values }).then((resposne) => {
                     if (resposne) {
                         setSetting(false)
-                        // setLoaded(false)
-                        getDataHandler()
                     }
                 }).catch((resErr) => {
                     console.log({ resErr });
@@ -98,8 +95,6 @@ const SettingNotify = ({ setSetting, getDataHandler ,setContactList}) => {
     const randomSubmitHandler = ()=>{
         storeRandomHandler({key:'12dffsw33rffd',random:isRandom}).then((result)=>{
             setSetting(false)
-            setContactList({ isLoaded: false, data: [] })
-            getDataHandler()
         }).catch((error)=>{
             console.log({error});
         })

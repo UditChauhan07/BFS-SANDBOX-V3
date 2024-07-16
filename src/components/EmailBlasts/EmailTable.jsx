@@ -164,7 +164,7 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                     setEmailHtml(null);
                 }}
             />
-            {setting ? <SettingNotify setSetting={setSetting} notifyDate={notifyDate} getDataHandler={getDataHandler} setContactList={setContactList} /> :
+            {setting ? <SettingNotify setSetting={setSetting} /> :
                 <>
                     <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
                         <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}>
