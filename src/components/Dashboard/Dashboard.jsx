@@ -588,7 +588,7 @@ function Dashboard({ dashboardData }) {
                       <thead>
                         <tr className={Styles.tablerow}>
                           <th scope="col" className="ps-3">
-                            Opportunity Owner
+                          Sales Rep Name
                           </th>
                           <th scope="col">Sale Target</th>
                           <th scope="col">Sale Amount</th>
@@ -658,7 +658,7 @@ function Dashboard({ dashboardData }) {
                       <thead>
                         <tr className={Styles.tablerow}>
                           <th scope="col" className="ps-3">
-                            Opportunity Owner
+                          Sales Rep Name
                           </th>
                           <th scope="col">Sale Target</th>
                           <th scope="col">Sale Amount</th>
@@ -726,7 +726,7 @@ function Dashboard({ dashboardData }) {
                   <table className="table table-borderless ">
                     <thead>
                       <tr className={Styles.tablerow}>
-                        <th className="ps-3">Manufacturer</th>
+                        <th className="ps-3">Brand Name</th>
                         {/* <th>Total Order</th> */}
                         <th scope="col">Sale Target</th>
                         <th scope="col">Sale Amount</th>
@@ -788,7 +788,7 @@ function Dashboard({ dashboardData }) {
                   <table className="table table-borderless mt-2">
                     <thead>
                       <tr className={Styles.tablerow}>
-                        <th className="ps-3">Manufacturer</th>
+                        <th className="ps-3">Brand Name</th>
                         <th>Received</th>
                         <th>Converted</th>
                       </tr>
@@ -841,7 +841,7 @@ function Dashboard({ dashboardData }) {
         <div className="my-5">
           {((accountPerformance.data?.length > 0 && accountPerformance?.isLoaded) || !accountPerformance?.isLoaded) && <div className={`row mt-1 justify-between ${Styles.topPerform2}`}>
             <div className={`col-lg-6 col-sm-12 ${Styles.top_perform1}`}>
-              <p className={Styles.Tabletext}>Top Performing Accounts</p>
+              <p className={Styles.Tabletext}>Top Performing Retailers</p>
               <div className="row">
                 {/* TOP PERFORMANCE */}
                 {!accountPerformance?.isLoaded ? (
@@ -884,7 +884,7 @@ function Dashboard({ dashboardData }) {
             </div>
             <ModalPage open={modalOpen} onClose={() => setModalOpen(false)} content={<SelectBrandModel brands={brandData} onClose={() => setModalOpen(false)} />} />
             <div className="col-lg-6 col-sm-12" style={{ width: "48%" }}>
-              <p className={Styles.Tabletext1}>Low Performing Accounts</p>
+              <p className={Styles.Tabletext1}>Low Performing Retailers</p>
               <div className="row">
                 {/* LOW PERFORMANCE */}
                 {!accountPerformance?.isLoaded ? (
@@ -934,7 +934,7 @@ function Dashboard({ dashboardData }) {
 
             <div className={`${Styles.donuttop} cardShadowHover`}>
               {/* <p className={` text-center mt-3  ${Styles.Tabletextt}`}>Sum of Order</p> */}
-              <p className={`text-end ${Styles.main_heading}`}>MANUFACTURER</p>
+              <p className={`text-end ${Styles.main_heading}`}>Brands</p>
               {!isLoading ? (
                 <ContentLoader />
               ) : (

@@ -148,7 +148,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                               {imageLoading[product.id] ? (
                                 <LoaderV2 width={100} height={100} />
                               ) : (
-                                <img key={product.Id} src={product.ProductImage ?? "\\assets\\images\\dummy.png"} alt={product.Name} height={212} width={212} onClick={() => {
+                                <img key={product.Id} className="zoomInEffect" src={product.ProductImage ?? "\\assets\\images\\dummy.png"} alt={product.Name} height={212} width={212} onClick={() => {
                                   setProductDetailId(product.Id);
                                 }} onLoad={() => handleImageLoad(product.Id)} />
                               )}
