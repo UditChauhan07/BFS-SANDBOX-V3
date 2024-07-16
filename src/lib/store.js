@@ -333,7 +333,7 @@ export async function getRollOver({ user }) {
   if (admins.includes(user.Sales_Rep__c)) {
     SalesRepId= null;
   }
-  let response = await fetch("http://3.223.209.6:6194/beauty/" + "target/SxaVXT0aX9wGVoM", {
+  let response = await fetch(url + "target/SxaVXT0aX9wGVoM", {
     method: "POST",
     headers: headersList,
     body: JSON.stringify({ key:user.x_access_token,SalesRepId }),
