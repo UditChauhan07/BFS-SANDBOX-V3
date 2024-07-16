@@ -81,7 +81,7 @@ useEffect(() => {
         <>
           <FilterItem
             minWidth="220px"
-            label="All Brand"
+            label="All Brands"
             name="All-Brand"
             value={brand}
             options={brands}

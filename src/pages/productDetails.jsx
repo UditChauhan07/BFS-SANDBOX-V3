@@ -6,7 +6,7 @@ import ModalPage from "../components/Modal UI";
 import ProductDetailCard from "../components/ProductDetailCard";
 import { CloseButton } from "../lib/svg";
 
-const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountId=null,ManufacturerId=null,toRedirect="/my-retailers" }) => {
+const ProductDetails = ({ productId, setProductDetailId, isAddtoCart = true, AccountId = null, ManufacturerId = null, toRedirect = "/my-retailers" }) => {
     const { orders, setOrders, setOrderQuantity, addOrder, setOrderProductPrice } = useBag();
     const [product, setProduct] = useState({ isLoaded: false, data: [], discount: {} });
     const [replaceCartModalOpen, setReplaceCartModalOpen] = useState(false);
@@ -20,7 +20,7 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountI
             GetAuthData().then((user) => {
                 let rawData = { productId: productId, key: user.x_access_token, salesRepId: user?.Sales_Rep__c, accountId: AccountId }
                 getProductDetails({ rawData }).then((productRes) => {
-                    console.log({productRes});
+                    console.log({ productRes });
                     setProduct({ isLoaded: true, data: productRes.data, discount: productRes.discount })
                 }).catch((proErr) => {
                     console.log({ proErr });
@@ -55,7 +55,7 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountI
             orderSetting(element, quantity);
         }
     };
- const onPriceChangeHander = (element, price = '0') => {
+    const onPriceChangeHander = (element, price = '0') => {
         if (price == '') price = 0;
         setOrderProductPrice(element, price)
     }
@@ -78,14 +78,22 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountI
             {isModalOpen && <ModalPage
                 open
                 content={
-                    <div className="d-flex flex-column gap-3" style={{width:'75vw'}}>
-                        <div className="d-flex align-items-center justify-content-between" style={{ minWidth: '75vw' }}>
-                            <h1 className="font-[Montserrat-500] text-[22px] tracking-[2.20px] m-0 p-0">Product Details</h1>
-                            <button type="button" onClick={()=>{setIsModalOpen(false); setProductDetailId(null)}}>
-                                <CloseButton />
-                            </button>
+                    <div className="d-flex flex-column gap-3" style={{ width: '75vw' }}>
+                        <div style={{
+                            position: 'sticky',
+                            top: '-20px',
+                            background: '#fff',
+                            zIndex: 1,
+                            padding: '15px 0 0 0'
+                        }}>
+                            <div className="d-flex align-items-center justify-content-between" style={{ minWidth: '75vw' }}>
+                                <h1 className="font-[Montserrat-500] text-[22px] tracking-[2.20px] m-0 p-0">Product Details</h1>
+                                <button type="button" onClick={() => { setIsModalOpen(false); setProductDetailId(null) }}>
+                                    <CloseButton />
+                                </button>
+                            </div>
+                            <hr />
                         </div>
-                        <hr />
                         {replaceCartModalOpen ? (
                             <ModalPage
                                 open
@@ -111,11 +119,11 @@ const ProductDetails = ({ productId,setProductDetailId,isAddtoCart=true,AccountI
                             />
                         ) : null}
                         {!product?.isLoaded ? <Loading /> :
-                            <ProductDetailCard product={product} orders={orders} onQuantityChange={onQuantityChange} onPriceChangeHander={onPriceChangeHander} isAddtoCart={isAddtoCart} AccountId={AccountId} toRedirect={toRedirect}/>}
+                            <ProductDetailCard product={product} orders={orders} onQuantityChange={onQuantityChange} onPriceChangeHander={onPriceChangeHander} isAddtoCart={isAddtoCart} AccountId={AccountId} toRedirect={toRedirect} />}
                     </div>
                 }
                 onClose={() => {
-                    setIsModalOpen(false);setProductDetailId(null);
+                    setIsModalOpen(false); setProductDetailId(null);
                 }}
             />}
         </>

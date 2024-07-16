@@ -129,8 +129,8 @@ const BrandsPage = () => {
             <FilterSearch
               onChange={(e) => setSearchBy(e.target.value)}
               value={searchBy}
-              placeholder={"Search by brands"}
-              minWidth={"155px"}
+              placeholder={"Search by Name"}
+              minWidth={"130px"}
             />
             <button
               className="border px-2 py-1 leading-tight d-grid"
