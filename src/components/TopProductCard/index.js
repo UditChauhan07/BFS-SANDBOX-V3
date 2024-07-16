@@ -7,8 +7,8 @@ import ProductDetails from "../../pages/productDetails";
 
 const TopProductCard = ({ data, productImages, to = null }) => {
   const [productDetailId, setProductDetailId] = useState(null);
-  
-  useEffect(() => {}, [productDetailId, productImages]);
+
+  useEffect(() => { }, [productDetailId, productImages]);
   return (
     <section>
       <div>
@@ -41,22 +41,24 @@ const TopProductCard = ({ data, productImages, to = null }) => {
                   </svg>
                 </div>
                 {productImages?.isLoaded ? (
-                   <div className={`last:mb-0 mb-4 ${Styles.HoverArrow}`}>
-                   <div className={` border-[#D0CFCF] flex flex-col gap-4   ${Styles.ImgHover1}`}>
-                  <img
-                    className={`${Styles.imgHolder} zoomInEffect`}
-                    onClick={() => {
-                      setProductDetailId(product.Id);
-                    }}
-                    src={product.ProductImage?product.ProductImage:productImages?.images?.[product.ProductCode]?.ContentDownloadUrl ?? "\\assets\\images\\dummy.png"}
-                  />
-                     </div>
-                        </div>
+                  <div className={`last:mb-0 mb-4 ${Styles.HoverArrow}`}>
+                    <div className={` border-[#D0CFCF] flex flex-col gap-4   ${Styles.ImgHover1}`}>
+                      <img
+                        className={`${Styles.imgHolder} zoomInEffect`}
+                        onClick={() => {
+                          setProductDetailId(product.Id);
+                        }}
+                        src={product.ProductImage ? product.ProductImage : productImages?.images?.[product.ProductCode]?.ContentDownloadUrl ?? "\\assets\\images\\dummy.png"}
+                      />
+                    </div>
+                  </div>
                 ) : (
-                  <LoaderV2 />
+                  <div className="d-grid place-content-center" style={{ height: '200px', margin: 'auto' }}>
+                    <LoaderV2 mods={{ height: '150px', width: '150px' }} />
+                  </div>
                 )}
-                <Link to={'/Brand/'+product.ManufacturerId__c} style={{color:'#000'}}>
-                <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
+                <Link to={'/Brand/' + product.ManufacturerId__c} style={{ color: '#000' }}>
+                  <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
                 </Link>
                 <p
                   className={`${Styles.titleHolder} linkEffect`}
