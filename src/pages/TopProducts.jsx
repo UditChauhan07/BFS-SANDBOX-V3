@@ -114,7 +114,7 @@ const TopProducts = () => {
     <AppLayout filterNodes={<>
       <FilterItem
         minWidth="220px"
-        label="Manufacturer"
+        label="All Brands"
         name="Manufacturer1"
         value={manufacturerFilter}
         options={manufacturers?.data?.map((manufacturer) => ({

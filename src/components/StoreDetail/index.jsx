@@ -48,6 +48,7 @@ const StoreDetailCard = ({ account }) => {
             console.log({ userErr });
         })
     }
+    console.log({account});
     return (<section className={Styles.container}>
         {fileDownload?<Loading/>:
         <div className={Styles.sectionHolder}>

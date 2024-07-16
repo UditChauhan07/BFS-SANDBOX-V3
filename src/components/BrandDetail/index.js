@@ -137,7 +137,9 @@ const BrandDetailCard = ({ brandId }) => {
                                                         src={item.ProductImage ? item.ProductImage : productImages?.images?.[item.ProductCode]?.ContentDownloadUrl ?? "\\assets\\images\\dummy.png"}
                                                     />
                                                 ) : (
+                                                    <div className="d-grid">
                                                     <LoaderV2 />
+                                                        </div>
                                                 )}
                                             </div>
                                         </div>

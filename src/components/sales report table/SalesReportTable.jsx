@@ -36,16 +36,16 @@ const SalesReportTable = ({ salesData, year, ownerPermission }) => {
               <thead>
                 <tr>
                   <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "170px" }}>
-                    Manufacturer
+                    Brand
                   </th>
                   <th className={`${styles.th} ${styles.stickySecondColumnHeading}`} style={{ minWidth: "150px" }}>
-                    Account
+                  Retailer
                   </th>
                   <th className={`${styles.th} ${styles.stickyThirdColumnHeading}`} style={{ minWidth: "200px" }}>
                     Sales Rep
                   </th>
                   <th className={`${styles.month} ${styles.stickyMonth}`} style={{ maxWidth: "200px" }}>
-                    Account Type
+                  Retailer Type
                   </th>
                   <th className={`${styles.month} ${styles.stickyMonth}`} style={{ minWidth: "150px" }}>
                     Date Open

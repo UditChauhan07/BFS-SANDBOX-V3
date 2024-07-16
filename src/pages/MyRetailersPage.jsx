@@ -100,7 +100,7 @@ const MyRetailersPage = () => {
           />
           <FilterItem
             minWidth="220px"
-            label="Manufacturer"
+            label="All Brands"
             name="Manufacturer1"
             value={manufacturerFilter}
             options={manufacturers?.data?.map((manufacturer) => ({
@@ -112,7 +112,7 @@ const MyRetailersPage = () => {
           <FilterSearch
             onChange={(e) => setSearchBy(e.target.value)}
             value={searchBy}
-            placeholder={"Search by account"}
+            placeholder={"Search by Retailers"}
             minWidth={"167px"}
           />
           <button

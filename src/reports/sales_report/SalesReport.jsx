@@ -111,83 +111,81 @@ const SalesReport = () => {
   const csvData = useMemo(() => {
     const dataWithTotals = filteredSalesReportData?.map((ele) =>
       ele.Orders.map((item) => ({
-        ManufacturerName: ele.ManufacturerName__c,
-        AccountName: item.AccountName,
-        AccountType: item.AccountType,
-        DateOpen: item.DateOpen,
+        "Brand Name": ele.ManufacturerName__c,
+        "Retailer Name": item.AccountName,
+        "Retailer Type": item.AccountType,
+        "Date Open": item.DateOpen,
         Status: item.Status,
-        AccountRepo: item?.AccountRepo ?? JSON.parse(localStorage.getItem("Api Data")).data.Name,
-        JanOrders: item.Jan.items?.length,
-        JanAmount: item.Jan.amount,
-        FebOrders: item.Feb.items?.length,
-        FebAmount: item.Feb.amount,
-        MarOrders: item.Mar.items?.length,
-        MarAmount: item.Mar.amount,
-        AprOrders: item.Apr.items?.length,
-        AprAmount: item.Apr.amount,
-        MayOrders: item.May.items?.length,
-        MayAmount: item.May.amount,
-        JunOrders: item.Jun.items?.length,
-        JunAmount: item.Jun.amount,
-        JulOrders: item.Jul.items?.length,
-        JulAmount: item.Jul.amount,
-        AugOrders: item.Aug.items?.length,
-        AugAmount: item.Aug.amount,
-        SepOrders: item.Sep.items?.length,
-        SepAmount: item.Sep.amount,
-        OctOrders: item.Oct.items?.length,
-        OctAmount: item.Oct.amount,
-        NovOrders: item.Nov.items?.length,
-        NovAmount: item.Nov.amount,
-        DecOrders: item.Dec.items?.length,
-        DecAmount: item.Dec.amount,
-        TotalOrders: item.totalOrders,
-        TotalAmount: item.totalorderPrice,
+        "Retailer Sales Rep": item?.AccountRepo ?? JSON.parse(localStorage.getItem("Api Data")).data.Name,
+        "Jan Orders": item.Jan.items?.length,
+        "Jan Amount": item.Jan.amount,
+        "Feb Orders": item.Feb.items?.length,
+        "Feb Amount": item.Feb.amount,
+        "Mar Orders": item.Mar.items?.length,
+        "Mar Amount": item.Mar.amount,
+        "Apr Orders": item.Apr.items?.length,
+        "Apr Amount": item.Apr.amount,
+        "May Orders": item.May.items?.length,
+        "May Amount": item.May.amount,
+        "Jun Orders": item.Jun.items?.length,
+        "Jun Amount": item.Jun.amount,
+        "Jul Orders": item.Jul.items?.length,
+        "Jul Amount": item.Jul.amount,
+        "Aug Orders": item.Aug.items?.length,
+        "Aug Amount": item.Aug.amount,
+        "Sep Orders": item.Sep.items?.length,
+        "Sep Amount": item.Sep.amount,
+        "Oct Orders": item.Oct.items?.length,
+        "Oct Amount": item.Oct.amount,
+        "Nov Orders": item.Nov.items?.length,
+        "Nov Amount": item.Nov.amount,
+        "Dec Orders": item.Dec.items?.length,
+        "Dec Amount": item.Dec.amount,
+        "Total Orders": item.totalOrders,
+        "Total Amount": item.totalorderPrice,
       }))
     ).flat();
 
     const totals = {
-      ManufacturerName: "Total",
-      JanOrders: dataWithTotals.reduce((total, item) => total + (item.JanOrders || 0), 0),
-      JanAmount: dataWithTotals.reduce((total, item) => total + (item.JanAmount || 0), 0),
+      "Brand Name": "Total",
+      "Jan Orders": dataWithTotals.reduce((total, item) => total + (item.JanOrders || 0), 0),
+      "Jan Amount": dataWithTotals.reduce((total, item) => total + (item.JanAmount || 0), 0),
 
-      FebOrders: dataWithTotals.reduce((total, item) => total + (item.FebOrders || 0), 0),
-      FebAmount: dataWithTotals.reduce((total, item) => total + (item.FebAmount || 0), 0),
+      "Feb Orders": dataWithTotals.reduce((total, item) => total + (item.FebOrders || 0), 0),
+      "Feb Amount": dataWithTotals.reduce((total, item) => total + (item.FebAmount || 0), 0),
 
-      MarOrders: dataWithTotals.reduce((total, item) => total + (item.MarOrders || 0), 0),
-      MarAmount: dataWithTotals.reduce((total, item) => total + (item.MarAmount || 0), 0),
+      "Mar Orders": dataWithTotals.reduce((total, item) => total + (item.MarOrders || 0), 0),
+      "Mar Amount": dataWithTotals.reduce((total, item) => total + (item.MarAmount || 0), 0),
 
-      AprOrders: dataWithTotals.reduce((total, item) => total + (item.AprOrders || 0), 0),
-      AprAmount: dataWithTotals.reduce((total, item) => total + (item.AprAmount || 0), 0),
+      "Apr Orders": dataWithTotals.reduce((total, item) => total + (item.AprOrders || 0), 0),
+      "Apr Amount": dataWithTotals.reduce((total, item) => total + (item.AprAmount || 0), 0),
 
-      MayOrders: dataWithTotals.reduce((total, item) => total + (item.MayOrders || 0), 0),
-      MayAmount: dataWithTotals.reduce((total, item) => total + (item.MayAmount || 0), 0),
+      "May Orders": dataWithTotals.reduce((total, item) => total + (item.MayOrders || 0), 0),
+      "May Amount": dataWithTotals.reduce((total, item) => total + (item.MayAmount || 0), 0),
 
-      JunOrders: dataWithTotals.reduce((total, item) => total + (item.JunOrders || 0), 0),
-      JunAmount: dataWithTotals.reduce((total, item) => total + (item.JunAmount || 0), 0),
+      "Jun Orders": dataWithTotals.reduce((total, item) => total + (item.JunOrders || 0), 0),
+      "Jun Amount": dataWithTotals.reduce((total, item) => total + (item.JunAmount || 0), 0),
 
-      JulOrders: dataWithTotals.reduce((total, item) => total + (item.JulOrders || 0), 0),
-      JulAmount: dataWithTotals.reduce((total, item) => total + (item.JulAmount || 0), 0),
+      "Jul Orders": dataWithTotals.reduce((total, item) => total + (item.JulOrders || 0), 0),
+      "Jul Amount": dataWithTotals.reduce((total, item) => total + (item.JulAmount || 0), 0),
 
-      AugOrders: dataWithTotals.reduce((total, item) => total + (item.AugOrders || 0), 0),
-      AugAmount: dataWithTotals.reduce((total, item) => total + (item.AugAmount || 0), 0),
+      "Aug Orders": dataWithTotals.reduce((total, item) => total + (item.AugOrders || 0), 0),
+      "Aug Amount": dataWithTotals.reduce((total, item) => total + (item.AugAmount || 0), 0),
 
-      SepOrders: dataWithTotals.reduce((total, item) => total + (item.SepOrders || 0), 0),
-      SepAmount: dataWithTotals.reduce((total, item) => total + (item.SepAmount || 0), 0),
+      "Sep Orders": dataWithTotals.reduce((total, item) => total + (item.SepOrders || 0), 0),
+      "Sep Amount": dataWithTotals.reduce((total, item) => total + (item.SepAmount || 0), 0),
 
-      OctOrders: dataWithTotals.reduce((total, item) => total + (item.OctOrders || 0), 0),
-      OctAmount: dataWithTotals.reduce((total, item) => total + (item.OctAmount || 0), 0),
+      "Oct Orders": dataWithTotals.reduce((total, item) => total + (item.OctOrders || 0), 0),
+      "Oct Amount": dataWithTotals.reduce((total, item) => total + (item.OctAmount || 0), 0),
 
-      NovOrders: dataWithTotals.reduce((total, item) => total + (item.NovOrders || 0), 0),
-      NovAmount: dataWithTotals.reduce((total, item) => total + (item.NovAmount || 0), 0),
+      "Nov Orders": dataWithTotals.reduce((total, item) => total + (item.NovOrders || 0), 0),
+      "Nov Amount": dataWithTotals.reduce((total, item) => total + (item.NovAmount || 0), 0),
 
-      DecOrders: dataWithTotals.reduce((total, item) => total + (item.DecOrders || 0), 0),
-      DecAmount: dataWithTotals.reduce((total, item) => total + (item.DceAmount || 0), 0),
+      'Dec Orders': dataWithTotals.reduce((total, item) => total + (item.DecOrders || 0), 0),
+      "Dec Amount": dataWithTotals.reduce((total, item) => total + (item.DceAmount || 0), 0),
 
-      TotalOrders: dataWithTotals.reduce((total, item) => total + (item.TotalOrders || 0), 0),
-      TotalAmount: dataWithTotals.reduce((total, item) => total + (item.TotalAmount || 0), 0),
-
-
+      "Total Orders": dataWithTotals.reduce((total, item) => total + (item.TotalOrders || 0), 0),
+      "Total Amount": dataWithTotals.reduce((total, item) => total + (item.TotalAmount || 0), 0),
     };
 
     const dataWithTotalRow = [...dataWithTotals, totals];
@@ -289,7 +287,7 @@ const SalesReport = () => {
     <AppLayout
       filterNodes={
         <div className="d-flex justify-content-between m-auto" style={{ width: '99%' }}>
-          <div className="d-flex justify-content-start gap-4 col-3">
+          <div className="d-flex justify-content-start gap-4 col-4">
             <FilterItem
               label="year"
               name="Year"
@@ -308,13 +306,12 @@ const SalesReport = () => {
               <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>search</small>
             </button>
           </div>
-          <div className="d-flex justify-content-around col-1"></div>
-          <div className="d-flex justify-content-around col-1"><hr className={Styles.breakHolder} /></div>
+          <div className="d-flex justify-content-end col-1"><hr className={Styles.breakHolder} /></div>
           <div className="d-flex justify-content-end gap-4 col-7">
             {ownerPermission && <FilterItem minWidth="220px" label="All Sales Rep" name="AllSalesRep" value={searchBySalesRep} options={salesRepList} onChange={(value) => setSearchBySalesRep(value)} />}
             <FilterItem
               minWidth="220px"
-              label="All Manufacturers"
+              label="All Brands"
               name="AllManufacturers1"
               value={manufacturerFilter}
               options={manufacturers}
@@ -322,16 +319,16 @@ const SalesReport = () => {
             />
             <FilterItem
               minWidth="220px"
-              label="Lowest Orders"
+              label="Lowest Amount Orders"
               name="LowestOrders"
               value={highestOrders}
               options={[
                 {
-                  label: "Highest Orders",
+                  label: "Highest Amount Orders",
                   value: true,
                 },
                 {
-                  label: "Lowest Orders",
+                  label: "Lowest Amount Orders",
                   value: false,
                 },
               ]}
