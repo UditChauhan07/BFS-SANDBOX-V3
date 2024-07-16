@@ -31,7 +31,10 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
       let productDetails = getProductData(item["Product Code"] || item["ProductCode"] || null);
       if (item?.Quantity) {
         let error = !item?.Quantity || !Number.isInteger(item?.Quantity) || item?.Quantity < (productDetails.Min_Order_QTY__c || 0) || !productDetails?.Name || (productDetails.Min_Order_QTY__c > 0 && item?.Quantity % productDetails.Min_Order_QTY__c !== 0);
+
         orderType == "preorder" ? (error == false) ? error = productDetails?.Category__c?.toLowerCase() != orderType.toLowerCase() : error = error : (error == false) ? error = productDetails?.Category__c?.toLowerCase() == "preorder" : error = error
+
+        (orderType == "wholesale" && productDetails?.Category__c?.toLowerCase() =="preorder") ? error = true:error=error
         checkLimit++;
         return accumulator + (error ? 1 : 0);
       } else {
@@ -39,7 +42,6 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
       }
       return accumulator;
     }, 0);
-    console.log({checkLimit,isLimitPass});
     if (checkLimit > 500) {
       setLimitCheck(true)
       setIsLimitPass(true)
