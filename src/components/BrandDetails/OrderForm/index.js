@@ -196,6 +196,7 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
     if (errorOnlist > 0) {
       setOpenModal(true);
     }
+    CheckError(data);
   }, [errorOnlist, orderType]);
   if (!showTable) {
     return (
