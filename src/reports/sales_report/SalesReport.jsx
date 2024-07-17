@@ -112,7 +112,7 @@ const SalesReport = () => {
     const dataWithTotals = filteredSalesReportData?.map((ele) =>
       ele.Orders.map((item) => ({
         "Brand Name": ele.ManufacturerName__c,
-        "Retailer Name": item.AccountName,
+        "Retailer Name": item.AccountName??item.Name,
         "Retailer Type": item.AccountType,
         "Date Open": item.DateOpen,
         Status: item.Status,

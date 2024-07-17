@@ -38,7 +38,7 @@ const NewnessReport = () => {
   const { data: manufacturers, isLoading, error } = useManufacturer();
   const [newnessData, setNewnessData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [status,setstatus] = useState(1)
+  const [status, setstatus] = useState(1)
   // if (manufacturers?.status !== 200) {
   //   // DestoryAuth();
   // }
@@ -55,69 +55,89 @@ const NewnessReport = () => {
   };
   const csvData = (price) => {
     let finalData = [];
+    let footer = {};
     if (newnessData?.AccountList?.length) {
       newnessData?.AccountList?.map((ele) => {
         let temp = {};
-        temp["Account Name"] = ele.AccountName__c;
-        temp["Account Owner Name"] = ele.OwnerName;
-        temp["Account Status"] = ele.Active_Closed__c;
+        temp["Retailer Name"] = ele.AccountName__c;
+        temp["Retailer Owner Name"] = ele.OwnerName;
+        temp["Retailer Status"] = ele.Active_Closed__c;
         temp["Sales Rep"] = ele.Sales_Rep_Name__c;
         temp["Manufacturer Name"] = ele.ManufacturerName__c;
         newnessData?.header?.map((item) => {
           if (price) {
             temp[`${item.name}`] = PriceDisplay(ele[item.name]?.price);
+            if (!footer[item.name]) { footer[item.name] = 0; }
+            footer[item.name] += parseFloat(ele[item.name]?.price);
           } else {
             temp[`${item.name}`] = ele[item.name]?.qty;
+            if (!footer[item.name]) { footer[item.name] = 0; }
+            footer[item.name] += parseInt(ele[item.name]?.qty);
           }
         });
         finalData.push(temp);
       });
     }
+    let footKey = Object.keys(footer)
+    if (footKey.length > 1) {
+      footer["Retailer Name"] = "Total";
+      if (price) {
+        footKey.map((key) => {
+          footer[key] = PriceDisplay(footer[key])
+        })
+      }
+      finalData.push(footer)
+    }
     return finalData;
   };
   const csvDataV2 = (price) => {
     let finalData = [];
+    let footer = {};
     if (newnessData?.AccountList?.length) {
       newnessData?.AccountList?.map((ele, index) => {
         let temp = {};
-        temp["Account Name"] = ele.AccountName__c;
-        temp["Account Owner Name"] = ele.OwnerName;
-        temp["Account Status"] = ele.Active_Closed__c;
-        temp["Account Sales Rep"] = ele.Sales_Rep_Name__c;
+        temp["Retailer Name"] = ele.AccountName__c;
+        temp["Retailer Owner Name"] = ele.OwnerName;
+        temp["Retailer Status"] = ele.Active_Closed__c;
+        temp["Retailer Sales Rep"] = ele.Sales_Rep_Name__c;
         temp["Manufacturer Name"] = ele.ManufacturerName__c;
         newnessData?.header?.map((item) => {
           temp[`${item.name} Price`] = PriceDisplay(ele[item.name]?.price);
           temp[`${item.name} Quantity`] = ele[item.name]?.qty;
+          if (!footer[`${item.name} Price`]) { footer[`${item.name} Price`] = 0; }
+          footer[`${item.name} Price`] += parseFloat(ele[item.name]?.price);
+          if (!footer[`${item.name} Quantity`]) { footer[`${item.name} Quantity`] = 0; }
+          footer[`${item.name} Quantity`] += parseInt(ele[item.name]?.qty);
         });
         if (index == 0) {
           let helper1 = {
-            "Account Name":"",
-            "Account Owner Name":"",
-            "Account Status":"",
-            "Account Sales Rep":"",
-            "Manufacturer Name":"Launch:",
+            "Retailer Name": "",
+            "Retailer Owner Name": "",
+            "Retailer Status": "",
+            "Retailer Sales Rep": "",
+            "Manufacturer Name": "Launch:",
           };
           let helper2 = {
-            "Account Name":"",
-            "Account Owner Name":"",
-            "Account Status":"",
-            "Account Sales Rep":"",
-            "Manufacturer Name":"Ship:",
+            "Retailer Name": "",
+            "Retailer Owner Name": "",
+            "Retailer Status": "",
+            "Retailer Sales Rep": "",
+            "Manufacturer Name": "Ship:",
           };
           newnessData?.header?.map((item) => {
-            if(!helper1[`${item.name} Price`]){
+            if (!helper1[`${item.name} Price`]) {
               helper1[`${item.name} Price`] = "";
             }
             helper1[`${item.name} Price`] = item.launchDate
-            if(!helper1[`${item.name} Quantity`]){
+            if (!helper1[`${item.name} Quantity`]) {
               helper1[`${item.name} Quantity`] = "";
             }
             helper1[`${item.name} Quantity`] = item.launchDate
-            if(!helper2[`${item.name} Price`]){
+            if (!helper2[`${item.name} Price`]) {
               helper2[`${item.name} Price`] = "";
             }
             helper2[`${item.name} Price`] = item.shipDate
-            if(!helper2[`${item.name} Quantity`]){
+            if (!helper2[`${item.name} Quantity`]) {
               helper2[`${item.name} Quantity`] = "";
             }
             helper2[`${item.name} Quantity`] = item.shipDate
@@ -127,6 +147,16 @@ const NewnessReport = () => {
         }
         finalData.push(temp);
       });
+    }
+    let footKey = Object.keys(footer)
+    if (footKey.length > 1) {
+      footer["Retailer Name"] = "Total";
+      footKey.map((key) => {
+        if (key.includes("Price")) {
+          footer[key] = PriceDisplay(footer[key])
+        }
+      })
+      finalData.push(footer)
     }
     return finalData;
   };
@@ -165,15 +195,15 @@ const NewnessReport = () => {
   const sendApiCall = async () => {
     setLoading(true);
     const result = await originalApiData.fetchNewnessApiData(filter);
-    let short = result.AccountList.filter(item => status == 1?item.Active_Closed__c !== "Closed Account":item)
+    let short = result.AccountList.filter(item => status == 1 ? item.Active_Closed__c !== "Closed Account" : item)
     setFilter((prev) => ({
       ...prev,
       dataDisplay: dataDisplayHandler,
     }));
     let temp = {
-      status:result.status,
-      header:result.header,
-      AccountList:short,
+      status: result.status,
+      header: result.header,
+      AccountList: short,
     }
     setNewnessData(temp);
     setLoading(false);
@@ -261,17 +291,17 @@ const NewnessReport = () => {
           />
           <div className="d-flex gap-1 ">
             <button className="border px-2 py-1 leading-tight  d-grid ms-3" onClick={sendApiCall}>
-            <SearchIcon fill="#fff" width={20} height={20}/>
-            <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>search</small>
+              <SearchIcon fill="#fff" width={20} height={20} />
+              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>search</small>
             </button>
             <button className="border px-2 py-1 leading-tight d-grid" onClick={resetFilter}>
-            <CloseButton crossFill={'#fff'} height={20} width={20}/>
-            <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
+              <CloseButton crossFill={'#fff'} height={20} width={20} />
+              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
             </button>
           </div>
           <button className="border px-2 py-1 leading-tight d-grid" onClick={handleExportToExcel}>
-            <MdOutlineDownload size={16} className="m-auto"/>
-            <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>export</small>
+            <MdOutlineDownload size={16} className="m-auto" />
+            <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>export</small>
           </button>
         </>
       }
