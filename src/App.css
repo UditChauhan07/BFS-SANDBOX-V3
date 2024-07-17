@@ -103,7 +103,10 @@ a {
 .accordion-button:not(.collapsed) {
   color: black;
 }
-
+.carousel .thumb img {
+  max-height: 100px!important;
+  width: auto!important;
+}
 .container {
   max-width: 90% !important;
   margin: auto !important;
