@@ -61,12 +61,12 @@ const PublicProduct = () => {
                 }}
             /> :
                 product.isloaded ?
-                    <div className="productDetailContainer">
+                    <div className="productDetailContainer" style={{margin:'1rem auto 4rem'}}>
                         {product.data?.Id ?
                             <ProductDetailCard product={product} orders={{}} isAddtoCart={false} /> : null}
-                    </div> : <Loading height={'70%'} />}
+                    </div> : <Loading height={'70vh'} />}
                     <HelpSection />
-                    <Footer />
+                    <Footer  readOnly/>
         </section>
     )
 }
