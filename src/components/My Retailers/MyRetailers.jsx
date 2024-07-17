@@ -42,7 +42,7 @@ const MyRetailers = ({ pageData, filterBy, sortBy, searchBy, isLoading,selectedS
           </section>
         ) : null}
         {!filteredPageData?.length && !isLoading && <div className="flex justify-center items-center py-4 w-full lg:min-h-[300px] xl:min-h-[380px]">No data found</div>}
-        {isLoading ? <Loading height={"70vh"} /> : null}
+        {isLoading ? <div className="flex justify-center items-center py-4 w-full lg:min-h-[300px] xl:min-h-[380px]"><Loading height={"40vh"} /></div> : null}
       </div>
     </>
   );
