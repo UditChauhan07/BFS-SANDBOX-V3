@@ -10,6 +10,7 @@ const HelpSection = () => {
         <div  className="  justify-content-center  align-items-center ">
           <div className={footerStyle.ControlHelp}>
           <p className={`m-0  ${footerStyle.textLarge}`}>Help us Improve</p>
+          <div className={footerStyle.languagemain}>
           <p className={`m-0 ${topNavStyle.language}`}>Take a brief survey about today's visit</p>
           <p className={`m-0  ${topNavStyle.language} ${footerStyle.underline}`}><Link style={{color:'#000'}} to="/lead">Begin Survey</Link></p>
         </div>
