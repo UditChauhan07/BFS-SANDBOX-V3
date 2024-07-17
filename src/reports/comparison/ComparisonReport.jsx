@@ -34,20 +34,29 @@ const ComparisonReport = () => {
   const [apiData, setApiData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [status, setstatus] = useState(1)
-  sortArrayHandler(apiData?.data||[],g=>g?.AccountName)
+  sortArrayHandler(apiData?.data || [], g => g?.AccountName)
   //csv Data
   let csvData = [];
   if (apiData?.data?.length) {
+    let totalRetail = 0;
+    let totalWhole = 0
     apiData?.data?.map((ele) => {
+      totalRetail += ele.retail_revenue__c
+      totalWhole += ele.Whole_Sales_Amount
       return csvData.push({
-        AccountName: ele.AccountName,
-        Estee_Lauder_Number__c: ele.Estee_Lauder_Number__c,
-        Sales_Rep__c: ele.Sales_Rep__c,
+        "Retailers Name": ele.AccountName,
+        "Estee Lauder Number": ele.Estee_Lauder_Number__c ?? "NA",
+        "SalesRep Name": ele.Sales_Rep__c,
         Status: ele.Status,
-        retail_revenue__c: `$${Number(ele.retail_revenue__c).toFixed(2)}`,
-        Whole_Sales_Amount: `$${Number(ele.Whole_Sales_Amount).toFixed(2)}`,
+        "Retail Revenue": ele.retail_revenue__c ? `$${Number(ele.retail_revenue__c).toFixed(2)}` : 'NA',
+        "Wholesales Amount": `$${Number(ele.Whole_Sales_Amount).toFixed(2)}`,
       });
     });
+    csvData.push({
+      "Retailers Name": "Total",
+      "Retail Revenue": totalRetail?`$${Number(totalRetail).toFixed(2)}`:'NA',
+      "Wholesales Amount": `$${Number(totalWhole).toFixed(2)}`,
+    })
   }
   useEffect(() => {
     sendApiCall();
