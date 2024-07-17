@@ -186,9 +186,7 @@ const YearlyComparisonReport = () => {
       }
       if ((apiData.length - 1) == index) {
         csvData.push({
-          AccountName: "",
-          Estee_Lauder_Number__c: "Total",
-          Sales_Rep__c: "",
+          "Retail Store": "Total",
           "Jan Retail Revenue": `$${Number(monthTotalAmount.Jan.retailer).toFixed(2)}`,
           "Jan Wholesale Amount": `$${Number(monthTotalAmount.Jan.wholesale).toFixed(2)}`,
           "Feb Retail Revenue": `$${Number(monthTotalAmount.Feb.retailer).toFixed(2)}`,
@@ -244,11 +242,11 @@ const YearlyComparisonReport = () => {
     setFilter(initialValues);
     setIsLoading(false);
     setStatus(1); // Reset status to active accounts
-    };
-    const sendApiCall = async () => {
-      setIsLoading(true);
-      const result = await getYearlyComparison({ ...filter });
-      console.log({result});
+  };
+  const sendApiCall = async () => {
+    setIsLoading(true);
+    const result = await getYearlyComparison({ ...filter });
+    console.log({ result });
     sortArrayHandler(result || [], g => g?.AccountName)
     setApiData(result);
     setIsLoading(false);
@@ -338,7 +336,7 @@ const YearlyComparisonReport = () => {
         </div>
         <div></div>
       </div>
-      {!isLoading ? <YearlyComparisonReportTable comparisonData={apiData} status={status}/> : <Loading height={"70vh"} />}
+      {!isLoading ? <YearlyComparisonReportTable comparisonData={apiData} status={status} /> : <Loading height={"70vh"} />}
     </AppLayout>
   );
 };
