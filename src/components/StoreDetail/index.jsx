@@ -55,6 +55,7 @@ const StoreDetailCard = ({ account }) => {
                 <h1 className={Styles.titleHolder}>{account.Name} | {account.BillingCity}, {account.BillingState}</h1>
                 <div className="d-flex justify-content-between align-items-start">
                     <div style={{ width: '60%' }}>
+                        <h1 className={Styles.titleHolder}>&nbsp;</h1>
                         <div className={Styles.bullets}>
                             <b>
                                 Billing Address:
@@ -91,8 +92,9 @@ const StoreDetailCard = ({ account }) => {
                                 </p>
                             </div>}
                     </div>
-                    <div style={{ width: '30%' }}>
-                        <div className={Styles.brandGrid}>
+                    <div style={{ width: '30%',border:'1px solid #ccc',borderRadius:'10px' }}>
+                        <h1 className={Styles.titleHolder} style={{marginTop:'1rem'}}>Audit Report</h1>
+                        <div className={Styles.brandGrid} style={{width:'80%',margin:'0 auto 1rem'}}>
                             {account.Brands && account.Brands.length > 0 && account.Brands.map((brand) => (
                                 <>
                                     <div className={Styles.cardHolder}><div className={Styles.badge} title="Click to download audit report" onClick={() => { AuditHandler(brand.ManufacturerId__c, account.Name, brand.ManufacturerName__c) }}>

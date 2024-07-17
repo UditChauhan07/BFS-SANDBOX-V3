@@ -37,7 +37,7 @@ const MyRetailerCard = ({ placeName, title, brands, accountId, address,selectedS
                     zIndex: 0,
                   }}
                 /> */}
-                <Link to={'/store/'+accountId} style={{color:'#000',zIndex: 1}} className="d-flex ps-2 gap-2">
+                <Link style={{color:'#000',zIndex: 1}} className="d-flex ps-2 gap-2">
                   <img className={Styles.ControlerImg} src={"/assets/images/LocationPin.svg"} alt="img" />
                   <p
                     className="w-100 mb-0"
