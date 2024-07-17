@@ -92,7 +92,7 @@ const StoreDetailCard = ({ account }) => {
                                 </p>
                             </div>}
                     </div>
-                    <div style={{ width: '30%',border:'1px solid #ccc',borderRadius:'10px' }}>
+                    <div style={{ width: '30%',border:'1px solid #ccc',borderRadius:'10px',background:'#fff' }}>
                         <h1 className={Styles.titleHolder} style={{marginTop:'1rem'}}>Audit Report</h1>
                         <div className={Styles.brandGrid} style={{width:'80%',margin:'0 auto 1rem'}}>
                             {account.Brands && account.Brands.length > 0 && account.Brands.map((brand) => (
