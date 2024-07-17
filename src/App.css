@@ -96,7 +96,6 @@ a {
   transform: scaleX(0);
   transition: transform 0.3s ease-in-out;
 }
-
 .linkStyle:hover::before {
   transform-origin: left;
   transform: scaleX(1);
