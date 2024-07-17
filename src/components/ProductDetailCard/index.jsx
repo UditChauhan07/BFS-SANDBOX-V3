@@ -46,8 +46,8 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
             {product?.data?.Name}
           </h2>
           {product?.discount ? (
-            <p style={{ textAlign: "start", color: "black" }}>
-              <span className={Styles.crossed}>{product?.data?.usdRetail__c}</span>&nbsp;${salesPrice}
+            <p className={Styles.priceHolder}>
+              ${parseFloat(salesPrice).toFixed(2)}&nbsp;<span className={Styles.crossed}>{product?.data?.usdRetail__c}</span>
             </p>
           ) : (
             <p className={Styles.priceHolder}>
