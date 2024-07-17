@@ -2,7 +2,7 @@ import React from "react";
 
 import footerStyle from "./index.module.css";
 import { Link } from "react-router-dom";
-const Footer = () => {
+const Footer = ({ readOnly = false }) => {
   return (
     <>
       <div className="container d-none-print">
@@ -15,26 +15,34 @@ const Footer = () => {
               <div className="mt-3">
                 <p className={`m-0 ${footerStyle.heading}`}>BFSG</p>
                 <p className={`m-0 ${footerStyle.subheadings}`}>
-                  <Link to="/about-us" className="linkStyle">
-                    About Us
-                  </Link>
+                  {readOnly ?
+                    <a className="linkStyle">About Us</a> :
+                    <Link to="/about-us" className="linkStyle">
+
+                    </Link>}
                 </p>
                 <p className={`m-0 ${footerStyle.subheadings}`}>
-                  <Link to="/customer-care" className="linkStyle">
-                    Customer Care
-                  </Link>
+                  {readOnly ?
+                    <a className="linkStyle">Customer Care</a> :
+                    <Link to="/customer-care" className="linkStyle">
+                      Customer Care
+                    </Link>}
                 </p>
 
                 <p className={`m-0 ${footerStyle.subheadings}`}>
-                  <Link to="/careers" className="linkStyle">
-                    Careers
-                  </Link>
+                  {readOnly ?
+                    <a className="linkStyle">Careers</a> :
+                    <Link to="/careers" className="linkStyle">
+                      Careers
+                    </Link>}
                 </p>
 
                 <p className={`m-0 ${footerStyle.subheadings}`}>
-                  <Link to="/wholesale-inquiry" className="linkStyle">
-                    Wholesale Enquires
-                  </Link>
+                  {readOnly ?
+                    <a className="linkStyle">Wholesale Enquires</a> :
+                    <Link to="/wholesale-inquiry" className="linkStyle">
+                      Wholesale Enquires
+                    </Link>}
 
                 </p>
                 {/* <p className={`m-0 ${footerStyle.subheadings}`}>What our retailers are saying</p> */}
@@ -72,15 +80,17 @@ const Footer = () => {
             <div className={`col-lg-3 col-md-3 col-sm-6 ${footerStyle.joinWebUs}`}>
               <div className="d-flex justify-content-end ">
                 <div className="mt-3  ">
-                  <Link to="/join-us" > <p className={`m-0 ${footerStyle.heading} linkStyle`}>Join US</p></Link>
-                  <Link to="/instagram"><p className={`m-0 ${footerStyle.subheadings} linkStyle`}>Instagram</p></Link>
-
-                  <Link to="/linkdin"><p className={`m-0 ${footerStyle.subheadings} linkStyle`}>Linkedin</p></Link>
+                  {readOnly ? <p className={`m-0 ${footerStyle.heading} linkStyle`}>Join US</p> :
+                    <Link to="/join-us" > <p className={`m-0 ${footerStyle.heading} linkStyle`}>Join US</p></Link>}
+                  {readOnly ? <p className={`m-0 ${footerStyle.subheadings} linkStyle`}>Instagram</p> :
+                    <Link to="/instagram"><p className={`m-0 ${footerStyle.subheadings} linkStyle`}>Instagram</p></Link>}
+                  {readOnly ? <p className={`m-0 ${footerStyle.subheadings} linkStyle`}>Linkedin</p> :
+                    <Link to="/linkdin"><p className={`m-0 ${footerStyle.subheadings} linkStyle`}>Linkedin</p></Link>}
                 </div>
               </div>
             </div>
           </div>
-          <div className={`mt-3 ${footerStyle.copyright}`}>2023 © Beauty Fashion Sales Group, Inc. All rights reserved.</div>
+          <div className={`mt-3 ${footerStyle.copyright}`}>2024 © Beauty Fashion Sales Group, Inc. All rights reserved.</div>
         </div>
       </div>
     </>

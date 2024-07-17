@@ -5,7 +5,7 @@ import { useState } from "react";
 import Loading from "../Loading";
 
 const StoreDetailCard = ({ account }) => {
-    let [fileDownload,setLoader]= useState(false)
+    let [fileDownload, setLoader] = useState(false)
     const bgColors = {
         "Kevyn Aucoin Cosmetics": "KevynAucoinCosmeticsBg",
         "Bumble and Bumble": "BumbleandBumbleBg",
@@ -48,59 +48,67 @@ const StoreDetailCard = ({ account }) => {
             console.log({ userErr });
         })
     }
-    console.log({account});
+    console.log({ account });
     return (<section className={Styles.container}>
-        {fileDownload?<Loading/>:
-        <div className={Styles.sectionHolder}>
-            <h1 className={Styles.titleHolder}>{account.Name} | {account.BillingCity}, {account.BillingState}</h1>
-            <div className={Styles.brandGrid}>
-                {account.Brands && account.Brands.length > 0 && account.Brands.map((brand) => (
-                    <>
-                        <div className={`${Styles.brandHolder} ${Styles[bgColor[getRandomInt(bgColor.length)]]} dropdown dropdown-toggle`} role="button" data-bs-toggle="dropdown" aria-expanded="false" key={brand.ManufacturerId__c} >{brand.ManufacturerName__c}</div>
-                        <ul className="dropdown-menu">
-                            <li className="d-flex align-items-center ml-2" onClick={() => { AuditHandler(brand.ManufacturerId__c, account.Name, brand.ManufacturerName__c) }}>
-                                <BiDownload />&nbsp;Audit Report
-                            </li>
-                        </ul>
-                    </>
-                ))}
-            </div>
-            <div className={Styles.bullets}>
-                <b>
-                    Billing Address:
-                </b>
-                <p>
-                    {account.BillingAddress.street},{account.BillingAddress.city}<br />
-                    {account.BillingAddress.state},{account.BillingAddress.country} {account.BillingAddress.postalCode}
-                </p>
-            </div>
-            <div className={Styles.bullets}>
-                <b>
-                    Shipping Address:
-                </b>
-                <p>
-                    {account.ShippingAddress.street},{account.ShippingAddress.city}<br />
-                    {account.ShippingAddress.state},{account.ShippingAddress.country} {account.ShippingAddress.postalCode}
-                </p>
-            </div>
-            <div className={Styles.bullets}>
-                <b>
-                    Business Type:
-                </b>
-                <p>
-                    {account.Type_of_Business__c}
-                </p>
-            </div>
-            {account.Display_or_Assortment__c &&
-                <div className={Styles.bullets}>
-                    <b>
-                        Display & Assortment:
-                    </b>
-                    <p>
-                        {account.Display_or_Assortment__c}
-                    </p>
-                </div>}
-        </div>}
+        {fileDownload ? <Loading /> :
+            <div className={Styles.sectionHolder}>
+                <h1 className={Styles.titleHolder}>{account.Name} | {account.BillingCity}, {account.BillingState}</h1>
+                <div className="d-flex justify-content-between align-items-start">
+                    <div style={{ width: '60%' }}>
+                        <div className={Styles.bullets}>
+                            <b>
+                                Billing Address:
+                            </b>
+                            <p>
+                                {account.BillingAddress.street},{account.BillingAddress.city}<br />
+                                {account.BillingAddress.state},{account.BillingAddress.country} {account.BillingAddress.postalCode}
+                            </p>
+                        </div>
+                        <div className={Styles.bullets}>
+                            <b>
+                                Shipping Address:
+                            </b>
+                            <p>
+                                {account.ShippingAddress.street},{account.ShippingAddress.city}<br />
+                                {account.ShippingAddress.state},{account.ShippingAddress.country} {account.ShippingAddress.postalCode}
+                            </p>
+                        </div>
+                        <div className={Styles.bullets}>
+                            <b>
+                                Business Type:
+                            </b>
+                            <p>
+                                {account.Type_of_Business__c}
+                            </p>
+                        </div>
+                        {account.Display_or_Assortment__c &&
+                            <div className={Styles.bullets}>
+                                <b>
+                                    Display & Assortment:
+                                </b>
+                                <p>
+                                    {account.Display_or_Assortment__c}
+                                </p>
+                            </div>}
+                    </div>
+                    <div style={{ width: '30%' }}>
+                        <div className={Styles.brandGrid}>
+                            {account.Brands && account.Brands.length > 0 && account.Brands.map((brand) => (
+                                <>
+                                    <div className={Styles.cardHolder}><div className={Styles.badge} title="Click to download audit report" onClick={() => { AuditHandler(brand.ManufacturerId__c, account.Name, brand.ManufacturerName__c) }}>
+                                        <BiDownload color="#fff"/>
+                                    </div>
+                                        <div>
+                                            <p className={Styles.textHolder}>{brand.ManufacturerName__c}</p>
+                                            <h1 className={Styles.countHolder}>0</h1>
+                                        </div>
+                                    </div>
+                                </>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>}
     </section>)
 }
 export default StoreDetailCard;
