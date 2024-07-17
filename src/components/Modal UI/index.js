@@ -25,16 +25,22 @@ const ModalPage = ({ open, content, onClose,styles={} }) => {
 
   useEffect(() => {
     setIsOpen(open);
+    if(isOpen){
+      document.body.style.overflow = "hidden";
+    }else{
+      document.body.style.overflow = "auto";
+    }
   }, [open]);
 
   const onModalClose = () => {
+    document.body.style.overflow = "auto";
     onClose?.();
     setIsOpen(false);
   };
 
   return isOpen ? (
     <Modal isOpen={isOpen} onClose={onModalClose} styles={styles}>
-      <div>
+      <div id={"alertBox"}>
         <div className={Styles.ModalControl}>
           {content}
         </div>
