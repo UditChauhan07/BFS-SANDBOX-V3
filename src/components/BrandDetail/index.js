@@ -101,17 +101,17 @@ const BrandDetailCard = ({ brandId }) => {
                         </div>
                         <div className="col-xl-8 col-lg-8 col-md-12 col-sm-12 m-auto ">
                             <div className="row">
-                                <div className={`col-xl-7 col-lg-6 col-md-12 col-sm-12 ${brand.tagLine ? Styles.borderRight : null}`}>
+                                <div className={`col-xl-7 col-lg-6 col-md-12 col-sm-12 ${brand?.tagLine ? Styles.borderRight : null}`}>
                                     <img className="img-fluid" src={`http://3.223.209.6:6194/brandImage/${brandId}.png`} />
                                 </div>
-                                {brand.tagLine ?
+                                {brand?.tagLine ?
                                     <div className="col-xl-5 col-lg-6 col-md-12 col-sm-12 m-auto ">
                                         <h1 className={Styles.titleWithLogo}>
                                             {brand.tagLine}
                                         </h1>
                                     </div> : null}
                             </div>
-                            <div className={Styles.autoHeight} id="ScrollRight" dangerouslySetInnerHTML={{ __html: brand.desc ??'NA'}} />
+                            <div className={Styles.autoHeight} id="ScrollRight" dangerouslySetInnerHTML={{ __html: brand?.desc ??'NA'}} />
                         </div>
                     </div>
 
@@ -127,7 +127,7 @@ const BrandDetailCard = ({ brandId }) => {
                                             <h4>{item.Name}</h4>
                                             <p>{item.Description??'NA'}</p>
 
-                                            <Link to={'/order'}>
+                                            <Link to={'/my-retailers?manufacturerId='+brandId}>
                                                 Shop The Collection
                                             </Link>
                                             <div className="fitContent">
