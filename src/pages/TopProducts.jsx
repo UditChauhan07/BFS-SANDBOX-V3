@@ -161,7 +161,7 @@ const TopProducts = () => {
           </div>
         </div>
         :
-        <TopProductCard data={topProductList.data} isLoaded={isLoaded} productImages={productImages} to={'/my-retailers'}/>}
+        <TopProductCard data={topProductList.data} isLoaded={isLoaded} productImages={productImages}/>}
     </AppLayout>
   );
 };

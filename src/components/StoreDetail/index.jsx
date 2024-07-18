@@ -48,14 +48,14 @@ const StoreDetailCard = ({ account }) => {
             console.log({ userErr });
         })
     }
-    console.log({ account });
     return (<section className={Styles.container}>
         {fileDownload ? <Loading /> :
             <div className={Styles.sectionHolder}>
-                <h1 className={Styles.titleHolder}>{account.Name} | {account.BillingCity}, {account.BillingState}</h1>
+                <h1 className={Styles.titleHolder} style={{ marginBottom: 0 }}>{account.Name} | {account.BillingCity}, {account.BillingState}</h1>
+                <hr style={{ marginBottom: '2rem' }} />
                 <div className="d-flex justify-content-between align-items-start">
-                    <div style={{ width: '60%' }}>
-                        <h1 className={Styles.titleHolder}>&nbsp;</h1>
+                    <div style={{ width: '60%', border: '1px solid #ccc', padding: '1rem', background: '#ecfbff', borderRadius: '10px' }}>
+                        <h1 className={Styles.titleHolder} style={{ textAlign: 'start', textDecoration: 'underline' }}>Account Info</h1>
                         <div className={Styles.bullets}>
                             <b>
                                 Billing Address:
@@ -92,17 +92,31 @@ const StoreDetailCard = ({ account }) => {
                                 </p>
                             </div>}
                     </div>
-                    <div style={{ width: '30%',border:'1px solid #ccc',borderRadius:'10px' }}>
-                        <h1 className={Styles.titleHolder} style={{marginTop:'1rem'}}>Audit Report</h1>
-                        <div className={Styles.brandGrid} style={{width:'80%',margin:'0 auto 1rem'}}>
+                    <div style={{ width: '35%', border: '1px solid #ccc', borderRadius: '10px', background: '#fff', maxHeight: '55vh', overflowY: 'scroll' }}>
+                        <h1 className={Styles.titleHolder} style={{ margin: '1rem 0 1rem 2rem', textAlign: 'start', textDecoration: 'underline' }}>Audit Report</h1>
+                        <div className={Styles.brandGrid} style={{ width: '80%', margin: '0 auto 1rem' }}>
                             {account.Brands && account.Brands.length > 0 && account.Brands.map((brand) => (
                                 <>
                                     <div className={Styles.cardHolder}><div className={Styles.badge} title="Click to download audit report" onClick={() => { AuditHandler(brand.ManufacturerId__c, account.Name, brand.ManufacturerName__c) }}>
-                                        <BiDownload color="#fff"/>
+                                        <BiDownload color="#fff" />
                                     </div>
                                         <div>
                                             <p className={Styles.textHolder}>{brand.ManufacturerName__c}</p>
-                                            <h1 className={Styles.countHolder}>0</h1>
+                                            <h1 className={Styles.countHolder}>
+                                                <small style={{ fontSize: '11px' }}>Sale</small>{" "}
+                                                NA</h1>
+                                            <h1 className={Styles.countHolder}>
+                                                <small style={{ fontSize: '11px' }}>Target</small>{" "}
+                                                NA</h1>
+                                            <h1 className={Styles.countHolder}>
+                                                <small style={{ fontSize: '11px' }}>Orders</small>{" "}
+                                                NA</h1>
+                                            <h1 className={Styles.countHolder}>
+                                                <small style={{ fontSize: '11px' }}>Retail No.</small>{" "}
+                                                NA</h1>
+                                            <h1 className={Styles.countHolder}>
+                                                <small style={{ fontSize: '11px' }}>Pre Order</small>{" "}
+                                                NA</h1>
                                         </div>
                                     </div>
                                 </>

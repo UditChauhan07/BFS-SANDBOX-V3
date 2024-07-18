@@ -147,10 +147,10 @@ const SettingNotify = ({ setSetting}) => {
                     />
                     <div className={StyleSheet.formContainer}>
                         <b className={StyleSheet.containerTitle}>Set Frequency of the email</b>
-                        <div className={StyleSheet.accordingHolder}>
+                        {/* <div className={StyleSheet.accordingHolder}>
                             <p className={isTab == 1 ?  StyleSheet.active :null } onClick={() => { setIsTab(1) }}>Manual</p>
                             <p className={isTab == 2 ?  StyleSheet.active :null  } onClick={() => { setIsTab(2) }}>Random</p>
-                        </div>
+                        </div> */}
                         {isTab == 1 ? <>
                             <div className="">
                                 <label for="freq" className={StyleSheet.labelHolder}>Enter the frequency for email
