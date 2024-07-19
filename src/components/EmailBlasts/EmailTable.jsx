@@ -1,12 +1,17 @@
 import { useEffect, useMemo, useState } from "react"
 import { DateConvert, GetAuthData, admins, deleteEmailBlast, getEmailBlast, getEmailBody, months, resentEmailBlast, resetEmailBlast, sortArrayHandler } from "../../lib/store"
 import Styles from "./index.module.css"
-import { BiAddToQueue, BiEraser, BiLeftArrow, BiMailSend, BiRefresh, BiTrash } from "react-icons/bi"
+import { BiAddToQueue, BiEraser, BiExport, BiLeftArrow, BiMailSend, BiRefresh, BiTrash } from "react-icons/bi"
 import ModalPage from "../Modal UI"
 import Pagination from "../Pagination/Pagination"
 import { useNavigate } from "react-router-dom";
 import Loading from "../Loading"
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
+
 let PageSize = 10;
+const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+const fileExtension = ".xlsx";
 
 const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, setYear, setDay, setMonth }) => {
     const navigate = useNavigate();
@@ -143,6 +148,8 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
             addtoqueue()
         } else if (confirm == 3) {
             resentHandler()
+        }else if (confirm == 4) {
+            excelExportHandler()
         } else { }
         setConfirm(false)
     }
@@ -160,6 +167,31 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
         })
     }
 
+    const csvData = ()=>{
+        let exportData = [];
+        data.map(element=>{
+            if(checkId.includes(element.id)){
+                let temp = {
+                    "Store Name":element.Account,
+                    "Brands Name":element.Brands,
+                    "Subscriber Name":element.ContactName,
+                    "Subscriber Email":element.ContactEmail,
+                    "Publish On":DateConvert(element.Date),
+                    "Status":element.mailStatus ==1?"Send":element.mailSend==2?"Failed":"Not Sent",
+                }
+                exportData.push(temp)
+            }
+        })
+        return exportData;
+    }
+    const excelExportHandler = ()=>{
+        const ws = XLSX.utils.json_to_sheet(csvData());
+        const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const data = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data, `Subscribers List for ${months[month - 1]} ${day}, ${year}'s NewLetter ${new Date().toDateString()}` + fileExtension);
+    }
+
     return (
         <div>
             <ModalPage
@@ -167,7 +199,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
                 content={<div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
                     <h2 className={`${Styles.warning} `}>Confirm</h2>
                     <p className={`${Styles.warningContent} `}>
-                        Are you Sure you want to {confirm == 1 ? <b>Delete</b> : confirm == 2 ? <b>Add to Queue</b> : confirm == 3 ? <b>Re-send mail to</b> : null} selected contact?<br /> This action cannot be undone.
+                        Are you Sure you want to {confirm == 1 ? <b>Delete</b> : confirm == 2 ? <b>Add to Queue</b> : confirm == 3 ? <b>Re-send mail to</b> : confirm == 4 ? <b>Export</b>: null} selected Subscriber?<br /> This action cannot be undone.
                     </p>
                     <div className="d-flex justify-content-around ">
                         <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => confirmHandler()}>
@@ -186,7 +218,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
                     <div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
                         <h2 className={`${Styles.warning} `}>Empty Selection</h2>
                         <p className={`${Styles.warningContent} `} style={{ lineHeight: '22px' }}>
-                            Please select any contact.
+                            Please select any Subscriber.
                         </p>
                         <div className="d-flex justify-content-around ">
                             <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setAlert(false)}>
@@ -240,14 +272,14 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
             />
             <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
                 <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}>
-                    <h2 className="d-flex justify-content-center align-items-center"><span style={{ cursor: 'pointer' }} onClick={() => { setMonth(); setDay(); setYear();setMonthList([]);setDayList([]); }}><BiLeftArrow /></span>&nbsp;Subscribers List for {months[month-1]} {day}, {year}`s NewLetter</h2>
+                    <h2 className="d-flex justify-content-center align-items-center"><span style={{ cursor: 'pointer' }} onClick={() => { setMonth(); setDay(); setYear(); setMonthList([]); setDayList([]); }}><BiLeftArrow /></span><p>Subscribers List for {months[month - 1]} {day}, {year}`s NewLetter</p></h2>
                     <div className="d-flex">
                         {checkId.length ?
                             <>
-                                <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} style={{ width: '300px' }} onClick={() => { setConfirm(2) }}>
+                                <div className={`${Styles.settingButton} ${Styles.settingButton1}  d-flex  justify-content-center align-items-center`} style={{ width: '300px' }} onClick={() => { setConfirm(2) }}>
                                     <BiAddToQueue size={23} title="Add to queue" />&nbsp;Add to Next Schedule
                                 </div>   &nbsp;
-                                <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} style={{ width: '200px' }} onClick={() => { setConfirm(3) }}>
+                                <div className={`${Styles.settingButton} ${Styles.settingButton2} d-flex  justify-content-center align-items-center`} style={{ width: '200px' }} onClick={() => { setConfirm(3) }}>
                                     <BiMailSend title="Resend mail to selected" size={23} />&nbsp;Resend Now
                                 </div>
                             </> : null}
@@ -261,6 +293,9 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
                         </div>
                         <div className={Styles.checkAllHolder} onClick={() => { resetHandler() }}>
                             <BiEraser size={23} title={'Reset'} />
+                        </div>
+                        <div className={Styles.checkAllHolder} onClick={() => { checkId.length ? setConfirm(4) : setAlert(true) }}>
+                            <BiExport size={23} title={'Export Selected rows'}/>
                         </div>
                         <div className={Styles.checkAllHolder} onClick={() => { checkId.length ? setConfirm(1) : setAlert(true) }}>
                             <BiTrash size={23} title={'Delete selected rows'} />
