@@ -1003,6 +1003,25 @@ export async function getYearlyComparison({ year, ManufacturerId__c }) {
   }
 }
 
+export async function getTierReportHandler({ year=null, token }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/AJ8GcUnufrmuGkn", {
+    method: "POST",
+    body: JSON.stringify({ year, token }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data?.data;
+  }
+}
+
 export async function getOrderDetailsPdf({ key, opportunity_id }) {
   let headersList = {
     Accept: "*/*",
