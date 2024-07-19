@@ -26,6 +26,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
     const [checkId, setCheckId] = useState([])
     const [searchValue, setSearchValue] = useState();
     const [checked, setChecked] = useState(false)
+    const [checkAll,setCheckedAll] = useState(false);
 
     useEffect(() => {
         getDataHandler()
@@ -78,6 +79,9 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
             mailList.map((contact, index) => {
                 temp.push(contact.id)
             })
+        }
+        if(temp.length == mailList.length){
+            setCheckedAll(true);
         }
         setCheckId(temp)
     }
@@ -141,6 +145,14 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
         }
 
     }, [emailHtml])
+
+    useEffect(()=>{
+        if(mailList.length != 0 &&checkId.length == mailList.length){
+            setCheckedAll(true);
+        }else{
+            setCheckedAll(false);
+        }
+    },[checkId])
     const confirmHandler = () => {
         if (confirm == 1) {
             deleteHandler()
@@ -287,7 +299,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
                 </div>
                 <div className="d-flex justify-content-between align-items-center" style={{ margin: '4px 0 27px 0' }}>
                     <div className="d-flex">
-                        <label for="ALL" className={Styles.checkAllHolder} title="Click to select All"><input type="checkbox" onClick={(e) => { checkedAll(!checked) }} id="ALL" /></label>
+                        <label for="ALL" className={Styles.checkAllHolder} title="Click to select All"><input type="checkbox" onClick={(e) => { checkedAll(!checked) }} id="ALL" checked={checkAll}/></label>
                         <div className={Styles.checkAllHolder} onClick={() => { setContactList({ isLoaded: false, data: [] }); getDataHandler() }}>
                             <BiRefresh size={23} title="Refersh list" />
                         </div>
