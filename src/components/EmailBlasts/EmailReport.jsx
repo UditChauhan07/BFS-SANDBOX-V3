@@ -32,27 +32,25 @@ const EmailReport = ({ setting, setSetting, onCheckout }) => {
     }
     const { isLoad, data } = emailReports;
     const letterList = useMemo(() => {
-        return data
-        // return (
-        //     data
-        //         ?.filter((frame) => {
-        //             return (
-        //                 !searchValue?.length ||
-        //                 [
-        //                     frame.NotSend,
-        //                     frame.FailMail,
-        //                     frame.SendMail,
-        //                     frame.Total,
-        //                     frame.Year,
-        //                     frame.Month,
-        //                     frame.Day
-        //                 ].some(property => {
-        //                     const propertyValue = property?.toLowerCase();
-        //                     return propertyValue.includes(searchValue);
-        //                 })
-        //             );
-        //         })
-        // )
+        return (
+            data
+                ?.filter((frame) => {
+                    return (
+                        !searchValue?.length ||
+                        [
+                            frame.NotSend,
+                            frame.FailMail,
+                            frame.SendMail,
+                            frame.Total,
+                            `${frame.Month} ${frame.Day}, ${frame.Year}`,
+                        ].some(property => {
+                            const propertyValue = property;
+                            return propertyValue.toString().toLowerCase().includes(searchValue.toLowerCase());
+                            return propertyValue.includes(searchValue);
+                        })
+                    );
+                })
+        )
     }, [data, searchValue]);
     if (setting) {
         return (<SettingNotify setSetting={setSetting} />)
@@ -97,7 +95,7 @@ const EmailReport = ({ setting, setSetting, onCheckout }) => {
                             return (
                                 <tr key={index} className={Styles.tableRow}>
                                     <td style={{ width: '200px' }}>
-                                        <p style={{ textDecoration: 'underline' }} onClick={() => { onCheckout({ day: frame.Day, month: frame.MonthValue, year: frame.Year }) }}>
+                                        <p style={{ textDecoration: 'underline' ,cursor:'pointer'}} onClick={() => { onCheckout({ day: frame.Day, month: frame.MonthValue, year: frame.Year }) }}>
                                             {frame.Month} {frame.Day}, {frame.Year}
                                         </p>
                                     </td>
