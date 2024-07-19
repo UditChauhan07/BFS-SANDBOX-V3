@@ -82,21 +82,21 @@ const TopNav = () => {
                 Welcome,
                 <span className={`m-0 ${styles.nameText}`}>{userName ?? "User"}</span>
               </p>
-             {showSetting&&<>
-              <div className={styles.vr}></div>
-              <p className={`m-0 ${styles.nameText}`}>
-                <div className="dropdown d-flex justify-content-center align-items-center " role="button" data-bs-toggle="dropdown" style={{ zIndex: 1021 }}>
-                  Admin
-                  <ul className="dropdown-menu">
-                    <li onClick={() => navigate("/emailSetting")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
-                      <BiMailSend />&nbsp;Email Blast
-                    </li>
-                    <li onClick={() => navigate("/TierStanding")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
-                      <BiStar />&nbsp;Account Tier & Standing Report
-                    </li>
-                  </ul>
-                </div>
-              </p></>}
+              {showSetting && <>
+                <div className={styles.vr}></div>
+                <p className={`m-0 ${styles.nameText}`}>
+                  <div className="dropdown d-flex justify-content-center align-items-center " role="button" data-bs-toggle="dropdown" style={{ zIndex: 1021 }}>
+                    Admin
+                    <ul className="dropdown-menu">
+                      <li onClick={() => navigate("/emailSetting")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
+                        <BiMailSend />&nbsp;Email Blast
+                      </li>
+                      <li onClick={() => navigate("/TierStanding")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
+                        <BiStar />&nbsp;Account Tier & Standing Report
+                      </li>
+                    </ul>
+                  </div>
+                </p></>}
               <div className={styles.vr}></div>
               <p className={`m-0 ${styles.nameText}`}>
                 <Link to="/order-list" className="linkStyle">
