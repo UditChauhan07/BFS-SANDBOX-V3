@@ -104,8 +104,8 @@ a {
   color: black;
 }
 .carousel .thumb img {
-  max-height: 100px!important;
-  width: auto!important;
+  max-height: 100px !important;
+  width: auto !important;
 }
 .container {
   max-width: 90% !important;
@@ -400,10 +400,10 @@ p.seti {
   margin-top: 25px;
   margin-bottom: 1rem;
 }
-.owl-nav{
-  margin-top: 2rem!important;
-  display: flex!important;
-  justify-content: end!important;
+.owl-nav {
+  margin-top: 2rem !important;
+  display: flex !important;
+  justify-content: end !important;
 }
 
 .zoomInEffect {
@@ -412,6 +412,11 @@ p.seti {
 }
 .zoomInEffect:hover {
   transform: scale(1.1);
+}
+.emailContainer {
+  width: 80%;
+  margin: auto;
+  min-height: 500px;
 }
 .cardHover:hover {
   /* -webkit-box-shadow: -7px -7px 0px 0px  rgba(0,0,0,0.05); */
@@ -428,6 +433,11 @@ p.seti {
   /* text-shadow: 4px 4px 0px #d5d5d5, 4px -4px 0px rgba(0, 0, 0, 0.2); */
   /* transform: scale(1.05); */
   text-decoration: underline;
+}
+@media (max-width: 1199.98px) {
+  .emailContainer {
+    width: 100%;
+  }
 }
 @media (max-width: 1024.98px) {
   .productDetailContainer {

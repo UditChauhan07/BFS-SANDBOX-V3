@@ -16,7 +16,9 @@
   letter-spacing: 2px;
   margin: 0;
 }
-
+.titleHolder h2 p{
+  margin: 0;
+}
 .settingButton {
   color: #fff;
   text-align: center;
@@ -116,4 +118,16 @@
   border-bottom-width: var(--bs-border-width);
   box-shadow: inset 0 0 0 9999px
     var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
+}
+@media (max-width: 1999.98px) {
+  .titleHolder h2 {
+    font-size: 20px;
+  }
+  .titleHolder h2 p{
+    margin-left: 10px;
+  }
+  .settingButton1{
+    font-size: 15px;
+    width: 260px!important;
+  }
 }
