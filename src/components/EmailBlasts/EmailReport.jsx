@@ -79,12 +79,12 @@ const EmailReport = ({ setting, setSetting, onCheckout }) => {
                 {isLoad ? <table style={{ width: '100%' }}>
                     <thead className={Styles.table} style={{ position: 'sticky', top: '265px', zIndex: 11 }}>
                         <tr>
-                            <th style={{ width: '200px' }}>Date</th>
+                            <th style={{ width: '200px' }}>Publish On</th>
                             <th style={{ width: '200px' }}>Layout</th>
-                            <th>Total Mail</th>
-                            <th>Send Mails</th>
-                            <th>Fail Mails</th>
-                            <th>Not Mails</th>
+                            <th>Subscribes</th>
+                            <th>Send NewLetter</th>
+                            <th>Fail NewLetter</th>
+                            <th>Waiting NewLetter</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,7 +99,7 @@ const EmailReport = ({ setting, setSetting, onCheckout }) => {
                                             {frame.Month} {frame.Day}, {frame.Year}
                                         </p>
                                     </td>
-                                    <td style={{ width: '200px' }}><p title="click to see Layout of this newletter" onClick={() => { setShowLayout(frame?.FirstBody.replaceAll("{{token}}", token)) }} style={{ cursor: 'pointer' }}>click to see Layout</p></td>
+                                    <td style={{ width: '200px' }}><p title="click to see Layout for this newletter" onClick={() => { setShowLayout(frame?.FirstBody.replaceAll("{{token}}", token)) }} style={{ cursor: 'pointer' }}>click to see Layout</p></td>
                                     <td>{frame.Total}</td>
                                     <td>{frame.SendMail}</td>
                                     <td>{frame.FailMail}</td>

@@ -240,7 +240,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
             />
             <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
                 <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}>
-                    <h2 className="d-flex justify-content-center align-items-center"><span style={{ cursor: 'pointer' }} onClick={() => { setMonth(); setDay(); setYear();setMonthList([]);setDayList([]); }}><BiLeftArrow /></span>&nbsp;NewLetter All List</h2>
+                    <h2 className="d-flex justify-content-center align-items-center"><span style={{ cursor: 'pointer' }} onClick={() => { setMonth(); setDay(); setYear();setMonthList([]);setDayList([]); }}><BiLeftArrow /></span>&nbsp;Subscribers List for {months[month-1]} {day}, {year}`s NewLetter</h2>
                     <div className="d-flex">
                         {checkId.length ?
                             <>
@@ -266,7 +266,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
                             <BiTrash size={23} title={'Delete selected rows'} />
                         </div>
                     </div>
-                    <input type="text" autoComplete="off" id="contactSearch" title="search for contact" placeholder="Search Contacts" className={Styles.searchBox} onKeyUp={(e) => { setSearchValue(e.target.value); setCurrentPage(1) }} />
+                    <input type="text" autoComplete="off" id="SubscribesSearch" title="search for Subscribes" placeholder="Search Subscribes" className={Styles.searchBox} onKeyUp={(e) => { setSearchValue(e.target.value); setCurrentPage(1) }} />
                 </div>
             </div>
             {isLoaded ?
@@ -274,11 +274,11 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
                     <table style={{ width: '100%' }}>
                         <thead className={Styles.table} style={{ position: 'sticky', top: '265px', zIndex: 11 }}>
                             <tr>
-                                <th style={{ width: '200px' }}>Account Name</th>
+                                <th style={{ width: '200px' }}>Store Name</th>
                                 <th style={{ width: '200px' }}>Brand Name</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Date</th>
+                                <th>Subscriber Name</th>
+                                <th>Subscriber Email</th>
+                                <th>Publish On</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
