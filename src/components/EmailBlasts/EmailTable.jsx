@@ -1,17 +1,31 @@
-import { useEffect, useState } from "react"
-import { DateConvert, deleteEmailBlast, getEmailBody, resentEmailBlast, resetEmailBlast } from "../../lib/store"
-import SettingNotify from "./SettingNotify"
+import { useEffect, useMemo, useState } from "react"
+import { DateConvert, GetAuthData, admins, deleteEmailBlast, getEmailBlast, getEmailBody, months, resentEmailBlast, resetEmailBlast, sortArrayHandler } from "../../lib/store"
 import Styles from "./index.module.css"
-import { BiAddToQueue, BiBoltCircle, BiCross, BiDice1, BiDice2, BiEraser, BiMailSend, BiRefresh, BiReset, BiTrash } from "react-icons/bi"
+import { BiAddToQueue, BiEraser, BiLeftArrow, BiMailSend, BiRefresh, BiTrash } from "react-icons/bi"
 import ModalPage from "../Modal UI"
+import Pagination from "../Pagination/Pagination"
+import { useNavigate } from "react-router-dom";
+import Loading from "../Loading"
+let PageSize = 10;
 
-const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, notifyDate, getDataHandler, setCurrentPage, setContactList, user }) => {
-    const { checkId, setCheckId, checked, checkedAll } = checkIdObj
+const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, setYear, setDay, setMonth }) => {
+    const navigate = useNavigate();
+    const [contactList, setContactList] = useState({ isLoaded: false, data: [] })
     const [alert, setAlert] = useState(false)
+    const [user, setUser] = useState([]);
     const [emailHtml, setEmailHtml] = useState(null);
     const [mailSend, setMailSend] = useState(false)
     const [showBrands, setShowBrands] = useState();
     const [confirm, setConfirm] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [checkId, setCheckId] = useState([])
+    const [searchValue, setSearchValue] = useState();
+    const [checked, setChecked] = useState(false)
+
+    useEffect(() => {
+        getDataHandler()
+    }, [day, month, year])
+
     const resentHandler = () => {
         if (checkId.length) {
             setContactList({ isLoaded: false, data: [] })
@@ -28,6 +42,66 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
         } else {
             setAlert(true)
         }
+    }
+
+    const { isLoaded, data } = contactList || false
+    const mailList = useMemo(() => {
+        return (
+            data
+                ?.filter((contact) => {
+                    return (
+                        !searchValue?.length ||
+                        [
+                            contact.Account,
+                            contact.Brands,
+                            contact.ContactEmail,
+                            contact.ContactName,
+                            DateConvert(contact.Date, true)
+                        ].some(property => {
+                            const propertyValue = property?.toLowerCase();
+                            return propertyValue.includes(searchValue);
+                        })
+                    );
+                })
+        )
+    }, [data, searchValue]);
+
+    function checkedAll(value) {
+        setChecked(!checked)
+        let temp = []
+        if (value) {
+            mailList.map((contact, index) => {
+                temp.push(contact.id)
+            })
+        }
+        setCheckId(temp)
+    }
+    const getDataHandler = () => {
+        setSearchValue(null)
+        setCheckId([])
+        GetAuthData().then((user) => {
+            if (admins.includes(user.Sales_Rep__c)) {
+                setUser(user)
+                getEmailBlast({ key: user.access_token, Id: user.Sales_Rep__c, month, day, year }).then((list) => {
+                    if (list?.notifyMail) {
+                        let contactList = sortArrayHandler(JSON.parse(list?.notifyMail || "[]") || [], g => g?.updatedAt, 'desc')
+                        setContactList({ isLoaded: true, data: contactList })
+                        let monthList = Object.keys(list.filter);
+                        setMonthList(monthList)
+                        setDayList(list.filter[months[list.month - 1]] || []);
+                        setFilter(list.filter)
+                    } else {
+                        setContactList({ isLoaded: true, data: [] })
+                    }
+                }).catch((conErr) => {
+                    console.log({ conErr });
+                })
+            } else {
+                navigate('/dashboard')
+            }
+        }).catch((err) => {
+            console.log({ err });
+        })
     }
     const deleteHandler = () => {
         if (checkId.length) {
@@ -164,43 +238,39 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                     setEmailHtml(null);
                 }}
             />
-            {setting ? <SettingNotify setSetting={setSetting} /> :
-                <>
-                    <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
-                        <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}>
-                            <h2>NewLetter List</h2>
-                            <div className="d-flex">
-                                {checkId.length ?
-                                    <>
-                                        <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} style={{width:'300px'}} onClick={() => { setConfirm(2) }}>
-                                            <BiAddToQueue size={23} title="Add to queue" />&nbsp;Add to Next Schedule
-                                        </div>   &nbsp;
-                                        <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} style={{width:'200px'}} onClick={() => { setConfirm(3) }}>
-                                            <BiMailSend title="Resend mail to selected" size={23} />&nbsp;Resend Now
-                                        </div>
-                                    </>:null}
-                                &nbsp;
-                                <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} onClick={() => { setSetting(true) }}>
-                                    <BiBoltCircle />&nbsp;Setting
+            <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
+                <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}>
+                    <h2 className="d-flex justify-content-center align-items-center"><span style={{ cursor: 'pointer' }} onClick={() => { setMonth(); setDay(); setYear();setMonthList([]);setDayList([]); }}><BiLeftArrow /></span>&nbsp;NewLetter All List</h2>
+                    <div className="d-flex">
+                        {checkId.length ?
+                            <>
+                                <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} style={{ width: '300px' }} onClick={() => { setConfirm(2) }}>
+                                    <BiAddToQueue size={23} title="Add to queue" />&nbsp;Add to Next Schedule
+                                </div>   &nbsp;
+                                <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} style={{ width: '200px' }} onClick={() => { setConfirm(3) }}>
+                                    <BiMailSend title="Resend mail to selected" size={23} />&nbsp;Resend Now
                                 </div>
-                            </div>
+                            </> : null}
+                    </div>
+                </div>
+                <div className="d-flex justify-content-between align-items-center" style={{ margin: '4px 0 27px 0' }}>
+                    <div className="d-flex">
+                        <label for="ALL" className={Styles.checkAllHolder} title="Click to select All"><input type="checkbox" onClick={(e) => { checkedAll(!checked) }} id="ALL" /></label>
+                        <div className={Styles.checkAllHolder} onClick={() => { setContactList({ isLoaded: false, data: [] }); getDataHandler() }}>
+                            <BiRefresh size={23} title="Refersh list" />
                         </div>
-                        <div className="d-flex justify-content-between align-items-center" style={{ margin: '4px 0 27px 0' }}>
-                            <div className="d-flex">
-                                <label for="ALL" className={Styles.checkAllHolder} title="Click to select All"><input type="checkbox" onClick={(e) => { checkedAll(!checked) }} id="ALL" /></label>
-                                <div className={Styles.checkAllHolder} onClick={() => { setContactList({ isLoaded: false, data: [] }); getDataHandler() }}>
-                                    <BiRefresh size={23} title="Refersh list" />
-                                </div>
-                                <div className={Styles.checkAllHolder} onClick={() => { resetHandler() }}>
-                                    <BiEraser size={23} title={'Reset'} />
-                                </div>
-                                <div className={Styles.checkAllHolder} onClick={() => { checkId.length ? setConfirm(1) : setAlert(true) }}>
-                                    <BiTrash size={23} title={'Delete selected rows'} />
-                                </div>
-                            </div>
-                            <input type="text" autoComplete="off" id="contactSearch" title="search for contact" placeholder="Search Contacts" className={Styles.searchBox} onKeyUp={(e) => { setSearchValue(e.target.value); setCurrentPage(1) }} />
+                        <div className={Styles.checkAllHolder} onClick={() => { resetHandler() }}>
+                            <BiEraser size={23} title={'Reset'} />
+                        </div>
+                        <div className={Styles.checkAllHolder} onClick={() => { checkId.length ? setConfirm(1) : setAlert(true) }}>
+                            <BiTrash size={23} title={'Delete selected rows'} />
                         </div>
                     </div>
+                    <input type="text" autoComplete="off" id="contactSearch" title="search for contact" placeholder="Search Contacts" className={Styles.searchBox} onKeyUp={(e) => { setSearchValue(e.target.value); setCurrentPage(1) }} />
+                </div>
+            </div>
+            {isLoaded ?
+                <>
                     <table style={{ width: '100%' }}>
                         <thead className={Styles.table} style={{ position: 'sticky', top: '265px', zIndex: 11 }}>
                             <tr>
@@ -213,7 +283,11 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                             </tr>
                         </thead>
                         <tbody>
-                            {data.length > 0 ? data.map((contact, index) => {
+                            {mailList.length > 0 ? mailList.slice(
+                                (currentPage - 1) * PageSize,
+                                currentPage * PageSize
+
+                            ).map((contact, index) => {
                                 return (
                                     <tr key={index} className={Styles.tableRow}>
                                         <td style={{ width: '200px' }}>
@@ -231,7 +305,16 @@ const EmailTable = ({ data, setSetting, setting, setSearchValue, checkIdObj, not
                                 )
                             }) : <tr className="text-center" style={{ height: '200px' }}><td colSpan={6}>No data found.</td></tr>}
                         </tbody>
-                    </table></>}</div>)
+                    </table>
+                    <Pagination
+                        className="pagination-bar"
+                        currentPage={currentPage}
+                        totalCount={mailList.length}
+                        pageSize={PageSize}
+                        onPageChange={(page) => setCurrentPage(page)}
+                    />
+                </> : <Loading height={'50vh'} />}
+        </div>)
 
 }
 export default EmailTable

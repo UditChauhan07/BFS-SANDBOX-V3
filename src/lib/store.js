@@ -758,7 +758,25 @@ export async function getEmailBlastFromData({ key }) {
     return data.data;
   }
 }
-export async function getEmailBlast({ key, Id,day=null,month=null }) {
+export async function getEmailBlastReport({ key, Id }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/ufrWMQqZEzxPC38", {
+    method: "POST",
+    body: JSON.stringify({ key, Id }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
+export async function getEmailBlast({ key, Id,day=null,month=null,year=null }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -766,7 +784,7 @@ export async function getEmailBlast({ key, Id,day=null,month=null }) {
 
   let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/m9w6uFie8U3EGuC", {
     method: "POST",
-    body: JSON.stringify({ key, Id,day,month }),
+    body: JSON.stringify({ key, Id,day,month,year }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());

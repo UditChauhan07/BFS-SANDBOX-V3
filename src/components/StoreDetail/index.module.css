@@ -63,15 +63,22 @@
 }
 
 .cardHolder {
+  background: #ecfbff;
   width: 100%;
-  height: 97px;
+  min-height: 97px;
   border: 2px solid rgb(238, 238, 238);
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 5%;
+  padding: 5%;
   gap: 2%;
+}
+.cardHolder:hover{
+    box-shadow:
+    0 4px 8px 0 rgba(0, 0, 0
+    , 0.2), 0 6px 20px 0 rgba(0
+    , 0, 0, 0.19);
 }
 .cardHolder .badge {
   width: 47px;
@@ -83,6 +90,12 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+.cardHolder .badge:hover{
+    box-shadow:
+    0 4px 8px 0 rgba(0, 0, 0
+    , 0.2), 0 6px 20px 0 rgba(0
+    , 0, 0, 0.19);
 }
 .cardHolder .textHolder {
   color: #000;
