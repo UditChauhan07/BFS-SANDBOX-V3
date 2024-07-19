@@ -3,7 +3,6 @@ import TopNav from "./All Headers/topNav/TopNav";
 import LogoHeader from "./All Headers/logoHeader/LogoHeader";
 import Header from "./All Headers/header/Header";
 import MobileHeader from "./All Headers/mobileHeader/MobileHeader";
-import HelpSection from "./Footer/HelpSection";
 import Footer from "./Footer/Footer";
 
 const AppLayout = ({ children, filterNodes }) => {
@@ -20,7 +19,6 @@ const AppLayout = ({ children, filterNodes }) => {
         </div>
         <main>{children}</main>
       </div>
-      {/* <HelpSection /> */}
       <Footer />
     </div>
   );
