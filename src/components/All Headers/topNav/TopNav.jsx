@@ -5,7 +5,7 @@ import { CustomerServiceIcon, NeedHelp, OrderStatusIcon } from "../../../lib/svg
 import ModalPage from "../../Modal UI";
 import SelectCaseReason from "../../CustomerServiceFormSection/SelectCaseReason/SelectCaseReason";
 import { GetAuthData, admins, getSessionStatus } from "../../../lib/store";
-import { BiMailSend } from "react-icons/bi";
+import { BiMailSend, BiStar } from "react-icons/bi";
 // import Redirect from "../../Redirect";
 const TopNav = () => {
   const navigate = useNavigate();
@@ -90,6 +90,9 @@ const TopNav = () => {
                   <ul className="dropdown-menu">
                     <li onClick={() => navigate("/emailSetting")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
                       <BiMailSend />&nbsp;Email Blast
+                    </li>
+                    <li onClick={() => navigate("/TierStanding")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
+                      <BiStar />&nbsp;Account Tier & Standing Report
                     </li>
                   </ul>
                 </div>
