@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react"
+import {useState } from "react"
 import AppLayout from "../components/AppLayout"
-import { DateConvert, GetAuthData, admins, getEmailBlast, months, sortArrayHandler } from "../lib/store";
+import { months } from "../lib/store";
 import EmailTable from "../components/EmailBlasts/EmailTable";
-import Loading from "../components/Loading";
 import { FilterItem } from "../components/FilterItem";
-import { CloseButton, SearchIcon } from "../lib/svg";
+import { SearchIcon } from "../lib/svg";
 import EmailReport from "../components/EmailBlasts/EmailReport";
 
 const EmailSetting = () => {
@@ -18,16 +17,6 @@ const EmailSetting = () => {
     const [filter, setFilter] = useState({});
     const [filterHelper, setFilterHelper] = useState({ day: null, month: null, year: null })
 
-    const monthChangeHandler = (value) => {
-        setMonth(value)
-        setDay(null)
-        if (filter[months[value - 1]]) {
-            if (filter[months[value - 1]].length == 1) {
-                setDay(filter[months[value - 1]][0])
-            }
-        }
-        setDayList(filter[months[value - 1]] || []);
-    }
     const getDetailsOfNewLetter = ({ year, month, day }) => {
         setDay(day)
         setMonth(month)
@@ -72,7 +61,7 @@ const EmailSetting = () => {
             </>
         }
     >
-        <div style={{ width: '80%', margin: 'auto', minHeight: '500px' }}>
+        <div className="emailContainer">
             {(day && month && year) ?
                 <EmailTable setDayList={setDayList} setMonthList={setMonthList} day={day} month={month} year={year} setFilter={setFilter} setYear={setYear} setDay={setDay} setMonth={setMonth} /> : <EmailReport setSetting={setSetting} setting={setting} onCheckout={getDetailsOfNewLetter} />}
         </div>
