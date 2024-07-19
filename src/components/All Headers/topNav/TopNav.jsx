@@ -74,7 +74,6 @@ const TopNav = () => {
                     </li>
                   </ul>
                 </div>
-                {/* <img src={"/assets/images/dropDownArrow.svg"} alt="img" /> */}
               </p>
             </div>
             <div className="d-flex justify-content-center align-items-center gap-3">
