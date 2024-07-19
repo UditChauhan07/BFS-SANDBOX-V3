@@ -1,4 +1,4 @@
-import {useState } from "react"
+import { useState } from "react"
 import AppLayout from "../components/AppLayout"
 import { months } from "../lib/store";
 import EmailTable from "../components/EmailBlasts/EmailTable";

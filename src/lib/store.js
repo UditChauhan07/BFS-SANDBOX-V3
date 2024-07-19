@@ -331,12 +331,12 @@ export async function getRollOver({ user }) {
   };
   let SalesRepId = user.Sales_Rep__c;
   if (admins.includes(user.Sales_Rep__c)) {
-    SalesRepId= null;
+    SalesRepId = null;
   }
   let response = await fetch(url + "target/SxaVXT0aX9wGVoM", {
     method: "POST",
     headers: headersList,
-    body: JSON.stringify({ key:user.x_access_token,SalesRepId }),
+    body: JSON.stringify({ key: user.x_access_token, SalesRepId }),
   });
   let data = JSON.parse(await response.text());
   if (data.status == 300) {
@@ -722,7 +722,7 @@ export async function getSalesRepList({ key }) {
     return data;
   }
 }
-export async function generateAuditTemplate({ key,Ids,brandId=null }) {
+export async function generateAuditTemplate({ key, Ids, brandId = null }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -730,7 +730,7 @@ export async function generateAuditTemplate({ key,Ids,brandId=null }) {
 
   let response = await fetch(originAPi + "/audit/ei2TZIVfuTYQ5Bp", {
     method: "POST",
-    body: JSON.stringify({ key,brandId,Ids }),
+    body: JSON.stringify({ key, brandId, Ids }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -748,7 +748,7 @@ export async function getEmailBlastFromData({ key }) {
 
   let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M", {
     method: "POST",
-    body: JSON.stringify({ key}),
+    body: JSON.stringify({ key }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -776,7 +776,7 @@ export async function getEmailBlastReport({ key, Id }) {
     return data.data;
   }
 }
-export async function getEmailBlast({ key, Id,day=null,month=null,year=null }) {
+export async function getEmailBlast({ key, Id, day = null, month = null, year = null }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -784,7 +784,7 @@ export async function getEmailBlast({ key, Id,day=null,month=null,year=null }) {
 
   let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/m9w6uFie8U3EGuC", {
     method: "POST",
-    body: JSON.stringify({ key, Id,day,month,year }),
+    body: JSON.stringify({ key, Id, day, month, year }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -929,11 +929,12 @@ export async function storeRandomHandler({ key, random }) {
   }
 }
 
-export async function createRandomHandler() {;
+export async function createRandomHandler() {
+  ;
 
   let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/vUbxDTnfunVyde9");
   let data = JSON.parse(await response.text());
-  console.log({data});
+  console.log({ data });
   if (data.status == 300) {
     DestoryAuth();
   } else {
@@ -1003,7 +1004,7 @@ export async function getYearlyComparison({ year, ManufacturerId__c }) {
   }
 }
 
-export async function getTierReportHandler({ year=null, token }) {
+export async function getTierReportHandler({ year = null, token }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
