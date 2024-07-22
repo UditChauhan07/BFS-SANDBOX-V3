@@ -11,7 +11,7 @@ const SettingNotify = ({ setSetting}) => {
     useEffect(()=>{
         getEmailBlastFromData({key:"qsjwijufhudeyvdwud"}).then((form)=>{
             setSize(form.notifyDate.length??0)
-            setIsTab(form.random?2:1)
+            // setIsTab(form.random?2:1)
             setRandom(form.random?true:false)
             setNotifyDate({isLoaded:true,data:{notifyDate:form.notifyDate,random:form.random?true:false}})
         }).catch((fromErr)=>{
