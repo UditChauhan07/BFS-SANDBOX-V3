@@ -13,7 +13,8 @@ const fileExtension = ".xlsx";
 
 const Tier = () => {
     let date = new Date();
-    let year = date.getFullYear();
+    let dYear = date.getFullYear();
+    const [year,setYear] = useState(dYear)
     const [tier, setTier] = useState({ isLoad: false, data: [], getSalesHolder: {} });
     useEffect(() => {
         GetDataHandler()
@@ -21,7 +22,7 @@ const Tier = () => {
 
     const GetDataHandler = () => {
         GetAuthData().then((user) => {
-            getTierReportHandler({ token: user.x_access_token }).then((res) => {
+            getTierReportHandler({ token: user.x_access_token,year:year }).then((res) => {
                 console.log({ res });
                 setTier({ isLoad: true, data: res?.salesArray ?? [], getSalesHolder: res?.getSalesHolder ?? {} })
             }).catch((resErr) => {
@@ -60,7 +61,9 @@ const Tier = () => {
     }
 
     const { isLoad, data, getSalesHolder } = tier
-
+    const formentAcmount =(amount)=>{
+        return `${Number(amount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
+      }
     return (
         <AppLayout
             filterNodes={<button className="border px-2 d-grid py-1 leading-tight d-grid" onClick={excelExportHandler}>
@@ -132,32 +135,32 @@ const Tier = () => {
                         {isLoad ?
                             <table>
                                 <thead>
-                                    <th className={`${Styles.th} ${Styles.stickyMonth}`}>Account</th>
-                                    <th className={`${Styles.th} ${Styles.stickyMonth}`}>Store Stheet</th>
+                                    <th className={`${Styles.th} ${Styles.stickyFirstColumnHeading}`}>Account</th>
+                                    <th className={`${Styles.th} ${Styles.stickyMonth}`}>Store Street</th>
                                     <th className={`${Styles.th} ${Styles.stickyMonth}`}>City</th>
                                     <th className={`${Styles.th} ${Styles.stickyMonth}`}>State</th>
                                     <th className={`${Styles.th} ${Styles.stickyMonth}`}>Zip</th>
                                     <th className={`${Styles.th} ${Styles.stickyMonth}`}>Brand</th>
                                     <th className={`${Styles.th} ${Styles.stickyMonth}`}>Sales Rep</th>
-                                    <th className={`${Styles.th} ${Styles.stickyMonth}`}>2023 revenue total for all orders</th>
-                                    <th className={`${Styles.th} ${Styles.stickyMonth}`}>2024 YTD for all orders</th>
-                                    <th className={`${Styles.th} ${Styles.stickyMonth}`}>Existing Tier</th>
-                                    <th className={`${Styles.th} ${Styles.stickyMonth}`}>Suggested Tier</th>
+                                    <th className={`${Styles.th} ${Styles.stickyMonth}`} style={{width:'150px'}}>{year-1} revenue</th>
+                                    <th className={`${Styles.th} ${Styles.stickyMonth}`} style={{width:'150px'}}>{year} revenue</th>
+                                    <th className={`${Styles.th} ${Styles.stickySecondLastColumnHeading}`} style={{width:'150px'}}>Existing Tier</th>
+                                    <th className={`${Styles.th} ${Styles.stickyLastColumnHeading}`} style={{width:'150px'}}>Suggested Tier</th>
                                 </thead>
                                 <tbody>
                                     {data.map((item, key) => (
                                         <tr key={key}>
-                                            <td className={`${Styles.td}`}>{item.Name}</td>
+                                            <td className={`${Styles.td} ${Styles.stickyFirstColumn}`}>{item.Name}</td>
                                             <td className={`${Styles.td}`}>{item.StoreStreet ?? 'NA'}</td>
                                             <td className={`${Styles.td}`}>{item.StoreCity ?? 'NA'}</td>
                                             <td className={`${Styles.td}`}>{item.StoreState ?? 'NA'}</td>
                                             <td className={`${Styles.td}`}>{item.StoreZip ?? 'NA'}</td>
                                             <td className={`${Styles.td}`}>{item.BrandName}</td>
                                             <td className={`${Styles.td}`}>{item.SalesRepName}</td>
-                                            <td className={`${Styles.td}`}>{item[2023]}</td>
-                                            <td className={`${Styles.td}`}>{item[2024]}</td>
-                                            <td className={`${Styles.td}`}>{item.Tier ?? 'NA'}</td>
-                                            <td className={`${Styles.td}`}>{item.Suggested}</td>
+                                            <td className={`${Styles.td}`}>${formentAcmount(item[2023])}</td>
+                                            <td className={`${Styles.td}`}>${formentAcmount(item[2024])}</td>
+                                            <td className={`${Styles.td} ${Styles.stickySecondLastColumn}`}>{item.Tier ?? 'NA'}</td>
+                                            <td className={`${Styles.td} ${Styles.stickyLastColumn}`}>{item.Suggested}</td>
                                         </tr>
                                     ))}
                                 </tbody>
