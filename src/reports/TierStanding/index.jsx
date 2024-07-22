@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react"
-import { GetAuthData, formatNumber, getTierReportHandler } from "../../lib/store"
+import { GetAuthData, admins, formatNumber, getTierReportHandler } from "../../lib/store"
 import Loading from "../../components/Loading";
 import AppLayout from "../../components/AppLayout";
 import Styles from "./index.module.css";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { MdOutlineDownload } from "react-icons/md";
-import { LuArrowBigDownDash, LuArrowBigUp, LuArrowBigUpDash } from "react-icons/lu";
+import { LuArrowBigDownDash, LuArrowBigUpDash } from "react-icons/lu";
+import { useNavigate } from "react-router-dom";
 
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
 
 const Tier = () => {
+    const navigate = useNavigate();
     let date = new Date();
     let dYear = date.getFullYear();
     const [year,setYear] = useState(dYear)
@@ -22,12 +24,16 @@ const Tier = () => {
 
     const GetDataHandler = () => {
         GetAuthData().then((user) => {
+            if (admins.includes(user.Sales_Rep__c)) {
             getTierReportHandler({ token: user.x_access_token,year:year }).then((res) => {
                 console.log({ res });
                 setTier({ isLoad: true, data: res?.salesArray ?? [], getSalesHolder: res?.getSalesHolder ?? {} })
             }).catch((resErr) => {
                 console.log({ resErr });
             })
+        } else {
+            navigate('/dashboard')
+        }
         })
     }
 
