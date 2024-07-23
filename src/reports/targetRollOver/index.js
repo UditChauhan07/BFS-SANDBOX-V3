@@ -828,12 +828,18 @@ const TargetReport = () => {
                                 )}
                                 <tfoot>
                                     <tr>
-                                        <td className={`${Styles.lastRow} ${Styles.stickyFirstColumn} ${Styles.stickyLastRow}`} colSpan={3}>
+                                        <td className={`${Styles.lastRow} ${Styles.stickyFirstColumn} ${Styles.stickyLastRow}`}>
                                             TOTAL
                                         </td>
-                                        <td className={`${Styles.lastRow}  ${Styles.lastRowMonth}  ${Styles.stickyLastRow}`} >
+                                        <td className={`${Styles.lastRow}  ${Styles.stickyFirstColumn}  ${Styles.stickyLastRow}`} >
                                         </td>
-                                        <td className={`${Styles.lastRow}  ${Styles.lastRowMonth}  ${Styles.stickyLastRow}`}>
+                                        <td className={`${Styles.lastRow}  ${Styles.stickyFirstColumn}  ${Styles.stickyLastRow}`} >
+                                        </td>
+                                        <td className={`${Styles.lastRow}  ${Styles.stickyFirstColumn}  ${Styles.stickyLastRow}`} >
+                                        </td>
+                                        <td className={`${Styles.lastRow}  ${Styles.stickyFirstColumn}  ${Styles.stickyLastRow}`} >
+                                        </td>
+                                        <td className={`${Styles.lastRow}  ${Styles.stickyFirstColumn}  ${Styles.stickyLastRow}`}>
                                         </td>
                                         <td className={`${Styles.lastRow}  ${Styles.lastRowMonth}  ${Styles.stickyLastRow}`}>
                                             ${formentAcmount(monthTotalAmount.Jan.target)}
