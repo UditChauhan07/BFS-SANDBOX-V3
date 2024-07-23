@@ -1100,6 +1100,18 @@ export async function getMarketingCalendarPDFV3({ key, manufacturerId, month }) 
     return data?.file || false;
   }
 }
+
+export const ArrayFindMaxMin = ({max=true,getter,data})=>{
+  const obj = data.reduce((value, current) => {
+    if(max){
+      return current[getter] > value[getter] ? current : value;
+    }else{
+      return current[getter] < value[getter] ? current : value;
+    }
+  }, data[0]);
+  return obj;
+}
+
 export async function uploadFileSupport({ key, supportId, files }) {
   if (files.length) {
 
