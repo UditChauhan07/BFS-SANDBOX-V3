@@ -120,8 +120,8 @@ const OrderListPage = () => {
       month: filterValue.month,
     })
       .then((order) => {
+        console.log({order});
         let sorting = sortingList(order);
-        console.log({sorting});
         setOrders(sorting);
         setLoaded(true);
       })
