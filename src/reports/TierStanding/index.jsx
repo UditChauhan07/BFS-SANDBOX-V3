@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { GetAuthData, admins, formatNumber, getTierReportHandler } from "../../lib/store"
+import { ArrayFindMaxMin, GetAuthData, admins, formatNumber, getTierReportHandler } from "../../lib/store"
 import Loading from "../../components/Loading";
 import AppLayout from "../../components/AppLayout";
 import Styles from "./index.module.css";
@@ -8,6 +8,7 @@ import * as XLSX from "xlsx";
 import { MdOutlineDownload } from "react-icons/md";
 import { LuArrowBigDownDash, LuArrowBigUpDash } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
+import { BiDollar } from "react-icons/bi";
 
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
@@ -16,8 +17,8 @@ const Tier = () => {
     const navigate = useNavigate();
     let date = new Date();
     let dYear = date.getFullYear();
-    const [year,setYear] = useState(dYear)
-    const [tier, setTier] = useState({ isLoad: false, data: [], getSalesHolder: {} });
+    const [year, setYear] = useState(dYear)
+    const [tier, setTier] = useState({ isLoad: false, data: [], getSalesHolder: {}, currentYearRevenue: 0, previousYearRevenue: 0 });
     useEffect(() => {
         GetDataHandler()
     }, [])
@@ -25,15 +26,18 @@ const Tier = () => {
     const GetDataHandler = () => {
         GetAuthData().then((user) => {
             if (admins.includes(user.Sales_Rep__c)) {
-            getTierReportHandler({ token: user.x_access_token,year:year }).then((res) => {
-                console.log({ res });
-                setTier({ isLoad: true, data: res?.salesArray ?? [], getSalesHolder: res?.getSalesHolder ?? {} })
-            }).catch((resErr) => {
-                console.log({ resErr });
-            })
-        } else {
-            navigate('/dashboard')
-        }
+                getTierReportHandler({ token: user.x_access_token, year: year }).then((res) => {
+                    console.log({ res });
+                    let currentYearRevenue = res?.salesArray.reduce((acc, curr) => acc + curr[year], 0);
+                    let previousYearRevenue = res?.salesArray.reduce((acc, curr) => acc + curr[year - 1], 0);
+                    setTier({ isLoad: true, data: res?.salesArray ?? [], getSalesHolder: res?.getSalesHolder ?? {}, currentYearRevenue, previousYearRevenue });
+
+                }).catch((resErr) => {
+                    console.log({ resErr });
+                })
+            } else {
+                navigate('/dashboard')
+            }
         })
     }
 
@@ -66,10 +70,10 @@ const Tier = () => {
         return csvData
     }
 
-    const { isLoad, data, getSalesHolder } = tier
-    const formentAcmount =(amount)=>{
+    const { isLoad, data, getSalesHolder, previousYearRevenue, currentYearRevenue } = tier
+    const formentAcmount = (amount) => {
         return `${Number(amount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
-      }
+    }
     return (
         <AppLayout
             filterNodes={<button className="border px-2 d-grid py-1 leading-tight d-grid" onClick={excelExportHandler}>
@@ -87,54 +91,89 @@ const Tier = () => {
                     <div></div>
                 </div>
                 {isLoad && <div className="mt-2 mb-2 m-auto">
-                    {getSalesHolder?.highest
-                        &&
-                        <div>
-                            {Object.keys(getSalesHolder?.highest).length ?
-                                <div className="d-flex">
-                                    <div className={Styles.subTitileHolder} style={{ margin: '10px 10px auto 0' }}>
-                                        <img src="\assets\images\boxIcons\highest-graph.png" width={100}/></div>
-                                    {Object.keys(getSalesHolder?.highest).map((key) => (
-                                        getSalesHolder?.highest[key]?.Id &&
-                                        <div className={`${Styles.cardHolder} max-w-[375px]`}>
-                                            <div className={Styles.badge}>
-                                                <LuArrowBigUpDash color="#fff" size={23}/>
-                                                {key}
-                                            </div>
-                                            <div>
-                                                <p className={Styles.textHolder}>{getSalesHolder?.highest[key]?.Name}</p>
-                                                <h1 className={Styles.countHolder}>
-                                                    <small style={{ fontSize: '11px' }}>Revenue</small>{" "}
-                                                    ${formatNumber(getSalesHolder?.highest[key]?.value)}</h1>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div> : null}
+                    <div className={Styles.dFlex}>
+                        <div className={Styles.cardMd}>
+                            {getSalesHolder?.highest
+                                &&
+                                <div>
+                                    {Object.keys(getSalesHolder?.highest).length ?
+                                        <div className={Styles.dGrid}>
+                                            <div className={Styles.subTitileHolder} style={{ margin: '10px 10px auto 0' }}>
+                                                <img src="\assets\images\boxIcons\highest-graph.png" width={100} /></div>
+                                            {Object.keys(getSalesHolder?.highest).map((key) => (
+                                                getSalesHolder?.highest[key]?.Id &&
+                                                <div className={`${Styles.cardHolder} max-w-[375px]`}>
+                                                    <div className={Styles.badge}>
+                                                        <LuArrowBigUpDash color="#fff" size={23} />
+                                                        {key}
+                                                    </div>
+                                                    <div>
+                                                        <p className={Styles.textHolder}>{getSalesHolder?.highest[key]?.Name}</p>
+                                                        <h1 className={Styles.countHolder}>
+                                                            <small style={{ fontSize: '11px' }}>Revenue</small>{" "}
+                                                            ${formatNumber(getSalesHolder?.highest[key]?.value)}</h1>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div> : null}
+                                </div>
+                            }
+                            {getSalesHolder?.lowest &&
+                                <div >
+                                    {Object.keys(getSalesHolder?.lowest).length ?
+                                        <div className={Styles.dGrid}>
+                                            <div className={Styles.subTitileHolder} style={{ margin: 'auto 0 10px 10px' }}><img src="\assets\images\boxIcons\lowest-graph.png" width={100} /></div>
+                                            {Object.keys(getSalesHolder?.lowest).map((key) => (
+                                                getSalesHolder?.lowest[key]?.Id &&
+                                                <div className={`${Styles.cardHolder} max-w-[375px]`}>
+                                                    <div className={Styles.badge}>
+                                                        {key}
+                                                        <LuArrowBigDownDash color="#fff" size={23} />
+                                                    </div>
+
+                                                    <div>
+                                                        <p className={Styles.textHolder}>{getSalesHolder?.lowest[key]?.Name}</p>
+                                                        <h1 className={Styles.countHolder}>
+                                                            <small style={{ fontSize: '11px' }}>Revenue</small>{" "}
+                                                            ${formatNumber(getSalesHolder?.lowest[key]?.value)}</h1>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div> : null}
+                                </div>
+                            }
                         </div>
-                    }
-                    {getSalesHolder?.lowest &&
-                        <div>
-                            {Object.keys(getSalesHolder?.lowest).length ?
-                                <div className="d-flex justify-content-end">
-                                    {Object.keys(getSalesHolder?.lowest).map((key) => (
-                                        getSalesHolder?.lowest[key]?.Id &&
-                                        <div className={`${Styles.cardHolder} max-w-[375px]`}>
-                                            <div className={Styles.badge}>
-                                                {key}
-                                                <LuArrowBigDownDash color="#fff" size={23}/>
-                                            </div>
-                                            <div>
-                                                <p className={Styles.textHolder}>{getSalesHolder?.lowest[key]?.Name}</p>
-                                                <h1 className={Styles.countHolder}>
-                                                    <small style={{ fontSize: '11px' }}>Revenue</small>{" "}
-                                                    ${formatNumber(getSalesHolder?.lowest[key]?.value)}</h1>
-                                            </div>
-                                        </div>
-                                    ))}
-                                    <div className={Styles.subTitileHolder} style={{ margin: 'auto 0 10px 10px' }}><img src="\assets\images\boxIcons\lowest-graph.png" width={100}/></div>
-                                </div> : null}
+                        <div className={Styles.cardBr}></div>
+                        <div className={Styles.cardSd}>
+                            <div className={`${Styles.inorderflex} mt-1 mb-2`}>
+                                <h2 className="fs-6">Annual Revenue Summary</h2>
+                            </div>
+                            <div className={`${Styles.cardHolder} max-w-[375px] mt-2 mb-2`}>
+                                <div className={Styles.badge}>
+                                    <BiDollar color="#fff" size={23} />
+                                    {year - 1}
+                                </div>
+                                <div>
+                                    <p className={Styles.textHolder}>Total</p>
+                                    <h1 className={Styles.countHolder}>
+                                        <small style={{ fontSize: '11px' }}>Revenue</small>{" "}
+                                        ${formatNumber(previousYearRevenue)}</h1>
+                                </div>
+                            </div>
+                            <div className={`${Styles.cardHolder} max-w-[375px]`}>
+                                <div className={Styles.badge}>
+                                    <BiDollar color="#fff" size={23} />
+                                    {year}
+                                </div>
+                                <div>
+                                    <p className={Styles.textHolder}>Total</p>
+                                    <h1 className={Styles.countHolder}>
+                                        <small style={{ fontSize: '11px' }}>Revenue</small>{" "}
+                                        ${formatNumber(currentYearRevenue)}</h1>
+                                </div>
+                            </div>
                         </div>
-                    }
+                    </div>
                 </div>}
                 <div className={`d-flex p-3 ${Styles.tableBoundary} mb-5`}>
                     <div className="" style={{ maxHeight: "73vh", minHeight: "40vh", overflow: "auto", width: "100%" }}>
@@ -148,10 +187,10 @@ const Tier = () => {
                                     <th className={`${Styles.th} ${Styles.stickyMonth}`}>Zip</th>
                                     <th className={`${Styles.th} ${Styles.stickyMonth}`}>Brand</th>
                                     <th className={`${Styles.th} ${Styles.stickyMonth}`}>Sales Rep</th>
-                                    <th className={`${Styles.th} ${Styles.stickyMonth}`} style={{width:'150px'}}>{year-1} revenue</th>
-                                    <th className={`${Styles.th} ${Styles.stickyMonth}`} style={{width:'150px'}}>{year} revenue</th>
-                                    <th className={`${Styles.th} ${Styles.stickySecondLastColumnHeading}`} style={{width:'150px'}}>Existing Tier</th>
-                                    <th className={`${Styles.th} ${Styles.stickyLastColumnHeading}`} style={{width:'150px'}}>Suggested Tier</th>
+                                    <th className={`${Styles.th} ${Styles.stickyMonth}`} style={{ width: '150px' }}>{year - 1} revenue</th>
+                                    <th className={`${Styles.th} ${Styles.stickyMonth}`} style={{ width: '150px' }}>{year} revenue</th>
+                                    <th className={`${Styles.th} ${Styles.stickySecondLastColumnHeading}`} style={{ width: '150px' }}>Existing Tier</th>
+                                    <th className={`${Styles.th} ${Styles.stickyLastColumnHeading}`} style={{ width: '150px' }}>Suggested Tier</th>
                                 </thead>
                                 <tbody>
                                     {data.map((item, key) => (
