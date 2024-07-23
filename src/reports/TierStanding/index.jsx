@@ -151,24 +151,22 @@ const Tier = () => {
                             <div className={`${Styles.cardHolder} max-w-[375px] mt-2 mb-2`}>
                                 <div className={Styles.badge}>
                                     <BiDollar color="#fff" size={23} />
-                                    {year - 1}
                                 </div>
                                 <div>
-                                    <p className={Styles.textHolder}>Total</p>
+                                    <p className={Styles.textHolder}>{year - 1}</p>
                                     <h1 className={Styles.countHolder}>
-                                        <small style={{ fontSize: '11px' }}>Revenue</small>{" "}
+                                        {/* <small style={{ fontSize: '11px' }}>Revenue</small>{" "} */}
                                         ${formatNumber(previousYearRevenue)}</h1>
                                 </div>
                             </div>
                             <div className={`${Styles.cardHolder} max-w-[375px]`}>
                                 <div className={Styles.badge}>
                                     <BiDollar color="#fff" size={23} />
-                                    {year}
                                 </div>
                                 <div>
-                                    <p className={Styles.textHolder}>Total</p>
+                                    <p className={Styles.textHolder}>{year}</p>
                                     <h1 className={Styles.countHolder}>
-                                        <small style={{ fontSize: '11px' }}>Revenue</small>{" "}
+                                        {/* <small style={{ fontSize: '11px' }}>Revenue</small>{" "} */}
                                         ${formatNumber(currentYearRevenue)}</h1>
                                 </div>
                             </div>
