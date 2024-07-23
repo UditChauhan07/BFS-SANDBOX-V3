@@ -91,6 +91,26 @@
   left: 28%;
   z-index: 2;
 }
+.dGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.dFlex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.cardMd {
+  width: 75%;
+  margin: auto;
+}
+.cardSd {
+  width: 20%;
+  margin: auto;
+}
+.cardBr {
+  border-left: 1px dashed #000;
+}
 .stickyLastColumn {
   position: sticky;
   right: 0%;
@@ -173,7 +193,7 @@
   letter-spacing: 2px;
   margin: 0;
 }
-.subTitileHolder{
+.subTitileHolder {
   color: #000;
   font-family: "Montserrat";
   font-size: 20px;
@@ -194,16 +214,14 @@
   justify-content: space-between;
   padding: 10px;
   gap: 2%;
+  margin: 5px 0;
 }
-.cardHolder:hover{
-    box-shadow:
-    0 4px 8px 0 rgba(0, 0, 0
-    , 0.2), 0 6px 20px 0 rgba(0
-    , 0, 0, 0.19);
+.cardHolder:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .cardHolder .badge {
-  width: 50px;
-  height: 45px;
+  width: 75px;
+  height: 50px;
   /* border: 2px solid #C7C7C7; */
   border-radius: 10px;
   background-color: black;
@@ -238,4 +256,43 @@
   line-height: 22px;
   letter-spacing: 0.12px;
   text-transform: uppercase;
+}
+@media (max-width: 1440.98px) {
+  .cardHolder .textHolder {
+    margin: 0;
+  }
+}
+@media (max-width: 1350.98px) {
+  .dFlex{
+    flex-direction: column;
+  }
+  .cardMd,.cardSd{
+    width: 100%;
+  }
+  .cardBr{
+    width: 0;
+  }
+  .cardHolder .countHolder{
+    font-size: 35px;
+  }
+  .cardHolder .textHolder {
+    margin-bottom: 0.5rem;
+  }
+  .cardSd{
+    display: flex;
+    border-bottom: 1px dashed #000;
+    border-top: 1px dashed #000;
+  }
+  .cardSd .inorderflex{
+    border-right: 1px dashed #000;
+    border-bottom: 0;
+    margin-right: 25px;
+    padding: 5px 10px;
+  }
+  .cardSd .cardHolder:nth-child(2){
+    margin: auto;
+  }
+  .cardSd .cardHolder:nth-child(3){
+    margin: auto;
+  }
 }
