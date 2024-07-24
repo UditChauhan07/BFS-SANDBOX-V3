@@ -180,7 +180,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
     if (helpId == "0123b0000007zc8AAA") {
       invoiceHandler(value)
     } else if (helpId == "0123b0000007z9pAAA") {
-      navigate("/customerService", { state: { Reason: value,OrderId:OrderData.Id,SalesRepId:OrderData.OwnerId } })
+      navigate("/customerService", { state: { Reason: value,OrderId:OrderData.Id,SalesRepId:OrderData.OwnerId,PONumber:OrderData.PO_Number__c } })
     } else {
       alert("do nothing")
     }

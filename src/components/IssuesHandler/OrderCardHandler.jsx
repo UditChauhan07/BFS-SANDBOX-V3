@@ -8,7 +8,7 @@ import { BiCheck, BiLeftArrow, BiLock, BiRightArrow } from "react-icons/bi";
 import ModalPage from "../Modal UI";
 import { RxEyeOpen } from "react-icons/rx";
 
-const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedStatus, files = [], desc, errorListObj, manufacturerIdObj, accountIdObj, accountList, contactIdObj, setSubject, Actual_Amount__cObj,autoSelect=null }) => {
+const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedStatus, files = [], desc, errorListObj, manufacturerIdObj, accountIdObj, accountList, contactIdObj, setSubject, Actual_Amount__cObj, autoSelect = null }) => {
     const { setOrderConfirmed, orderConfirmed } = orderConfirmedStatus || null;
     const { accountId, setAccountId } = accountIdObj || null;
     const [productAllList, setProductAllList] = useState([])
@@ -67,14 +67,110 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
         };
     }
 
-    useEffect(()=>{
-        if(autoSelect){
+    useEffect(() => {
+        if (autoSelect) {
             autoSelectOrderHandler();
         }
-    },[autoSelect])
+    }, [autoSelect])
 
-    const autoSelectOrderHandler = ()=>{
+    const autoSelectOrderHandler = () => {
         setOrderId(autoSelect)
+        {
+            let accountItemID = null;
+            orders.map((item) => {
+                if (autoSelect == item.Id) {
+                    if (reason == "Product Overage") {
+                        let opcs = []
+                        item.OpportunityLineItems?.records?.map((e) => {
+                            opcs.push(e.Product2Id)
+                        })
+                        GetAuthData().then((user) => {
+                            let rawData = {
+                                key: user?.x_access_token,
+                                Sales_Rep__c: user.Sales_Rep__c,
+                                Manufacturer: item.ManufacturerId__c,
+                                AccountId__c: item.AccountId,
+                            }
+                            setProductList([])
+                            setShowProductList(false)
+                            getProductList({ rawData }).then((productRes) => {
+                                let productCode = "";
+                                let temp = []
+                                productRes?.data?.records?.map((product, index) => {
+                                    productCode += `'${product?.ProductCode}'`
+                                    if (productRes?.data?.records?.length - 1 != index) productCode += ', ';
+                                    if (!opcs.includes(product.Id)) {
+                                        let pDiscount = 0;
+                                        let listPrice = Number(product.usdRetail__c.replace('$', '').replace(',', ''));
+                                        if (product.Category__c === "TESTER") {
+                                            pDiscount = productRes?.discount?.testerMargin || 0
+                                        } else if (product.Category__c === "Samples") {
+                                            pDiscount = productRes?.discount?.sample || 0
+                                        } else {
+                                            pDiscount = productRes?.discount?.margin || 0
+                                        }
+                                        let salesPrice = (+listPrice - (pDiscount / 100) * +listPrice).toFixed(2)
+                                        temp.push({
+                                            Id: index + 1,
+                                            Name: product.Name,
+                                            Product2Id: product.Id,
+                                            ProductCode: product.ProductCode,
+                                            TotalPrice: salesPrice
+                                        })
+                                    }
+                                })
+                                // setProductList(temp)
+                                sortArrayHandler(temp, g => g.Name)
+                                setProductAllList(temp)
+                                let data = ShareDrive();
+                                if (!data) {
+                                    data = {};
+                                }
+                                getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
+                                    if (res) {
+                                        if (data[item.ManufacturerId__c]) {
+                                            data[item.ManufacturerId__c] = { ...data[item.ManufacturerId__c], ...res }
+                                        } else {
+                                            data[item.ManufacturerId__c] = res
+                                        }
+                                        ShareDrive(data)
+                                        setProductImage({ isLoaded: true, images: res });
+                                    } else {
+                                        setProductImage({ isLoaded: true, images: {} });
+                                    }
+                                }).catch((err) => {
+                                    console.log({ err });
+                                })
+                            }).catch((productErr) => {
+                                console.log({ productErr });
+                            })
+                        }).catch((err) => {
+                            console.log({ err });
+                        })
+                    }
+                    getOrderDetails({ order: item })
+                    setManufacturerId(item.ManufacturerId__c)
+                    setAccountId(item.AccountId)
+                    accountItemID = item.AccountId
+                    setActual_Amount__c(item.Amount)
+                }
+            })
+            setSearchPO(null);
+            let inputValue = document.getElementById("poSearchInput");
+            if (inputValue) {
+                inputValue.value = null;
+            }
+            let contactList = [];
+            accountList.map(element => (
+                element.Id == accountItemID &&
+                element.contact.map((con) => {
+                    {
+                        contactList.push({ label: con.Name, value: con.Id })
+                    }
+                })
+            ))
+            setContacts(contactList)
+        }
     }
 
 
@@ -366,7 +462,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                 setShowProductList(false);
             }}
         />
-        <p className={Styles1.reasonTitle}><span style={{ cursor: "pointer" }} onClick={() => shakeHandler()}>Select the order you want to handle:</span> {!orderId && reason && <input type="text" placeholder='Search Order' autoComplete="off" className={Styles1.searchBox} title="You can search by PO Number, Account Name & Brand for last 3 month Orders" onKeyUp={(e) => { setSearchPO(e.target.value) }} id="poSearchInput" style={{ width: '120px' }} />}{reason && orderId&& !orderConfirmed ? reason == "Product Overage" && showProductList ?null: <button className={Styles1.btnHolder} onClick={() => setShowProductList(true)}><RxEyeOpen />&nbsp; Other Products</button>
+        <p className={Styles1.reasonTitle}><span style={{ cursor: "pointer" }} onClick={() => shakeHandler()}>Select the order you want to handle:</span> {!orderId && reason && <input type="text" placeholder='Search Order' autoComplete="off" className={Styles1.searchBox} title="You can search by PO Number, Account Name & Brand for last 3 month Orders" onKeyUp={(e) => { setSearchPO(e.target.value) }} id="poSearchInput" style={{ width: '120px' }} />}{reason && orderId && !orderConfirmed ? reason == "Product Overage" && showProductList ? null : <button className={Styles1.btnHolder} onClick={() => setShowProductList(true)}><RxEyeOpen />&nbsp; Other Products</button>
             : null} {!reason && <BiLock id="lock1" style={{ float: 'right' }} />}</p>
         {reason && reason != "Update Account Info" &&
             <div className={`${Styles1.orderListHolder} ${Styles1.openListHolder}`} style={(orderId && (!searchPo || searchPo == "")) ? { overflow: 'unset', height: 'auto', border: 0 } : {}}>
@@ -440,17 +536,17 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                                                 }
                                                                             })}
                                                                         {reason == "Product Overage" && productList.map((ele, index) => {
-                                                                                if (!searchItem || (ele.ProductCode?.toLowerCase().includes(
-                                                                                    searchItem?.toLowerCase()) || ele.Name?.toLowerCase().includes(
-                                                                                        searchItem?.toLowerCase()) || ele.ProductUPC__c?.toLowerCase().includes(
-                                                                                            searchItem?.toLowerCase()))) {
-                                                                                    return (
-                                                                                        <ErrorProductCard Styles1={Styles1} productErrorHandler={productErrorHandler} errorList={errorList} setProductDetailId={setProductDetailId} product={ele} productImage={productImage} reason={reason} AccountName={item.AccountName} ErrorProductQtyHandler={ErrorProductQtyHandler}
-                                                                                            readOnly={orderConfirmed} style={{ cardHolder: { backgroundColor: '#67f5f533', borderBottom: '1px solid #fff' }, nameHolder: { width: '300px' } }} />
-                                                                                    )
-                                                                                }
+                                                                            if (!searchItem || (ele.ProductCode?.toLowerCase().includes(
+                                                                                searchItem?.toLowerCase()) || ele.Name?.toLowerCase().includes(
+                                                                                    searchItem?.toLowerCase()) || ele.ProductUPC__c?.toLowerCase().includes(
+                                                                                        searchItem?.toLowerCase()))) {
+                                                                                return (
+                                                                                    <ErrorProductCard Styles1={Styles1} productErrorHandler={productErrorHandler} errorList={errorList} setProductDetailId={setProductDetailId} product={ele} productImage={productImage} reason={reason} AccountName={item.AccountName} ErrorProductQtyHandler={ErrorProductQtyHandler}
+                                                                                        readOnly={orderConfirmed} style={{ cardHolder: { backgroundColor: '#67f5f533', borderBottom: '1px solid #fff' }, nameHolder: { width: '300px' } }} />
+                                                                                )
                                                                             }
-                                                                            )}
+                                                                        }
+                                                                        )}
                                                                     </tbody>
                                                                 </table>
                                                             </>) : (
