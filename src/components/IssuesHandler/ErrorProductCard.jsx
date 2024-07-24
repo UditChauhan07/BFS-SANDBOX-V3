@@ -10,11 +10,11 @@ const ErrorProductCard = ({ Styles1, productErrorHandler, errorList, setProductD
                 !productImage.isLoaded ? <LoaderV2 /> :
                     productImage.images?.[product.ProductCode] ?
                         productImage.images[product.ProductCode]?.ContentDownloadUrl ?
-                            <img onClick={() => { setProductDetailId(product?.Product2Id) }} src={productImage.images[product.ProductCode]?.ContentDownloadUrl} className="zoomInEffect" alt="img" />
-                            : <img onClick={() => { setProductDetailId(product?.Product2Id) }} src={productImage.images[product.ProductCode]} className="zoomInEffect" alt="img" />
-                        : <img onClick={() => { setProductDetailId(product?.Product2Id) }} src={originAPi + "/dummy.png"} className="zoomInEffect" alt="img" />
+                            <img onClick={() => { setProductDetailId(product?.Product2Id) }} src={productImage.images[product.ProductCode]?.ContentDownloadUrl} className={`${Styles1.imgHolder} zoomInEffect`} alt="img" />
+                            : <img onClick={() => { setProductDetailId(product?.Product2Id) }} src={productImage.images[product.ProductCode]} className={`${Styles1.imgHolder} zoomInEffect`} alt="img" />
+                        : <img onClick={() => { setProductDetailId(product?.Product2Id) }} src={originAPi + "/dummy.png"} className={`${Styles1.imgHolder} zoomInEffect`} alt="img" />
             }
-             <label for={product.Id}>{product.Name.split(AccountName).length ==2 ?product.Name.split(AccountName)[1]:<><b style={{fontWeight:'600',textTransform:'capitalize',textAlign:'start'}}>{product.Name}</b><br /><small style={{ fontSize: '12px', color: '#000000' }}>( Not contains in order );</small></>}</label></td>
+             <label className={Styles1.productNameHolder} for={product.Id}>{product.Name.split(AccountName).length ==2 ?product.Name.split(AccountName)[1]:<><b style={{fontWeight:'600',textTransform:'capitalize',textAlign:'start'}}>{product.Name}</b><br /><small style={{ fontSize: '12px', color: '#000000' }}>( Not contains in order );</small></>}</label></td>
         <td>{product.ProductCode}</td>
         <td>{product.Quantity??0}</td>
         <td>${parseFloat(product.TotalPrice).toFixed(2)}</td>
