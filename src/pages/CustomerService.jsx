@@ -11,7 +11,7 @@ import { FilterItem } from "../components/FilterItem.jsx";
 
 const CustomerService = () => {
   const { state } = useLocation();
-  const { Reason, OrderId,SalesRepId } = state || null;
+  const { Reason, OrderId,SalesRepId,PONumber } = state || null;
   const navigate = useNavigate();
   const [reason, setReason] = useState();
   const [accountList, setAccountList] = useState([]);
@@ -27,7 +27,7 @@ const CustomerService = () => {
   const [manufacturerId, setManufacturerId] = useState(null)
   const [Actual_Amount__c, setActual_Amount__c] = useState(null)
   const [errorList, setErrorList] = useState({});
-  const [searchPo, setSearchPO] = useState(null);
+  const [searchPo, setSearchPO] = useState(PONumber);
   const [sumitForm, setSubmitForm] = useState(false)
   const [userData, setUserData] = useState({});
   const [salesRepList, setSalesRepList] = useState([])
