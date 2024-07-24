@@ -11,7 +11,16 @@ import { FilterItem } from "../components/FilterItem.jsx";
 
 const CustomerService = () => {
   const { state } = useLocation();
-  const { Reason, OrderId,SalesRepId,PONumber } = state || null;
+  let Reason = null;
+  let OrderId = null;
+  let SalesRepId = null;
+  let PONumber = null;
+  if(state){
+    Reason = state?.Reason
+    OrderId = state?.OrderId
+    SalesRepId = state?.SalesRepId
+    PONumber = state?.PONumber
+  }
   const navigate = useNavigate();
   const [reason, setReason] = useState();
   const [accountList, setAccountList] = useState([]);
