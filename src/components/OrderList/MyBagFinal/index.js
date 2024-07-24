@@ -4,7 +4,7 @@ import Styles from "./Styles.module.css";
 import axios from "axios";
 import Loading from "../../Loading";
 import { useNavigate } from "react-router-dom";
-import { DestoryAuth, ShareDrive, getOrderDetailsBasedId, getOrderDetailsInvoice, getProductImageAll, originAPi, supportShare } from "../../../lib/store";
+import { DestoryAuth, ShareDrive, getOrderDetailsInvoice, getProductImageAll, originAPi, supportShare } from "../../../lib/store";
 import { MdOutlineDownload } from "react-icons/md";
 import LoaderV2 from "../../loader/v2";
 import ProductDetails from "../../../pages/productDetails";
@@ -73,6 +73,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
       BodyContent,
       headersList
     );
+    console.log({response});
     if (Object.values(data).length > 0) {
       if (response.data.data?.ManufacturerId__c) {
         if (data[response.data.data?.ManufacturerId__c]) {
@@ -418,7 +419,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
                   </div>
                   <div className={Styles.ShippControl}>
                     <h2>Need Help?</h2>
-                    <div className={Styles.ShipAdress}>
+                    <div className={`${Styles.ShipAdress} ${Styles.dFlex}`}>
                       <div className=" pt-2 pb-2" style={{ cursor: 'pointer' }} onClick={() => { setHelpId("0123b0000007zc8AAA") }}>
                         <div className="d-flex align-items-center" style={helpId == "0123b0000007zc8AAA" ? { color: '#0d6efd' } : {}}>
                           <span style={{ fontSize: '25px' }}>&bull;</span>
@@ -426,7 +427,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
                         </div>
                         {helpId == "0123b0000007zc8AAA" &&
                           <div className={Styles.SupportHolder}>
-                            <p onClick={() => { supportHandler("Request Status Updates") }} style={reason == "Request Status Updates" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Request Status Updates</p>
+                            <p onClick={() => { supportHandler("Request Status Updates") }} style={reason == "Request Status Updates" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Request Status Updates <span className={Styles.supportLinkHolder}>132eenmkvndjndj</span></p>
                             <p onClick={() => { supportHandler("Request Invoice") }} style={reason == "Request Invoice" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Request Invoice</p>
                             <p onClick={() => { supportHandler("Request Tracking number") }} style={reason == "Request Tracking number" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Request Tracking number</p>
                           </div>}

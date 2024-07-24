@@ -69,11 +69,10 @@ const CustomerService = () => {
     if (OrderId) {
       setOrderId(OrderId)
     }
-
     GetAuthData()
       .then((response) => {
         setUserData(response)
-        orderListBasedOnRepHandler(response.x_access_token, Reason?SalesRepId:response.Sales_Rep__c,Reason?false:true)
+        orderListBasedOnRepHandler(response.x_access_token, Reason?SalesRepId:response.Sales_Rep__c,Reason?false:true,OrderId)
         if (admins.includes(response.Sales_Rep__c)) {
           getSalesRepList({ key: response.x_access_token }).then((repRes) => {
             setSalesRepList(repRes.data)
@@ -87,14 +86,36 @@ const CustomerService = () => {
       });
   }, []);
 
-  const orderListBasedOnRepHandler = (key, Sales_Rep__c,ReasonNull=true) => {
+  // useEffect(()=>{
+  //   if(orderConfirmed == false&&OrderId){
+  //     setOrderId()
+  //     GetAuthData()
+  //     .then((response) => {
+  //       setUserData(response)
+  //       orderListBasedOnRepHandler(response.x_access_token, SalesRepId,Reason?false:true,)
+  //       if (admins.includes(response.Sales_Rep__c)) {
+  //         getSalesRepList({ key: response.x_access_token }).then((repRes) => {
+  //           setSalesRepList(repRes.data)
+  //         }).catch((repErr) => {
+  //           console.log({ repErr });
+  //         })
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log({ err });
+  //     });
+  //   }
+  // },[orderConfirmed])
+
+  const orderListBasedOnRepHandler = (key, Sales_Rep__c,ReasonNull=true,searchId=null) => {
     setLoaded(false)
     setSelectedSalesRepId(Sales_Rep__c)
     getOrderCustomerSupport({
       user: { key, Sales_Rep__c },
-      PONumber: searchPo
+      PONumber: searchPo,searchId
     })
       .then((order) => {
+        console.log({order});
         if(ReasonNull){
           setReason(null)
         }
