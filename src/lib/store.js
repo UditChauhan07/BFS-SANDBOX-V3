@@ -241,7 +241,7 @@ export async function getOrderList({ user, month }) {
   }
 }
 
-export async function getOrderCustomerSupport({ user, PONumber }) {
+export async function getOrderCustomerSupport({ user, searchId }) {
   let headersList = {
     Accept: "*/*",
   };
@@ -249,7 +249,7 @@ export async function getOrderCustomerSupport({ user, PONumber }) {
   let bodyContent = new FormData();
   bodyContent.append("key", user.key);
   bodyContent.append("Sales_Rep__c", user.Sales_Rep__c);
-  if (PONumber) bodyContent.append("PONumber", PONumber);
+  if (searchId) bodyContent.append("searchId", searchId);
 
   let response = await fetch(url + "v3/Jn91V1GChwP9dZg", {
     method: "POST",
