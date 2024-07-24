@@ -15,7 +15,11 @@
   padding: 38px 30px 30px 10px;
   margin: 10px 0 0 0;
 }
-
+.imgHolder {
+  width: 100px;
+  height: 50px;
+  object-fit: contain;
+}
 .MainInner {
   background: #fff;
   padding: 17px 3px;
@@ -324,33 +328,51 @@
   letter-spacing: 1.12px;
   text-transform: uppercase;
 }
-.warning{
-    text-decoration: underline;
-  }
-  
-  .ShipBut {
-    width: 100%;
-  }
-  .ShipBut button{
-    width: 100%;
-  }
-  .btnHolder{
-    width: 100px;
-  }
-  .ShipBut button,.btnHolder {
-    color: #fff;
-    text-align: center;
-    font-family: "Montserrat";
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 32px; /* 213.333% */
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    background-color: #000;
-    margin: 0 0 28px 0;
-  }
+.warning {
+  text-decoration: underline;
+}
 
+.ShipBut {
+  width: 100%;
+}
+.ShipBut button {
+  width: 100%;
+}
+.btnHolder {
+  width: 100px;
+}
+.SupportHolder p{
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 25px;
+  letter-spacing: 1.12px;
+  border: 0;
+  padding: 0;
+  margin: 0 auto 0 3rem;
+}
+.ShipBut button,
+.btnHolder {
+  color: #fff;
+  text-align: center;
+  font-family: "Montserrat";
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 32px; /* 213.333% */
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background-color: #000;
+  margin: 0 0 28px 0;
+}
+@media (max-width: 1300px) {
+  .ShipBut button,
+  .btnHolder {
+    font-size: 13px;
+  }
+}
 @media (max-width: 1199px) {
   .MainInner {
     padding: 17px 5px;
@@ -361,5 +383,9 @@
 
   .Mainbox1M {
     gap: 15px;
+  }
+  .ShipBut button,
+  .btnHolder {
+    font-size: 11px;
   }
 }

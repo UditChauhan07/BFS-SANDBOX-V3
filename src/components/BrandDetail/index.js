@@ -8,11 +8,13 @@ import { GetAuthData, ShareDrive, brandDetails, getProductImageAll, topProduct }
 import LoaderV2 from "../loader/v2";
 import { Link } from "react-router-dom";
 import ContentLoader from "react-content-loader";
+import ProductDetails from "../../pages/productDetails";
 
 const BrandDetailCard = ({ brandId }) => {
     const brand = brandDetails[brandId];
     const [topProducts, setTopProduct] = useState({ isLoaded: false, data: [] })
-    const [productImages, setProductImages] = useState({});
+    const [productImages, setProductImages] = useState({ isLoaded: false, images: {} });
+    const [productId,setProductId] = useState()
     const d = new Date();
     let monthIndex = d.getMonth();
     useEffect(() => {
@@ -32,7 +34,6 @@ const BrandDetailCard = ({ brandId }) => {
         }
         GetAuthData().then((user) => {
             topProduct({ manufacturerId: brandId }).then((products) => {
-                console.log({ products });
                 setTopProduct({ isLoaded: true, data: products.data })
                 let productCode = "";
                 products.data?.map((product, index) => {
@@ -48,10 +49,8 @@ const BrandDetailCard = ({ brandId }) => {
                             data[brandId] = res
                         }
                         ShareDrive(data)
-                        setProductImages({ isLoaded: true, images: res });
-                    } else {
-                        setProductImages({ isLoaded: true, images: {} });
                     }
+                    setProductImages({ isLoaded: true, images: res??{} });
                 }).catch((err) => {
                     console.log({ aaa111: err });
                 })
@@ -61,6 +60,7 @@ const BrandDetailCard = ({ brandId }) => {
         }).catch((userErr) => {
             console.log({ userErr });
         })
+        console.log("booooo");
     }, [])
     const options = {
         loop: true,
@@ -89,6 +89,7 @@ const BrandDetailCard = ({ brandId }) => {
             },
         },
     };
+
     return (
         <section>
             <div className="container">
@@ -124,14 +125,14 @@ const BrandDetailCard = ({ brandId }) => {
                                 return (<div class="item">
                                     <div>
                                         <div className={Styles.ArriavalsInnerContent}>
-                                            <h4>{item.Name}</h4>
+                                            <h4 onClick={()=>setProductId(item.Id)}>{item.Name}</h4>
                                             <p>{item.Description??'NA'}</p>
 
                                             <Link to={'/my-retailers?manufacturerId='+brandId}>
                                                 Shop The Collection
                                             </Link>
-                                            <div className="fitContent">
-                                                {productImages?.isLoaded ? (
+                                            <div className="fitContent" onClick={()=>setProductId(item.Id)}>
+                                                {(productImages?.isLoaded||item.ProductImage) ? (
                                                     <img className="zoomInEffect"
                                                         style={{ maxHeight: '320px', width: 'auto', margin: '10px auto' }}
                                                         src={item.ProductImage ? item.ProductImage : productImages?.images?.[item.ProductCode]?.ContentDownloadUrl ?? "\\assets\\images\\dummy.png"}
@@ -159,6 +160,7 @@ const BrandDetailCard = ({ brandId }) => {
                     </OwlCarousel>
                 </div>
             </div>
+            <ProductDetails productId={productId} setProductDetailId={setProductId}/>
         </section>
     );
 }
