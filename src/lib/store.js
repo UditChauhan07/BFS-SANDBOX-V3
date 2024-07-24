@@ -349,6 +349,30 @@ export async function getRollOver({ user }) {
     return rawRes;
   }
 }
+
+export async function getOrderIdDetails({ rawData }) {
+  let headersList = {
+    Accept: "*/*",
+  };
+
+  let bodyContent = new FormData();
+  bodyContent.append("key", rawData.key);
+  bodyContent.append("opportunity_id", rawData.id);
+
+  let response = await fetch(url + "/BKpeLbweyZPXmwe", {
+    method: "POST",
+    body: bodyContent,
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
+
+
 export async function getOrderDetailsBasedId({ rawData }) {
   let headersList = {
     Accept: "*/*",

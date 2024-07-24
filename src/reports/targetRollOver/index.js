@@ -319,7 +319,6 @@ const TargetReport = () => {
             return name;
         }
     };
-    console.log({ filteredTargetData, salesRepList });
     const exportToExcel = () => {
         setExportToExcelState(false);
         const ws = XLSX.utils.json_to_sheet(csvData());
