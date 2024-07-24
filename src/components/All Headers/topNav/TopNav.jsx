@@ -58,7 +58,7 @@ const TopNav = () => {
                   {/* </a> */}
                   <ul className="dropdown-menu">
                     <li onClick={() => navigate("/orderStatus")}>
-                      <Link to="/order-list" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
+                      <Link to="/order-list" className={`dropdown-item rounded topNav_nameText__Jdtjp hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center ${styles.nameText}`}>
                         <OrderStatusIcon width={15} height={15} />&nbsp;Order Status
                       </Link>
                     </li>
@@ -68,7 +68,7 @@ const TopNav = () => {
                         navigate("/customerService")
                       }}
                     >
-                      <Link to="/customerService" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
+                      <Link to="/customerService" className={`dropdown-item rounded topNav_nameText__Jdtjp hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center ${styles.nameText}`}>
                         <CustomerServiceIcon width={15} height={15} />&nbsp;Customer Services
                       </Link>
                     </li>

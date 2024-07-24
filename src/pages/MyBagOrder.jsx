@@ -41,7 +41,6 @@ function MyBagOrder(props) {
             const a = document.createElement('a');
             a.href = originAPi + "/download/" + file + "/2/index";
             // a.target = '_blank'
-            console.log({ a });
             setPDFIsloaed(false);
             a.click();
           } else {
@@ -119,7 +118,7 @@ function MyBagOrder(props) {
     FileSaver.saveAs(data, `${filename} ${new Date()}` + fileExtension);
   };
   return (
-    <AppLayout filterNodes={
+    <AppLayout filterNodes1={
       orderDetail?.Id &&
       <div className="d-flex justify-content-end mr-2">
         <div className="dropdown dropdown-toggle border px-2.5 py-1 leading-tight d-flex" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -131,10 +130,10 @@ function MyBagOrder(props) {
           </div>
           <ul className="dropdown-menu">
             <li>
-              <div className="dropdown-item text-start" onClick={() => generatePdfServerSide()}>&nbsp;Pdf</div>
+              <div className="dropdown-item rounded topNav_nameText__Jdtjp hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center" onClick={() => generatePdfServerSide()}>&nbsp;Pdf</div>
             </li>
             <li>
-              <div className="dropdown-item text-start" onClick={() => generateXLSX(orderDetail)}>&nbsp;XLSX</div>
+              <div className="dropdown-item rounded topNav_nameText__Jdtjp hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center" onClick={() => generateXLSX(orderDetail)}>&nbsp;XLSX</div>
             </li>
           </ul>
         </div>
@@ -145,7 +144,7 @@ function MyBagOrder(props) {
     }>
       <div className="col-12">
         {isPDFLoaded ? <div className="d-flex" style={{ height: '50vh' }}><p className="m-auto">Generating Pdf..<span>{pdfLoadingText}</span></p></div> :
-          <MyBagFinal setOrderDetail={setOrderDetail} />}
+          <MyBagFinal setOrderDetail={setOrderDetail} generatePdfServerSide={generatePdfServerSide} generateXLSX={generateXLSX}/>}
       </div>
     </AppLayout>
   );

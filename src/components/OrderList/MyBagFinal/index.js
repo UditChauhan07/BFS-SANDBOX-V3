@@ -12,14 +12,17 @@ import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 import { RxEyeOpen } from "react-icons/rx";
 import { TbEyeClosed } from "react-icons/tb";
 import ModalPage from "../../Modal UI";
+import { CustomerServiceIcon, OrderStatusIcon } from "../../../lib/svg";
 
-function MyBagFinal({ setOrderDetail }) {
+function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
   let Img1 = "/assets/images/dummy.png";
   const [OrderData, setOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showTracking, setShowTracking] = useState(false)
   const navigate = useNavigate();
   const [confirm, setConfirm] = useState(false);
+  const [helpId, setHelpId] = useState();
+  const [reason, setReason] = useState()
 
   const OrderId = JSON.parse(localStorage.getItem("OpportunityId"));
   const Key = JSON.parse(localStorage.getItem("Api Data"));
@@ -172,33 +175,43 @@ function MyBagFinal({ setOrderDetail }) {
   const openInNewTab = (url) => {
     window.open(url, "_blank", "noreferrer");
   };
+  const supportHandler = (value) => {
+    setReason(value)
+    if (helpId == "0123b0000007zc8AAA") {
+      invoiceHandler(value)
+    } else if (helpId == "0123b0000007z9pAAA") {
+      navigate("/customerService", { state: { Reason: value,OrderId:OrderData.Id,SalesRepId:OrderData.OwnerId } })
+    } else {
+      alert("do nothing")
+    }
+  }
 
   return (
     <div>
       <ModalPage
-          open={confirm || false}
-          content={
-            <div className="d-flex flex-column gap-3">
-              <h2 style={{textDecoration:'underline'}}>
-                Confirm
-              </h2>
-              <p>
-                Are you sure you want to generate a ticket?<br /> This action cannot be undone.
-              </p>
-              <div className="d-flex justify-content-around ">
-                <button className={Styles.btnHolder} onClick={()=>invoiceHandler(confirm)}>
-                  Submit
-                </button>
-                <button className={Styles.btnHolder} onClick={() => setConfirm(false)}>
-                  Cancel
-                </button>
-              </div>
+        open={confirm || false}
+        content={
+          <div className="d-flex flex-column gap-3">
+            <h2 style={{ textDecoration: 'underline' }}>
+              Confirm
+            </h2>
+            <p>
+              Are you sure you want to generate a ticket?<br /> This action cannot be undone.
+            </p>
+            <div className="d-flex justify-content-around ">
+              <button className={Styles.btnHolder} onClick={() => invoiceHandler(confirm)}>
+                Submit
+              </button>
+              <button className={Styles.btnHolder} onClick={() => setConfirm(false)}>
+                Cancel
+              </button>
             </div>
-          }
-          onClose={() => {
-            setConfirm(false);
-          }}
-        />
+          </div>
+        }
+        onClose={() => {
+          setConfirm(false);
+        }}
+      />
       <style>
         {`@media print {
   .MainInnerPrint {
@@ -260,14 +273,14 @@ function MyBagFinal({ setOrderDetail }) {
                                   <div className={Styles.Mainbox1M}>
                                     <div className={Styles.Mainbox2} style={{ cursor: 'pointer' }}>
                                       {
-                                        item?.ProductImage?<img src={item.ProductImage} className="zoomInEffect 1111" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />:
-                                        item?.ContentDownloadUrl ? <img src={item.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} /> :
-                                          !productImage.isLoaded ? <LoaderV2 /> :
-                                            productImage.images?.[item.ProductCode] ?
-                                              productImage.images[item.ProductCode]?.ContentDownloadUrl ?
-                                                <img src={productImage.images[item.ProductCode]?.ContentDownloadUrl} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
-                                                : <img src={productImage.images[item.ProductCode]} className="zoomInEffect" alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
-                                              : <img src={Img1} className="zoomInEffect" alt="img" onClick={() => { setProductDetailId(item?.Product2Id) }} width={25} />
+                                        item?.ProductImage ? <img src={item.ProductImage} className={`${Styles.imgHolder} zoomInEffect`} alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} /> :
+                                          item?.ContentDownloadUrl ? <img src={item.ContentDownloadUrl} className={`${Styles.imgHolder} zoomInEffect`} alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} /> :
+                                            !productImage.isLoaded ? <LoaderV2 /> :
+                                              productImage.images?.[item.ProductCode] ?
+                                                productImage.images[item.ProductCode]?.ContentDownloadUrl ?
+                                                  <img src={productImage.images[item.ProductCode]?.ContentDownloadUrl} className={`${Styles.imgHolder} zoomInEffect`} alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
+                                                  : <img src={productImage.images[item.ProductCode]} className={`${Styles.imgHolder} zoomInEffect`} alt="img" width={25} onClick={() => { setProductDetailId(item?.Product2Id) }} />
+                                                : <img src={Img1} className={`${Styles.imgHolder} zoomInEffect`} alt="img" onClick={() => { setProductDetailId(item?.Product2Id) }} width={25} />
                                       }
                                     </div>
                                     <div className={Styles.Mainbox3}>
@@ -363,25 +376,82 @@ function MyBagFinal({ setOrderDetail }) {
                       </p>
                     </div>
                   </div>
+                  <div className="row" data-html2canvas-ignore>
+                    <div className="col-6"><div className={Styles.ShipBut} >
+                      {invoices?.length > 0 ? (
+                        <button className="py-1 d-flex justify-content-center" onClick={() => downloadFiles(invoices)}>
+                          <span style={{ margin: 'auto 0' }}><MdOutlineDownload size={16} /></span>&nbsp;Download INVOICE
+                        </button>
+                      ) : <button className="py-1 d-flex justify-content-center" onClick={() => setConfirm("Invoice")}>
+                        <span style={{ margin: 'auto 0' }}><VscGitPullRequestNewChanges size={16} /></span>&nbsp;Request Invoice
+                      </button>}
+                    </div>
+                    </div>
+                    <div className="col-6"><div className={Styles.ShipBut}>
+                      {OrderData.Tracking__c ? (
+                        <button className="py-1 d-flex justify-content-center" onClick={() => setShowTracking(!showTracking)}>
+                          <span style={{ margin: 'auto 0' }} >{showTracking ? <RxEyeOpen size={16} style={{ transition: 'all 500s linear' }} /> : <TbEyeClosed size={16} style={{ transition: 'all 250s linear' }} />}</span>&nbsp;Tracking Status
+                        </button>
+                      ) : <button className="py-1 d-flex justify-content-center" onClick={() => setConfirm("Tracking Status")}>
+                        <span style={{ margin: 'auto 0' }}><VscGitPullRequestNewChanges size={16} /></span>&nbsp;Request Tracking
+                      </button>}
+                    </div>
+                    </div>
+                    <div className={Styles.ShipBut}>
+                      <button className="dropdown dropdown-toggle border px-2.5 py-1 leading-tight d-flex justify-content-center align-items-center" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div className="d-flex justify-content-center" role="button"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false">
+                          <MdOutlineDownload size={16} className="m-auto" />&nbsp;
+                          <small>Download Order Summary</small>
+                        </div>
+                        <ul className="dropdown-menu">
+                          <li>
+                            <div className="dropdown-item rounded topNav_nameText__Jdtjp hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center" onClick={() => generatePdfServerSide()}>&nbsp;Pdf</div>
+                          </li>
+                          <li>
+                            <div className="dropdown-item rounded topNav_nameText__Jdtjp hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center" onClick={() => generateXLSX(OrderData)}>&nbsp;XLSX</div>
+                          </li>
+                        </ul>
+                      </button>
+                    </div>
+                  </div>
+                  <div className={Styles.ShippControl}>
+                    <h2>Need Help?</h2>
+                    <div className={Styles.ShipAdress}>
+                      <div className=" pt-2 pb-2" style={{ cursor: 'pointer' }} onClick={() => { setHelpId("0123b0000007zc8AAA") }}>
+                        <div className="d-flex align-items-center" style={helpId == "0123b0000007zc8AAA" ? { color: '#0d6efd' } : {}}>
+                          <span style={{ fontSize: '25px' }}>&bull;</span>
+                          <div className="d-flex ml-2"><OrderStatusIcon fill={helpId == "0123b0000007zc8AAA" ? "#0d6efd" : "black"} />&nbsp;Order Status</div>
+                        </div>
+                        {helpId == "0123b0000007zc8AAA" &&
+                          <div className={Styles.SupportHolder}>
+                            <p onClick={() => { supportHandler("Request Status Updates") }} style={reason == "Request Status Updates" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Request Status Updates</p>
+                            <p onClick={() => { supportHandler("Request Invoice") }} style={reason == "Request Invoice" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Request Invoice</p>
+                            <p onClick={() => { supportHandler("Request Tracking number") }} style={reason == "Request Tracking number" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Request Tracking number</p>
+                          </div>}
 
-                  <div className={Styles.ShipBut} data-html2canvas-ignore>
-                    {invoices?.length > 0 ? (
-                      <button className="py-1 d-flex justify-content-center" onClick={() => downloadFiles(invoices)}>
-                        <span style={{ margin: 'auto 0' }}><MdOutlineDownload size={16} /></span>&nbsp;Download INVOICE
-                      </button>
-                    ) : <button className="py-1 d-flex justify-content-center" onClick={() => setConfirm("Invoice")}>
-                      <span style={{ margin: 'auto 0' }}><VscGitPullRequestNewChanges size={16} /></span>&nbsp;Request Invoice
-                    </button>}
+                      </div>
+                      <div className=" pt-2 pb-2" style={{ cursor: 'pointer' }} onClick={() => { setHelpId("0123b0000007z9pAAA") }}>
+                        <div className="d-flex align-items-center" style={helpId == "0123b0000007z9pAAA" ? { color: '#0d6efd' } : {}}>
+
+                          <span style={{ fontSize: '25px' }}>&bull;</span>
+                          <div className="d-flex ml-2"><CustomerServiceIcon fill={helpId == "0123b0000007z9pAAA" ? "#0d6efd" : "black"} />
+                            &nbsp;Customer Service</div>
+                        </div>
+                        {helpId == "0123b0000007z9pAAA" &&
+                          <div className={Styles.SupportHolder}>
+                            <p onClick={() => { supportHandler("Charges") }} style={reason == "Charges" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Charges</p>
+                            <p onClick={() => { supportHandler("Product Missing") }} style={reason == "Product Missing" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Product Missing</p>
+                            <p onClick={() => { supportHandler("Product Overage") }} style={reason == "Product Overage" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Product Overage</p>
+                            <p onClick={() => { supportHandler("Product Damage") }} style={reason == "Product Damage" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Product Damage</p>
+                          </div>}
+
+                      </div>
+                    </div>
                   </div>
-                  <div className={Styles.ShipBut} data-html2canvas-ignore>
-                    {OrderData.Tracking__c ? (
-                      <button className="py-1 d-flex justify-content-center" onClick={() => setShowTracking(!showTracking)}>
-                        <span style={{ margin: 'auto 0' }} >{showTracking ? <RxEyeOpen size={16} style={{ transition: 'all 500s linear' }} /> : <TbEyeClosed size={16} style={{ transition: 'all 250s linear' }} />}</span>&nbsp;Tracking Status
-                      </button>
-                    ) : <button className="py-1 d-flex justify-content-center" onClick={() => setConfirm("Tracking Status")}>
-                      <span style={{ margin: 'auto 0' }}><VscGitPullRequestNewChanges size={16} /></span>&nbsp;Request Tracking
-                    </button>}
-                  </div>
+
+
                 </div>
               </div>
             </div>

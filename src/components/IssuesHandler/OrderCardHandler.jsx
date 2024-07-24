@@ -8,7 +8,7 @@ import { BiCheck, BiLeftArrow, BiLock, BiRightArrow } from "react-icons/bi";
 import ModalPage from "../Modal UI";
 import { RxEyeOpen } from "react-icons/rx";
 
-const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedStatus, files = [], desc, errorListObj, manufacturerIdObj, accountIdObj, accountList, contactIdObj, setSubject, Actual_Amount__cObj }) => {
+const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedStatus, files = [], desc, errorListObj, manufacturerIdObj, accountIdObj, accountList, contactIdObj, setSubject, Actual_Amount__cObj,autoSelect=null }) => {
     const { setOrderConfirmed, orderConfirmed } = orderConfirmedStatus || null;
     const { accountId, setAccountId } = accountIdObj || null;
     const [productAllList, setProductAllList] = useState([])
@@ -66,6 +66,18 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
             }
         };
     }
+
+    useEffect(()=>{
+        if(autoSelect){
+            autoSelectOrderHandler();
+        }
+    },[autoSelect])
+
+    const autoSelectOrderHandler = ()=>{
+        setOrderId(autoSelect)
+    }
+
+
     const orderSelectHandler = (e) => {
         setOrderId(e.target.value)
         {
