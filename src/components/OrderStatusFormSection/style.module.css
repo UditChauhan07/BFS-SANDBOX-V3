@@ -135,6 +135,7 @@
   letter-spacing: 1.12px;
 }
 
+
 @media (max-width: 769px) {
   .container {
     width: 80%;
