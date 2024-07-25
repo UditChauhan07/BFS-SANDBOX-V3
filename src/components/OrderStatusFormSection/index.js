@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import styles from "./style.module.css";
-import { GetAuthData, getSupportFormRaw, postSupport, supportClear, supportDriveBeg, supportShare, uploadFileSupport } from "../../lib/store";
+import { GetAuthData, getOrderIdDetails, getSupportFormRaw, postSupport, supportClear, supportDriveBeg, supportShare, uploadFileSupport } from "../../lib/store";
 import { Link, useNavigate } from "react-router-dom";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { OrderStatusSchema } from "../../validation schema/OrderStatusValidation";
 import TextError from "../../validation schema/TextError";
 import Select from "react-select";
 import { BiUpload } from "react-icons/bi";
-import Loading from "../Loading";
 import ModalPage from "../Modal UI";
 
 const OrderStatusFormSection = ({ setSubmitLoad }) => {
@@ -17,6 +16,7 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
   const [supportTicketData, setTicket] = useState();
   const [activeBtn, setActive] = useState(false);
   const [confirm, setConfirm] = useState(false);
+  const [orderDetails,setOrderDetail]=useState();
 
   useEffect(() => {
     let data = supportDriveBeg();
@@ -31,6 +31,14 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
           .then((raw) => {
             setPrioritiesList(raw.Priority);
             setContactList(raw.ContactList);
+            if(data.orderStatusForm.opportunityId){
+              getOrderIdDetails({rawData:{key: user.x_access_token,id:data.orderStatusForm.opportunityId}}).then((orderDetails)=>{
+                setOrderDetail(orderDetails);
+                console.log({orderDetails});
+              }).catch((orderErr)=>{
+                console.log({orderErr});
+              })
+            }
           })
           .catch((error) => {
             console.error({ error });
@@ -149,6 +157,27 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
       />
     );
   };
+  if(supportTicketData?.orderStatusForm?.opportunityId){
+    return(<section>
+      <div>
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Product Code</th>
+                <th>Product Price</th>
+                <th>Product Qty</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div>
+
+        </div>
+      </div>
+    </section>)
+  }else{
   return (
     <>
       <ModalPage
@@ -231,5 +260,6 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
       </Formik>
     </>
   );
+}
 };
 export default OrderStatusFormSection;

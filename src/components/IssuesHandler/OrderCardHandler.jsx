@@ -75,103 +75,104 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
 
     const autoSelectOrderHandler = (value) => {
         setOrderId(value)
-        {
-            let accountItemID = null;
-            orders.map((item) => {
-                if (value == item.Id) {
-                    if (reason == "Product Overage") {
-                        let opcs = []
-                        item.OpportunityLineItems?.records?.map((e) => {
-                            opcs.push(e.Product2Id)
-                        })
-                        GetAuthData().then((user) => {
-                            let rawData = {
-                                key: user?.x_access_token,
-                                Sales_Rep__c: user.Sales_Rep__c,
-                                Manufacturer: item.ManufacturerId__c,
-                                AccountId__c: item.AccountId,
-                            }
-                            setProductList([])
-                            setShowProductList(false)
-                            getProductList({ rawData }).then((productRes) => {
-                                let productCode = "";
-                                let temp = []
-                                productRes?.data?.records?.map((product, index) => {
-                                    productCode += `'${product?.ProductCode}'`
-                                    if (productRes?.data?.records?.length - 1 != index) productCode += ', ';
-                                    if (!opcs.includes(product.Id)) {
-                                        let pDiscount = 0;
-                                        let listPrice = Number(product.usdRetail__c.replace('$', '').replace(',', ''));
-                                        if (product.Category__c === "TESTER") {
-                                            pDiscount = productRes?.discount?.testerMargin || 0
-                                        } else if (product.Category__c === "Samples") {
-                                            pDiscount = productRes?.discount?.sample || 0
-                                        } else {
-                                            pDiscount = productRes?.discount?.margin || 0
-                                        }
-                                        let salesPrice = (+listPrice - (pDiscount / 100) * +listPrice).toFixed(2)
-                                        temp.push({
-                                            Id: index + 1,
-                                            Name: product.Name,
-                                            Product2Id: product.Id,
-                                            ProductCode: product.ProductCode,
-                                            TotalPrice: salesPrice
-                                        })
-                                    }
-                                })
-                                // setProductList(temp)
-                                sortArrayHandler(temp, g => g.Name)
-                                setProductAllList(temp)
-                                let data = ShareDrive();
-                                if (!data) {
-                                    data = {};
-                                }
-                                getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
-                                    if (res) {
-                                        if (data[item.ManufacturerId__c]) {
-                                            data[item.ManufacturerId__c] = { ...data[item.ManufacturerId__c], ...res }
-                                        } else {
-                                            data[item.ManufacturerId__c] = res
-                                        }
-                                        ShareDrive(data)
-                                        setProductImage({ isLoaded: true, images: res });
+        let accountItemID = null;
+        orders.map((item) => {
+            if (value == item.Id) {
+                if (reason == "Product Overage") {
+                    let opcs = []
+                    item.OpportunityLineItems?.records?.map((e) => {
+                        opcs.push(e.Product2Id)
+                    })
+                    GetAuthData().then((user) => {
+                        let rawData = {
+                            key: user?.x_access_token,
+                            Sales_Rep__c: user.Sales_Rep__c,
+                            Manufacturer: item.ManufacturerId__c,
+                            AccountId__c: item.AccountId,
+                        }
+                        setProductList([])
+                        setShowProductList(false)
+                        getProductList({ rawData }).then((productRes) => {
+                            let productCode = "";
+                            let temp = []
+                            productRes?.data?.records?.map((product, index) => {
+                                productCode += `'${product?.ProductCode}'`
+                                if (productRes?.data?.records?.length - 1 != index) productCode += ', ';
+                                if (!opcs.includes(product.Id)) {
+                                    let pDiscount = 0;
+                                    let listPrice = Number(product.usdRetail__c.replace('$', '').replace(',', ''));
+                                    if (product.Category__c === "TESTER") {
+                                        pDiscount = productRes?.discount?.testerMargin || 0
+                                    } else if (product.Category__c === "Samples") {
+                                        pDiscount = productRes?.discount?.sample || 0
                                     } else {
-                                        setProductImage({ isLoaded: true, images: {} });
+                                        pDiscount = productRes?.discount?.margin || 0
                                     }
-                                }).catch((err) => {
-                                    console.log({ err });
-                                })
-                            }).catch((productErr) => {
-                                console.log({ productErr });
+                                    let salesPrice = (+listPrice - (pDiscount / 100) * +listPrice).toFixed(2)
+                                    temp.push({
+                                        Id: index + 1,
+                                        Name: product.Name,
+                                        Product2Id: product.Id,
+                                        ProductCode: product.ProductCode,
+                                        TotalPrice: salesPrice
+                                    })
+                                }
                             })
-                        }).catch((err) => {
-                            console.log({ err });
+                            // setProductList(temp)
+                            sortArrayHandler(temp, g => g.Name)
+                            setProductAllList(temp)
+                            let data = ShareDrive();
+                            if (!data) {
+                                data = {};
+                            }
+                            getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
+                                if (res) {
+                                    if (data[item.ManufacturerId__c]) {
+                                        data[item.ManufacturerId__c] = { ...data[item.ManufacturerId__c], ...res }
+                                    } else {
+                                        data[item.ManufacturerId__c] = res
+                                    }
+                                    ShareDrive(data)
+                                    setProductImage({ isLoaded: true, images: res });
+                                } else {
+                                    setProductImage({ isLoaded: true, images: {} });
+                                }
+                            }).catch((err) => {
+                                console.log({ err });
+                            })
+                        }).catch((productErr) => {
+                            console.log({ productErr });
                         })
-                    }
-                    getOrderDetails({ order: item })
-                    setManufacturerId(item.ManufacturerId__c)
-                    setAccountId(item.AccountId)
-                    accountItemID = item.AccountId
-                    setActual_Amount__c(item.Amount)
+                    }).catch((err) => {
+                        console.log({ err });
+                    })
                 }
-            })
-            setSearchPO(null);
-            let inputValue = document.getElementById("poSearchInput");
-            if (inputValue) {
-                inputValue.value = null;
+                getOrderDetails({ order: item })
+                setManufacturerId(item.ManufacturerId__c)
+                setAccountId(item.AccountId)
+                accountItemID = item.AccountId
+                setActual_Amount__c(item.Amount)
             }
-            let contactList = [];
-            accountList.map(element => (
-                element.Id == accountItemID &&
-                element.contact.map((con) => {
-                    {
-                        contactList.push({ label: con.Name, value: con.Id })
-                    }
-                })
-            ))
-            setContacts(contactList)
+        })
+        setSearchPO(null);
+        let inputValue = document.getElementById("poSearchInput");
+        if (inputValue) {
+            inputValue.value = null;
         }
     }
+
+    useEffect(() => {
+        let contactList = [];
+        accountList.map(element => (
+            element.Id == accountId &&
+            element.contact.map((con) => {
+                {
+                    contactList.push({ label: con.Name, value: con.Id })
+                }
+            })
+        ))
+        setContacts(contactList)
+    }, [accountId,accountList])
 
 
     useEffect(() => { }, [searchPo, errorProductCount, productImage])
