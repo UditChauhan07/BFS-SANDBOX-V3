@@ -1,6 +1,5 @@
 import { useSearchParams } from "react-router-dom";
 import FullQuearyDetail from "../components/CustomerSupportPage/FullQuearyDetail";
-import Layout from "../components/Layout/Layout";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { GetAuthData, getSupportDetails } from "../lib/store";
