@@ -47,7 +47,8 @@
     font-weight: 400;
   }
 .productDetailsHolder {
-  width: 80%;
+  width: 78%;
+  margin-left: 3px;
 }
 .borderBottom {
   background: #f9fafc;
@@ -98,9 +99,25 @@
 .imgHolder {
   width: 100px;
   height: 75px;
+  max-width: 19%;
 }
 .imgHolder img {
   width: 100px;
   height: 75px;
   object-fit: contain;
+}
+@media (max-width: 2560.98px) {
+    .productDetailsHolder{
+        width: 86%;
+    }
+}
+@media (max-width: 1827.98px) {
+    .productDetailsHolder{
+        width: 83%;
+    }
+}
+@media (max-width: 1490.98px) {
+    .productDetailsHolder{
+        width: 80%;
+    }
 }

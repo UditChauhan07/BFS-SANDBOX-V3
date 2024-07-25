@@ -36,7 +36,6 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
             if (data.orderStatusForm.opportunityId) {
               getOrderIdDetails({ rawData: { key: user.x_access_token, id: data.orderStatusForm.opportunityId } }).then((orderDetails) => {
                 setOrderDetail(orderDetails);
-                console.log({ orderDetails });
               }).catch((orderErr) => {
                 console.log({ orderErr });
               })
@@ -159,6 +158,9 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
       />
     );
   };
+  const formentAcmount =(amount)=>{
+    return `${Number(amount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
+  }
   if (supportTicketData?.orderStatusForm?.opportunityId) {
     if (!orderDetails?.Id) {
       return <Loading />
@@ -190,7 +192,7 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
       />
       <Formik initialValues={initialValues} validationSchema={OrderStatusSchema} onSubmit={(values) => { setConfirm(values) }}>
         <Form>
-          <h2 className={stylesV2.TitleHolder}><b>Order Po:</b> {orderDetails.PO_Number__c} {orderDetails.Order_Number__c && <>({orderDetails.Order_Number__c})</>}</h2>
+          <h2 className={stylesV2.TitleHolder}><b>Order Po</b> {orderDetails.PO_Number__c} {orderDetails.Order_Number__c && <>({orderDetails.Order_Number__c})</>} <span style={{float:'right',fontWeight:'bold'}}>Support For <p style={{margin:0,fontWeight:'initial'}}>{supportTicketData?.orderStatusForm?.reason}</p></span></h2>
           <p className={stylesV2.titleSubHolder}>{DateConvert(orderDetails.CreatedDate, true)}</p>
           <div className={`${stylesV2.dFlex} ${stylesV2.spaceBetween}`}>
             <div className={stylesV2.itemsHolder}>
@@ -205,8 +207,8 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
                       <div className={stylesV2.productDetailsHolder}>
                         <p className={stylesV2.productTitleHolder}>{item.Name.split(orderDetails.Name)}&nbsp;<span className={stylesV2.contentHolder}>({item.ProductCode})</span></p>
                         <div className={`${stylesV2.dFlex} ${stylesV2.spaceEnd} mt-2`}>
-                          <p className={`${stylesV2.productTitleHolder} ml-4`}>{item.Quantity}x{item.UnitPrice}</p>
-                          <p className={`${stylesV2.productTitleHolder} ml-4`}>{item.TotalPrice}</p>
+                          <p className={`${stylesV2.productTitleHolder} ml-4`}><small style={{fontSize:'9px'}}>qty</small> {item.Quantity} x {formentAcmount(item.UnitPrice)}</p>
+                          <p className={`${stylesV2.productTitleHolder} ml-4`}><small style={{fontSize:'9px'}}>pirce</small> {formentAcmount(item.TotalPrice)}</p>
                         </div>
                       </div>
                     </div>
@@ -215,7 +217,7 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
               </div>
               <div className={`${stylesV2.detailsCardTitleHolder}`}>
                 <b>Order Summary</b>
-                <p className={`${stylesV2.dFlex} ${stylesV2.spaceBetween} mt-2 mb-1`}><span>Total</span> <span>{orderDetails.Amount}</span></p>
+                <p className={`${stylesV2.dFlex} ${stylesV2.spaceBetween} mt-2 mb-1`}><span>Total</span> <span>{formentAcmount(orderDetails.Amount)}</span></p>
               </div>
             </div>
             <div className={stylesV2.orderDetailsHolder}>
