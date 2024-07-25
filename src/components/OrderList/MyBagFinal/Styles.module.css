@@ -303,6 +303,14 @@
   background-color: transparent;
 }
 
+.dFlex{
+  display: flex;
+  flex-wrap: wrap;
+}
+.dFlex > div{
+  width: 50%;
+}
+
 .ShipAdress2 label {
   color: #000;
   font-family: Arial, Helvetica, sans-serif;
@@ -351,7 +359,12 @@
   letter-spacing: 1.12px;
   border: 0;
   padding: 0;
-  margin: 0 auto 0 3rem;
+  margin: 0 auto 0 1.5rem;
+}
+.SupportHolder p .supportLinkHolder{
+  margin-left: 10px;
+  color: #000;
+  text-decoration: underline !important;
 }
 .ShipBut button,
 .btnHolder {
@@ -380,12 +393,17 @@
   .scrollP {
     padding: 10px 5px;
   }
-
+  
   .Mainbox1M {
     gap: 15px;
   }
   .ShipBut button,
   .btnHolder {
     font-size: 11px;
+  }
+}
+@media (max-width: 1025px) {
+  .dFlex > div{
+    width: 100%;
   }
 }

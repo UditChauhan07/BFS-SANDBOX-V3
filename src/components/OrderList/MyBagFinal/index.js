@@ -3,8 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Styles from "./Styles.module.css";
 import axios from "axios";
 import Loading from "../../Loading";
-import { useNavigate } from "react-router-dom";
-import { DestoryAuth, ShareDrive, getOrderDetailsBasedId, getOrderDetailsInvoice, getProductImageAll, originAPi, supportShare } from "../../../lib/store";
+import { Link, useNavigate } from "react-router-dom";
+import { DestoryAuth, ShareDrive, getOrderDetailsInvoice, getProductImageAll, originAPi, supportShare } from "../../../lib/store";
 import { MdOutlineDownload } from "react-icons/md";
 import LoaderV2 from "../../loader/v2";
 import ProductDetails from "../../../pages/productDetails";
@@ -22,7 +22,8 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
   const navigate = useNavigate();
   const [confirm, setConfirm] = useState(false);
   const [helpId, setHelpId] = useState();
-  const [reason, setReason] = useState()
+  const [reason, setReason] = useState();
+  const [restrict, setRestrict] = useState();
 
   const OrderId = JSON.parse(localStorage.getItem("OpportunityId"));
   const Key = JSON.parse(localStorage.getItem("Api Data"));
@@ -32,6 +33,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
   const [productImage, setProductImage] = useState({ isLoaded: false, images: {} });
   const [productDetailId, setProductDetailId] = useState(null)
   const [invoices, setInvoice] = useState([]);
+  const [oldSupport, setOldSupport] = useState({});
   useEffect(() => {
     // let rawData = {key:Key.data.access_token,id:OrderId}
     // getOrderDetailsBasedId({rawData}).then((res)=>{
@@ -111,6 +113,19 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
         console.log({ err });
       })
     }
+    if (response.data.data?.support?.length) {
+      let cases = {}
+      response.data.data?.support.map((support) => {
+        if (!cases[support.RecordTypeId]) {
+          cases[support.RecordTypeId] = {}
+        }
+        if (!cases[support.RecordTypeId][support.Reason]) {
+          cases[support.RecordTypeId][support.Reason] = {}
+        }
+        cases[support.RecordTypeId][support.Reason] = support
+      })
+      setOldSupport(cases)
+    }
     setOrderData(response.data.data);
     setOrderDetail(response.data.data)
     setIsLoading(true);
@@ -161,6 +176,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
           salesRepId: null,
           sendEmail: false,
         },
+        order:OrderData
       };
       supportShare(ticket)
         .then((response) => {
@@ -180,14 +196,55 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
     if (helpId == "0123b0000007zc8AAA") {
       invoiceHandler(value)
     } else if (helpId == "0123b0000007z9pAAA") {
-      navigate("/customerService", { state: { Reason: value,OrderId:OrderData.Id,SalesRepId:OrderData.OwnerId,PONumber:OrderData.PO_Number__c } })
+      navigate("/customerService", { state: { Reason: value, OrderId: OrderData.Id, SalesRepId: OrderData.OwnerId, PONumber: OrderData.PO_Number__c } })
     } else {
       alert("do nothing")
     }
   }
 
+  const SupportTransporter = ({ Type, Reason }) => {
+    if (oldSupport?.[Type]?.[Reason]?.Id) {
+      return (<Link to={"/CustomerSupportDetails?id=" + oldSupport[Type][Reason].Id} className={Styles.supportLinkHolder}>{oldSupport[Type][Reason]?.CaseNumber}</Link>)
+    } else {
+      return null;
+    }
+  }
+
+  const ReasonCardHandler = ({ reasonType }) => {
+    if (reasonType) {
+      if (!oldSupport?.[helpId]?.[reasonType]?.Id) {
+        return (<p onClick={() => { supportHandler(reasonType) }} style={reason == reasonType ? { color: '#0d6efd' } : {}}>&bull;&nbsp;{reasonType}</p>)
+      } else {
+        return (<p onClick={() => setRestrict(reasonType)} style={reason == reasonType ? { color: '#0d6efd' } : {}}>&bull;&nbsp;{reasonType}<SupportTransporter Type={helpId} Reason={reasonType} /></p>)
+      }
+    } else {
+      return null;
+    }
+  }
+
   return (
     <div>
+      <ModalPage
+        open={restrict || false}
+        content={
+          <div className="d-flex flex-column gap-3">
+            <h2 style={{ textDecoration: 'underline' }}>
+              Warning!
+            </h2>
+            <p>
+              You can't create Support Request for this Order. <br/>Please contact your Sales Representative for further assistance.
+            </p>
+            <div className="d-flex justify-content-around ">
+              <button className={Styles.btnHolder} onClick={() => setRestrict()} style={{width:'max-content',padding:'5px 10px'}}>
+                I Understand
+              </button>
+            </div>
+          </div>
+        }
+        onClose={() => {
+          setRestrict()
+        }}
+      />
       <ModalPage
         open={confirm || false}
         content={
@@ -418,7 +475,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
                   </div>
                   <div className={Styles.ShippControl}>
                     <h2>Need Help?</h2>
-                    <div className={Styles.ShipAdress}>
+                    <div className={`${Styles.ShipAdress} ${Styles.dFlex}`}>
                       <div className=" pt-2 pb-2" style={{ cursor: 'pointer' }} onClick={() => { setHelpId("0123b0000007zc8AAA") }}>
                         <div className="d-flex align-items-center" style={helpId == "0123b0000007zc8AAA" ? { color: '#0d6efd' } : {}}>
                           <span style={{ fontSize: '25px' }}>&bull;</span>
@@ -426,9 +483,9 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
                         </div>
                         {helpId == "0123b0000007zc8AAA" &&
                           <div className={Styles.SupportHolder}>
-                            <p onClick={() => { supportHandler("Request Status Updates") }} style={reason == "Request Status Updates" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Request Status Updates</p>
-                            <p onClick={() => { supportHandler("Request Invoice") }} style={reason == "Request Invoice" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Request Invoice</p>
-                            <p onClick={() => { supportHandler("Request Tracking number") }} style={reason == "Request Tracking number" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Request Tracking number</p>
+                            <ReasonCardHandler reasonType={"Request Status Updates"} />
+                            <ReasonCardHandler reasonType={"Request Invoice"} />
+                            <ReasonCardHandler reasonType={"Request Tracking number"} />
                           </div>}
 
                       </div>
@@ -441,10 +498,10 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
                         </div>
                         {helpId == "0123b0000007z9pAAA" &&
                           <div className={Styles.SupportHolder}>
-                            <p onClick={() => { supportHandler("Charges") }} style={reason == "Charges" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Charges</p>
-                            <p onClick={() => { supportHandler("Product Missing") }} style={reason == "Product Missing" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Product Missing</p>
-                            <p onClick={() => { supportHandler("Product Overage") }} style={reason == "Product Overage" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Product Overage</p>
-                            <p onClick={() => { supportHandler("Product Damage") }} style={reason == "Product Damage" ? { color: '#0d6efd' } : {}}>&bull;&nbsp;Product Damage</p>
+                            <ReasonCardHandler reasonType={"Charges"} />
+                            <ReasonCardHandler reasonType={"Product Missing"} />
+                            <ReasonCardHandler reasonType={"Product Overage"} />
+                            <ReasonCardHandler reasonType={"Product Damage"} />
                           </div>}
 
                       </div>

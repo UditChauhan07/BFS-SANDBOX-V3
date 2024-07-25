@@ -69,16 +69,16 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
 
     useEffect(() => {
         if (autoSelect) {
-            autoSelectOrderHandler();
+            autoSelectOrderHandler(autoSelect);
         }
     }, [autoSelect])
 
-    const autoSelectOrderHandler = () => {
-        setOrderId(autoSelect)
+    const autoSelectOrderHandler = (value) => {
+        setOrderId(value)
         {
             let accountItemID = null;
             orders.map((item) => {
-                if (autoSelect == item.Id) {
+                if (value == item.Id) {
                     if (reason == "Product Overage") {
                         let opcs = []
                         item.OpportunityLineItems?.records?.map((e) => {
@@ -174,105 +174,6 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
     }
 
 
-    const orderSelectHandler = (e) => {
-        setOrderId(e.target.value)
-        {
-            let accountItemID = null;
-            orders.map((item) => {
-                if (e.target.value == item.Id) {
-                    if (reason == "Product Overage") {
-                        let opcs = []
-                        item.OpportunityLineItems?.records?.map((e) => {
-                            opcs.push(e.Product2Id)
-                        })
-                        GetAuthData().then((user) => {
-                            let rawData = {
-                                key: user?.x_access_token,
-                                Sales_Rep__c: user.Sales_Rep__c,
-                                Manufacturer: item.ManufacturerId__c,
-                                AccountId__c: item.AccountId,
-                            }
-                            setProductList([])
-                            setShowProductList(false)
-                            getProductList({ rawData }).then((productRes) => {
-                                let productCode = "";
-                                let temp = []
-                                productRes?.data?.records?.map((product, index) => {
-                                    productCode += `'${product?.ProductCode}'`
-                                    if (productRes?.data?.records?.length - 1 != index) productCode += ', ';
-                                    if (!opcs.includes(product.Id)) {
-                                        let pDiscount = 0;
-                                        let listPrice = Number(product.usdRetail__c.replace('$', '').replace(',', ''));
-                                        if (product.Category__c === "TESTER") {
-                                            pDiscount = productRes?.discount?.testerMargin || 0
-                                        } else if (product.Category__c === "Samples") {
-                                            pDiscount = productRes?.discount?.sample || 0
-                                        } else {
-                                            pDiscount = productRes?.discount?.margin || 0
-                                        }
-                                        let salesPrice = (+listPrice - (pDiscount / 100) * +listPrice).toFixed(2)
-                                        temp.push({
-                                            Id: index + 1,
-                                            Name: product.Name,
-                                            Product2Id: product.Id,
-                                            ProductCode: product.ProductCode,
-                                            TotalPrice: salesPrice
-                                        })
-                                    }
-                                })
-                                // setProductList(temp)
-                                sortArrayHandler(temp, g => g.Name)
-                                setProductAllList(temp)
-                                let data = ShareDrive();
-                                if (!data) {
-                                    data = {};
-                                }
-                                getProductImageAll({ rawData: { codes: productCode } }).then((res) => {
-                                    if (res) {
-                                        if (data[item.ManufacturerId__c]) {
-                                            data[item.ManufacturerId__c] = { ...data[item.ManufacturerId__c], ...res }
-                                        } else {
-                                            data[item.ManufacturerId__c] = res
-                                        }
-                                        ShareDrive(data)
-                                        setProductImage({ isLoaded: true, images: res });
-                                    } else {
-                                        setProductImage({ isLoaded: true, images: {} });
-                                    }
-                                }).catch((err) => {
-                                    console.log({ err });
-                                })
-                            }).catch((productErr) => {
-                                console.log({ productErr });
-                            })
-                        }).catch((err) => {
-                            console.log({ err });
-                        })
-                    }
-                    getOrderDetails({ order: item })
-                    setManufacturerId(item.ManufacturerId__c)
-                    setAccountId(item.AccountId)
-                    accountItemID = item.AccountId
-                    setActual_Amount__c(item.Amount)
-                }
-            })
-            setSearchPO(null);
-            let inputValue = document.getElementById("poSearchInput");
-            if (inputValue) {
-                inputValue.value = null;
-            }
-            let contactList = [];
-            accountList.map(element => (
-                element.Id == accountItemID &&
-                element.contact.map((con) => {
-                    {
-                        contactList.push({ label: con.Name, value: con.Id })
-                    }
-                })
-            ))
-            setContacts(contactList)
-        }
-    }
     useEffect(() => { }, [searchPo, errorProductCount, productImage])
 
     const resetForm = () => {
@@ -482,7 +383,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                 return (
                                     <div className={` ${Styles.orderStatement} cardHover ${orderId == item.Id ? Styles1.selOrder : ''}`} style={{ paddingBottom: '15px' }} key={index}>
                                         <div style={{ position: 'relative' }} className={(index % 2 == 0) ? Styles1.cardEnterRight : Styles1.cardEnterLeft}>
-                                            <input type="radio" id={`order${item.Id}`} value={item.Id} onClick={(e) => { orderSelectHandler(e) }} name="order" className={Styles1.inputHolder} checked={item.Id == orderId} />
+                                            <input type="radio" id={`order${item.Id}`} value={item.Id} onClick={(e) => { autoSelectOrderHandler(e.target.value) }} name="order" className={Styles1.inputHolder} checked={item.Id == orderId} />
                                             <label for={`order${item.Id}`} title={!orderId ? "click to select" : null} className={Styles.poNumber} style={item.Id == orderId ? { background: 'linear-gradient(90deg, #FFFFFF 0%,#000000 100%)' } : {}}>
                                                 <div className={Styles1.dFlex}>
                                                     <div className={Styles.poNumb1}>
@@ -614,10 +515,11 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                             <p className={Styles1.detailsTitleHolder}>Notes</p>
                                                             <p className={Styles1.detailsDescHolder}>{item.Description}</p>
                                                         </div>}
-                                                        <div className={Styles1.Margitotal}>
-                                                            <p className={Styles1.detailsTitleHolder}>Shipping Address</p>
-                                                            <p className={Styles1.detailsDescHolder}>{item.Shipping_Street__c}{item.Shipping_City__c && <>,<br /> {item.Shipping_City__c}</>}{item.Shipping_State__c && `, ${item.Shipping_State__c}`}{item.Shipping_Country__c && <>,<br /> {item.Shipping_Country__c}</>}{item.Shipping_Zip__c && `, ${item.Shipping_Zip__c}`}</p>
-                                                        </div>
+                                                        {(item.Shipping_Street__c || item.Shipping_City__c || item.Shipping_State__c || item.Shipping_Country__c || item.Shipping_Zip__c) &&
+                                                            <div className={Styles1.Margitotal}>
+                                                                <p className={Styles1.detailsTitleHolder}>Shipping Address</p>
+                                                                <p className={Styles1.detailsDescHolder}>{item.Shipping_Street__c}{item.Shipping_City__c && <>,<br /> {item.Shipping_City__c}</>}{item.Shipping_State__c && `, ${item.Shipping_State__c}`}{item.Shipping_Country__c && <>,<br /> {item.Shipping_Country__c}</>}{item.Shipping_Zip__c && `, ${item.Shipping_Zip__c}`}</p>
+                                                            </div>}
                                                         {item.Order_Number__c && <div className={Styles1.Margitotal}>
                                                             <p className={Styles1.detailsTitleHolder}>Order Number</p>
                                                             <p className={Styles1.detailsDescHolder}>{item.Order_Number__c}</p>
