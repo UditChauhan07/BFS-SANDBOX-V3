@@ -1,0 +1,106 @@
+.TitleHolder {
+  color: #000;
+  text-align: left;
+  font-family: Montserrat;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  margin-top: 25px;
+}
+.titleSubHolder {
+  color: #000;
+  font-family: "Montserrat";
+  font-size: 12px;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 1.4px;
+  word-wrap: break-word;
+}
+.productTitleHolder {
+  color: #000;
+  font-family: "Montserrat-500";
+  font-size: 16px;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 1.4px;
+  word-wrap: break-word;
+  text-transform: capitalize;
+  margin-bottom: 0;
+}
+.detailsCardTitleHolder {
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 1.12px;
+  margin: 0;
+  padding: 5px;
+}
+.detailsCardTitleHolder b {
+  font-weight: 700;
+}
+.detailsCardTitleHolder p {
+    font-weight: 400;
+  }
+.productDetailsHolder {
+  width: 80%;
+}
+.borderBottom {
+  background: #f9fafc;
+  padding: 5px 2px;
+  border-bottom: 1px solid #ccc;
+}
+.contentHolder {
+  color: #000;
+  font-family: "Montserrat";
+  font-size: 14px;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 1.4px;
+  word-wrap: break-word;
+}
+.dFlex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.spaceBetween {
+  justify-content: space-between;
+}
+.spaceEnd {
+  justify-content: end;
+}
+.spaceAround{
+    justify-content: space-around;
+}
+.widthFull{
+    width: 100%;
+}
+.itemsHolder {
+  width: 63%;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+.itemHolder {
+  height: 400px;
+  overflow-y: scroll;
+  margin-top: 1rem;
+}
+.orderDetailsHolder {
+  width: 35%;
+  height: 100%;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+.imgHolder {
+  width: 100px;
+  height: 75px;
+}
+.imgHolder img {
+  width: 100px;
+  height: 75px;
+  object-fit: contain;
+}

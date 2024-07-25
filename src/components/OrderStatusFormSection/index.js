@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./style.module.css";
-import { GetAuthData, getOrderIdDetails, getSupportFormRaw, postSupport, supportClear, supportDriveBeg, supportShare, uploadFileSupport } from "../../lib/store";
+import stylesV2 from "./stylev2.module.css";
+import { DateConvert, GetAuthData, getOrderIdDetails, getSupportFormRaw, postSupport, supportClear, supportDriveBeg, supportShare, uploadFileSupport } from "../../lib/store";
 import { Link, useNavigate } from "react-router-dom";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { OrderStatusSchema } from "../../validation schema/OrderStatusValidation";
@@ -8,6 +9,7 @@ import TextError from "../../validation schema/TextError";
 import Select from "react-select";
 import { BiUpload } from "react-icons/bi";
 import ModalPage from "../Modal UI";
+import Loading from "../Loading";
 
 const OrderStatusFormSection = ({ setSubmitLoad }) => {
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
   const [supportTicketData, setTicket] = useState();
   const [activeBtn, setActive] = useState(false);
   const [confirm, setConfirm] = useState(false);
-  const [orderDetails,setOrderDetail]=useState();
+  const [orderDetails, setOrderDetail] = useState();
 
   useEffect(() => {
     let data = supportDriveBeg();
@@ -31,12 +33,12 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
           .then((raw) => {
             setPrioritiesList(raw.Priority);
             setContactList(raw.ContactList);
-            if(data.orderStatusForm.opportunityId){
-              getOrderIdDetails({rawData:{key: user.x_access_token,id:data.orderStatusForm.opportunityId}}).then((orderDetails)=>{
+            if (data.orderStatusForm.opportunityId) {
+              getOrderIdDetails({ rawData: { key: user.x_access_token, id: data.orderStatusForm.opportunityId } }).then((orderDetails) => {
                 setOrderDetail(orderDetails);
-                console.log({orderDetails});
-              }).catch((orderErr)=>{
-                console.log({orderErr});
+                console.log({ orderDetails });
+              }).catch((orderErr) => {
+                console.log({ orderErr });
               })
             }
           })
@@ -157,38 +159,20 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
       />
     );
   };
-  if(supportTicketData?.orderStatusForm?.opportunityId){
-    return(<section>
-      <div>
-        <div>
-          <table>
-            <thead>
-              <tr>
-                <th>Product Name</th>
-                <th>Product Code</th>
-                <th>Product Price</th>
-                <th>Product Qty</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-        <div>
-
-        </div>
-      </div>
-    </section>)
-  }else{
-  return (
-    <>
+  if (supportTicketData?.orderStatusForm?.opportunityId) {
+    if (!orderDetails?.Id) {
+      return <Loading />
+    }
+    return (<section>
       <ModalPage
         open={confirm || false}
         content={
           <div className="d-flex flex-column gap-3">
             <h2>
-              Confirm  
+              Confirm
             </h2>
             <p>
-              Are you sure you want to generate a ticket?<br/> This action cannot be undone.<br/> You will be redirected to the ticket page after the ticket is generated.
+              Are you sure you want to generate a ticket?<br /> This action cannot be undone.<br /> You will be redirected to the ticket page after the ticket is generated.
             </p>
             <div className="d-flex justify-content-around ">
               <button className={styles.btn} onClick={() => onSubmitHandler(confirm)}>
@@ -204,40 +188,141 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
           setConfirm(false);
         }}
       />
-
       <Formik initialValues={initialValues} validationSchema={OrderStatusSchema} onSubmit={(values) => { setConfirm(values) }}>
-
-        {(formProps) => (
-          <div className={styles.container}>
-            <Form className={styles.formContainer}>
-              <b className={styles.containerTitle}>{supportTicketData?.orderStatusForm?.reason}</b>
-              <label className={styles.labelHolder}>
-                Contact Name
-                <Field name="contact.value" className="contact" options={contactList.map((contact) => ({ label: contact.Name, value: contact.Id }))} component={SearchableSelect} />
-              </label>
-              <ErrorMessage component={TextError} name="contact" />
-
-              <label className={styles.labelHolder}>
-                Describe your issues
-                <Field component="textarea" placeholder="Description" rows={4} name="description" defaultValue={initialValues.description}></Field>
-              </label>
-              <ErrorMessage component={TextError} name="description" />
-              <div className={styles.attachHolder}>
-                <p className={styles.subTitle}>upload some attachments</p>
-                <label className={styles.attachLabel} for="attachement"><div><div className={styles.attachLabelDiv}><BiUpload /></div></div></label>
-                <input type="file" style={{ width: 0, height: 0 }} id="attachement" onChange={handleChange} multiple accept="image/*" />
-                <div className={styles.imgHolder}>
-                  {files.map((file, index) => (
-                    <div style={{ position: 'relative' }}>
-                      <span style={{ position: 'absolute', right: '5px', top: '-5px', color: '#000', zIndex: 1, cursor: 'pointer', fontSize: '18px' }} onClick={() => { fileRemoveHandler(index) }}>x</span>
-                      <a href={file?.preview} target="_blank" title="Click to Download">
-                        <img src={file?.preview} key={index} alt={file?.preview} />
-                      </a>
+        <Form>
+          <h2 className={stylesV2.TitleHolder}><b>Order Po:</b> {orderDetails.PO_Number__c} {orderDetails.Order_Number__c && <>({orderDetails.Order_Number__c})</>}</h2>
+          <p className={stylesV2.titleSubHolder}>{DateConvert(orderDetails.CreatedDate, true)}</p>
+          <div className={`${stylesV2.dFlex} ${stylesV2.spaceBetween}`}>
+            <div className={stylesV2.itemsHolder}>
+              <div className={stylesV2.detailsCardTitleHolder}>
+                <b className="mt-2">Order Item</b>
+                <div className={stylesV2.itemHolder}>
+                  {orderDetails.OpportunityLineItems.map((item) => (
+                    <div className={`${stylesV2.dFlex} ${stylesV2.borderBottom}`}>
+                      <div className={stylesV2.imgHolder}>
+                        <img src={item.ContentDownloadUrl ?? "https://b2b.beautyfashionsales.com/dummy.png"} alt="dummy" />
+                      </div>
+                      <div className={stylesV2.productDetailsHolder}>
+                        <p className={stylesV2.productTitleHolder}>{item.Name.split(orderDetails.Name)}&nbsp;<span className={stylesV2.contentHolder}>({item.ProductCode})</span></p>
+                        <div className={`${stylesV2.dFlex} ${stylesV2.spaceEnd} mt-2`}>
+                          <p className={`${stylesV2.productTitleHolder} ml-4`}>{item.Quantity}x{item.UnitPrice}</p>
+                          <p className={`${stylesV2.productTitleHolder} ml-4`}>{item.TotalPrice}</p>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
-              {/* <label className="mt-2">
+              <div className={`${stylesV2.detailsCardTitleHolder}`}>
+                <b>Order Summary</b>
+                <p className={`${stylesV2.dFlex} ${stylesV2.spaceBetween} mt-2 mb-1`}><span>Total</span> <span>{orderDetails.Amount}</span></p>
+              </div>
+            </div>
+            <div className={stylesV2.orderDetailsHolder}>
+              <div className={stylesV2.detailsCardTitleHolder}>
+                <b>Notes</b>
+                <p className="mb-2 mt-1">{orderDetails.Description ?? "NA"}</p>
+              </div>
+              <div className={stylesV2.detailsCardTitleHolder}>
+                <b>Store</b>
+                <p className="mb-2 mt-1">{orderDetails.Name}</p>
+              </div>
+              <div className={stylesV2.detailsCardTitleHolder}>
+                <b>Brand</b>
+                <p className="mb-2 mt-1">{orderDetails.ManufacturerName__c}</p>
+              </div>
+              <div className={stylesV2.detailsCardTitleHolder}>
+                <b>Shipping Address</b>
+                <p className="mb-2 mt-1">{orderDetails.Shipping_Street__c},<br />{orderDetails.Shipping_City__c},{orderDetails.Shipping_State__c}, {orderDetails.Shipping_Country__c}<br /> {orderDetails.Shipping_Zip__c}</p>
+              </div>
+              <div className={stylesV2.detailsCardTitleHolder}>
+                <b>Contact</b>
+                <p className="mb-2 mt-1"> <Field name="contact.value" className="contact" options={contactList.map((contact) => ({ label: contact.Name, value: contact.Id }))} component={SearchableSelect} />
+                  <p className="mt-1">
+                    <ErrorMessage component={TextError} name="contact" />
+                  </p>
+                </p>
+              </div>
+              <div className={stylesV2.detailsCardTitleHolder}>
+                <b>Description</b>
+                <p className="mb-2 mt-1"> <Field component="textarea" rows={6} style={{ width: '100%',background:'#f0f5f5' }} name="description" defaultValue={initialValues.description} />
+                <p className="mt-1">
+                  <ErrorMessage component={TextError} name="description" />
+                  </p>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className={`${stylesV2.dFlex} ${stylesV2.widthFull} justify-content-center align-items-center mt-4`}>
+            <Link to={"/orderStatus"} className={`${styles.btn} mr-2`}>
+              Cancel
+            </Link>
+            <input type="submit" className={`${styles.btn} ml-2`} value={"Submit"} disabled={activeBtn} />
+          </div>
+        </Form>
+      </Formik>
+    </section>)
+  } else {
+    return (
+      <>
+        <ModalPage
+          open={confirm || false}
+          content={
+            <div className="d-flex flex-column gap-3">
+              <h2>
+                Confirm
+              </h2>
+              <p>
+                Are you sure you want to generate a ticket?<br /> This action cannot be undone.<br /> You will be redirected to the ticket page after the ticket is generated.
+              </p>
+              <div className="d-flex justify-content-around ">
+                <button className={styles.btn} onClick={() => onSubmitHandler(confirm)}>
+                  Submit
+                </button>
+                <button className={styles.btn} onClick={() => setConfirm(false)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          }
+          onClose={() => {
+            setConfirm(false);
+          }}
+        />
+
+        <Formik initialValues={initialValues} validationSchema={OrderStatusSchema} onSubmit={(values) => { setConfirm(values) }}>
+
+          {(formProps) => (
+            <div className={styles.container}>
+              <Form className={styles.formContainer}>
+                <b className={styles.containerTitle}>{supportTicketData?.orderStatusForm?.reason}</b>
+                <label className={styles.labelHolder}>
+                  Contact Name
+                  <Field name="contact.value" className="contact" options={contactList.map((contact) => ({ label: contact.Name, value: contact.Id }))} component={SearchableSelect} />
+                </label>
+                <ErrorMessage component={TextError} name="contact" />
+
+                <label className={styles.labelHolder}>
+                  Describe your issues
+                  <Field component="textarea" placeholder="Description" rows={4} name="description" defaultValue={initialValues.description}></Field>
+                </label>
+                <ErrorMessage component={TextError} name="description" />
+                <div className={styles.attachHolder}>
+                  <p className={styles.subTitle}>upload some attachments</p>
+                  <label className={styles.attachLabel} for="attachement"><div><div className={styles.attachLabelDiv}><BiUpload /></div></div></label>
+                  <input type="file" style={{ width: 0, height: 0 }} id="attachement" onChange={handleChange} multiple accept="image/*" />
+                  <div className={styles.imgHolder}>
+                    {files.map((file, index) => (
+                      <div style={{ position: 'relative' }}>
+                        <span style={{ position: 'absolute', right: '5px', top: '-5px', color: '#000', zIndex: 1, cursor: 'pointer', fontSize: '18px' }} onClick={() => { fileRemoveHandler(index) }}>x</span>
+                        <a href={file?.preview} target="_blank" title="Click to Download">
+                          <img src={file?.preview} key={index} alt={file?.preview} />
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* <label className="mt-2">
               <input
                 type="checkbox"
                 checked={supportTicketData?.orderStatusForm?.sendEmail}
@@ -247,19 +332,19 @@ const OrderStatusFormSection = ({ setSubmitLoad }) => {
               />
               &nbsp;Send Updates via email
             </label> */}
-              <div className={styles.dFlex}>
-                {" "}
-                <Link to={"/orderStatus"} className={styles.btn}>
-                  Cancel
-                </Link>
-                <input type="submit" className={styles.btn} value={"Submit"} disabled={activeBtn} />
-              </div>
-            </Form>
-          </div>
-        )}
-      </Formik>
-    </>
-  );
-}
+                <div className={styles.dFlex}>
+                  {" "}
+                  <Link to={"/orderStatus"} className={styles.btn}>
+                    Cancel
+                  </Link>
+                  <input type="submit" className={styles.btn} value={"Submit"} disabled={activeBtn} />
+                </div>
+              </Form>
+            </div>
+          )}
+        </Formik>
+      </>
+    );
+  }
 };
 export default OrderStatusFormSection;
