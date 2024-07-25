@@ -126,6 +126,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
       })
       setOldSupport(cases)
     }
+    console.log({response});
     setOrderData(response.data.data);
     setOrderDetail(response.data.data)
     setIsLoading(true);
