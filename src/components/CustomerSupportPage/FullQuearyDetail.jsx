@@ -116,7 +116,7 @@ function FullQuearyDetail({ data, setRest }) {
                                                     <p className={Detail.Para2} dangerouslySetInnerHTML={{ __html: desc[1] }} /></> : <p className={Detail.Para2} dangerouslySetInnerHTML={{ __html: activity?.CommentBody }} />}
                                             </div>
                                             <div className={Detail.ActivityDate}>
-                                                <p>{DateConvert(activity.CreatedDate,true)} {formatAMPM(itemDate)}</p>
+                                                <p>{DateConvert(activity.CreatedDate, true)} {formatAMPM(itemDate)}</p>
                                             </div>
                                         </div>)
                                     })}
@@ -182,7 +182,11 @@ function FullQuearyDetail({ data, setRest }) {
                             </div>
                             {data.Associated_PO_Number__c && <div className={Detail.PONumber}>
                                 <h3>PO Number</h3>
-                                <p>#{data.Associated_PO_Number__c}</p>
+                                {data.Opportunity__c ?
+                                    <Link to={'/orderDetails'}>
+                                        <p onClick={() => localStorage.setItem("OpportunityId", JSON.stringify(data.Opportunity__c))} style={{textDecoration:'underline'}}>#{data.Associated_PO_Number__c}</p>
+                                    </Link> :
+                                    <p>#{data.Associated_PO_Number__c}</p>}
                             </div>}
                             <div className={Detail.RecordType}>
                                 <h3>Record Type</h3>

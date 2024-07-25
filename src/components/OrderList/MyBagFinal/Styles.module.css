@@ -364,6 +364,7 @@
 .SupportHolder p .supportLinkHolder{
   margin-left: 10px;
   color: #000;
+  text-decoration: underline !important;
 }
 .ShipBut button,
 .btnHolder {

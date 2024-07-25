@@ -5,9 +5,6 @@ import {
   DefaultSupportIcon,
   MarketingSupportIcon,
   OrderStatusIcon,
-  SupportStatusGreen,
-  SupportStatusRed,
-  SupportStatusYellow,
   UserChecked,
 } from "../../lib/svg";
 import { Link } from "react-router-dom";
@@ -47,7 +44,7 @@ function MySupportTicket({ data, PageSize, currentPage }) {
                         )}
                         <span className={Styles.Queary}>{item.RecordType?.Name ? item.RecordType?.Name : "No Record Type"} </span>&nbsp;for&nbsp;
                         <span className={Styles.Underline}>{item.Reason} </span>
-                        &nbsp;having PO<span className={Styles.PoNumberStatus}>#{item.Associated_PO_Number__c}</span>
+                        {item.Associated_PO_Number__c &&<>&nbsp;having PO&nbsp;<span className={Styles.PoNumberStatus}>#{item.Associated_PO_Number__c}</span></>}
                         &nbsp;<span className={Styles.CreatedInBold}>Created</span>&nbsp;on&nbsp;
                         <span className={Styles.QuearyRiseDate}>{`${date.getDate()} ${monthNames[date.getMonth()]}`}</span>
                       </p>
