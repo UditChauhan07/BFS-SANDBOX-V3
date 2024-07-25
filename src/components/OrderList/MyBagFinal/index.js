@@ -176,7 +176,6 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
           salesRepId: null,
           sendEmail: false,
         },
-        order:OrderData
       };
       supportShare(ticket)
         .then((response) => {
@@ -210,12 +209,12 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
     }
   }
 
-  const ReasonCardHandler = ({ reasonType }) => {
+  const ReasonCardHandler = ({ reasonType,label=null }) => {
     if (reasonType) {
       if (!oldSupport?.[helpId]?.[reasonType]?.Id) {
-        return (<p onClick={() => { supportHandler(reasonType) }} style={reason == reasonType ? { color: '#0d6efd' } : {}}>&bull;&nbsp;{reasonType}</p>)
+        return (<p onClick={() => { supportHandler(reasonType) }} style={reason == reasonType ? { color: '#0d6efd' } : {}}>&bull;&nbsp;{label??reasonType}</p>)
       } else {
-        return (<p onClick={() => setRestrict(reasonType)} style={reason == reasonType ? { color: '#0d6efd' } : {}}>&bull;&nbsp;{reasonType}<SupportTransporter Type={helpId} Reason={reasonType} /></p>)
+        return (<p onClick={() => setRestrict(reasonType)} style={reason == reasonType ? { color: '#0d6efd' } : {}}>&bull;&nbsp;{label??reasonType}<SupportTransporter Type={helpId} Reason={reasonType} /></p>)
       }
     } else {
       return null;
@@ -483,9 +482,9 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
                         </div>
                         {helpId == "0123b0000007zc8AAA" &&
                           <div className={Styles.SupportHolder}>
-                            <ReasonCardHandler reasonType={"Request Status Updates"} />
-                            <ReasonCardHandler reasonType={"Request Invoice"} />
-                            <ReasonCardHandler reasonType={"Request Tracking number"} />
+                            <ReasonCardHandler label={"Request Status Updates"} reasonType={"Status of Order"}/>
+                            <ReasonCardHandler label={"Request Invoice"} reasonType="Invoice"/>
+                            <ReasonCardHandler label={"Request Tracking number"} reasonType="Tracking Status"/>
                           </div>}
 
                       </div>
