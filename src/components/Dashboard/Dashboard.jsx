@@ -248,6 +248,7 @@ function Dashboard({ dashboardData }) {
         }
         getDashboardata({ user })
           .then((dashboard) => {
+            console.log({dashboard});
             let oldSalesAmount = dashboard?.oldSalesAmount || 0;
             let currentSalesAmount = dashboard.monthlySalesRepData?.[user.Sales_Rep__c]?.sale || 0
             let growth = parseInt(((currentSalesAmount - oldSalesAmount) / oldSalesAmount) * 100)
