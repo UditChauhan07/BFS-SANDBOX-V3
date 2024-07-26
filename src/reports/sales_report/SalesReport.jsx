@@ -148,44 +148,44 @@ const SalesReport = () => {
 
     const totals = {
       "Brand Name": "Total",
-      "Jan Orders": dataWithTotals.reduce((total, item) => total + (item.JanOrders || 0), 0),
-      "Jan Amount": dataWithTotals.reduce((total, item) => total + (item.JanAmount || 0), 0),
+      "Jan Orders": dataWithTotals.reduce((total, item) => total + (item["Jan Orders"] || 0), 0),
+      "Jan Amount": dataWithTotals.reduce((total, item) => total + (item["Jan Amount"] || 0), 0),
 
-      "Feb Orders": dataWithTotals.reduce((total, item) => total + (item.FebOrders || 0), 0),
-      "Feb Amount": dataWithTotals.reduce((total, item) => total + (item.FebAmount || 0), 0),
+      "Feb Orders": dataWithTotals.reduce((total, item) => total + (item["Feb Orders"] || 0), 0),
+      "Feb Amount": dataWithTotals.reduce((total, item) => total + (item["Feb Amount"] || 0), 0),
 
-      "Mar Orders": dataWithTotals.reduce((total, item) => total + (item.MarOrders || 0), 0),
-      "Mar Amount": dataWithTotals.reduce((total, item) => total + (item.MarAmount || 0), 0),
+      "Mar Orders": dataWithTotals.reduce((total, item) => total + (item['Mar Orders'] || 0), 0),
+      "Mar Amount": dataWithTotals.reduce((total, item) => total + (item['Mar Amount'] || 0), 0),
 
-      "Apr Orders": dataWithTotals.reduce((total, item) => total + (item.AprOrders || 0), 0),
-      "Apr Amount": dataWithTotals.reduce((total, item) => total + (item.AprAmount || 0), 0),
+      "Apr Orders": dataWithTotals.reduce((total, item) => total + (item['Apr Orders'] || 0), 0),
+      "Apr Amount": dataWithTotals.reduce((total, item) => total + (item['Apr Amount'] || 0), 0),
 
-      "May Orders": dataWithTotals.reduce((total, item) => total + (item.MayOrders || 0), 0),
-      "May Amount": dataWithTotals.reduce((total, item) => total + (item.MayAmount || 0), 0),
+      "May Orders": dataWithTotals.reduce((total, item) => total + (item['May Orders'] || 0), 0),
+      "May Amount": dataWithTotals.reduce((total, item) => total + (item['May Amount'] || 0), 0),
 
-      "Jun Orders": dataWithTotals.reduce((total, item) => total + (item.JunOrders || 0), 0),
-      "Jun Amount": dataWithTotals.reduce((total, item) => total + (item.JunAmount || 0), 0),
+      "Jun Orders": dataWithTotals.reduce((total, item) => total + (item['Jun Orders'] || 0), 0),
+      "Jun Amount": dataWithTotals.reduce((total, item) => total + (item['Jun Amount'] || 0), 0),
 
-      "Jul Orders": dataWithTotals.reduce((total, item) => total + (item.JulOrders || 0), 0),
-      "Jul Amount": dataWithTotals.reduce((total, item) => total + (item.JulAmount || 0), 0),
+      "Jul Orders": dataWithTotals.reduce((total, item) => total + (item['Jul Orders'] || 0), 0),
+      "Jul Amount": dataWithTotals.reduce((total, item) => total + (item['Jul Amount'] || 0), 0),
 
-      "Aug Orders": dataWithTotals.reduce((total, item) => total + (item.AugOrders || 0), 0),
-      "Aug Amount": dataWithTotals.reduce((total, item) => total + (item.AugAmount || 0), 0),
+      "Aug Orders": dataWithTotals.reduce((total, item) => total + (item['Aug Orders'] || 0), 0),
+      "Aug Amount": dataWithTotals.reduce((total, item) => total + (item['Aug Amount'] || 0), 0),
 
-      "Sep Orders": dataWithTotals.reduce((total, item) => total + (item.SepOrders || 0), 0),
-      "Sep Amount": dataWithTotals.reduce((total, item) => total + (item.SepAmount || 0), 0),
+      "Sep Orders": dataWithTotals.reduce((total, item) => total + (item['Sep Orders'] || 0), 0),
+      "Sep Amount": dataWithTotals.reduce((total, item) => total + (item['Sep Amount'] || 0), 0),
 
-      "Oct Orders": dataWithTotals.reduce((total, item) => total + (item.OctOrders || 0), 0),
-      "Oct Amount": dataWithTotals.reduce((total, item) => total + (item.OctAmount || 0), 0),
+      "Oct Orders": dataWithTotals.reduce((total, item) => total + (item['Oct Orders'] || 0), 0),
+      "Oct Amount": dataWithTotals.reduce((total, item) => total + (item['Oct Amount'] || 0), 0),
 
-      "Nov Orders": dataWithTotals.reduce((total, item) => total + (item.NovOrders || 0), 0),
-      "Nov Amount": dataWithTotals.reduce((total, item) => total + (item.NovAmount || 0), 0),
+      "Nov Orders": dataWithTotals.reduce((total, item) => total + (item['Nov Orders'] || 0), 0),
+      "Nov Amount": dataWithTotals.reduce((total, item) => total + (item['Nov Amount'] || 0), 0),
 
-      'Dec Orders': dataWithTotals.reduce((total, item) => total + (item.DecOrders || 0), 0),
-      "Dec Amount": dataWithTotals.reduce((total, item) => total + (item.DceAmount || 0), 0),
+      'Dec Orders': dataWithTotals.reduce((total, item) => total + (item['Dec Orders'] || 0), 0),
+      "Dec Amount": dataWithTotals.reduce((total, item) => total + (item['Dce Amount'] || 0), 0),
 
-      "Total Orders": dataWithTotals.reduce((total, item) => total + (item.TotalOrders || 0), 0),
-      "Total Amount": dataWithTotals.reduce((total, item) => total + (item.TotalAmount || 0), 0),
+      "Total Orders": dataWithTotals.reduce((total, item) => total + (item['Total Orders'] || 0), 0),
+      "Total Amount": dataWithTotals.reduce((total, item) => total + (item['Total Amount'] || 0), 0),
     };
 
     const dataWithTotalRow = [...dataWithTotals, totals];

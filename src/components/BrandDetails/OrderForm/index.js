@@ -32,9 +32,20 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
       if (item?.Quantity) {
         let error = !item?.Quantity || !Number.isInteger(item?.Quantity) || item?.Quantity < (productDetails.Min_Order_QTY__c || 0) || !productDetails?.Name || (productDetails.Min_Order_QTY__c > 0 && item?.Quantity % productDetails.Min_Order_QTY__c !== 0);
 
-        orderType == "preorder" ? (error == false) ? error = productDetails?.Category__c?.toLowerCase() != orderType.toLowerCase() : error = error : (error == false) ? error = productDetails?.Category__c?.toLowerCase() == "preorder" : error = error
+        // orderType == "preorder" ? (error == false) ? error = productDetails?.Category__c?.toLowerCase() != orderType.toLowerCase() : error = error : (error == false) ? error = productDetails?.Category__c?.toLowerCase() == "preorder" : error = error
+        if (orderType == "preorder") {
+          if (error == false) {
+            error = productDetails?.Category__c?.toLowerCase() != orderType.toLowerCase();
+          }
+        } else {
+          if (error == false) {
+            error = productDetails?.Category__c?.toLowerCase() == "preorder";
+          }
+        }
 
-        (orderType == "wholesale" && productDetails?.Category__c?.toLowerCase() =="preorder") ? error = true:error=error
+        if (orderType == "wholesale" && productDetails?.Category__c?.toLowerCase() == "preorder") {
+          error = true;
+        }
         checkLimit++;
         return accumulator + (error ? 1 : 0);
       } else {
@@ -45,7 +56,7 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
     if (checkLimit > 500) {
       setLimitCheck(true)
       setIsLimitPass(true)
-    }else{
+    } else {
       setLimitCheck(false)
     }
     if (totalQty == data.length) {
@@ -356,7 +367,7 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
                 <div className="mt-3">No Data Found.</div>
               </div>
             ) : null}
-            <div className="d-flex justify-content-center" style={{position:'sticky',bottom:'0'}}>
+            <div className="d-flex justify-content-center" style={{ position: 'sticky', bottom: '120px',background:'#fff',padding:'1rem 0' }}>
               <button className={btnClassName} onClick={() => { !isLimitPass ? submitForm() : setLimitCheck(true) }}>
                 Submit
               </button>
