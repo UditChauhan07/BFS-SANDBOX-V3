@@ -109,10 +109,11 @@ function MyBagOrder(props) {
       if (data?.OpportunityLineItems.length) {
         data?.OpportunityLineItems?.map((ele) => {
           let temp = {};
-          temp[""] = ele.Name.split(data.Name);
+          temp[""] = ele.Name.split(`${data.Name} `)[1];
           temp[" "] = ele.Quantity;
           temp["  "] = ele.UnitPrice;
           finalData.push(temp);
+          console.log({temp});
         });
       }
       return finalData;

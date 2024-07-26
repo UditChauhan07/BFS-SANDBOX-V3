@@ -130,6 +130,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
     setOrderDetail(response.data.data)
     setIsLoading(true);
     getOrderDetailsInvoice({ rawData: { key: Key.data.access_token, id: OrderId } }).then((response) => {
+      console.log({response});
       setInvoice(response.data)
 
       // const base64String = response.attachment[0].base64;
