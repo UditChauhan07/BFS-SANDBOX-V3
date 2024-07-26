@@ -251,7 +251,7 @@ function OrderListContent({ data, hideDetailedShow = false }) {
                       >
                         Request invoice
                       </h4>}
-                    {!item.Tracking_URL__c ?
+                    {!item.Tracking__c ?
                       <h4
                         title="Get Help with Tracking Status"
                         onClick={(e) =>
