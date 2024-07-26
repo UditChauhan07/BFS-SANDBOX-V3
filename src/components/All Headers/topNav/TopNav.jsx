@@ -6,6 +6,7 @@ import ModalPage from "../../Modal UI";
 import SelectCaseReason from "../../CustomerServiceFormSection/SelectCaseReason/SelectCaseReason";
 import { GetAuthData, admins, getSessionStatus } from "../../../lib/store";
 import { BiMailSend, BiStar } from "react-icons/bi";
+import { RiGuideLine } from "react-icons/ri";
 // import Redirect from "../../Redirect";
 const TopNav = () => {
   const navigate = useNavigate();
@@ -72,9 +73,18 @@ const TopNav = () => {
                         <CustomerServiceIcon width={15} height={15} />&nbsp;Customer Services
                       </Link>
                     </li>
+                    <li
+                      onClick={() => {
+                        // setModalOpen(true);
+                        navigate("/Help-Section")
+                      }}
+                    >
+                      <Link to="/Help-Section" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
+                       <RiGuideLine  width={15} height={15}/>&nbsp;How-To Guides
+                      </Link>
+                    </li>
                   </ul>
                 </div>
-                {/* <img src={"/assets/images/dropDownArrow.svg"} alt="img" /> */}
               </p>
             </div>
             <div className="d-flex justify-content-center align-items-center gap-3">
