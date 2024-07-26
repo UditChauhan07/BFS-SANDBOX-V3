@@ -6,6 +6,7 @@ import ModalPage from "../../Modal UI";
 import SelectCaseReason from "../../CustomerServiceFormSection/SelectCaseReason/SelectCaseReason";
 import { GetAuthData, admins, getSessionStatus } from "../../../lib/store";
 import { BiMailSend, BiStar } from "react-icons/bi";
+import { RiGuideLine } from "react-icons/ri";
 // import Redirect from "../../Redirect";
 const TopNav = () => {
   const navigate = useNavigate();
@@ -70,6 +71,16 @@ const TopNav = () => {
                     >
                       <Link to="/customerService" className={`dropdown-item rounded topNav_nameText__Jdtjp hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center ${styles.nameText}`}>
                         <CustomerServiceIcon width={15} height={15} />&nbsp;Customer Services
+                      </Link>
+                    </li>
+                    <li
+                      onClick={() => {
+                        // setModalOpen(true);
+                        navigate("/Help-Section")
+                      }}
+                    >
+                      <Link to="/Help-Section" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
+                       <RiGuideLine  width={15} height={15}/>&nbsp;How-To Guides
                       </Link>
                     </li>
                   </ul>

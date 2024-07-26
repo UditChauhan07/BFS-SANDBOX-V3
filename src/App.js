@@ -43,7 +43,7 @@ import TargetRollOver from "./reports/targetRollOver";
 import StoreDetails from "./pages/StoreDetails";
 import BrandDetails from "./pages/BrandDetails";
 import Tier from "./reports/TierStanding";
-
+import HelpSection from "./pages/HelpSection";
 
 function App() {
   // const Redirect = ({ href }) => {
@@ -107,6 +107,7 @@ function App() {
             <Route path="/emailSetting" element={<EmailSetting />}></Route>
             <Route path="/brandManagementApproval" element={<BMAIssues />}></Route>
             <Route path="/public/product/:id/:token/details" element={<PublicProduct />}></Route>
+            <Route path="/Help-Section" element={<HelpSection/>}></Route>
             <Route path="/store/:id" element={<StoreDetails/>}/>
             <Route path="/Brand/:id" element={<BrandDetails/>}/>
             <Route path="/TierStanding" element={<Tier/>}/>
