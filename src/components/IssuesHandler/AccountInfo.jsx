@@ -11,13 +11,15 @@ import ModalPage from "../Modal UI";
 const AccountInfo = ({ reason, typeId, Accounts, postSupportAny, GetAuthData, setSubmitForm }) => {
     const navigate = useNavigate();
     const [contactList, setContactList] = useState([]);
+    const [brandList, setBrandList] = useState([]);
     const [confirm, setConfirm] = useState(false);
     let [files, setFile] = useState([])
 
     const initialValues = {
         description: "",
         account: null,
-        contact: null
+        contact: null,
+        manufacturerId:null
     };
     if (!typeId) return null;
     const SearchableSelect = (FieldProps) => {
@@ -30,10 +32,12 @@ const AccountInfo = ({ reason, typeId, Accounts, postSupportAny, GetAuthData, se
                     Accounts.map((a) => {
                         if (a.Id == option.value) {
                             setContactList(a.contact)
+                            setBrandList(a.Brands??[])
                         }
                     })
                     FieldProps.form.setFieldValue(FieldProps.field.name, option);
                     FieldProps.form.setFieldValue("contact", null);
+                    FieldProps.form.setFieldValue("manufacturer", null);
                 }}
                 value={FieldProps.options ? FieldProps.options.find((option) => option.value === FieldProps.field.value?.value) : ""}
             />
@@ -69,6 +73,7 @@ const AccountInfo = ({ reason, typeId, Accounts, postSupportAny, GetAuthData, se
                             salesRepId: user.Sales_Rep__c,
                             accountId: values.account?.value,
                             contactId: values.contact?.value,
+                            manufacturerId:values.manufacturer.value,
                             desc: values.description,
                             priority: "Medium",
                             subject,
@@ -161,10 +166,15 @@ const AccountInfo = ({ reason, typeId, Accounts, postSupportAny, GetAuthData, se
                         <b className={styles.containerTitle}>{reason}</b>
 
                         <label className={styles.labelHolder}>
-                            Account Name
+                            Store Name
                             <Field name="account" className="account" options={Accounts.map((account) => ({ label: account.Name, value: account.Id }))} component={SearchableSelect} />
                         </label>
                         <ErrorMessage component={TextError} name="account" />
+                        <label className={styles.labelHolder}>
+                            Brand Name
+                            <Field name="manufacturer" className="manufacturer" options={brandList.map((brand) => ({ label: brand.Name, value: brand.Id }))} component={SearchableSelect1} />
+                        </label>
+                        <ErrorMessage component={TextError} name="manufacturer" />
                         <label className={styles.labelHolder}>
                             Contact Name
                             <Field name="contact" className="contact" options={contactList.map((contact) => ({ label: contact.Name, value: contact.Id }))} component={SearchableSelect1} />
