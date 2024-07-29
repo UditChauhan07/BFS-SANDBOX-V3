@@ -4,34 +4,106 @@
   min-height: 30vh;
 }
 .sectionHolder {
-  border-radius: 8px;
-  border: 1px solid #d5d9d9;
-  background: #f8fafb;
+ border: 1px solid #d5d9d9;
+  background: white;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
   justify-content: center;
-  padding: 2rem;
+  /* padding: 2rem; */
 }
-.titleHolder {
+.AccountName p {
   color: #000;
   font-family: Montserrat;
-  font-size: 22px;
-  font-style: normal;
+  font-size: 16px;
+  /* font-style: normal; */
   font-weight: 500;
-  line-height: normal;
-  letter-spacing: 2.2px;
-  margin-bottom: 2rem;
-  text-align: center;
+  line-height: 19.5;
+  letter-spacing: 10px;
+  /* margin-bottom: 2rem; */
+ width:292px;
+  height:24px; 
+   /* top:267px; */
+  left:255px
+}
+.ApothecaryBeauty h4{
+color: #000;
+  font-family: Montserrat;
+  font-size: 22px;
+ font-weight: 700px;
+  line-height: 26.87px;
+  letter-spacing: 10px;
+width:309px;
+  height:24px; 
+   /* top:291px; */
+  left:255px
+}
+.Websitelink p{
+  color: #000;
+  font-family:Arial,;
+  font-size: 16px;
+ font-weight: 500px;
+  line-height: 18.0.3px;
+  letter-spacing: 1.2px;
+width:282px;
+  height:16px; 
+   /* top:291px; */
+  left:255px
+}
+.AccountDetailsButton{
+  color: white;
+  font-family:Arial,;
+  font-size: 16px;
+ font-weight: 500px;
+  line-height: 18.0.3px;
+  letter-spacing: 1.2px;
+  background-color: #000;
+  padding: 11px 14px 11px 14px;
+  border-radius: 12px;
+width:54%;
+  height:20%; 
+   margin-top:10%;
+ text-align:  center;
+  
+}
+.storeCtiy{
+  box-shadow: 0px 0px 1px 1px #c2c2c2;
+border-radius: 10px;
+  height: 62px  ;
+  width: 185px;
+}
+.RollingHills{
+  font-weight: 500;
+  font-size: 16px;
+   font-family: Arial;
+   /* line-height: 18.03; */
+   letter-spacing: 10%;
+   /* width: 166px;
+    height: 30px, */
+    padding: 0px 12px 13px 12px;
+ 
+}
+.City{
+  font-weight: 500;
+  font-size: 12px;
+   font-family:Montserrat ;
+   /* line-height: 14.63; */
+   letter-spacing: 10%;
+   /* width: 95px;
+    height: 17px, */
+     
+    padding: 6px 13px 0px 12px;
+
 }
 .brandGrid {
   gap: 10px;
   display: flex;
   flex-wrap: wrap;
 }
+
 .brandHolder {
   border-radius: 3px;
-  background: #ecfbff;
+  background: white;
   color: #000;
   font-family: Arial-400;
   font-size: 12px;
@@ -44,7 +116,7 @@
 .bullets {
   border-radius: 8px;
   border: 1px solid #d5d9d9;
-  background: #fff;
+  background: white;
   width: 100%;
   /* min-height: 70px; */
   display: flex;
@@ -66,7 +138,7 @@
   background: #ecfbff;
   width: 100%;
   min-height: 97px;
-  border: 2px solid rgb(238, 238, 238);
+  border: 2px solid white;
   border-radius: 5px;
   display: flex;
   align-items: center;
