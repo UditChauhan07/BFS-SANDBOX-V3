@@ -367,7 +367,7 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
                 <div className="mt-3">No Data Found.</div>
               </div>
             ) : null}
-            <div className="d-flex justify-content-center" style={{ position: 'sticky', bottom: '120px',background:'#fff',padding:'1rem 0' }}>
+            <div className="d-flex justify-content-center" style={{ position: 'sticky', bottom: '-120px',background:'#fff',padding:'1rem 0' }}>
               <button className={btnClassName} onClick={() => { !isLimitPass ? submitForm() : setLimitCheck(true) }}>
                 Submit
               </button>
