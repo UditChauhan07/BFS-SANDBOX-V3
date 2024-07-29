@@ -8,6 +8,7 @@ import CustomerSupportLayout from "../components/customerSupportLayout/index.js"
 import AccountInfo from "../components/IssuesHandler/AccountInfo.jsx";
 import Loading from "../components/Loading.jsx";
 import { FilterItem } from "../components/FilterItem.jsx";
+import AppLayout from "../components/AppLayout.jsx";
 
 const CustomerService = () => {
   const { state } = useLocation();
@@ -200,7 +201,7 @@ const CustomerService = () => {
         console.log(error);
       });
   }
-  if (sumitForm) return <Loading height={'80vh'} />;
+  if (sumitForm) return <AppLayout><Loading height={'50vh'} /></AppLayout>;
   return (<CustomerSupportLayout
     filterNodes={(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
       <FilterItem
