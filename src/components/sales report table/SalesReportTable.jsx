@@ -148,7 +148,7 @@ const SalesReportTable = ({ salesData, year, ownerPermission }) => {
                           <td className={`${styles.td} ${styles.stickyThirdColumn}`}>
                             {item?.AccountRepo ?? JSON.parse(localStorage.getItem("Api Data")).data.Name}
                           </td>
-                          <td className={`${styles.td}`} style={{ maxWidth: "200px" }}>
+                          <td className={`${styles.td}`} style={{ maxWidth: "200px",wordWrap: "break-word" }}>
                             {item?.AccountType ?? "---"}
                           </td>
                           <td className={`${styles.td}`} style={{ minWidth: "150px" }}>

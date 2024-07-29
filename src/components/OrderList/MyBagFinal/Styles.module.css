@@ -16,7 +16,7 @@
   margin: 10px 0 0 0;
 }
 .imgHolder {
-  width: 100px;
+  width: 50px !important;
   height: 50px;
   object-fit: contain;
 }
