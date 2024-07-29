@@ -130,7 +130,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
     setOrderDetail(response.data.data)
     setIsLoading(true);
     getOrderDetailsInvoice({ rawData: { key: Key.data.access_token, id: OrderId } }).then((response) => {
-      console.log({response});
+      console.log({ response });
       setInvoice(response.data)
 
       // const base64String = response.attachment[0].base64;
@@ -210,12 +210,14 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
     }
   }
 
-  const ReasonCardHandler = ({ reasonType,label=null }) => {
+  const ReasonCardHandler = ({ reasonType, label = null, haveValue = false }) => {
     if (reasonType) {
       if (!oldSupport?.[helpId]?.[reasonType]?.Id) {
-        return (<p onClick={() => { supportHandler(reasonType) }} style={reason == reasonType ? { color: '#0d6efd' } : {}}>&bull;&nbsp;{label??reasonType}</p>)
+        if (!haveValue) {
+          return (<p onClick={() => { supportHandler(reasonType) }} style={reason == reasonType ? { color: '#0d6efd' } : {}}>&bull;&nbsp;{label ?? reasonType}</p>)
+        }
       } else {
-        return (<p onClick={() => setRestrict(reasonType)} style={reason == reasonType ? { color: '#0d6efd' } : {}}>&bull;&nbsp;{label??reasonType}<SupportTransporter Type={helpId} Reason={reasonType} /></p>)
+        return (<p onClick={() => setRestrict(reasonType)} style={reason == reasonType ? { color: '#0d6efd' } : {}}>&bull;&nbsp;{label ?? reasonType}<SupportTransporter Type={helpId} Reason={reasonType} /></p>)
       }
     } else {
       return null;
@@ -232,10 +234,10 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
               Warning!
             </h2>
             <p>
-              You can't create Support Request for this Order. <br/>Please contact your Sales Representative for further assistance.
+              You can't create Support Request for this Order. <br />Please contact your Sales Representative for further assistance.
             </p>
             <div className="d-flex justify-content-around ">
-              <button className={Styles.btnHolder} onClick={() => setRestrict()} style={{width:'max-content',padding:'5px 10px'}}>
+              <button className={Styles.btnHolder} onClick={() => setRestrict()} style={{ width: 'max-content', padding: '5px 10px' }}>
                 I Understand
               </button>
             </div>
@@ -483,9 +485,9 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
                         </div>
                         {helpId == "0123b0000007zc8AAA" &&
                           <div className={Styles.SupportHolder}>
-                            <ReasonCardHandler label={"Request Status Updates"} reasonType={"Status of Order"}/>
-                            <ReasonCardHandler label={"Request Invoice"} reasonType="Invoice"/>
-                            <ReasonCardHandler label={"Request Tracking number"} reasonType="Tracking Status"/>
+                            <ReasonCardHandler label={"Request Status Updates"} reasonType={"Status of Order"} haveValue={OrderData.Order_Number__c} />
+                            <ReasonCardHandler label={"Request Invoice"} reasonType="Invoice" haveValue={invoices?.length != 0} />
+                            <ReasonCardHandler label={"Request Tracking number"} reasonType="Tracking Status" haveValue={OrderData.Tracking__c} />
                           </div>}
 
                       </div>
