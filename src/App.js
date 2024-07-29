@@ -44,7 +44,6 @@ import StoreDetails from "./pages/StoreDetails";
 import BrandDetails from "./pages/BrandDetails";
 import Tier from "./reports/TierStanding";
 import HelpSection from "./pages/HelpSection";
-
 function App() {
   // const Redirect = ({ href }) => {
   //   window.location.href = href;
@@ -111,6 +110,7 @@ function App() {
             <Route path="/store/:id" element={<StoreDetails/>}/>
             <Route path="/Brand/:id" element={<BrandDetails/>}/>
             <Route path="/TierStanding" element={<Tier/>}/>
+     
             <Route path="*" element={<PageNotFound />}></Route>
             
             {/* 1234 */}
