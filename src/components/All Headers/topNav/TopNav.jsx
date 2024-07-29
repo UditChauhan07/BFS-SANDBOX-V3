@@ -29,6 +29,7 @@ const TopNav = () => {
     })
   }, [])
 
+                               
   // console.log("userDetails", userDetails);
   const reasons = {
     Charges: "Charges",
@@ -79,7 +80,7 @@ const TopNav = () => {
                         navigate("/Help-Section")
                       }}
                     >
-                      <Link to="/Help-Section" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
+                      <Link to="/Help-Section" className={`dropdown-item rounded topNav_nameText__Jdtjp hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center ${styles.nameText}`}>
                        <RiGuideLine  width={15} height={15}/>&nbsp;How-To Guides
                       </Link>
                     </li>

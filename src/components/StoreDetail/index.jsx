@@ -53,8 +53,8 @@ const StoreDetailCard = ({ account }) => {
             <div className={Styles.sectionHolder}>
                 <h1 className={Styles.titleHolder} style={{ marginBottom: 0 }}>{account.Name} | {account.BillingCity}, {account.BillingState}</h1>
                 <hr style={{ marginBottom: '2rem' }} />
-                <div className="d-flex justify-content-between align-items-start">
-                    <div style={{ width: '60%', border: '1px solid #ccc', padding: '1rem', background: '#ecfbff', borderRadius: '10px' }}>
+                <div className="d-flex justify-content-between align-items-start" style={{width:"100%"}}>
+                    <div style={{ width: '100%', padding: '1rem', background: '#ecfbff', borderRadius: '10px' }}>
                         <h1 className={Styles.titleHolder} style={{ textAlign: 'start', textDecoration: 'underline' }}>Account Info</h1>
                         <div className={Styles.bullets}>
                             <b>
@@ -92,6 +92,7 @@ const StoreDetailCard = ({ account }) => {
                                 </p>
                             </div>}
                     </div>
+                    </div>
                     <div style={{ width: '35%', border: '1px solid #ccc', borderRadius: '10px', background: '#fff', maxHeight: '55vh', overflowY: 'scroll' }}>
                         <h1 className={Styles.titleHolder} style={{ margin: '1rem 0 1rem 2rem', textAlign: 'start', textDecoration: 'underline' }}>Audit Report</h1>
                         <div className={Styles.brandGrid} style={{ width: '80%', margin: '0 auto 1rem' }}>
@@ -123,8 +124,9 @@ const StoreDetailCard = ({ account }) => {
                             ))}
                         </div>
                     </div>
-                </div>
-            </div>}
+                
+            </div>
+            }
     </section>)
 }
 export default StoreDetailCard;

@@ -5,6 +5,7 @@ background: #FFF;
  /* ........................... */
  .tableBoundary {
   border: 1px dashed #000;
+ 
   /* overflow: auto; */
 }
 .stickyFirstColumnHeading {
@@ -33,6 +34,19 @@ background: #FFF;
   line-height: 32px; /* 177.778% */
   letter-spacing: 1.12px;
   padding-left: 20px !important;
+}
+.TOPName{
+  color: #000;
+  font-family: Montserrat-400;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+ 
+  line-height: 22px; /* 150% */
+  letter-spacing: 1.6px;
+
+padding-top: 17px;
+margin-left: -30px;
 }
 .td {
   color: #000;
@@ -64,11 +78,12 @@ background: #FFF;
   background: #fff;
   padding: 20px;
   border-radius: 8px;
-  width: 80%;
+  width: 28%;
   max-width: 500px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
   overflow: hidden;
+  height: 150px;
 }
 
 .modalActions {
@@ -92,6 +107,14 @@ background: #FFF;
   background-color: #080808; /* Darker green on hover */
 }
 
+.downloadButton{
+ background-color: #000;
+ color: white;
+  width: 18%;
+  padding: 3px 10px 3px 10px ;
+  font-family: Montserrat-400;
+  font-size: 13px;
+}
 .cancelButton {
   border: 2px solid black;
   background-color: #ececec; /* Red background for the cancel button */
