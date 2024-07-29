@@ -13,7 +13,6 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
   const [replaceCartModalOpen, setReplaceCartModalOpen] = useState(false);
   const [replaceCartProduct, setReplaceCartProduct] = useState({});
   const [showName, setShowName] = useState(false);
-  const [limitInput, setLimitInput] = useState("");
   const [ productDetailId, setProductDetailId] = useState(null)
 
   const onQuantityChange = (product, quantity, salesPrice = null, discount = null) => {

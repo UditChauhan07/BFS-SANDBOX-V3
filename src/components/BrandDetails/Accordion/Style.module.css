@@ -10,8 +10,10 @@
 }
 
 .ControlStyle img{
-  
+  width: 50px;
   margin: auto;
+  height: 75px;
+  object-fit: contain;
 }
 
 .ButtonControl button{
