@@ -51,86 +51,156 @@ const StoreDetailCard = ({ account }) => {
     return (<section className={Styles.container}>
         {fileDownload ? <Loading /> :
             <div className={Styles.sectionHolder}>
+                {/* .................... */}
+                <div style={{ width: "100%", border: '0px 0px 1px 0px', borderBottom: "2px solid #D3D3D3", backgroundColor: "#F8F8F8", padding: "2rem", }}>
 
 
-                <div className="d-flex align-items-center justify-content-between gap-5" style={{ width: "100%", border: '0px 0px 1px 0px', borderBottom: "2px solid #D3D3D3", backgroundColor: "#F8F8F8", padding: "2rem", }}>
-                    <div className="" style={{ width: '25%' }}>
-                        <p className={Styles.AccountName}>ACCOUNT NAME</p>
-                        <div className="d-flex align-items-center justify-content-between ">
-                            <h4 className={Styles.ApothecaryBeauty}>APOTHECARY BEAUTY</h4>
+                    <div className="d-flex align-items-center justify-content-between gap-5 col-lg-12 " >
+                        <div className="col-lg-3" >
+                            <p className={Styles.AccountName}>ACCOUNT NAME</p>
+                            <div className="d-flex align-items-center justify-content-between ">
+                                <h4 className={Styles.ApothecaryBeauty}>APOTHECARY BEAUTY</h4>
 
-                            <img src="/assets/images/image51.png" alt="Apothecary Beauty" />
+                                <img src="/assets/images/image51.png" alt="Apothecary Beauty" />
+                            </div>
+                            <p className={Styles.Websitelink}>WWW.apothecarybeauty.com</p>
+
+
                         </div>
-                        <p className={Styles.Websitelink}>WWW.apothecarybeauty.com</p>
 
-                        <div className="d-flex align-items-center justify-content-between"   >
-                            <button className={Styles.AccountDetailsButton} >Account Details</button>
 
-                            <p style={{ fontFamily: "Arial", fontFamily: '500', fontSize: "16px", lineHeight: "18.03px", letterSpacing: '1.12px', marginTop: "10%" }}>More info </p>
-                        </div>
-                    </div>
+                        <div className="col-lg-6" >
+                            <div className="d-flex align-items-center justify-content-between gap-2 " style={{ width: "60" }}>
+                                <div className={Styles.storeCtiy} style={{ width: "20" }}>
+                                    <sup className={Styles.City}>Store City</sup>
+                                    <small className={Styles.RollingHills} >Rolling Hills Estate</small>
 
-                    <div className="" style={{ width: '50%' }}>
-                        <div className="d-flex align-items-center justify-content-between ">
-                            <div className={Styles.storeCtiy}>
-                                <p>Store City</p>
-                                <small style={{ fontWeight: "500", fontSize: '16px', fontFamily: "Arial", lineHeight: '18.03', letterSpacing: '10%', width: '166px', height: "30px", }}>Rolling Hills Estate</small>
+                                </div>
+                                <div className={Styles.storeCtiy1} style={{ width: "20" }}>
+                                    <p className={Styles.City}>Store State</p>
+                                    <small className={Styles.RollingHills} >CA</small>
+                                </div>
+
+                                <div className={Styles.storeCtiy2} style={{ width: "20" }}>
+                                    <p className={Styles.City}>Phone</p>
+                                    <small className={Styles.RollingHills} >(310) 541-5500</small>
+
+                                </div>
 
                             </div>
-                            <div>2</div>
-                            <div>3</div>
 
                         </div>
-
-                    </div>
-                    <div className="" style={{ width: '25%' }}>
-                        <h1>hello</h1>
-                    </div>
-                    </div>
-                    {/* .................... */}
-                    <div className="d-flex align-items-center justify-content-between gap-5 col-lg-12" style={{ width: "100%", border: '0px 0px 1px 0px', borderBottom: "2px solid #D3D3D3", backgroundColor: "#F8F8F8", padding: "2rem", }}>
-                    <div className="col-lg-3" >
-                        <p className={Styles.AccountName}>ACCOUNT NAME</p>
-                        <div className="d-flex align-items-center justify-content-between ">
-                            <h4 className={Styles.ApothecaryBeauty}>APOTHECARY BEAUTY</h4>
-
-                            <img src="/assets/images/image51.png" alt="Apothecary Beauty" />
-                        </div>
-                        <p className={Styles.Websitelink}>WWW.apothecarybeauty.com</p>
-
-                        <div className="d-flex align-items-center justify-content-between"   >
-                            <button className={Styles.AccountDetailsButton} >Account Details</button>
-
-                            <p style={{ fontFamily: "Arial", fontFamily: '500', fontSize: "16px", lineHeight: "18.03px", letterSpacing: '1.12px', marginTop: "10%" }}>More info </p>
+                        <div className="col-lg-3" >
+                            <p className={Styles.TotalRevenue}>Total Revenue</p>
+                            <h5 className={Styles.price}>$2195.85</h5>
                         </div>
                     </div>
 
-                    <div className="col-lg-6" >
-                        <div className="d-flex align-items-center justify-content-between ">
-                            <div className={Styles.storeCtiy}>
-                                <sup className={Styles.City}>Store City</sup>
-                                <small className={Styles.RollingHills} >Rolling Hills Estate</small>
+
+                    <div className="d-flex align-items-center justify-content-between gap-5 col-lg-12 ">
+                        <div className="col-lg-3" >
+                            <div className="d-flex align-items-center justify-content-between gap-5"   >
+                                <button className={Styles.AccountDetailsButton} >Account Details</button>
+
+                                <p style={{ fontFamily: "Arial", fontFamily: '500', fontSize: "16px", lineHeight: "18.03px", letterSpacing: '1.12px', marginTop: "10%" }}>More info </p>
 
                             </div>
-                            <div  className={Styles.storeCtiy1}>
-                            <span className={Styles.City}>Store State</span>
-                            <small className={Styles.RollingHills} >CA</small>
-                            </div>
 
-                            <div  className={Styles.storeCtiy1}>
-                            <p className={Styles.City}>Phone</p>
-                            <small className={Styles.RollingHills} >(310) 541-5500</small>
+
+                        </div>
+
+                        <hr className="HrLIne"></hr>
+                        <div className="col-lg-8" >
+                            <div className="d-flex align-items-center justify-content-between ">
+                                <h5 className="AuditReport">Brand Audit Report</h5>
+
 
                             </div>
 
                         </div>
 
+
                     </div>
-                    <div className="col-lg-3" >
-                        <h1>hello</h1>
+                </div>
+                <div style={{ width: "100%", border: '0px 0px 1px 0px', borderBottom: "2px solid #D3D3D3", backgroundColor: "#F8F8F8", padding: "2rem", }}>
+                    <h5 className="">Details</h5>
+                    <div className="d-flex align-items-center justify-content-between gap-5 col-lg-12 " >
+                        <div className="col-lg-3 mt-4" >
+                            <button className={Styles.StatusActive} >Status: Active</button>
+                        <div className="d-flex align-items-center justify-content-between ">
+                                <h4 className={Styles.DSXContent}>DSX-0001</h4>
+
+                            
+                            </div>
+                            <p className={Styles.Launder}>Estee Launder Account Name</p> 
+
+
+                        </div>
+                        {/* <div className="vl"></div> */}
+
+                        <div className="col-lg-3" style={{ width: "60" }}>
+                           
+                            <div className="d-flex align-items-center justify-content-between gap-2 " >
+                                <div style={{ width: "20" }}>
+                                    <span className={Styles .AccountOwner} style={{fontSize:"16px",letterSpacing:"1.12px",fontFamily:"Montserrat",fontWeight:'400' }}>Account Owner :</span>
+                                    <span className={Styles.APIUser} style={{fontSize:"16px",letterSpacing:"1.12px",fontFamily:"Arial",fontWeight:'500' }} >API User</span>
+                                    </div>
+                                </div>
+                                <div className="d-flex align-items-center justify-content-between gap-2 " >
+                                <div  style={{ width: "20" }}>
+                                <span className={Styles .AccountOwner} style={{fontSize:"16px",letterSpacing:"1.12px",fontFamily:"Montserrat",fontWeight:'400' }}>Number of <br/>Order Placed: :</span>
+                                <span className={Styles.APIUser} style={{fontSize:"16px",letterSpacing:"1.12px",fontFamily:"Arial",fontWeight:'500' }} >14</span>
+                                    </div>
+                                </div>
+
+                                <div className="d-flex align-items-center justify-content-between gap-2 " >
+                                <div className={Styles.storeCtiy} style={{ width: "20" }}>
+                                    <sup className={Styles.City}>Store City</sup>
+                                    <small className={Styles.RollingHills} >Rolling Hills Estate</small>
+                                    </div>
+                                </div>
+
+                       
+
+                        </div>
+                        <div className="col-lg-3" >
+                            <p className={Styles.TotalRevenue}>Total Revenue</p>
+                            <h5 className={Styles.price}>$2195.85</h5>
+                        </div>
+                        <div className="col-lg-3" >
+                            <p className={Styles.TotalRevenue}>Total Revenue</p>
+                            <h5 className={Styles.price}>$2195.85</h5>
+                        </div>
                     </div>
-                    </div>
-             </div>
+
+
+                    {/* <div className="d-flex align-items-center justify-content-between gap-5 col-lg-12 ">
+                        <div className="col-lg-3" >
+                            <div className="d-flex align-items-center justify-content-between gap-5"   >
+                                <button className={Styles.AccountDetailsButton} >Account Details</button>
+
+                                <p style={{ fontFamily: "Arial", fontFamily: '500', fontSize: "16px", lineHeight: "18.03px", letterSpacing: '1.12px', marginTop: "10%" }}>More info </p>
+
+                            </div>
+
+
+                        </div>
+
+                        <hr className="HrLIne"></hr>
+                        <div className="col-lg-8" >
+                            <div className="d-flex align-items-center justify-content-between ">
+                                <h5 className="AuditReport">Brand Audit Report</h5>
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div> */}
+
+                </div>
+            </div>
         }
     </section>)
 }
