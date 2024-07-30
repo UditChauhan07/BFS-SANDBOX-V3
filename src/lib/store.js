@@ -1,4 +1,4 @@
-export const originAPi = process.env.REACT_APP_OA_URL||"https://b2b.beautyfashionsales.com"
+export const originAPi = process.env.REACT_APP_OA_URL || "https://b2b.beautyfashionsales.com"
 // export const originAPi = "https://dev.beautyfashionsales.com"
 // export const originAPi = "http://localhost:6194"
 let url = `${originAPi}/beauty/`;
@@ -12,7 +12,7 @@ const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
 export const salesRepIdKey = "BzQIEAjzCEHmlXc";
-export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3","0053b00000CwOnLAAV"]; // ,"0053b00000DgEVEAA3"
+export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3", "0053b00000CwOnLAAV"]; // ,"0053b00000DgEVEAA3"
 
 export const months = [
   "January",
@@ -1125,11 +1125,11 @@ export async function getMarketingCalendarPDFV3({ key, manufacturerId, month }) 
   }
 }
 
-export const ArrayFindMaxMin = ({max=true,getter,data})=>{
+export const ArrayFindMaxMin = ({ max = true, getter, data }) => {
   const obj = data.reduce((value, current) => {
-    if(max){
+    if (max) {
       return current[getter] > value[getter] ? current : value;
-    }else{
+    } else {
       return current[getter] < value[getter] ? current : value;
     }
   }, data[0]);
@@ -1322,147 +1322,145 @@ export const productGuides = {
     Categoryname: "Access",
     filename: "How to Access BFSG Retailer Portal Video",
     OriginalFileName: "how-to-access-bfsg-retailer-portal-video",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-access-bfsg-retailer-portal-video.mp4",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-access-bfsg-retailer-portal-video.mp4",
     Type: "Video",
   },
   productKey2: {
-  
-    Categoryname:"Access",
-    filename:"How To : Access BFSG Retailer Portal ",
-    OriginalFileName:"how-to-access-bfsg-retailer-portal",
+
+    Categoryname: "Access",
+    filename: "How To : Access BFSG Retailer Portal ",
+    OriginalFileName: "how-to-access-bfsg-retailer-portal",
     Link: "https://b2b.beautyfashionsales.com/help/how-to-access-bfsg-retailer-portal.pdf ",
-    Type:"pdf",
-   
-   // Direct link to the video file
+    Type: "pdf",
+
+    // Direct link to the video file
   },
   productKey3: {
-    Categoryname:"Customer Service",
-     
+    Categoryname: "Customer Service",
+
     Link: "https://b2b.beautyfashionsales.com/help/how-to-report-incorrect-charges.pdf ",
-    filename:"How to  Report  incorrect charges",
-    OriginalFileName:"how-to-report-incorrect-charges",
-    Type:"Pdf",
-   
-   // Direct link to the video file
+    filename: "How to  Report  incorrect charges",
+    OriginalFileName: "how-to-report-incorrect-charges",
+    Type: "Pdf",
+
+    // Direct link to the video file
   },
   productKey4: {
-    Categoryname:"Customer Service",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-report-product-damages-video.mp4",
-    filename:"How to Report Product Damages Video  ",
-    OriginalFileName:"how-to-report-product-damages-video",
-    Type:"Video",
-    
-   // Direct link to the video file
+    Categoryname: "Customer Service",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-report-product-damages-video.mp4",
+    filename: "How to Report Product Damages Video  ",
+    OriginalFileName: "how-to-report-product-damages-video",
+    Type: "Video",
   },
   productKey5: {
-    Categoryname:"Customer Service",
-    Link: "https://b2b.beautyfashionsales.com/help/how-to-report-product-damages.pdf ",
-    filename:"How to Report Product Damages  ",
-    OriginalFileName:"how-to-report-product-damages",
-    Type:"pdf",
-   
-   // Direct link to the video file
+    Categoryname: "Customer Service",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-report-product-damages.pdf",
+    filename: "How to Report Product Damages  ",
+    OriginalFileName: "how-to-report-product-damages",
+    Type: "pdf",
+
+    // Direct link to the video file
   },
   productKey6: {
-    Categoryname:"Customer Service",
-    Link: "https://b2b.beautyfashionsales.com/help/how-to-report-product-shortage.pdf ",
-    filename:"How to Report Product Damages Stortage ",
-    OriginalFileName:"how-to-report-product-shortage",
-    Type:"pdf",
-   
-   // Direct link to the video file
+    Categoryname: "Customer Service",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-report-product-shortage.pdf",
+    filename: "How to Report Product Damages Stortage ",
+    OriginalFileName: "how-to-report-product-shortage",
+    Type: "pdf",
+
+    // Direct link to the video file
   },
   productKey7: {
-    Categoryname:"Customer Service",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-report-product-shortages-video.mp4",
-    filename:"How to Report Product Damages Stortages  ",
-    OriginalFileName:"how-to-report-product-shortages-video",
-    Type:"Video",
-    
-   // Direct link to the video file
+    Categoryname: "Customer Service",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-report-product-shortages-video.mp4",
+    filename: "How to Report Product Damages Stortages  ",
+    OriginalFileName: "how-to-report-product-shortages-video",
+    Type: "Video",
+
+    // Direct link to the video file
   },
   productKey8: {
-    Categoryname:"Customer Service",
-    Link: "https://b2b.beautyfashionsales.com/help/how-to-request-invoice-tracking-number-order-status.pdf ",
+    Categoryname: "Customer Service",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-request-invoice-tracking-number-order-status.pdf",
+    filename: "How To Request Invoice Tracking Number Order Status ",
+    OriginalFileName: "	how-to-request-invoice-tracking-number-order-status",
+    Type: "pdf",
 
-    filename:"How To Request Invoice Tracking Number Order Status ",
-    OriginalFileName:"	how-to-request-invoice-tracking-number-order-status",
-    Type:"pdf",
-   
-   // Direct link to the video file
+    // Direct link to the video file
   },
   productKey9: {
-    Categoryname:"Marketing Calender",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-marketing-calendar-video.mp4",
-    filename:"How to Marketing calendar Video ",
-    OriginalFileName:"how-to-marketing-calendar-video",
-    Type:"Video",
-   
-   // Direct link to the video file
+    Categoryname: "Marketing Calender",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-marketing-calendar-video.mp4",
+    filename: "How to Marketing calendar Video ",
+    OriginalFileName: "how-to-marketing-calendar-video",
+    Type: "Video",
+
+    // Direct link to the video file
   },
   productKey10: {
-    Categoryname:"Marketing Calender",
-    Link: "https://b2b.beautyfashionsales.com/help/how-to-marketing-calendar.pdf ",
-    filename:"How to Marketing Calendar",
-    OriginalFileName:"how-to-marketing-calendar",
-    Type:"pdf",
-   
-   // Direct link to the video file
+    Categoryname: "Marketing Calender",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-marketing-calendar.pdf",
+    filename: "How to Marketing Calendar",
+    OriginalFileName: "how-to-marketing-calendar",
+    Type: "pdf",
+
+    // Direct link to the video file
   },
   productKey11: {
-    Categoryname:"Orders",
-    Link: "https://b2b.beautyfashionsales.com/help/how-to-place-an-event-order-for-elc-brand.pdf ",
-    filename:"How to place an Event order for ELC brand ",
-    OriginalFileName:"how-to-place-an-event-order-for-elc-brand",
-    Type:"pdf",
-   
-   // Direct link to the video file
+    Categoryname: "Orders",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-place-an-event-order-for-elc-brand.pdf",
+    filename: "How to place an Event order for ELC brand ",
+    OriginalFileName: "how-to-place-an-event-order-for-elc-brand",
+    Type: "pdf",
+
+    // Direct link to the video file
   },
- productKey12: {
-    Categoryname:"Orders",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-place-an-event-order-video.mp4",
-    filename:"How to place an Event order Video ",
-    OriginalFileName:"how-to-place-an-event-order-video",
-    Type:"Video",
-    
-   // Direct link to the video file
+
+  productKey12: {
+    Categoryname: "Orders",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-place-an-event-order-video.mp4",
+    filename: "How to place an Event order Video ",
+    OriginalFileName: "how-to-place-an-event-order-video",
+    Type: "Video",
+
+    // Direct link to the video file
   },
   productKey13: {
-    Categoryname:"Orders",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-place-an-order-video.mp4",
-    filename:"How to Place an order Video ",
-    OriginalFileName:"how-to-place-an-order-video",
-    Type:"Video",
-    
-   // Direct link to the video file
+    Categoryname: "Orders",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-place-an-order-video.mp4",
+    filename: "How to Place an order Video ",
+    OriginalFileName: "how-to-place-an-order-video",
+    Type: "Video",
+
+    // Direct link to the video file
   },
   productKey14: {
-    Categoryname:"Orders",
-    Link: "https://b2b.beautyfashionsales.com/help/how-to-place-an-order.pdf ",
-    filename:"How to Place on Order  ",
-    OriginalFileName:"how-to-place-an-order",
-    Type:"pfd",
-   
-   // Direct link to the video file
+    Categoryname: "Orders",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-place-an-order.pdf",
+    filename: "How to Place on Order  ",
+    OriginalFileName: "how-to-place-an-order",
+    Type: "pfd",
+
+    // Direct link to the video file
   },
   productKey15: {
-    Categoryname:"Orders",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-place-preorders-video.mp4",
-    filename:"How to Place Preorder Video",
-    OriginalFileName:"how-to-place-preorders-video",
-    Type:"Video",
-    
-   // Direct link to the video file
+    Categoryname: "Orders",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-place-preorders-video.mp4",
+    filename: "How to Place Preorder Video",
+    OriginalFileName: "how-to-place-preorders-video",
+    Type: "Video",
+
+    // Direct link to the video file
   },
   productKey16: {
-    Categoryname:"Orders",
-    Link: "https://b2b.beautyfashionsales.com/help/how-to-place-preorders.pdf ",
-    filename:"How to Place preorders ",
-    OriginalFileName:"how-to-place-preorders",
-    Type:"pdf",
+    Categoryname: "Orders",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-place-preorders.pdf",
+    filename: "How to Place preorders ",
+    OriginalFileName: "how-to-place-preorders",
+    Type: "pdf",
 
-    
-   // Direct link to the video file
+
+    // Direct link to the video file
   },
 
 
