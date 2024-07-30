@@ -66,12 +66,21 @@ width:54%;
  text-align:  center;
   
 }
-.storeCtiy{
+.storeCtiy,.storeCtiy2,.storeCtiy1{
   box-shadow: 0px 0px 1px 1px #c2c2c2;
 border-radius: 10px;
+height: 51px;
+width: 165px;
+}
+.storeCtiy1{
   height: 62px  ;
   width: 185px;
 }
+.storeCtiy2{
+  height: 62px;
+  width: 185px;
+}
+
 .RollingHills{
   font-weight: 500;
   font-size: 16px;
