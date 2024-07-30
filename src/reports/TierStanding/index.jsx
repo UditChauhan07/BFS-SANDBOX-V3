@@ -10,9 +10,10 @@ import { LuArrowBigDownDash, LuArrowBigUpDash } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { BiDollar } from "react-icons/bi";
 import MapGenerator from "../../components/Map";
+import classNames from "classnames";
 const center = {
-    lat: 38.7734612,
-    lng: -97.143973
+    lat: 38,
+    lng: -97
 };
 
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -22,6 +23,7 @@ const Tier = () => {
     const navigate = useNavigate();
     let date = new Date();
     let dYear = date.getFullYear();
+    const [ext, setExt] = useState(false);
     const [year, setYear] = useState(dYear)
     const [tier, setTier] = useState({ isLoad: false, data: [], getSalesHolder: {}, currentYearRevenue: 0, previousYearRevenue: 0 });
     useEffect(() => {
@@ -33,21 +35,34 @@ const Tier = () => {
         if (tier?.data?.length) {
             let markHelper = {};
             tier.data.map((item, index) => {
-                // console.log({item});
-                if (!markHelper[item.Id]) {
-                    markHelper[item.Id] = {
+                let address = `<b>Address:</b><p>${item.StoreStreet ? item.StoreStreet : ''} ${item.StoreCity ? ', ' + item.StoreCity + ',' : ''}</p><p>${item.StoreState ? item.StoreState : ''} ${item.StoreCountry ? ', ' + item.StoreCountry : ''} ${item.StoreZip ? item.StoreZip : ''}</p>`
+                if (item.location.lat && item.location.long) {
+                    response.push({
                         Name: item.Name,
                         Location: item.location,
-                        StoreAddress: `<b>Address:</b><p>${item.StoreStreet?item.StoreStreet:''} ${item.StoreCity ? ', ' + item.StoreCity+',' : ''}</p><p>${item.StoreState ? item.StoreState : ''} ${item.StoreCountry ? ', ' + item.StoreCountry : ''} ${item.StoreZip ? item.StoreZip : ''}</p>`,
-                        Brands: {}
-                    }
+                        lat: item.location.lat, lng: item.location.long,
+                        StoreAddress: address,
+                        icon: `/assets/${item.Tier || 'E'}.png`,
+                        content: `${address}<br/><b>Brands:</b><p>${item.BrandName} &nbsp;${item.Tier}</p>`,
+                        tier: item.Tier ?? 'E'
+                    })
                 }
-                if (!markHelper[item.Id].Brands?.[item.BrandId]) {
-                    markHelper[item.Id].Brands[item.BrandId] = {}
-                }
-                markHelper[item.Id].Brands[item.BrandId].Name = item.BrandName
-                markHelper[item.Id].Brands[item.BrandId].Tier = item.Tier ?? 0
+                // console.log({item});
+                // if (!markHelper[item.Id]) {
+                //     markHelper[item.Id] = {
+                //         Name: item.Name,
+                //         Location: item.location,
+                //         StoreAddress: `<b>Address:</b><p>${item.StoreStreet ? item.StoreStreet : ''} ${item.StoreCity ? ', ' + item.StoreCity + ',' : ''}</p><p>${item.StoreState ? item.StoreState : ''} ${item.StoreCountry ? ', ' + item.StoreCountry : ''} ${item.StoreZip ? item.StoreZip : ''}</p>`,
+                //         Brands: {}
+                //     }
+                // }
+                // if (!markHelper[item.Id].Brands?.[item.BrandId]) {
+                //     markHelper[item.Id].Brands[item.BrandId] = {}
+                // }
+                // markHelper[item.Id].Brands[item.BrandId].Name = item.BrandName
+                // markHelper[item.Id].Brands[item.BrandId].Tier = item.Tier ?? 5
             })
+            console.log({ response });
             let accountIds = Object.keys(markHelper);
             if (accountIds.length) {
                 accountIds.map((actId) => {
@@ -55,7 +70,7 @@ const Tier = () => {
                         let helper = {
                             title: markHelper[actId].Name,
                             lat: markHelper[actId].Location.lat, lng: markHelper[actId].Location.long,
-                            content: null
+                            content: null, icon: null
                         }
                         let brandids = Object.keys(markHelper[actId]?.Brands);
                         let brandStr = "";
@@ -67,7 +82,8 @@ const Tier = () => {
                             })
                         }
                         let address = markHelper[actId].StoreAddress
-                        helper.content= brandStr!=""?`${address}<br/><b>Brands:</b>${brandStr}`:address+brandStr
+                        helper.icon = "/assets/" + 5 + ".png"
+                        helper.content = brandStr != "" ? `${address}<br/><b>Brands:</b>${brandStr}` : address + brandStr
                         response.push(helper)
                     }
                 })
@@ -228,7 +244,20 @@ const Tier = () => {
                 </div>}
                 {isLoad && true &&
                     <div className="mt-3 mb-3 m-auto">
-                        <div className={Styles.mapHolder}><MapGenerator focusOn={center} MarkLocations={MarkLocations} /></div>
+                        <div className={Styles.mapHolder}>
+                            <div className={Styles.mapContainer} style={ext ? { height: '65vh' } : {}}><MapGenerator focusOn={center} MarkLocations={MarkLocations} /></div>
+                            <div className={Styles.extHolder} title={ext ? "Click to reduce height" : "click to enlarge height"} onClick={() => setExt(!ext)}> <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="29"
+                                height="28"
+                                viewBox="0 0 29 28"
+                                fill="none"
+                                className={classNames({
+                                    "rotate-180": ext,
+                                })}
+                            >
+                                <path d="M7.71484 10.8534L14.8098 17.7119L21.9048 10.8534" stroke="#403A35" strokeWidth={"2"} />
+                            </svg></div></div>
                     </div>}
                 <div className={`d-flex p-3 ${Styles.tableBoundary} mb-5`}>
                     <div className="" style={{ maxHeight: "73vh", minHeight: "40vh", overflow: "auto", width: "100%" }}>
