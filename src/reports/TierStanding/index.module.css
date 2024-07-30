@@ -203,6 +203,10 @@
   letter-spacing: 2px;
   text-transform: uppercase;
 }
+.mapHolder{
+  width: 100%;
+  height: 350px;
+}
 .cardHolder {
   /* background: #ecfbff; */
   width: 100%;
