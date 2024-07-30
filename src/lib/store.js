@@ -1322,7 +1322,7 @@ export const productGuides = {
     Categoryname: "Access",
     filename: "How to Access BFSG Retailer Portal Video",
     OriginalFileName: "how-to-access-bfsg-retailer-portal-video",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-access-bfsg-retailer-portal-video.mp4/How%20to%20Access%20BFSG%20Retailer%20Portal%20HowtoAccessBFSGRetailerPortalVideo.mp4/index",
+    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-access-bfsg-retailer-portal-video.mp4",
     Type: "Video",
   },
   productKey2: {
@@ -1347,7 +1347,7 @@ export const productGuides = {
   },
   productKey4: {
     Categoryname:"Customer Service",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-report-product-damages-video.mp4/Videos.mp4/index",
+    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-report-product-damages-video.mp4",
     filename:"How to Report Product Damages Video  ",
     OriginalFileName:"how-to-report-product-damages-video",
     Type:"Video",
@@ -1374,7 +1374,7 @@ export const productGuides = {
   },
   productKey7: {
     Categoryname:"Customer Service",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-report-product-shortages-video.mp4/Videos1.mp4/index",
+    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-report-product-shortages-video.mp4",
     filename:"How to Report Product Damages Stortages  ",
     OriginalFileName:"how-to-report-product-shortages-video",
     Type:"Video",
@@ -1383,7 +1383,8 @@ export const productGuides = {
   },
   productKey8: {
     Categoryname:"Customer Service",
-    Link: "https://b2b.beautyfashionsales.com/help/	how-to-request-invoice-tracking-number-order-status.pdf ",
+    Link: "https://b2b.beautyfashionsales.com/help/how-to-request-invoice-tracking-number-order-status.pdf ",
+
     filename:"How To Request Invoice Tracking Number Order Status ",
     OriginalFileName:"	how-to-request-invoice-tracking-number-order-status",
     Type:"pdf",
@@ -1392,7 +1393,7 @@ export const productGuides = {
   },
   productKey9: {
     Categoryname:"Marketing Calender",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-marketing-calendar-video.mp4/Video2.mp4/index",
+    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-marketing-calendar-video.mp4",
     filename:"How to Marketing calendar Video ",
     OriginalFileName:"how-to-marketing-calendar-video",
     Type:"Video",
@@ -1419,7 +1420,7 @@ export const productGuides = {
   },
  productKey12: {
     Categoryname:"Orders",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-place-an-event-order-video.mp4/Video3.mp4/index",
+    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-place-an-event-order-video.mp4",
     filename:"How to place an Event order Video ",
     OriginalFileName:"how-to-place-an-event-order-video",
     Type:"Video",
@@ -1428,7 +1429,7 @@ export const productGuides = {
   },
   productKey13: {
     Categoryname:"Orders",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-place-an-order-video.mp4/Video5.mp4/index",
+    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-place-an-order-video.mp4",
     filename:"How to Place an order Video ",
     OriginalFileName:"how-to-place-an-order-video",
     Type:"Video",
@@ -1446,7 +1447,7 @@ export const productGuides = {
   },
   productKey15: {
     Categoryname:"Orders",
-    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-place-preorders-video.mp4/Viedo6.mp4/index",
+    Link: "https://b2b.beautyfashionsales.com/files/help/how-to-place-preorders-video.mp4",
     filename:"How to Place Preorder Video",
     OriginalFileName:"how-to-place-preorders-video",
     Type:"Video",
