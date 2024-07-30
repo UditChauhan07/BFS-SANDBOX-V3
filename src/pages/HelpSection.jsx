@@ -47,6 +47,8 @@ const HelpSection = () => {
   };
 
   const handleDownload = async () => {
+    console.log({currentLink});
+    return;
     setIsDownloading(true); // Start the spinner
     try {
       const response = await fetch(currentLink);
@@ -165,19 +167,19 @@ const HelpSection = () => {
                       {currentFileName}
                     </h1>
 
-                   
+
                   </div>
                   <button
-                      className={styles.downloadButton}
-                      onClick={openDownloadConfirm}
-                    >
-                      <div className="d-flex align-items-center justify-content-between gap-1" >
-                        <MdOutlineDownload size={16} />Download
-                      </div>
-                    </button>
+                    className={styles.downloadButton}
+                    onClick={openDownloadConfirm}
+                  >
+                    <div className="d-flex align-items-center justify-content-between gap-1" >
+                      <MdOutlineDownload size={16} />Download
+                    </div>
+                  </button>
 
-                  <button type="button" onClick={closeModal} style={{ marginLeft: "50px",marginTop:"-3px", width: "15px", height:"20px"}} >
-                  <IoIosCloseCircleOutline  size={35}/>
+                  <button type="button" onClick={closeModal} style={{ marginLeft: "50px", marginTop: "-3px", width: "15px", height: "20px" }} >
+                    <IoIosCloseCircleOutline size={35} />
                   </button>
                 </div>
               </div>
@@ -194,7 +196,7 @@ const HelpSection = () => {
               ) : (
                 <iframe
                   src={currentLink}
-                  style={{ width: "104%", height: "400px", marginLeft: "-20px",overflow: "hidden" }}></iframe>
+                  style={{ width: "104%", height: "400px", marginLeft: "-20px", overflow: "hidden" }}></iframe>
               )}
               {isDownloadConfirmOpen &&
                 <div className={styles.modalOverlay}>

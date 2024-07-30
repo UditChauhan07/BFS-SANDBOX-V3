@@ -114,6 +114,7 @@ const TargetReport = () => {
                     AccountName: target.AccountName,
                     ManufacturerName: target.ManufacturerName,
                     DateOpen: target.DateOpen,
+                    Status:target.Status,
                     JanuaryTarget: target.January.monthTarget,
                     JanuarySale: target.January.sales,
                     JanuaryDiff: target.January.diff,
