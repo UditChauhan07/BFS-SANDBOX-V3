@@ -108,18 +108,18 @@ const StoreDetailCard = ({ account }) => {
                     <div className="col-lg-6" >
                         <div className="d-flex align-items-center justify-content-between ">
                             <div className={Styles.storeCtiy}>
-                                <p className={Styles.City}>Store City</p>
+                                <sup className={Styles.City}>Store City</sup>
                                 <small className={Styles.RollingHills} >Rolling Hills Estate</small>
 
                             </div>
-                            <div  className={Styles.storeCtiy}>
-                            <p className={Styles.City}>Store City</p>
-                            <small className={Styles.RollingHills} >Rolling Hills Estate</small>
+                            <div  className={Styles.storeCtiy1}>
+                            <span className={Styles.City}>Store State</span>
+                            <small className={Styles.RollingHills} >CA</small>
                             </div>
 
-                            <div  className={Styles.storeCtiy}>
-                            <sup className={Styles.City}>Store City</sup>
-                            <sub className={Styles.RollingHills} >Rolling Hills Estate</sub>
+                            <div  className={Styles.storeCtiy1}>
+                            <p className={Styles.City}>Phone</p>
+                            <small className={Styles.RollingHills} >(310) 541-5500</small>
 
                             </div>
 
