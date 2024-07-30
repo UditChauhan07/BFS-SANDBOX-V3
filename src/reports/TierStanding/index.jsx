@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { ArrayFindMaxMin, GetAuthData, admins, formatNumber, getTierReportHandler } from "../../lib/store"
 import Loading from "../../components/Loading";
 import AppLayout from "../../components/AppLayout";
@@ -9,6 +9,11 @@ import { MdOutlineDownload } from "react-icons/md";
 import { LuArrowBigDownDash, LuArrowBigUpDash } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { BiDollar } from "react-icons/bi";
+import MapGenerator from "../../components/Map";
+const center = {
+    lat: 38.7734612,
+    lng: -97.143973
+};
 
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
@@ -22,12 +27,59 @@ const Tier = () => {
     useEffect(() => {
         GetDataHandler()
     }, [])
+    //define marker
+    const MarkLocations = useMemo(() => {
+        let response = [];
+        if (tier?.data?.length) {
+            let markHelper = {};
+            tier.data.map((item, index) => {
+                // console.log({item});
+                if (!markHelper[item.Id]) {
+                    markHelper[item.Id] = {
+                        Name: item.Name,
+                        Location: item.location,
+                        StoreAddress: `<b>Address:</b><p>${item.StoreStreet?item.StoreStreet:''} ${item.StoreCity ? ', ' + item.StoreCity+',' : ''}</p><p>${item.StoreState ? item.StoreState : ''} ${item.StoreCountry ? ', ' + item.StoreCountry : ''} ${item.StoreZip ? item.StoreZip : ''}</p>`,
+                        Brands: {}
+                    }
+                }
+                if (!markHelper[item.Id].Brands?.[item.BrandId]) {
+                    markHelper[item.Id].Brands[item.BrandId] = {}
+                }
+                markHelper[item.Id].Brands[item.BrandId].Name = item.BrandName
+                markHelper[item.Id].Brands[item.BrandId].Tier = item.Tier ?? 0
+            })
+            let accountIds = Object.keys(markHelper);
+            if (accountIds.length) {
+                accountIds.map((actId) => {
+                    if (markHelper[actId]?.Brands && markHelper[actId].Location.lat && markHelper[actId].Location.long) {
+                        let helper = {
+                            title: markHelper[actId].Name,
+                            lat: markHelper[actId].Location.lat, lng: markHelper[actId].Location.long,
+                            content: null
+                        }
+                        let brandids = Object.keys(markHelper[actId]?.Brands);
+                        let brandStr = "";
+                        if (brandids.length) {
+                            brandids.map((brandId) => {
+                                if (markHelper[actId]?.Brands[brandId]) {
+                                    brandStr += `<p>${markHelper[actId]?.Brands[brandId].Name} &nbsp; ${markHelper[actId]?.Brands[brandId].Tier}</p>`
+                                }
+                            })
+                        }
+                        let address = markHelper[actId].StoreAddress
+                        helper.content= brandStr!=""?`${address}<br/><b>Brands:</b>${brandStr}`:address+brandStr
+                        response.push(helper)
+                    }
+                })
+            }
+        }
+        return response;
+    }, [tier?.data])
 
     const GetDataHandler = () => {
         GetAuthData().then((user) => {
             if (admins.includes(user.Sales_Rep__c)) {
                 getTierReportHandler({ token: user.x_access_token, year: year }).then((res) => {
-                    console.log({ res });
                     let currentYearRevenue = res?.salesArray.reduce((acc, curr) => acc + curr[year], 0);
                     let previousYearRevenue = res?.salesArray.reduce((acc, curr) => acc + curr[year - 1], 0);
                     setTier({ isLoad: true, data: res?.salesArray ?? [], getSalesHolder: res?.getSalesHolder ?? {}, currentYearRevenue, previousYearRevenue });
@@ -74,6 +126,7 @@ const Tier = () => {
     const formentAcmount = (amount) => {
         return `${Number(amount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
     }
+
     return (
         <AppLayout
             filterNodes={<button className="border px-2 d-grid py-1 leading-tight d-grid" onClick={excelExportHandler}>
@@ -90,7 +143,7 @@ const Tier = () => {
                     </div>
                     <div></div>
                 </div>
-                {isLoad && <div className="mt-2 mb-2 m-auto">
+                {isLoad && false && <div className="mt-2 mb-2 m-auto">
                     <div className={Styles.dFlex}>
                         <div className={Styles.cardMd}>
                             {getSalesHolder?.highest
@@ -173,6 +226,10 @@ const Tier = () => {
                         </div>
                     </div>
                 </div>}
+                {isLoad && true &&
+                    <div className="mt-3 mb-3 m-auto">
+                        <div className={Styles.mapHolder}><MapGenerator focusOn={center} MarkLocations={MarkLocations} /></div>
+                    </div>}
                 <div className={`d-flex p-3 ${Styles.tableBoundary} mb-5`}>
                     <div className="" style={{ maxHeight: "73vh", minHeight: "40vh", overflow: "auto", width: "100%" }}>
                         {isLoad ?
