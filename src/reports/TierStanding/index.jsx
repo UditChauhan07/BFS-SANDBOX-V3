@@ -35,32 +35,32 @@ const Tier = () => {
         if (tier?.data?.length) {
             let markHelper = {};
             tier.data.map((item, index) => {
-                let address = `<b>Address:</b><p>${item.StoreStreet ? item.StoreStreet : ''} ${item.StoreCity ? ', ' + item.StoreCity + ',' : ''}</p><p>${item.StoreState ? item.StoreState : ''} ${item.StoreCountry ? ', ' + item.StoreCountry : ''} ${item.StoreZip ? item.StoreZip : ''}</p>`
-                if (item.location.lat && item.location.long) {
-                    response.push({
-                        Name: item.Name,
-                        Location: item.location,
-                        lat: item.location.lat, lng: item.location.long,
-                        StoreAddress: address,
-                        icon: `/assets/${item.Tier || 'E'}.png`,
-                        content: `${address}<br/><b>Brands:</b><p>${item.BrandName} &nbsp;${item.Tier}</p>`,
-                        tier: item.Tier ?? 'E'
-                    })
-                }
-                // console.log({item});
-                // if (!markHelper[item.Id]) {
-                //     markHelper[item.Id] = {
+                // let address = `<b>Address:</b><p>${item.StoreStreet ? item.StoreStreet : ''} ${item.StoreCity ? ', ' + item.StoreCity + ',' : ''}</p><p>${item.StoreState ? item.StoreState : ''} ${item.StoreCountry ? ', ' + item.StoreCountry : ''} ${item.StoreZip ? item.StoreZip : ''}</p>`
+                // if (item.location.lat && item.location.long) {
+                //     response.push({
                 //         Name: item.Name,
                 //         Location: item.location,
-                //         StoreAddress: `<b>Address:</b><p>${item.StoreStreet ? item.StoreStreet : ''} ${item.StoreCity ? ', ' + item.StoreCity + ',' : ''}</p><p>${item.StoreState ? item.StoreState : ''} ${item.StoreCountry ? ', ' + item.StoreCountry : ''} ${item.StoreZip ? item.StoreZip : ''}</p>`,
-                //         Brands: {}
-                //     }
+                //         lat: item.location.lat, lng: item.location.long,
+                //         StoreAddress: address,
+                //         icon: `/assets/${item.Tier || 'E'}.png`,
+                //         content: `${address}<br/><b>Brands:</b><p>${item.BrandName} &nbsp;${item.Tier}</p>`,
+                //         tier: item.Tier ?? 'E'
+                //     })
                 // }
-                // if (!markHelper[item.Id].Brands?.[item.BrandId]) {
-                //     markHelper[item.Id].Brands[item.BrandId] = {}
-                // }
-                // markHelper[item.Id].Brands[item.BrandId].Name = item.BrandName
-                // markHelper[item.Id].Brands[item.BrandId].Tier = item.Tier ?? 5
+                // console.log({item});
+                if (!markHelper[item.Id]) {
+                    markHelper[item.Id] = {
+                        Name: item.Name,
+                        Location: item.location,
+                        StoreAddress: `<b>Address:</b><p>${item.StoreStreet ? item.StoreStreet : ''} ${item.StoreCity ? ', ' + item.StoreCity + ',' : ''}</p><p>${item.StoreState ? item.StoreState : ''} ${item.StoreCountry ? ', ' + item.StoreCountry : ''} ${item.StoreZip ? item.StoreZip : ''}</p>`,
+                        Brands: {}
+                    }
+                }
+                if (!markHelper[item.Id].Brands?.[item.BrandId]) {
+                    markHelper[item.Id].Brands[item.BrandId] = {}
+                }
+                markHelper[item.Id].Brands[item.BrandId].Name = item.BrandName
+                markHelper[item.Id].Brands[item.BrandId].Tier = item.Tier ?? 5
             })
             console.log({ response });
             let accountIds = Object.keys(markHelper);
