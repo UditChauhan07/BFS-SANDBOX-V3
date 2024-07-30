@@ -56,7 +56,7 @@ const HelpSection = () => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `${currentType === 'Video' ? 'video.mp4' : 'document.pdf'}`);
+      link.setAttribute('download', `${currentFileName}`);
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
@@ -67,49 +67,7 @@ const HelpSection = () => {
       setIsDownloading(false); // Stop the spinner even if there's an error
     }
   };
-  // const handleDownload = async () => {
-  //   setIsDownloading(true); // Start the spinner
-  //   try {
-  //     const response = await fetch(currentLink);
-  //     const reader = response.body.getReader();
-  //     const contentLength = +response.headers.get('Content-Length');
-
-  //     let receivedLength = 0; // received that many bytes at the moment
-  //     let chunks = []; // array of received binary chunks (comprises the body)
-  //     const downloadProgress = document.getElementById('downloadProgress');
-
-  //     while (true) {
-  //       const { done, value } = await reader.read();
-
-  //       if (done) {
-  //         break;
-  //       }
-
-  //       chunks.push(value);
-  //       receivedLength += value.length;
-
-  //       // Update the progress bar
-  //       if (downloadProgress) {
-  //         downloadProgress.style.width = `${(receivedLength / contentLength) * 100}%`;
-  //       }
-  //     }
-
-  //     const blob = new Blob(chunks);
-  //     const url = window.URL.createObjectURL(blob);
-  //     const link = document.createElement('a');
-  //     link.href = url;
-  //     link.setAttribute('download', `${currentType === 'Video' ? 'video.mp4' : 'document.pdf'}`);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     link.parentNode.removeChild(link);
-
-  //     setIsDownloading(false); // Stop the spinner
-  //     closeDownloadConfirm(); // Close the download confirmation modal
-  //   } catch (error) {
-  //     console.error('Download failed:', error);
-  //     setIsDownloading(false); // Stop the spinner even if there's an error
-  //   }
-  // };
+  
 
   const filteredGuides = guides.filter((guide) =>
     guide.Categoryname.toLowerCase().includes(searchTerm.toLowerCase()) ||
