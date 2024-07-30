@@ -10,9 +10,8 @@ const containerStyle = {
 
 const MapGenerator = ({ focusOn, MarkLocations, zoom = 5 }) => {
     const key = process.env.REACT_APP_GMAK;
-    let p = process.env
-    console.log({p});
     const [selectedMarker, setSelectedMarker] = useState(null);
+    if(key){
     return (<LoadScript
         googleMapsApiKey={key}
         loadingElement={<Loading />}
@@ -44,6 +43,9 @@ const MapGenerator = ({ focusOn, MarkLocations, zoom = 5 }) => {
             )}
         </GoogleMap>
     </LoadScript>)
+    }else{
+        return null;
+    }
 }
 
 export default MapGenerator
