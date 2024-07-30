@@ -36,16 +36,17 @@ const MapGenerator = ({ focusOn, MarkLocations, zoom = 5 }) => {
             >
                 {MarkLocations.length && MarkLocations.map((location, index) => (
                     <>
+                    {/* location.icon ||  */}
                         <Marker
                             key={index}
-                            icon={location.icon || "/assets/marker.png"}
+                            icon={"/assets/marker.png"}
                             position={{ lat: location.lat, lng: location.lng }}
                             onClick={() => setSelectedMarker(location)}
                         />
-                        <Circle
+                        {/* <Circle
                             center={location}
                             options={{ ...circleOptions, strokeColor: color[location.tier], fillColor: color[location.tier] }}
-                        />
+                        /> */}
                     </>
                 ))}
 
