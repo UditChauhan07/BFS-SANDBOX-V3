@@ -1351,8 +1351,6 @@ export const productGuides = {
     filename: "How to Report Product Damages Video  ",
     OriginalFileName: "how-to-report-product-damages-video",
     Type: "Video",
-
-    // Direct link to the video file
   },
   productKey5: {
     Categoryname: "Customer Service",
@@ -1417,6 +1415,7 @@ export const productGuides = {
 
     // Direct link to the video file
   },
+
   productKey12: {
     Categoryname: "Orders",
     Link: "https://b2b.beautyfashionsales.com/help/how-to-place-an-event-order-video.mp4",
