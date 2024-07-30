@@ -41,7 +41,7 @@ const SalesReport = () => {
     if (searchBy) {
       filtered = filtered?.map((ele) => {
         const Orders = ele.Orders.filter((item) => {
-          if (item.Name?.toLowerCase().includes(searchBy?.toLowerCase())) {
+          if (item.Name?.toLowerCase().includes(searchBy?.toLowerCase())||item.AccountName?.toLowerCase().includes(searchBy?.toLowerCase())) {
             return item;
           }
         });

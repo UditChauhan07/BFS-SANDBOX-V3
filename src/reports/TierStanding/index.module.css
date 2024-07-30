@@ -204,8 +204,25 @@
   text-transform: uppercase;
 }
 .mapHolder{
+  position: relative;
+}
+.mapHolder .mapContainer{
   width: 100%;
   height: 350px;
+  padding-bottom: 30px;
+}
+.mapHolder .extHolder{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  background: #ccc;
+  color: #fff;
+  display: grid;
+  place-content: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  cursor: pointer;
 }
 .cardHolder {
   /* background: #ecfbff; */
