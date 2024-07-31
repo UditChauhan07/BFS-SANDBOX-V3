@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./page.module.css";
 import AppLayout from "../components/AppLayout";
-import { productGuides } from "../lib/store";
+import { originAPi, productGuides } from "../lib/store";
 import ModalPage from "../components/Modal UI";
 import { IoIosCloseCircleOutline } from "react-icons/io"
 import { MdOutlineDownload } from "react-icons/md";
@@ -47,70 +47,14 @@ const HelpSection = () => {
   };
 
   const handleDownload = async () => {
-    console.log({currentLink});
-    return;
     setIsDownloading(true); // Start the spinner
-    try {
-      const response = await fetch(currentLink);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `${currentType === 'Video' ? 'video.mp4' : 'document.pdf'}`);
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-      setIsDownloading(false); // Stop the spinner
-      closeDownloadConfirm(); // Close the download confirmation modal
-    } catch (error) {
-      console.error('Download failed:', error);
-      setIsDownloading(false); // Stop the spinner even if there's an error
-    }
+    const a = document.createElement('a');
+    a.href = `${originAPi}/api/download?fileName=${currentLink}`;
+    // a.target = '_blank'
+    a.click();
+    setIsDownloading(false); // Stop the spinner
+    closeDownloadConfirm(); // Close the download confirmation modal
   };
-  // const handleDownload = async () => {
-  //   setIsDownloading(true); // Start the spinner
-  //   try {
-  //     const response = await fetch(currentLink);
-  //     const reader = response.body.getReader();
-  //     const contentLength = +response.headers.get('Content-Length');
-
-  //     let receivedLength = 0; // received that many bytes at the moment
-  //     let chunks = []; // array of received binary chunks (comprises the body)
-  //     const downloadProgress = document.getElementById('downloadProgress');
-
-  //     while (true) {
-  //       const { done, value } = await reader.read();
-
-  //       if (done) {
-  //         break;
-  //       }
-
-  //       chunks.push(value);
-  //       receivedLength += value.length;
-
-  //       // Update the progress bar
-  //       if (downloadProgress) {
-  //         downloadProgress.style.width = `${(receivedLength / contentLength) * 100}%`;
-  //       }
-  //     }
-
-  //     const blob = new Blob(chunks);
-  //     const url = window.URL.createObjectURL(blob);
-  //     const link = document.createElement('a');
-  //     link.href = url;
-  //     link.setAttribute('download', `${currentType === 'Video' ? 'video.mp4' : 'document.pdf'}`);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     link.parentNode.removeChild(link);
-
-  //     setIsDownloading(false); // Stop the spinner
-  //     closeDownloadConfirm(); // Close the download confirmation modal
-  //   } catch (error) {
-  //     console.error('Download failed:', error);
-  //     setIsDownloading(false); // Stop the spinner even if there's an error
-  //   }
-  // };
-
   const filteredGuides = guides.filter((guide) =>
     guide.Categoryname.toLowerCase().includes(searchTerm.toLowerCase()) ||
     guide.filename.toLowerCase().includes(searchTerm.toLowerCase())
@@ -185,7 +129,7 @@ const HelpSection = () => {
               </div>
               {currentType === 'Video' ? (
                 <ReactPlayer
-                  url={currentLink}
+                  url={`${originAPi}/${currentLink}`}
                   width="104%"
                   height="400px"
                   overflow="hidden"
@@ -195,7 +139,7 @@ const HelpSection = () => {
                 ></ReactPlayer>
               ) : (
                 <iframe
-                  src={currentLink}
+                  src={`${originAPi}/${currentLink}`}
                   style={{ width: "104%", height: "400px", marginLeft: "-20px", overflow: "hidden" }}></iframe>
               )}
               {isDownloadConfirmOpen &&
@@ -203,7 +147,7 @@ const HelpSection = () => {
                   <div className={styles.modalContent}>
                     <p style={{ marginTop: '20px' }}>Are you sure you want to download. ? </p>
                     <div className={styles.modalActions}>
-                      <button onClick={handleDownload} className={styles.confirmButton}>YES</button>
+                      <button onClick={() => handleDownload()} className={styles.confirmButton}>YES</button>
                       <button onClick={closeDownloadConfirm} className={styles.cancelButton}>NO</button>
                     </div>
                     {/* {isDownloading && (
