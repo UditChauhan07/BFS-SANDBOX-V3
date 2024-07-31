@@ -239,10 +239,13 @@ const YearlyComparisonReportTable = ({ comparisonData, status }) => {
                 <tfoot>
                   <tr>
                     {" "}
-                    <td className={`${styles.lastRow} ${styles.stickyFirstColumn} ${styles.stickyLastRow}`} colSpan={5}>
+                    <td className={`${styles.lastRow} ${styles.stickyFirstColumn} ${styles.stickyLastRow}`}>
                       {" "}
                       TOTAL
                     </td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}></td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}></td>
+                    <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}></td>
                     <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`}>
                       {" "}
                       {monthTotalAmount.Jan.retailer
