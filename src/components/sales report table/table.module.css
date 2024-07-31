@@ -103,7 +103,7 @@
 }
 .stickyLastRow {
   position: sticky;
-  bottom: 0%;
+  bottom: -1%;
 }
 .lastRow {
   background-color: #f8f8f8 !important;
