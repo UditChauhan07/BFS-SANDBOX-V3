@@ -58,13 +58,13 @@
 }
 .stickySecondColumn {
   position: sticky;
-  left: 200px;
+  left: 180px;
   z-index: 2;
   /* max-width: 150px !important; */
 }
 .stickySecondColumnHeading {
   position: sticky;
-  left: 200px;
+  left: 180px;
   top: 0%;
   z-index: 5;
 }
@@ -83,13 +83,13 @@
 }
 .stickyThirdColumn1 {
   position: sticky;
-  left: 400px;
+  left: 375px;
   z-index: 2;
 }
 
 .stickyThirdColumnHeading1 {
   position: sticky;
-  left: 400px;
+  left: 375px;
   top: 0%;
   z-index: 5;
   min-width: 130px !important;
