@@ -46,7 +46,7 @@ const HelpSection = () => {
     setIsDownloadConfirmOpen(false);
   };
 
-  const handleDownload = async () => {
+  const handleDownload = () => {
     setIsDownloading(true); // Start the spinner
     const a = document.createElement('a');
     a.href = `${originAPi}/api/download?fileName=${currentLink}`;
