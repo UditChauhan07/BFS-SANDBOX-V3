@@ -182,7 +182,7 @@ const SalesReport = () => {
       "Nov Amount": dataWithTotals.reduce((total, item) => total + (item['Nov Amount'] || 0), 0),
 
       'Dec Orders': dataWithTotals.reduce((total, item) => total + (item['Dec Orders'] || 0), 0),
-      "Dec Amount": dataWithTotals.reduce((total, item) => total + (item['Dce Amount'] || 0), 0),
+      "Dec Amount": dataWithTotals.reduce((total, item) => total + (item['Dec Amount'] || 0), 0),
 
       "Total Orders": dataWithTotals.reduce((total, item) => total + (item['Total Orders'] || 0), 0),
       "Total Amount": dataWithTotals.reduce((total, item) => total + (item['Total Amount'] || 0), 0),

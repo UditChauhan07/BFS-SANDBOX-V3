@@ -114,7 +114,7 @@ const TargetReport = () => {
                     AccountName: target.AccountName,
                     ManufacturerName: target.ManufacturerName,
                     DateOpen: target.DateOpen,
-                    Status:target.Status,
+                    Status: target.Status,
                     JanuaryTarget: target.January.monthTarget,
                     JanuarySale: target.January.sales,
                     JanuaryDiff: target.January.diff,
@@ -555,10 +555,10 @@ const TargetReport = () => {
                                         <th className={`${Styles.th} ${Styles.stickyThirdColumnHeading}`} style={{ minWidth: "200px" }}>
                                             Brand
                                         </th>
-                                        <th className={`${Styles.th} ${Styles.stickyThirdColumnHeading}`} style={{ minWidth: "200px" }}>
+                                        <th className={`${Styles.th} ${Styles.stickyMonth}`} style={{ minWidth: "200px" }}>
                                             Status
                                         </th>
-                                        <th className={`${Styles.th} ${Styles.stickyThirdColumnHeading}`} style={{ minWidth: "200px" }}>
+                                        <th className={`${Styles.th} ${Styles.stickyMonth}`} style={{ minWidth: "200px" }}>
                                             Date Open
                                         </th>
                                         <th className={`${Styles.month} ${Styles.stickyMonth}`} style={{ minWidth: "125px" }}>
@@ -741,10 +741,10 @@ const TargetReport = () => {
                                             return (
                                                 <tr key={index}>
                                                     <td className={`${Styles.td} ${Styles.stickyFirstColumn}`}>{element?.salesRepName}</td>
-                                                    <td className={`${Styles.td} ${Styles.stickySecondColumn}`}><Link style={{color:'#000'}} to={'/store/'+element.AccountId}>{element?.AccountName}</Link></td>
-                                                    <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}><Link to={'/Brand/'+element.ManufacturerId} style={{color:'#000'}}>{element.ManufacturerName}</Link></td>
-                                                    <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}>{element.Status}</td>
-                                                    <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}>{DateConvert(element?.DateOpen)}</td>
+                                                    <td className={`${Styles.td} ${Styles.stickySecondColumn}`}><Link style={{ color: '#000' }} to={'/store/' + element.AccountId}>{element?.AccountName}</Link></td>
+                                                    <td className={`${Styles.td} ${Styles.stickyThirdColumn}`}><Link to={'/Brand/' + element.ManufacturerId} style={{ color: '#000' }}>{element.ManufacturerName}</Link></td>
+                                                    <td className={`${Styles.td}`}>{element.Status}</td>
+                                                    <td className={`${Styles.td}`}>{DateConvert(element?.DateOpen)}</td>
                                                     <td className={`${Styles.td}`}>${formentAcmount(element.January.monthTarget)}
                                                         {element.January.totalRoll ? (element.January.totalRoll > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formentAcmount(element.January.totalRoll)}</small>+{formentAcmount(element.January.staticTarget)}</p></> : false ? <><br /><p className={Styles.calHolder}>{formentAcmount(element.January.staticTarget)}-<small style={{ color: 'green' }}>{formentAcmount(-element.January.totalRoll)}</small></p></> : null) : null}
                                                     </td>
