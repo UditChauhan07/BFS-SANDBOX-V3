@@ -831,15 +831,13 @@ const TargetReport = () => {
                                         <td className={`${Styles.lastRow} ${Styles.stickyFirstColumn} ${Styles.stickyLastRow}`}>
                                             TOTAL
                                         </td>
-                                        <td className={`${Styles.lastRow}  ${Styles.stickyFirstColumn}  ${Styles.stickyLastRow}`} >
+                                        <td className={`${Styles.lastRow}  ${Styles.stickySecondColumn}  ${Styles.stickyLastRow}`} >
+                                        </td>
+                                        <td className={`${Styles.lastRow}  ${Styles.stickyThirdColumn}  ${Styles.stickyLastRow}`} >
                                         </td>
                                         <td className={`${Styles.lastRow}  ${Styles.stickyFirstColumn}  ${Styles.stickyLastRow}`} >
                                         </td>
                                         <td className={`${Styles.lastRow}  ${Styles.stickyFirstColumn}  ${Styles.stickyLastRow}`} >
-                                        </td>
-                                        <td className={`${Styles.lastRow}  ${Styles.stickyFirstColumn}  ${Styles.stickyLastRow}`} >
-                                        </td>
-                                        <td className={`${Styles.lastRow}  ${Styles.stickyFirstColumn}  ${Styles.stickyLastRow}`}>
                                         </td>
                                         <td className={`${Styles.lastRow}  ${Styles.lastRowMonth}  ${Styles.stickyLastRow}`}>
                                             ${formentAcmount(monthTotalAmount.Jan.target)}

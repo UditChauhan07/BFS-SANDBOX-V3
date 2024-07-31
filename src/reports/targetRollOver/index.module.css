@@ -70,7 +70,7 @@
   position: sticky;
   left: 170px;
   z-index: 2;
-  max-width: 170px !important;
+  max-width: 130px !important;
 }
 .stickySecondColumnHeading {
   position: sticky;
@@ -163,7 +163,7 @@
 }
 .stickyLastRow {
   position: sticky;
-  bottom: 0%;
+  bottom: -1%;
 }
 .lastRow {
   background-color: #f8f8f8 !important;
