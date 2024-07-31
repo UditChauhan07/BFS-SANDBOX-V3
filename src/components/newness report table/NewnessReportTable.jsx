@@ -115,7 +115,7 @@ const NewnessReportTable = ({ newnessData, dataDisplay }) => {
                 <tr>
                   <td className={`${styles.lastRow} ${styles.stickyFirstColumn} ${styles.stickyLastRow}`} style={{ minWidth: "191px" }}>Total</td>
                   {/* <td colSpan={3}></td> */}
-                  <td className={`${styles.lastRow} ${styles.stickySecondColumn} ${styles.stickyLastRow}`} style={{ minWidth: "202px" }}></td>
+                  <td className={`${styles.lastRow} ${styles.stickySecondColumn} ${styles.stickyLastRow}`} style={{ minWidth: "225px" }}></td>
                   <td className={`${styles.lastRow} ${styles.stickyThirdColumn} ${styles.stickyLastRow}`} style={{ minWidth: "120px" }}></td>
                   <td className={`${styles.lastRow} ${styles.stickyLastRow}`} style={{ minWidth: "120px" }}></td>
 
