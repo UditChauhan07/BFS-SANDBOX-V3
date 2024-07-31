@@ -21,7 +21,7 @@
   padding: 0;
   margin: 0;
 }
-.breakHolder{
+.breakHolder {
   width: 2px;
   height: 100%;
   background: #fff;
@@ -57,36 +57,36 @@
 }
 .stickyFirstColumn {
   position: sticky;
-  left: 0%;
+  left: -1%;
   z-index: 2;
 }
 .stickyFirstColumnHeading {
   position: sticky;
-  left: 0%;
+  left: -1%;
   top: 0%;
   z-index: 5;
 }
 .stickySecondColumn {
   position: sticky;
-  left: 170px;
+  left: 150px;
   z-index: 2;
   max-width: 130px !important;
 }
 .stickySecondColumnHeading {
   position: sticky;
-  left: 170px;
+  left: 150px;
   top: 0%;
   z-index: 5;
 }
 
 .stickyThirdColumn {
   position: sticky;
-  left: 320px;
+  left: 290px;
   z-index: 2;
 }
 .stickyThirdColumnHeading {
   position: sticky;
-  left: 320px;
+  left: 290px;
   top: 0%;
   z-index: 5;
   min-width: 130px !important;
@@ -105,7 +105,7 @@
 }
 .stickySecondLastColumn {
   position: sticky;
-  right: 164px;
+  right: 120px;
   z-index: 2;
 }
 .inorderflex {
@@ -142,21 +142,21 @@
   padding: 0px 13px;
   border: none;
 }
-.stickyThirdLastColumn{
-    position: sticky;
-    right: 325px;
-    z-index: 2;
+.stickyThirdLastColumn {
+  position: sticky;
+  right: 305px;
+  z-index: 2;
 }
 .stickySecondLastColumnHeading {
   position: sticky;
-  right: 125px;
+  right: 120px;
   top: 0%;
   z-index: 5;
   min-width: 200px !important;
 }
 .stickyThirdLastColumnHeading {
   position: sticky;
-  right: 325px;
+  right: 305px;
   top: 0%;
   z-index: 5;
   min-width: 150px !important;
@@ -185,7 +185,20 @@
   letter-spacing: 1.6px;
   padding-left: 20px !important;
 }
-
+@media (max-width: 1200.98px) {
+  .stickySecondLastColumn {
+    right: 100px;
+  }
+  .stickySecondLastColumnHeading {
+    right: 100px;
+  }
+  .stickyThirdLastColumn{
+    right: 250px;
+  }
+  .stickyThirdLastColumnHeading{
+    right: 250px;
+  }
+}
 /* #salesReportTable tbody tr:nth-last-child(1) {
     position: sticky;
     bottom: 0%;
