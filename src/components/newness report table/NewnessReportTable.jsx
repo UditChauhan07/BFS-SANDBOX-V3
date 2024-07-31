@@ -115,14 +115,14 @@ const NewnessReportTable = ({ newnessData, dataDisplay }) => {
                 <tr>
                   <td className={`${styles.lastRow} ${styles.stickyFirstColumn} ${styles.stickyLastRow}`} style={{ minWidth: "191px" }}>Total</td>
                   {/* <td colSpan={3}></td> */}
-                  <td className={`${styles.lastRow} ${styles.stickyFirstColumn} ${styles.stickyLastRow}`} style={{ minWidth: "202px" }}></td>
-                  <td  className={`${styles.lastRow} ${styles.stickyFirstColumn} ${styles.stickyLastRow}`}style={{ minWidth: "120px" }}></td>
-                  <td className={`${styles.lastRow} ${styles.stickyFirstColumn} ${styles.stickyLastRow}`} style={{ minWidth: "120px" }}></td>
+                  <td className={`${styles.lastRow} ${styles.stickySecondColumn} ${styles.stickyLastRow}`} style={{ minWidth: "202px" }}></td>
+                  <td className={`${styles.lastRow} ${styles.stickyThirdColumn} ${styles.stickyLastRow}`} style={{ minWidth: "120px" }}></td>
+                  <td className={`${styles.lastRow} ${styles.stickyLastRow}`} style={{ minWidth: "120px" }}></td>
 
                   {newnessData.header.map((item, innerIndex) => {
                     length = item?.name?.length * 9.5;
                     return (
-                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`} key={innerIndex} style={{textAlign:'start',minWidth: `${length}px`}}>
+                      <td className={`${styles.lastRow}  ${styles.lastRowMonth}  ${styles.stickyLastRow}`} key={innerIndex} style={{ textAlign: 'start', minWidth: `${length}px` }}>
                         {handleTableDataDisplay(columnTotals[item.name])}
                       </td>
                     );
