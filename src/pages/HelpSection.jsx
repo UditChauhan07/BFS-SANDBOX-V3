@@ -3,12 +3,13 @@ import styles from "./page.module.css";
 import AppLayout from "../components/AppLayout";
 import { originAPi, productGuides } from "../lib/store";
 import ModalPage from "../components/Modal UI";
-import { IoIosCloseCircleOutline } from "react-icons/io"
+import { IoIosCloseCircleOutline, IoMdDocument } from "react-icons/io"
 import { MdOutlineDownload } from "react-icons/md";
 import ReactPlayer from 'react-player';
 import FilterSearch from "../components/FilterSearch";
 import Loading from "../components/Loading";
 import { MdSlideshow } from "react-icons/md";
+import { BiVideo } from "react-icons/bi";
 // import { ClipLoader } from "react-spinners"; // Import the spinner component
 
 const HelpSection = () => {
@@ -145,7 +146,7 @@ const HelpSection = () => {
               {isDownloadConfirmOpen &&
                 <div className={styles.modalOverlay}>
                   <div className={styles.modalContent}>
-                    <p style={{ marginTop: '20px' }}>Are you sure you want to download. ? </p>
+                    <p style={{ marginTop: '20px' }}>Are you sure you want to download?</p>
                     <div className={styles.modalActions}>
                       <button onClick={() => handleDownload()} className={styles.confirmButton}>YES</button>
                       <button onClick={closeDownloadConfirm} className={styles.cancelButton}>NO</button>
@@ -200,7 +201,7 @@ const HelpSection = () => {
                             <td className={styles.td}>
                               {guide.Categoryname}
                             </td>
-                            <td className={styles.td}>
+                            <td className={styles.td}>                    
                               {guide.filename}
                             </td>
                             <td className={styles.td}>
@@ -209,7 +210,8 @@ const HelpSection = () => {
                                 onClick={() => openModal(guide.Link, guide.Type, guide.filename)}
                               >
                                 <div className="d-flex align-items-center justify-content-between gap-1" >
-                                  <MdSlideshow size={16} /> View
+                                  {guide.Type=="Video"?<MdSlideshow size={16} />:<IoMdDocument/>}
+                                   View
                                 </div>
                               </button>
                             </td>
