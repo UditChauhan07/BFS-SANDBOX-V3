@@ -28,6 +28,7 @@ function CreateAccountForm() {
   const [redirect, setRedirect] = useState(false);
   const [tryAgain, setTryAgain] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [files, setFile] = useState([])
   const [manufacturers, setManufacturers] = useState([]);
   const api = useSignUp();
   const ApiManufacturers = usePublicManufacturers();
@@ -58,6 +59,28 @@ function CreateAccountForm() {
     }
   };
 
+  function handleChange(e) {
+    // let tempFile = [...files];
+    let tempFile = [];
+    let reqfiles = e.target.files;
+    if (reqfiles) {
+      if (reqfiles.length > 0) {
+        Object.keys(reqfiles).map((index) => {
+          let url = URL.createObjectURL(reqfiles[index])
+          if (url) {
+            tempFile.push({ preview: url, file: reqfiles[index] });
+          }
+          // this thoughing me Failed to execute 'createObjectURL' on 'URL': Overload resolution failed?
+        })
+      }
+    }
+    setFile(tempFile);
+  }
+  const fileRemoveHandler = (index) => {
+    let tempFile = [...files];
+    tempFile.splice(index, 1)
+    setFile(tempFile);
+  }
   return (
     <>
       {redirect ? (
@@ -207,7 +230,17 @@ function CreateAccountForm() {
                           <label htmlFor="name">Picture (Multiple)</label>
                           <br />
                           {/* <input type="file" class="form-control" name="image[]" placeholder="Upload Image" multiple="true"/> */}
-                          <input className="w-95" type="file" name="images" id="images" multiple />
+                          <input className="w-95" type="file" name="images" id="images" onChange={handleChange} accept="image/*" multiple />
+                          <div className={style.imgHolder}>
+                            {files.map((file, index) => (
+                              <div style={{ position: 'relative' }}>
+                                <span style={{ position: 'absolute', right: '5px', top: '-5px', color: '#000', zIndex: 1, cursor: 'pointer', fontSize: '18px' }} onClick={() => { fileRemoveHandler(index) }}>x</span>
+                                <a href={file?.preview} target="_blank" title="Click to Download">
+                                  <img src={file?.preview} key={index} alt={file?.preview} />
+                                </a>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
