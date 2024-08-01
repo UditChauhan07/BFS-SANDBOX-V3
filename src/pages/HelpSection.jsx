@@ -124,7 +124,7 @@ const HelpSection = () => {
                     </div>
                   </button>
 
-                  <button type="button" onClick={closeModal} style={{ marginLeft: "50px", marginTop: "-3px", width: "15px", height: "20px" }} >
+                  <button type="button" onClick={closeModal} style={{ marginTop: "-3px", width: "15px", height: "20px" }} >
                     <IoIosCloseCircleOutline size={35} />
                   </button>
                 </div>

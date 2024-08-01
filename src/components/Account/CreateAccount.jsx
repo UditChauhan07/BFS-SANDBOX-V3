@@ -57,7 +57,7 @@ function CreateAccountForm() {
       action.resetForm();
     }
   };
-  
+
   return (
     <>
       {redirect ? (
@@ -68,7 +68,7 @@ function CreateAccountForm() {
               <div style={{ maxWidth: "309px" }}>
                 <h1 className={`fs-5 ${Styles.ModalHeader}`}>Congratulations</h1>
                 <p className={` ${Styles.ModalContent}`}>
-                Your wholesale account request with BFG has been added successfully.
+                  Your wholesale account application with <b>BFSG</b> has been submitted successfully! We will review your application and notify you of the status shortly. Thank you for choosing <b>BFSG</b>.
                   <br />
                 </p>
                 <p>Redirecting to Login page...</p>
@@ -214,7 +214,7 @@ function CreateAccountForm() {
 
                     {/* How do you sell to your customers? */}
                     <div className={style.innerInformationRadio}>
-                      <div className={`${style.SvgLogo} ${style.SvgLogo1}`} style={{marginTop:"-1%"}}>
+                      <div className={`${style.SvgLogo} ${style.SvgLogo1}`} style={{ marginTop: "-1%" }}>
                         <QuestionMark />
                       </div>
 
@@ -284,7 +284,7 @@ function CreateAccountForm() {
                     </div>
                     {/* Choose Brands to Apply */}
                     <div className={style.innerInformationRadio}>
-                      <div className={`${style.SvgLogo} ${style.SvgLogo2}`} style={{marginTop:"-1%"}}>
+                      <div className={`${style.SvgLogo} ${style.SvgLogo2}`} style={{ marginTop: "-1%" }}>
                         <ChooseBrand />
                       </div>
 
