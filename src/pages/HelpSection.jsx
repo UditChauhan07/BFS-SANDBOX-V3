@@ -10,6 +10,7 @@ import FilterSearch from "../components/FilterSearch";
 import Loading from "../components/Loading";
 import { MdSlideshow } from "react-icons/md";
 import { BiVideo } from "react-icons/bi";
+import VideoPlayer from "../components/VideoPlayer";
 // import { ClipLoader } from "react-spinners"; // Import the spinner component
 
 const HelpSection = () => {
@@ -97,7 +98,7 @@ const HelpSection = () => {
         <ModalPage
           open
           content={
-            <div ref={modalRef} className="d-flex flex-column gap-3" style={{ width: '75vw' }}>
+            <div ref={modalRef} className="d-flex flex-column gap-3" style={{ width: '75vw',maxWidth:'800px' }}>
               <div style={{
                 position: 'sticky',
                 top: '0',
@@ -106,7 +107,7 @@ const HelpSection = () => {
                 padding: "9px 8px 9px 10px",
                 borderBottom: '1px solid #ddd',
               }}>
-                <div className="d-flex align-items-center justify-content-between " style={{ minWidth: '75vw', marginTop: "-30px", marginLeft: '-20px' }}>
+                <div className="d-flex align-items-center justify-content-between " style={{ marginTop: "-30px", marginLeft: '-20px' }}>
                   <div className="d-flex justify-content-end mt-2 gap-3">
                     <h1 className="font-[Montserrat-500] text-[22px] tracking-[2.20px] m-0 p-0" style={{ fontSize: '18px' }}>
                       {currentFileName}
@@ -129,15 +130,7 @@ const HelpSection = () => {
                 </div>
               </div>
               {currentType === 'Video' ? (
-                <ReactPlayer
-                  url={`${originAPi}/${currentLink}`}
-                  width="104%"
-                  height="400px"
-                  overflow="hidden"
-                  style={{ marginLeft: "-20px", }}
-
-                  controls
-                ></ReactPlayer>
+                <VideoPlayer src={`${originAPi}/${currentLink}`}/>
               ) : (
                 <iframe
                   src={`${originAPi}/${currentLink}`}
