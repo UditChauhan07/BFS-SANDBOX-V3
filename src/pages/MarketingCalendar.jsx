@@ -35,7 +35,6 @@ const MarketingCalendar = () => {
     { value: "Kevyn Aucoin Cosmetics", label: "Kevyn Aucoin Cosmetics" },
     { value: "L'Occitane", label: "L'Occitane" },
     { value: "Maison Margiela", label: "Maison Margiela" },
-    { value: "Miriam Quevedo", label: "Miriam Quevedo" },
     { value: "Re-Nutriv", label: "Re-Nutriv" },
     { value: "ReVive", label: "ReVive" },
     { value: "RMS Beauty", label: "RMS Beauty" },
