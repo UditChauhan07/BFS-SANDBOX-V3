@@ -80,13 +80,13 @@ const StoreDetailCard = ({ account }) => {
         ],
         responsive: {
             0: {
-                items: 2,
+                items: 1,
             },
             767: {
-                items: 3,
+                items: 2,
             },
             1000: {
-                items: 4,
+                items: 3,
             },
         },
     };
@@ -112,6 +112,7 @@ const StoreDetailCard = ({ account }) => {
             console.log({ userErr });
         })
     }
+    console.log({account});
     return (<section className={Styles.container}>
         {fileDownload ? <Loading /> :
             <div>
@@ -136,7 +137,7 @@ const StoreDetailCard = ({ account }) => {
                             </div>
                             <div>
                                 <p className={Styles.totalRevenueLinkHolder}>Total Revenue</p>
-                                <p className={Styles.totalRevenueHolder}>${formatNumber(account.TotalSales)}</p>
+                                <p className={Styles.totalRevenueHolder}>${formatNumber(account.TotalSales||0)}</p>
                             </div>
                         </div>
                     </div>
@@ -198,15 +199,15 @@ const StoreDetailCard = ({ account }) => {
                             </div>
                             <div className={Styles.detailBox}>
                                 <p className={Styles.labelHolder}>Number of Order Placed:</p>
-                                <p className={Styles.valueHolder}>{account.TotalSaleCount}</p>
+                                <p className={Styles.valueHolder} style={{marginTop:'20px'}}>{account.TotalSaleCount}</p>
                             </div>
                             <div className={Styles.detailBox}>
                                 <p className={Styles.labelHolder}>Date Account Est. with BFSG:</p>
-                                <p className={Styles.valueHolder}>{DateConvert(account.Date_account_established_with_BFSG__c || null, true) ?? 'NA'}</p>
+                                <p className={Styles.valueHolder} style={{marginTop:'20px'}}>{DateConvert(account.Date_account_established_with_BFSG__c || null, true) ?? 'NA'}</p>
                             </div>
                             <div className={Styles.detailBox}>
                                 <p className={Styles.labelHolder}>Address:</p>
-                                <p className={Styles.valueHolder}>{account.ShippingAddress?.street},{account.ShippingAddress.city},<br />{account.ShippingAddress.state},{account.ShippingAddress.country}<br /> {account.ShippingAddress.postalCode}</p>
+                                <p className={Styles.valueHolder}>{account.ShippingAddress?.street},{account.ShippingAddress.city},<br />{account.ShippingAddress.state} {account.ShippingAddress.postalCode}<br /> {account.ShippingAddress.country}</p>
                             </div>
                         </div>
                     </div>
@@ -219,11 +220,11 @@ const StoreDetailCard = ({ account }) => {
                             <div className="d-flex mt-3">
                                 <div className="w-[50%]">
                                     <p className={Styles.subTitleHolder}>Shipping Address</p>
-                                    <p className={Styles.addressLabelHolder} style={{ color: '#3296ED' }}>{account.ShippingAddress?.street},{account.ShippingAddress.city},<br />{account.ShippingAddress.state},{account.ShippingAddress.country}<br /> {account.ShippingAddress.postalCode}</p>
+                                    <p className={Styles.addressLabelHolder} style={{ color: '#3296ED' }}>{account.ShippingAddress?.street},{account.ShippingAddress.city},<br />{account.ShippingAddress.state},{account.ShippingAddress.postalCode}<br /> {account.ShippingAddress.country}</p>
                                 </div>
                                 <div className="w-[50%]">
                                     <p className={Styles.subTitleHolder}>Billing Address</p>
-                                    <p className={Styles.addressLabelHolder} style={{ color: '#3296ED' }}>{account.BillingAddress?.street},{account.BillingAddress.city},<br />{account.BillingAddress.state},{account.BillingAddress.country}<br /> {account.BillingAddress.postalCode}</p>
+                                    <p className={Styles.addressLabelHolder} style={{ color: '#3296ED' }}>{account.BillingAddress?.street},{account.BillingAddress.city},<br />{account.BillingAddress.state},{account.BillingAddress.postalCode}<br /> {account.BillingAddress.country}</p>
                                 </div>
                             </div>
                         </div>
