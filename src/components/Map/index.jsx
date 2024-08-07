@@ -21,7 +21,7 @@ let color = {
     A: "#00FF00a1", B: "#66FF66a1", C: "#FFFF66a1a1", D: "#FF9966a1", E: "#FF0000a1"
 }
 
-const MapGenerator = ({ focusOn, MarkLocations, zoom = 5 }) => {
+const MapGenerator = ({ focusOn, MarkLocations=[], zoom = 5,icon=true }) => {
     const key = process.env.REACT_APP_GMAK;
     const [selectedMarker, setSelectedMarker] = useState(null);
     if (key) {
@@ -39,7 +39,7 @@ const MapGenerator = ({ focusOn, MarkLocations, zoom = 5 }) => {
                     {/* location.icon ||  */}
                         <Marker
                             key={index}
-                            icon={"/assets/marker.png"}
+                            icon={icon?"/assets/marker.png":null}
                             position={{ lat: location.lat, lng: location.lng }}
                             onClick={() => setSelectedMarker(location)}
                         />
