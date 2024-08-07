@@ -752,7 +752,7 @@ export async function generateAuditTemplate({ key, Ids, brandId = null }) {
     "Content-Type": "application/json",
   };
 
-  let response = await fetch(originAPi + "/audit/ei2TZIVfuTYQ5Bp", {
+  let response = await fetch(originAPi + "/audit/ei2TZIVfuTYQ5Bp1", {
     method: "POST",
     body: JSON.stringify({ key, brandId, Ids }),
     headers: headersList,
@@ -1467,7 +1467,7 @@ export const productGuides = {
 };
 
 export function DateConvert(dateString, timeStamp = false) {
-  if (timeStamp) {
+  if (dateString&&timeStamp) {
     const options = { year: "numeric", month: "long", day: "numeric" }
     dateString = new Date(dateString).toLocaleDateString(undefined, options)
     return dateString
