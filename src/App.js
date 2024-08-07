@@ -107,7 +107,7 @@ function App() {
             <Route path="/brandManagementApproval" element={<BMAIssues />}></Route>
             <Route path="/public/product/:id/:token/details" element={<PublicProduct />}></Route>
             <Route path="/Help-Section" element={<HelpSection/>}></Route>
-            {/* <Route path="/store/:id" element={<StoreDetails/>}/> */}
+            <Route path="/store/:id" element={<StoreDetails/>}/>
             <Route path="/Brand/:id" element={<BrandDetails/>}/>
             <Route path="/TierStanding" element={<Tier/>}/>
      
