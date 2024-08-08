@@ -40,6 +40,10 @@
   text-transform: uppercase;
   margin-bottom: 2px;
 }
+.accountHolder .webLinkHolder{
+  position: relative;
+  z-index: 111;
+}
 .accountHolder .webLinkHolder,.detailsContainer .addressLabelHolder {
   font-family: Arial;
   font-size: 14px;
