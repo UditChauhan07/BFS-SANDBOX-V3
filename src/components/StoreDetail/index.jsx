@@ -14,23 +14,70 @@ const StoreDetailCard = ({ account }) => {
     let graph = {
         options: {
             chart: {
-                id: 'brand-Sales'
+                type: 'bar',
+                height: 350,
+                stacked: false
             },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '50%',
+                    endingShape: 'rounded',
+                },
+            },
+            colors: ['#1E90FF', '#28A745'], // Blue and Green
             dataLabels: {
-                enabled: false // disable data labels
+                enabled: false,
             },
+            stroke: {
+                show: true,
+                width: 4,
+                colors: ['transparent'],
+            },
+            series: [{
+                name: 'Target',
+                data: [35, 70, 60, 90]
+            }, {
+                name: 'Achieved',
+                data: [20, 60, 70, 80]
+            }],
             xaxis: {
                 categories: account.Brands.map((value) => {
-                    return value?.ManufacturerName__c || 0;
-                })
+                    return value?.ManufacturerName__c || "NA";
+                }),
+                labels: {
+                    rotate: -27, // Slight rotation for better fit
+                    style: {
+                        fontSize: '10px', // Adjusted font size
+                    },
+                    trim: true, // Ensure no labels are trimmed
+                },
+                tickPlacement: 'on',
             },
-            colors: ["#3296ed", "#16bc4e"],
+            fill: {
+                opacity: 1
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+            },
+            title: {
+                text: 'MTD Revenue by Brand',
+                align: 'left',
+                style: {
+                    fontSize: '15px',
+                    fontWeight: '700',
+                    fontFamily: 'Montserrat-400',
+                    lineHeight: '18.94px',
+                    letterSpacing: '0.1em'
+                }
+            },
             tooltip: {
                 enabled: true,
                 custom: function ({ series, seriesIndex, dataPointIndex, w }) {
                     return (
                         `<div style="background: #333; color: #fff; padding: 10px; border-radius: 8px;">
-                      <strong>${w.globals.labels[dataPointIndex]}</strong>
+                      <strong>${w.globals.categoryLabels[dataPointIndex]}</strong>
                       <br />
                       <span style="color: ${w.globals.colors[seriesIndex]};">
                         ${w.globals.seriesNames[seriesIndex]}: <span style="color: #fff;">$${series[seriesIndex][dataPointIndex].toFixed(2)}</span>
@@ -42,14 +89,15 @@ const StoreDetailCard = ({ account }) => {
         },
         series: [
             {
-                name: 'Target',
-                data: account.Brands.map((value) => {
-                    return parseFloat(value?.Sales?.Target || 0).toFixed(2);
-                })
-            }, {
-                name: 'Achieved',
+                name: 'Purchase',
                 data: account.Brands.map((value) => {
                     return parseFloat(value?.Sales?.Amount || 0).toFixed(2);
+                })
+            },
+            {
+                name: 'Sales',
+                data: account.Brands.map((value) => {
+                    return parseFloat(value?.Sales?.Retail || 0).toFixed(2);
                 })
             }],
     }
@@ -180,7 +228,7 @@ const StoreDetailCard = ({ account }) => {
                     <h3 className={Styles.detailTitleHolder}>Details</h3>
                     <div className="d-flex mt-4">
                         <div className={`${Styles.accountNumberHolder}`}>
-                            <span className={`${Styles.buttonHolder} ${Styles.activeHolder}`}>Status: Active</span>
+                            <span className={`${Styles.buttonHolder} ${account.Active_Closed__c=="Active Account"?Styles.activeHolder:Styles.closeHolder}`}>Status: {account.Active_Closed__c=="Active Account"?"Active":"In-Active"}</span>
                             <h4 className={Styles.accountNumber}>{account.Estee_Lauder_Account_Number__c}</h4>
                             <p className={Styles.accountNumberTinyText}>Estee Launder Account Name</p>
                         </div>
@@ -199,7 +247,7 @@ const StoreDetailCard = ({ account }) => {
                             </div>
                             <div className={Styles.detailBox}>
                                 <p className={Styles.labelHolder}>Number of Order Placed:</p>
-                                <p className={Styles.valueHolder} style={{marginTop:'20px'}}>{account.TotalSaleCount}</p>
+                                <p className={Styles.valueHolder} style={{marginTop:'20px'}}>{account.TotalSaleCount??0}</p>
                             </div>
                             <div className={Styles.detailBox}>
                                 <p className={Styles.labelHolder}>Date Account Est. with BFSG:</p>
@@ -220,7 +268,7 @@ const StoreDetailCard = ({ account }) => {
                             <div className="d-flex mt-3">
                                 <div className="w-[50%]">
                                     <p className={Styles.subTitleHolder}>Shipping Address</p>
-                                    <p className={Styles.addressLabelHolder} style={{ color: '#3296ED' }}>{account.ShippingAddress?.street},{account.ShippingAddress.city},<br />{account.ShippingAddress.state},{account.ShippingAddress.postalCode}<br /> {account.ShippingAddress.country}</p>
+                                    <p className={Styles.addressLabelHolder} style={{ color: '#3296ED' }}>{account.ShippingAddress?.street}{account.ShippingAddress?.street?',':""}{account.ShippingAddress.city}{account.ShippingAddress?.city?<>,<br /></>:""}{account.ShippingAddress.state},{account.ShippingAddress.postalCode}<br /> {account.ShippingAddress.country}</p>
                                 </div>
                                 <div className="w-[50%]">
                                     <p className={Styles.subTitleHolder}>Billing Address</p>
