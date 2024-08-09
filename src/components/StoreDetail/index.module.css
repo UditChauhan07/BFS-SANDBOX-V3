@@ -13,6 +13,10 @@
   display: flex;
   flex-wrap: wrap;
 }
+.brandContainer{
+  position: absolute;
+  width: 100%;
+}
 .dGrid {
   display: grid;
   place-content: center;
@@ -27,6 +31,14 @@
   font-size: 15px;
   font-weight: 500;
   line-height: 19.5px;
+  letter-spacing: 0.1em;
+  text-align: left;
+}
+.detailTitleSubHolder {
+  font-family: Montserrat-400;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 18.94px;
   letter-spacing: 0.1em;
   text-align: left;
 }

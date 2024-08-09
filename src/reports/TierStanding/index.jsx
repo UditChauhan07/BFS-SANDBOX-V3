@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import { ArrayFindMaxMin, GetAuthData, admins, formatNumber, getTierReportHandler } from "../../lib/store"
+import { GetAuthData, admins, formatNumber, getTierReportHandler } from "../../lib/store"
 import Loading from "../../components/Loading";
 import AppLayout from "../../components/AppLayout";
 import Styles from "./index.module.css";
