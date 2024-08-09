@@ -4,7 +4,7 @@ import Accordion from "./Accordion/Accordion";
 import FilterPage from "./Accordion/FilterPage";
 import { MdOutlineDownload, MdOutlineUpload } from "react-icons/md";
 import { useAuth } from "../../context/UserContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loading from "../Loading";
 import { FilterItem } from "../FilterItem";
 import FilterSearch from "../FilterSearch";
@@ -167,6 +167,7 @@ function Product() {
         AccountId__c: localStorage.getItem("AccountId__c"),
       }
       getProductList({ rawData }).then((productRes) => {
+        console.log({productRes});
         let productData = productRes.data.records || []
         productData.map((element) => {
           if (element.AttachedContentDocuments) {
@@ -477,7 +478,7 @@ function Product() {
                       </h4>
 
                       <p>
-                        <span>Account</span>: {localStorage.getItem("Account")}
+                        <span>Account</span>: <Link style={{color:'#000',textDecoration:'underline'}} to={"/store/"+localStorage.getItem("AccountId__c")}>{localStorage.getItem("Account")}</Link>
                       </p>
                     </div>
 
