@@ -2,12 +2,15 @@ import Styles from "./Styles.module.css";
 import { DeleteIcon } from "../../lib/svg";
 import QuantitySelector from "../BrandDetails/Accordion/QuantitySelector";
 import Slider from "../../utilities/Slider";
-
+import Select from 'react-select';
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { DateConvert } from "../../lib/store";
+// accountList = [],setOverAct,overAct
 const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuantityChange = null, isAddtoCart, AccountId, toRedirect }) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [showAccountList, setShowAccountList] = useState(false);
+
   if (!product) {
     return null;
   }
@@ -32,6 +35,11 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
       src: "\\assets\\images\\dummy.png",
     },
   ];
+
+  // const selectAccount = (value) => {
+  //   console.log({ value });
+  //   setOverAct(value)
+  // }
   return (
     <div className="container mt-4 product-card-element">
       <div className="d-flex">
@@ -126,7 +134,25 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
                 )}
               </>
             </>
-          ) : (
+          ) 
+          // : (!AccountId && !showAccountList && accountList.length) ? (
+          //   <div className="d-flex align-items-center gap-4 h-[5rem] ">
+          //     {toRedirect && <button onClick={() => { setShowAccountList(true) }} className={Styles.button}>
+          //       Add to cart
+          //     </button>}
+          //   </div>
+          // ) : (!AccountId && showAccountList && accountList.length) ? (
+          //   <div style={{maxWidth:'250px'}}>
+          //     <Select
+          //     value={overAct}
+          //     onChange={(value) => selectAccount(value)}
+          //     options={accountList.map((value) => {
+          //       return { value: value.Id, label: value.Name };
+          //     })}
+          //   />
+          //   </div>
+          // ) 
+          : (
             <div className="d-flex align-items-center gap-4 h-[5rem] ">
               {toRedirect && <Link to={toRedirect} className={Styles.button}>
                 Add to cart

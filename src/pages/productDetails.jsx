@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GetAuthData, getProductDetails } from "../lib/store";
+import { GetAuthData, getProductDetails, getRetailerList } from "../lib/store";
 import Loading from "../components/Loading";
 import { useBag } from "../context/BagContext";
 import ModalPage from "../components/Modal UI";
@@ -11,16 +11,24 @@ const ProductDetails = ({ productId, setProductDetailId, isAddtoCart = true, Acc
     const [product, setProduct] = useState({ isLoaded: false, data: [], discount: {} });
     const [replaceCartModalOpen, setReplaceCartModalOpen] = useState(false);
     const [replaceCartProduct, setReplaceCartProduct] = useState({});
-    const [isModalOpen, setIsModalOpen] = useState(true)
-
+    const [isModalOpen, setIsModalOpen] = useState(true);
+    // const [accountList,setAccountList]=useState([])
+    // const [overAct,setOverAct] = useState();
     useEffect(() => {
         if (productId) {
             setIsModalOpen(true)
             setProduct({ isLoaded: false, data: [], discount: {} })
             GetAuthData().then((user) => {
+                // ||overAct?.value
                 let rawData = { productId: productId, key: user.x_access_token, salesRepId: user?.Sales_Rep__c, accountId: AccountId }
+                // console.log({rawData});
                 getProductDetails({ rawData }).then((productRes) => {
-                    console.log({ productRes });
+                    // console.log({productRes});
+                    // if(!AccountId && !overAct){
+                    //     getRetailerList({key: user.x_access_token,userId:user?.Sales_Rep__c,}).then((retailerRes)=>{
+                    //         setAccountList(retailerRes.data)
+                    //     }).catch(e=>console.error(e))
+                    // }
                     setProduct({ isLoaded: true, data: productRes.data, discount: productRes.discount })
                 }).catch((proErr) => {
                     console.log({ proErr });
@@ -30,6 +38,7 @@ const ProductDetails = ({ productId, setProductDetailId, isAddtoCart = true, Acc
             })
         }
     }, [productId])
+    //overAct
     if (!productId) return null;
 
 
@@ -120,6 +129,7 @@ const ProductDetails = ({ productId, setProductDetailId, isAddtoCart = true, Acc
                         ) : null}
                         {!product?.isLoaded ? <Loading /> :
                             <ProductDetailCard product={product} orders={orders} onQuantityChange={onQuantityChange} onPriceChangeHander={onPriceChangeHander} isAddtoCart={isAddtoCart} AccountId={AccountId} toRedirect={toRedirect} />}
+                            {/* accountList={accountList} setOverAct={setOverAct} overAct={overAct} */}
                     </div>
                 }
                 onClose={() => {
