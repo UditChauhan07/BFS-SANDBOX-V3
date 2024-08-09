@@ -10,10 +10,19 @@ const StoreDetails = ()=>{
     const navigate = useNavigate();
     const {id} = useParams();
     const [account,setAccount]=useState({isLoaded:false,data:{}});
+    const [brandList,setBrandList] = useState([])
     useEffect(()=>{
         if(id){
             GetAuthData().then((user)=>{
                 getStoreDetails({key: user.x_access_token,Id:id}).then((actDetails)=>{
+                    let brands = []
+                    actDetails.Brands.map((element)=>{
+                        console.log({element});
+                        if(element.Sales_Rep__c == user.Sales_Rep__c){
+                            brands.push(element)
+                        }
+                    })
+                    setBrandList(brands)
                     setAccount({isLoaded:true,data:actDetails})
                 }).catch((actErr)=>{
                     console.log({actErr});
@@ -25,10 +34,9 @@ const StoreDetails = ()=>{
             navigate("/");
         }
     },[id])
-
     const {isLoaded,data} = account;
     return(<AppLayout>
-        {isLoaded?<StoreDetailCard account={data}/>:<LoaderV3 text={"Please wait..."}/>}
+        {isLoaded?<StoreDetailCard account={data} brandList={brandList}/>:<LoaderV3 text={"Please wait..."}/>}
     </AppLayout>)
 }
 export default StoreDetails;
