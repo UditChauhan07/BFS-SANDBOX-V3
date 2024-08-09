@@ -535,6 +535,27 @@ export async function getAllAccount({ user }) {
   }
 }
 
+export async function getAccountAllContact({ key,Id }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+  let body = {
+    key,Id
+  };
+  let response = await fetch(url + "v3/PP1Rx34VLTBuUqK", {
+    method: "POST",
+    headers: headersList,
+    body: JSON.stringify(body),
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
+
 export async function postSupport({ rawData }) {
   console.log({ rawData });
   let headersList = {
@@ -1208,7 +1229,6 @@ export async function getStoreDetails({ key, Id }) {
     Accept: "*/*",
     "Content-Type": "application/json",
   };
-
   let response = await fetch(originAPi + "/retailerv2/OuE4gYJIz2ZUEP6", {
     method: "POST",
     body: JSON.stringify({ key, Id }),

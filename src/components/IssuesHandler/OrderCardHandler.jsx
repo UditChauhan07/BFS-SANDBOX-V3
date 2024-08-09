@@ -1,4 +1,4 @@
-import { GetAuthData, ShareDrive, getProductImageAll, getProductList, months, originAPi, sortArrayHandler } from "../../lib/store";
+import { GetAuthData, ShareDrive, getAccountAllContact, getProductImageAll, getProductList, months, originAPi, sortArrayHandler } from "../../lib/store";
 import Styles from "../OrderList/style.module.css"
 import Styles1 from "./OrderCardHandler.module.css"
 import { useEffect, useState } from "react";
@@ -170,6 +170,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
             inputValue.value = null;
         }
     }
+    const [contactLoad,setContactLoad] = useState(false);
 
     useEffect(() => {
         let contactList = [];
@@ -182,6 +183,23 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
             })
         ))
         setContacts(contactList)
+        if (!contactList.length && accountId) {
+            setContactLoad(true)
+            GetAuthData().then((user) => {
+                getAccountAllContact({ key: user.x_access_token, Id: accountId }).then((conRes) => {
+                    let cont = [];
+                    conRes.map((con)=>{
+                        cont.push({ label: con.Name, value: con.Id })
+                    })
+                    setContacts(cont)
+                    setContactLoad(false)
+                }).catch((conErr) => {
+                    console.log({ conErr });
+                })
+            }).catch((userErr) => {
+                console.log({ userErr });
+            })
+        }
     }, [accountId, accountList])
 
 
@@ -235,7 +253,6 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
 
     const orderConfirmationHandler = () => {
         let error = Object.keys(errorList)
-        console.log({ error });
         if (error.length) {
             let confimationStatus = true;
             if (reason != "Charges") {
@@ -329,9 +346,9 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
             open={showProductList ?? false}
             content={
                 <div className="d-flex flex-column gap-3">
-                    <h2 className={`${Styles.warning} `}>Select other product of the Brand <button type="button" style={{ float:'right',marginRight:'10px', width: "15px", height: "20px" }} onClick={() => setShowProductList(false)} >
-                    <IoIosCloseCircleOutline size={35} />
-                  </button></h2>
+                    <h2 className={`${Styles.warning} `}>Select other product of the Brand <button type="button" style={{ float: 'right', marginRight: '10px', width: "15px", height: "20px" }} onClick={() => setShowProductList(false)} >
+                        <IoIosCloseCircleOutline size={35} />
+                    </button></h2>
                     <div>
                         {(productAllList.length && !allProductSold) ? <div><input type="text" placeholder='Search Product' autoComplete="off" className={Styles1.searchBox} title="You can search Product by Name,SKU or UPC" id="poductInput" onKeyUp={(e) => { setSearchItem(e.target.value) }} style={{ width: '150px', marginBottom: '10px' }} /></div> : null}
                         <div style={{ maxHeight: '500px', overflow: 'scroll', width: '900px' }}>
@@ -364,10 +381,10 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                         </div>
                     </div>
                     {/* <div className="d-flex justify-content-around "> */}
-                        {/* <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '250px' }} onClick={() => setShowProductList(false)}>
+                    {/* <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '250px' }} onClick={() => setShowProductList(false)}>
                             Go Back
                         </button> */}
-                        {/* <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setShowProductList(false)}>
+                    {/* <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => setShowProductList(false)}>
                             Cancel
                         </button> */}
                     {/* </div> */}
@@ -430,7 +447,7 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                     <div className={Styles.ProtuctInnerBox}>
                                                         <div className={Styles.BoxBlack}>
                                                             <div className={Styles.Boxwhite}>
-                                                                <h1 style={item.ProductCount.toString().length==7?{fontSize:'21px'}:item.ProductCount.toString().length==6?{fontSize:'24px'}:item.ProductCount.toString().length==5?{fontSize:'27px'}:item.ProductCount.toString().length==4?{fontSize:'30px'}:{}}>
+                                                                <h1 style={item.ProductCount.toString().length == 7 ? { fontSize: '21px' } : item.ProductCount.toString().length == 6 ? { fontSize: '24px' } : item.ProductCount.toString().length == 5 ? { fontSize: '27px' } : item.ProductCount.toString().length == 4 ? { fontSize: '30px' } : {}}>
                                                                     {item.ProductCount} <span>Products</span>
                                                                 </h1>
                                                             </div>
@@ -563,26 +580,10 @@ const OrderCardHandler = ({ orders, setOrderId, orderId, reason, orderConfirmedS
                                                         <div className={Styles1.Margitotal}>
                                                             <p className={Styles1.detailsTitleHolder}>Contact Person</p>
                                                             <p className={Styles1.detailsDescHolder} style={{ display: 'flex', justifyContent: 'end', marginTop: '5px' }}>
-                                                                {/* <Select
-                                                                options={contacts}
-                                                                defaultValue={{
-                                                                    value: null,
-                                                                    label: "Select Contact...",
-                                                                }}
-                                                                value={{
-                                                                    value: contacts.filter((ele) => ele.value == contactId)[0]?.["value"] || null,
-                                                                    label: contacts.filter((ele) => ele.value == contactId)[0]?.["label"] || "Select Contact...",
-                                                                }}
-                                                                onChange={(option) => setContactId(option.value)}
-                                                                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-                                                                menuPortalTarget={document.body}
-                                                                isSearchable
-                                                                menuPosition={"fixed"}
-                                                                menuShouldScrollIntoView={false}
-                                                            /> */}
+
                                                                 <select id="contactSelector" style={{ width: '200px' }} className="form-control" onChange={(e) => { setContactId(e.target.value) }} title={!contactId ? "Please select Contact" : null}>
                                                                     <option>Select Contact</option>
-                                                                    {contacts.map(element => (
+                                                                    {contactLoad?<Loading/> :contacts.map(element => (
                                                                         <option value={element.value}>{element.label}</option>
                                                                     ))}
                                                                 </select>
