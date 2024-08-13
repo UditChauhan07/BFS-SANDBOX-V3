@@ -5,7 +5,6 @@ import FilterSearch from "../components/FilterSearch";
 import { useManufacturer } from "../api/useManufacturer";
 import Loading from "../components/Loading";
 import { useNavigate } from "react-router";
-import Layout from "../components/Layout/Layout";
 import Page from "./page.module.css";
 import AppLayout from "../components/AppLayout";
 import { CloseButton } from "../lib/svg";
@@ -31,6 +30,7 @@ const brandsImageMap = {
   "Victoria Beckham Beauty": "victoria.png",
   "Re-Nutriv": "Re-Nutriv-2.png",
   "LOccitane": "LOccitane.png",
+  "111Skin":"a0ORb000001EbK5MAK.png"
 };
 
 const defaultImage = "dummy.png";

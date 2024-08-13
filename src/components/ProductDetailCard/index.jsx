@@ -2,12 +2,23 @@ import Styles from "./Styles.module.css";
 import { DeleteIcon } from "../../lib/svg";
 import QuantitySelector from "../BrandDetails/Accordion/QuantitySelector";
 import Slider from "../../utilities/Slider";
-
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DateConvert } from "../../lib/store";
-const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuantityChange = null, isAddtoCart, AccountId, toRedirect }) => {
+import Loading from "../Loading";
+const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuantityChange = null, isAddtoCart, AccountId, toRedirect, setStoreSet = null, accountId = null, accounts = 0,autoSelectCheck=false }) => {
+  console.log({autoSelectCheck});
+  
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [showAccountList, setShowAccountList] = useState(false);
+  // useEffect(()=>{
+  //   if(autoSelectCheck){
+  //     autoSelectQty();
+  //   }
+  // },[autoSelectCheck])
+
+  useEffect(()=>{},[orders])
+  
   if (!product) {
     return null;
   }
@@ -16,8 +27,19 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
   let discount = product?.discount?.margin;
   let inputPrice = Object.values(orders)?.find(
     (order) =>
-      order.product.Id === product?.data?.Id && order.manufacturer.name === product?.data?.ManufacturerName__c && order.account.id === AccountId
+      order.product.Id === product?.data?.Id && order.manufacturer.name === product?.data?.ManufacturerName__c && order.account.id === (AccountId || accountId.value)
   )?.product?.salesPrice;
+  
+  Object.values(orders)?.find(
+    (order) =>
+    {
+      console.log(order.product.Id === product?.data?.Id,order.manufacturer.name === product?.data?.ManufacturerName__c ,order.account.id === (AccountId || accountId),AccountId,accountId,order);
+      
+    }
+  )
+  
+
+
   if (product?.data?.Category__c === "TESTER") {
     discount = product?.discount?.testerMargin;
     salesPrice = (+listPrice - (product?.discount?.testerMargin / 100) * +listPrice).toFixed(2);
@@ -32,6 +54,10 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
       src: "\\assets\\images\\dummy.png",
     },
   ];
+  const autoSelectQty= ()=>{
+    onQuantityChange(product?.data, product?.data?.Min_Order_QTY__c, inputPrice || parseFloat(salesPrice), discount);
+  }
+
   return (
     <div className="container mt-4 product-card-element">
       <div className="d-flex">
@@ -72,49 +98,53 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
               )}
             </p>
           )}
-          {isAddtoCart && product?.discount ? (
-            <>
-              <>
-                {orders[product?.data?.Id] ? (
-                  <div className="d-flex flex-column">
-                    <p style={{ textAlign: "start" }}>
-                      $
-                      <input
-                        type="number"
-                        className={Styles.priceInputHolder}
-                        value={inputPrice}
-                        placeholder={Number(inputPrice).toFixed(2)}
-                        onChange={(e) => {
-                          onPriceChangeHander(
-                            product?.data,
-                            e.target.value < 10 ? e.target.value.replace("0", "").slice(0, 4) : e.target.value.slice(0, 4) || 0
-                          );
-                        }}
-                        id="limit_input"
-                        minLength={0}
-                        maxLength={4}
-                        name="limit_input"
-                      />
-                    </p>
-                    <div className="d-flex gap-1">
-                      <QuantitySelector
-                        min={product?.data?.Min_Order_QTY__c || 0}
-                        value={orders[product?.data?.Id]?.quantity}
-                        onChange={(quantity) => {
-                          onQuantityChange(product?.data, quantity, inputPrice || parseFloat(salesPrice), discount);
-                        }}
-                      />
+          {accountId?.label && <p className={Styles.descHolder}>
+            Store For: <span >{accountId?.label}</span>
+          </p>}
+          {orders[product?.data?.Id] ? (
+              <div className="d-flex flex-column">
+                <p style={{ textAlign: "start" }}>
+                  $
+                  <input
+                    type="number"
+                    className={Styles.priceInputHolder}
+                    value={inputPrice}
+                    placeholder={Number(inputPrice).toFixed(2)}
+                    onChange={(e) => {
+                      onPriceChangeHander(
+                        product?.data,
+                        e.target.value < 10 ? e.target.value.replace("0", "").slice(0, 4) : e.target.value.slice(0, 4) || 0
+                      );
+                    }}
+                    id="limit_input"
+                    minLength={0}
+                    maxLength={4}
+                    name="limit_input"
+                  />
+                </p>
+                <div className="d-flex gap-1">
+                  <QuantitySelector
+                    min={product?.data?.Min_Order_QTY__c || 0}
+                    value={orders[product?.data?.Id]?.quantity}
+                    onChange={(quantity) => {
+                      onQuantityChange(product?.data, quantity, inputPrice || parseFloat(salesPrice), discount);
+                    }}
+                  />
 
-                      <button className="ml-4" onClick={() => onQuantityChange(product?.data, 0, inputPrice || parseFloat(salesPrice), discount)}>
-                        <DeleteIcon fill="red" />
-                      </button>
-                    </div>
+                  <button className="ml-4" onClick={() => onQuantityChange(product?.data, 0, inputPrice || parseFloat(salesPrice), discount)}>
+                    <DeleteIcon fill="red" />
+                  </button>
+                </div>
 
-                    <p className="mt-3" style={{ textAlign: "start" }}>
-                      Total: <b>{inputPrice * orders[product?.data?.Id]?.quantity}</b>
-                    </p>
-                  </div>
-                ) : (
+                <p className="mt-3" style={{ textAlign: "start" }}>
+                  Total: <b>{inputPrice * orders[product?.data?.Id]?.quantity}</b>
+                </p>
+              </div>
+          ) : (
+            accounts ? <>
+              {accounts == "load" ? <Loading /> : <>
+                {isAddtoCart && product?.discount ? (
+
                   <button
                     className={Styles.button}
                     onClick={() =>
@@ -123,16 +153,20 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
                   >
                     Add to cart
                   </button>
-                )}
-              </>
-            </>
-          ) : (
-            <div className="d-flex align-items-center gap-4 h-[5rem] ">
-              {toRedirect && <Link to={toRedirect} className={Styles.button}>
-                Add to cart
-              </Link>}
-            </div>
-          )}
+                )
+                  : (
+                    <div className="d-flex align-items-center gap-4 h-[5rem] ">
+                      <button
+                        className={Styles.button}
+                        onClick={() =>
+                          setStoreSet(true)
+                        }
+                      >
+                        Add to cart
+                      </button>
+                    </div>
+                  )}</>}
+            </> : <small className="text-left w-[100%] font-['Arial-400'] text-[#FF7F7F] d-block">You can't buy this product. contact to salesforce Admin.</small>)}
           {/* {product?.data?.Description && <p style={{ textAlign: 'start', color: "#898989" }}>{product?.data?.Description}</p>} */}
           <hr style={{ borderTop: "3px dashed #000", fontSize: "20px", color: "black" }}></hr>
           {product?.data?.ProductCode && <p className={Styles.descHolder}>
@@ -207,12 +241,12 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
       )}
       {product?.data?.Newness_Start_Date__c && product.data?.Newness_Start_Date__c != "N/A" && (
         <p className={Styles.descHolder}>
-          <span>Product Newness Start Date:</span> {product?.data?.Newness_Start_Date__c}
+          <span>Product Newness Start Date:</span> {DateConvert(product?.data?.Newness_Start_Date__c)}
         </p>
       )}
       {product?.data?.Newness_Report_End_Date__c && product.data?.Newness_Report_End_Date__c != "N/A" && (
         <p className={Styles.descHolder}>
-          <span>Product Newness End Date:</span> {product?.data?.Newness_Report_End_Date__c}
+          <span>Product Newness End Date:</span> {DateConvert(product?.data?.Newness_Report_End_Date__c)}
         </p>
       )}
       {product?.data?.Season__c && product.data?.Season__c != "N/A" && (

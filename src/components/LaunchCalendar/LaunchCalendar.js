@@ -87,6 +87,26 @@ function LaunchCalendar({ productList, brand, month }) {
   //   setFilterData(newValues);
   // }, [ShipDate]);
 
+  const ImageWithFallback = ({ src, alt, fallback,className,style }) => {
+    // State to manage the current image source
+    const [imgSrc, setImgSrc] = useState(src);
+
+    // Function to handle image loading errors
+    const handleError = () => {
+        setImgSrc(fallback); // Set fallback image on error
+    };
+
+    return (
+        <img
+            src={imgSrc}
+            alt={alt}
+            onError={handleError}
+            style={style}
+            className={className}
+        />
+    );
+};
+
   return (
     <div id="Calendar">
       <div className="container">
@@ -155,7 +175,7 @@ function LaunchCalendar({ productList, brand, month }) {
                                   </div>
                                   <div className="launchBrand">
                                     <Link to={'/Brand/'+product.ManufacturerId__c}>
-                                    <img className="img-fluid" src={"\\assets\\images\\brandImage\\" + product.ManufacturerId__c + ".png"} alt={`${product.name} logo`} style={{maxWidth:'200px',height:'auto'}}/>
+                                    <ImageWithFallback className="img-fluid" src={"\\assets\\images\\brandImage\\" + product.ManufacturerId__c + ".png"} alt={`${product.name} logo`} fallback={"\\assets\\images\\dummy.png"} style={{maxWidth:'200px',height:'auto'}} />
                                     {/* {console.log(product.ManufacturerId__c)} */}
                                     </Link>
                                   </div>

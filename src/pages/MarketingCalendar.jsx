@@ -33,7 +33,7 @@ const MarketingCalendar = () => {
     { value: "Diptyque", label: "Diptyque" },
     { value: "ESTEE LAUDER", label: "ESTEE LAUDER" },
     { value: "Kevyn Aucoin Cosmetics", label: "Kevyn Aucoin Cosmetics" },
-    { value: "L'Occitane", label: "L'Occitane" },
+    { value: "LOccitane", label: "L'Occitane" },
     { value: "Maison Margiela", label: "Maison Margiela" },
     { value: "Re-Nutriv", label: "Re-Nutriv" },
     { value: "ReVive", label: "ReVive" },
