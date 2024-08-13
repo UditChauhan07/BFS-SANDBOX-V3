@@ -156,14 +156,20 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
                 )
                   : (
                     <div className="d-flex align-items-center gap-4 h-[5rem] ">
-                      <button
+                      {/* <button
                         className={Styles.button}
                         onClick={() =>
                           setStoreSet(true)
                         }
                       >
                         Add to cart
-                      </button>
+                      </button> */}
+                      <Link
+                        className={Styles.button}
+                        to={'/my-retailers'}
+                      >
+                        Add to cart
+                      </Link>
                     </div>
                   )}</>}
             </> : <small className="text-left w-[100%] font-['Arial-400'] text-[#FF7F7F] d-block">You can't buy this product. contact to salesforce Admin.</small>)}
