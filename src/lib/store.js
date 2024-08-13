@@ -678,7 +678,7 @@ export async function getProductDetails({ rawData }) {
     Accept: "*/*",
     "Content-Type": "application/json",
   };
-
+  
   let response = await fetch(url + "v3/V59WN1CMm8Pjxay", {
     method: "POST",
     body: JSON.stringify(rawData),
@@ -729,11 +729,12 @@ export async function getBrandList({ key, userId }) {
     return data;
   }
 }
-export async function getRetailerList({ key, userId }) {
+//
+export async function getRetailerList({ key, userId,manufacturerid=null }) {
   let headersList = {
     Accept: "*/*",
     key,
-    userId,
+    userId,manufacturerid,
     "Content-Type": "application/json",
   };
   let response = await fetch(url + "v3/JbUxci", {
@@ -785,6 +786,26 @@ export async function generateAuditTemplate({ key, Ids, brandId = null }) {
     return data.data;
   }
 }
+
+export async function generateBrandAuditTemplate({ key, Ids }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/audit/8rM04B63RFDXH9Z", {
+    method: "POST",
+    body: JSON.stringify({ key, Ids }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
+
 export async function getEmailBlastFromData({ key }) {
   let headersList = {
     Accept: "*/*",

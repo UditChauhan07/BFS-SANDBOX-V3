@@ -5,7 +5,7 @@ import { CustomerServiceIcon, NeedHelp, OrderStatusIcon } from "../../../lib/svg
 import ModalPage from "../../Modal UI";
 import SelectCaseReason from "../../CustomerServiceFormSection/SelectCaseReason/SelectCaseReason";
 import { GetAuthData, admins, getSessionStatus } from "../../../lib/store";
-import { BiMailSend, BiStar } from "react-icons/bi";
+import { BiLogoZoom, BiMailSend, BiStar } from "react-icons/bi";
 import { RiGuideLine } from "react-icons/ri";
 // import Redirect from "../../Redirect";
 const TopNav = () => {
@@ -60,7 +60,7 @@ const TopNav = () => {
                   {/* </a> */}
                   <ul className="dropdown-menu">
                     <li onClick={() => navigate("/orderStatus")}>
-                      <Link to="/order-list" className={`dropdown-item text-start d-flex align-items-center${styles.nameText}`}>
+                      <Link to="/order-list" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
                         <OrderStatusIcon width={15} height={15} />&nbsp;Order Status
                       </Link>
                     </li>
@@ -104,6 +104,9 @@ const TopNav = () => {
                       </li>
                       <li onClick={() => navigate("/TierStanding")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
                         <BiStar />&nbsp;Account Tier & Standing Report
+                      </li>
+                      <li onClick={() => navigate("/AuditReport")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
+                        <BiLogoZoom />&nbsp;Audit Report
                       </li>
                     </ul>
                   </div>
