@@ -3,7 +3,7 @@ import Styles from "./style.module.css";
 import { CloseButton } from "../../../lib/svg";
 
 
-const SelectBrandModel = ({ brands, onClose=null,onChange=null }) => {
+const SelectBrandModel = ({ brands, onClose = null, onChange = null }) => {
 
 
   return (
@@ -11,12 +11,12 @@ const SelectBrandModel = ({ brands, onClose=null,onChange=null }) => {
       <div className="px-[68px] pb-[67px] pt-[40px] max-w-[900px]">
         <section>
           <div className="d-flex align-items-center justify-content-end gap-5">
-          <button type="button" onClick={onClose}>
+            <button type="button" onClick={onClose}>
               <CloseButton />
             </button>
           </div>
           <h1 className="font-[Montserrat-500] text-[22px] tracking-[2.20px] mb-[20px]">Choose the Manufacturer</h1>
-          
+
           <div className={Styles.BrandInRadio}>
             <div className={Styles.ModalResponsive}>
               {brands?.map((brand, index) => (
@@ -24,19 +24,21 @@ const SelectBrandModel = ({ brands, onClose=null,onChange=null }) => {
                   <input
                     type="radio"
                     name="brand_names"
-                    onChange={()=>onChange(brand)}
-                    id={brand.ManufacturerName__c||brand.Name}
+                    onChange={() => {
+                      if (onChange) { onChange(brand) }
+                    }}
+                    id={brand.ManufacturerName__c || brand.Name}
                   />
-                  <label htmlFor={brand.ManufacturerName__c||brand.Name}>{brand.ManufacturerName__c||brand.Name}</label>
+                  <label htmlFor={brand.ManufacturerName__c || brand.Name}>{brand.ManufacturerName__c || brand.Name}</label>
                 </div>
               ))}
             </div>
 
             {/* <div className={Styles.BrandButton}> */}
-              {/* <button className={Styles.Button1} onClick={onClose}>
+            {/* <button className={Styles.Button1} onClick={onClose}>
                 CANCEL
               </button> */}
-              {/* <button
+            {/* <button
                 className={Styles.Button2}
                 onClick={() => {
                   if (selectedBrandManufacturer) {

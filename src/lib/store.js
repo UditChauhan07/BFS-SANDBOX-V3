@@ -786,6 +786,26 @@ export async function generateAuditTemplate({ key, Ids, brandId = null }) {
     return data.data;
   }
 }
+
+export async function generateBrandAuditTemplate({ key, Ids }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/audit/8rM04B63RFDXH9Z", {
+    method: "POST",
+    body: JSON.stringify({ key, Ids }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
+
 export async function getEmailBlastFromData({ key }) {
   let headersList = {
     Accept: "*/*",
