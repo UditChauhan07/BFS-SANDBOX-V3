@@ -10,7 +10,7 @@ import { generateBrandAuditTemplate, GetAuthData, originAPi } from "../lib/store
 const AuditReport = () => {
     const [isShowBrandModal, setIsShowBrandModal] = useState(false);
     const { data: manufacturers, isLoading, error } = useManufacturer();
-    const [isPdfGenerated,setIsPdfGenerated]=useState(false)
+    const [isPdfGenerated, setIsPdfGenerated] = useState(false)
 
 
     const onChangeHandler = (brand) => {
@@ -21,10 +21,10 @@ const AuditReport = () => {
                 setIsPdfGenerated(false)
                 if (file) {
                     const a = document.createElement('a');
-                    a.href = originAPi+"/files/"+file+"/Brand-Audit-Report.pdf/index"
+                    a.href = originAPi + "/files/" + file + "/Brand-Audit-Report.pdf/index"
                     // a.target = '_blank'
                     a.click();
-                  }
+                }
 
             }).catch((aErr) => {
                 console.log({ aErr });
@@ -43,7 +43,11 @@ const AuditReport = () => {
             <small style={{ fontSize: '9px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Brand <br />Report</small>
         </button>}>
         <ModalPage content={<SelectBrandModel brands={manufacturers?.data} onChange={onChangeHandler} onClose={() => setIsShowBrandModal(false)} />} onClose={() => setIsShowBrandModal(false)} open={isShowBrandModal} />
-        {isLoading||isPdfGenerated ? <Loading height={'40vh'}/> : null}
+        {isLoading || isPdfGenerated ? <Loading height={'40vh'} /> : <div className="d-grid place-content-center min-h-[40vh]">
+            <div className="col-12">
+                <p className="m-0 fs-2 font-[Montserrat-400] text-[14px] tracking-[2.20px]">Coming Soon...</p>
+            </div>
+        </div>}
     </AppLayout>)
 }
 export default AuditReport
