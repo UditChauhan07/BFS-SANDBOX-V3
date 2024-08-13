@@ -678,7 +678,7 @@ export async function getProductDetails({ rawData }) {
     Accept: "*/*",
     "Content-Type": "application/json",
   };
-
+  
   let response = await fetch(url + "v3/V59WN1CMm8Pjxay", {
     method: "POST",
     body: JSON.stringify(rawData),
@@ -729,11 +729,12 @@ export async function getBrandList({ key, userId }) {
     return data;
   }
 }
-export async function getRetailerList({ key, userId }) {
+//
+export async function getRetailerList({ key, userId,manufacturerid=null }) {
   let headersList = {
     Accept: "*/*",
     key,
-    userId,
+    userId,manufacturerid,
     "Content-Type": "application/json",
   };
   let response = await fetch(url + "v3/JbUxci", {

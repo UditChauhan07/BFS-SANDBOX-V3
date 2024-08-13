@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Styles from "./Styles.module.css";
 import SelectBrandModel from "./SelectBrandModel/SelectBrandModel";
+import { useNavigate } from "react-router-dom";
 import ModalPage from "../Modal UI";
 import { Link } from "react-router-dom";
+import { salesRepIdKey } from "../../lib/store";
 
 const bgColors = {
   "Kevyn Aucoin Cosmetics": "KevynAucoinCosmeticsBg",
@@ -18,9 +20,17 @@ const bgColors = {
 
 const MyRetailerCard = ({ placeName, title, brands, accountId, address,selectedSalesRepId }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const showProductHandler=(brand)=>{
+    localStorage.setItem("manufacturer", brand.ManufacturerName__c|| brand.Name);
+    localStorage.setItem("ManufacturerId__c", brand.ManufacturerId__c||  brand.Id);
+    localStorage.setItem(salesRepIdKey, selectedSalesRepId);
+    localStorage.setItem("shippingMethod", JSON.stringify({number:brand.Shipping_Account_Number__c,method:brand.Shipping_Method__c}));
+    navigate(`/product`);
+  }
   return (
     <>
-      <ModalPage open={modalOpen} onClose={() => setModalOpen(false)} content={<SelectBrandModel brands={brands} selectedSalesRepId={selectedSalesRepId} onClose={() => setModalOpen(false)} />} />
+      <ModalPage open={modalOpen} onClose={() => setModalOpen(false)} content={<SelectBrandModel brands={brands} onChange={showProductHandler} onClose={() => setModalOpen(false)} />} />
       <div
         className={`${Styles.Retailer} cursor-pointer flex`}
       >

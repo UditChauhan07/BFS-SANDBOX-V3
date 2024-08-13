@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import Styles from "./style.module.css";
-import { useNavigate } from "react-router-dom";
 import { CloseButton } from "../../../lib/svg";
-import { salesRepIdKey } from "../../../lib/store";
 
-const SelectBrandModel = ({ brands,selectedSalesRepId, onClose }) => {
-  // const [selectedBrandAccountId, setSelectedBrandAccountId] = useState();
-  const [selectedBrandManufacturer, setSelectedBrandManufacturer] = useState(false);
-  // const [modalOpen, setModalOpen] = useState(false);
 
-  const navigate = useNavigate();
+const SelectBrandModel = ({ brands, onClose=null,onChange=null }) => {
+
+
   return (
     <>
       <div className="px-[68px] pb-[67px] pt-[40px] max-w-[900px]">
@@ -28,16 +24,7 @@ const SelectBrandModel = ({ brands,selectedSalesRepId, onClose }) => {
                   <input
                     type="radio"
                     name="brand_names"
-                    // checked={selectedBrandAccountId === brand.AccountId__c}
-                    onChange={() => {
-                      // setSelectedBrandAccountId(brand.AccountId__c);
-                      setSelectedBrandManufacturer(true);
-                      localStorage.setItem("manufacturer", brand.ManufacturerName__c|| brand.Name);
-                      localStorage.setItem("ManufacturerId__c", brand.ManufacturerId__c||  brand.Id);
-                      localStorage.setItem(salesRepIdKey, selectedSalesRepId);
-                      localStorage.setItem("shippingMethod", JSON.stringify({number:brand.Shipping_Account_Number__c,method:brand.Shipping_Method__c}));
-                      navigate(`/product`);
-                    }}
+                    onChange={()=>onChange(brand)}
                     id={brand.ManufacturerName__c||brand.Name}
                   />
                   <label htmlFor={brand.ManufacturerName__c||brand.Name}>{brand.ManufacturerName__c||brand.Name}</label>

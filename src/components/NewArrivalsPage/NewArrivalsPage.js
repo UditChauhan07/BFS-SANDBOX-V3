@@ -12,6 +12,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
   const [products, setProducts] = useState(productList);
   const [modalShow, setModalShow] = useState(false);
   const [productDetailId, setProductDetailId] = useState();
+  const [productBrandId,setProductBrandId] = useState();
 
   const [isEmpty, setIsEmpty] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -32,7 +33,6 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
     const endIndex = currentPage * PageSize;
     const newValues = filterData?.flatMap((month) => month?.content).slice(startIndex, endIndex);
     setpagination([{ content: newValues }]);
-    console.log(newValues);
   }, [filterData, PageSize, currentPage]);
   // ............
   useEffect(() => {
@@ -81,6 +81,11 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
   const handleImageLoad = (imageId) => {
     setImageLoading((prevLoading) => ({ ...prevLoading, [imageId]: false }));
   };
+  const resetHandler = ()=>{
+    setProductDetailId();
+    setProductBrandId()
+  }
+  
   return (
     <>
       {modalShow ? (
@@ -144,12 +149,12 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                         <div className={`${Styles.cardElement} cardHover`}>
                           <div className={`last:mb-0 mb-4 ${Styles.HoverArrow}`}>
                             <div className={` border-[#D0CFCF] flex flex-col gap-4   ${Styles.ImgHover1}`}>
-                              {/* {isLoaded ? <img className={Styles.imgHolder} onClick={() => { setProductDetailId(product.Id) }} src={product?.[product.ProductCode]?.ContentDownloadUrl ?? product.image} /> : <LoaderV2 />} */}
                               {imageLoading[product.id] ? (
                                 <LoaderV2 width={100} height={100} />
                               ) : (
                                 <img key={product.Id} className="zoomInEffect" src={product.ProductImage ?? "\\assets\\images\\dummy.png"} alt={product.Name} height={212} width={212} onClick={() => {
                                   setProductDetailId(product.Id);
+                                  setProductBrandId(product.ManufacturerId__c)
                                 }} onLoad={() => handleImageLoad(product.Id)} />
                               )}
                             </div>
@@ -162,6 +167,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                             className={`${Styles.titleHolder} linkEffect`}
                             onClick={() => {
                               setProductDetailId(product.Id);
+                              setProductBrandId(product.ManufacturerId__c)
                             }}
                           >
                             {product?.Name?.substring(0, 15)}...
@@ -190,7 +196,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
             </div>
           }
         </div>
-        <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} isAddtoCart={false} />
+        <ProductDetails productId={productDetailId} setProductDetailId={resetHandler} ManufacturerId={productBrandId} isAddtoCart={false} />
       </section>
       {!loaded &&
         <Pagination
