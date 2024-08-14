@@ -10,12 +10,12 @@ const SelectBrandModel = ({ brands, onClose = null, onChange = null }) => {
     <>
       <div className="px-[68px] pb-[67px] pt-[40px] max-w-[900px]">
         <section>
-          <div className="d-flex align-items-center justify-content-end gap-5">
+          <div className="d-flex align-items-center justify-content-between gap-5 mb-4">
+          <h1 className="font-[Montserrat-500] text-[22px] tracking-[2.20px] text-center">Choose the Manufacturer</h1>
             <button type="button" onClick={onClose}>
               <CloseButton />
             </button>
           </div>
-          <h1 className="font-[Montserrat-500] text-[22px] tracking-[2.20px] mb-[20px]">Choose the Manufacturer</h1>
 
           <div className={Styles.BrandInRadio}>
             <div className={Styles.ModalResponsive}>

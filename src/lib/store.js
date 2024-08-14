@@ -1,6 +1,7 @@
 export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 // export const originAPi = "https://dev.beautyfashionsales.com"
 // export const originAPi = "http://localhost:2611"
+
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
 const orderKey = "orders";
@@ -787,7 +788,28 @@ export async function generateAuditTemplate({ key, Ids, brandId = null }) {
   }
 }
 
-export async function generateBrandAuditTemplate({ key, Ids }) {
+
+export async function getBrandAuditPaginate({ key, Ids }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/audit/8GdxECxXZpY6jhN", {
+    method: "POST",
+    body: JSON.stringify({ key, Ids }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
+
+
+export async function generateBrandAuditTemplate({ key, Ids,currentPage }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -795,7 +817,7 @@ export async function generateBrandAuditTemplate({ key, Ids }) {
 
   let response = await fetch(originAPi + "/audit/8rM04B63RFDXH9Z", {
     method: "POST",
-    body: JSON.stringify({ key, Ids }),
+    body: JSON.stringify({ key, Ids,currentPage }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
