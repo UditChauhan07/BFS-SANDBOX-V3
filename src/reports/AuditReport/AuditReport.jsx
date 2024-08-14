@@ -95,12 +95,21 @@ const AuditReport = () => {
         })
     }
 
-
     const ChunkedReportDownload = ({ chunks }) => {
         const [loadingChunk, setLoadingChunk] = useState(null);
         const [downloadedChunks, setDownloadedChunks] = useState([]);
+        const [busyMessageVisible, setBusyMessageVisible] = useState(false);
 
         const onChangeHandler = async (page) => {
+            // Prevent multiple downloads at the same time
+            if (loadingChunk !== null) {
+                if (!busyMessageVisible) {
+                    setBusyMessageVisible(true);
+                    setTimeout(() => setBusyMessageVisible(false), 3000); // Show message for 3 seconds
+                }
+                return;
+            }
+
             setLoadingChunk(page);
             try {
                 const user = await GetAuthData();
@@ -113,7 +122,7 @@ const AuditReport = () => {
                 setLoadingChunk(null);
                 if (file) {
                     const a = document.createElement('a');
-                    let fileName = `${brandSelect.Name}-Audit-Report-${new Date().toISOString()}.pdf`.replaceAll(" ", "-");
+                    let fileName = `${brandSelect.Name}-Audit-Report-Part-${page}-${new Date().toISOString()}.pdf`.replaceAll(" ", "-");
                     a.href = `${originAPi}/files${file}/${fileName}/index`;
                     a.click();
                     setDownloadedChunks((prev) => [...prev, page]);
@@ -132,11 +141,17 @@ const AuditReport = () => {
                             key={index}
                             style={styles.chunkButton}
                             onClick={() => onChangeHandler(index + 1)}
+                            disabled={loadingChunk !== null && loadingChunk !== index + 1}
+                            title={loadingChunk !== index + 1 ? 'Busy, please try again later' : 'Generating'}
                         >
                             <span style={{ display: 'flex', alignItems: 'center' }}>
                                 {loadingChunk === index + 1 && <div style={styles.loader}></div>}
                                 <span style={{ marginLeft: loadingChunk === index + 1 ? '10px' : '0', display: 'flex' }}>
-                                    {loadingChunk === index + 1 ? 'Downloading...' : <><MdOutlineDownload size={16} className="m-auto" />&nbsp;{`Part ${index + 1}`}</>}
+                                    {loadingChunk === index + 1
+                                        ? 'Downloading...'
+                                        : busyMessageVisible
+                                            ? 'Busy, please try again later'
+                                            : <><MdOutlineDownload size={16} className="m-auto" />&nbsp;{`Part ${index + 1}`}</>}
                                 </span>
                             </span>
                             {downloadedChunks.includes(index + 1) && (
@@ -157,15 +172,15 @@ const AuditReport = () => {
         useEffect(() => {
             // Any side-effects based on brandPages can be handled here
         }, [brandPages]);
-            const chunks = Array.from({ length: brandPages.value }, (_, i) => i + 1);
+        const chunks = Array.from({ length: brandPages.value }, (_, i) => i + 1);
 
-            return (
-                <div style={styles.comparisonContainer}>
-                    {brandPages.isLoaded?
-                    <ChunkedReportDownload chunks={chunks} />:
+        return (
+            <div style={styles.comparisonContainer}>
+                {brandPages.isLoaded ?
+                    <ChunkedReportDownload chunks={chunks} /> :
                     <Loading height={'200px'} />}
-                </div>
-            );
+            </div>
+        );
     };
 
 
