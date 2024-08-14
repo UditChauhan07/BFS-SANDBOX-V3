@@ -5,11 +5,9 @@ import { originAPi, productGuides } from "../lib/store";
 import ModalPage from "../components/Modal UI";
 import { IoIosCloseCircleOutline, IoMdDocument } from "react-icons/io"
 import { MdOutlineDownload } from "react-icons/md";
-import ReactPlayer from 'react-player';
 import FilterSearch from "../components/FilterSearch";
 import Loading from "../components/Loading";
 import { MdSlideshow } from "react-icons/md";
-import { BiVideo } from "react-icons/bi";
 import VideoPlayer from "../components/VideoPlayer";
 // import { ClipLoader } from "react-spinners"; // Import the spinner component
 

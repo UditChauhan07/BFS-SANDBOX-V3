@@ -44,7 +44,7 @@ import StoreDetails from "./pages/StoreDetails";
 import BrandDetails from "./pages/BrandDetails";
 import Tier from "./reports/TierStanding";
 import HelpSection from "./pages/HelpSection";
-import AuditReport from "./pages/AuditReport";
+import AuditReport from "./reports/AuditReport/AuditReport";
 function App() {
   // const Redirect = ({ href }) => {
   //   window.location.href = href;
