@@ -95,11 +95,12 @@ const AuditReport = () => {
         })
     }
 
-    const ChunkedReportDownload = ({ chunks }) => {
+
+    const ChunkedReportDownload1 = ({ chunks }) => {
         const [loadingChunk, setLoadingChunk] = useState(null);
         const [downloadedChunks, setDownloadedChunks] = useState([]);
         const [busyMessageVisible, setBusyMessageVisible] = useState(false);
-
+    
         const onChangeHandler = async (page) => {
             // Prevent multiple downloads at the same time
             if (loadingChunk !== null) {
@@ -109,7 +110,7 @@ const AuditReport = () => {
                 }
                 return;
             }
-
+    
             setLoadingChunk(page);
             try {
                 const user = await GetAuthData();
@@ -118,21 +119,23 @@ const AuditReport = () => {
                     Ids: JSON.stringify([brandSelect.Id]),
                     currentPage: page
                 });
-
-                setLoadingChunk(null);
+    
                 if (file) {
                     const a = document.createElement('a');
                     let fileName = `${brandSelect.Name}-Audit-Report-Part-${page}-${new Date().toISOString()}.pdf`.replaceAll(" ", "-");
-                    a.href = `${originAPi}/files${file}/${fileName}/index`;
+                    a.href = `${brandSelect.Name}/files${file}/${fileName}/index`;
+                    a.download = fileName;
                     a.click();
                     setDownloadedChunks((prev) => [...prev, page]);
                 }
             } catch (error) {
                 console.error('Error generating or downloading PDF:', error);
+            } finally {
+                // Ensure this runs regardless of success or failure
                 setLoadingChunk(null);
             }
         };
-
+    
         return (
             <div style={styles.optionContainer}>
                 <div style={styles.chunkList}>
@@ -142,14 +145,13 @@ const AuditReport = () => {
                             style={styles.chunkButton}
                             onClick={() => onChangeHandler(index + 1)}
                             disabled={loadingChunk !== null && loadingChunk !== index + 1}
-                            title={loadingChunk !== index + 1 ? 'Busy, please try again later' : 'Generating'}
                         >
                             <span style={{ display: 'flex', alignItems: 'center' }}>
                                 {loadingChunk === index + 1 && <div style={styles.loader}></div>}
                                 <span style={{ marginLeft: loadingChunk === index + 1 ? '10px' : '0', display: 'flex' }}>
                                     {loadingChunk === index + 1
                                         ? 'Downloading...'
-                                        : busyMessageVisible
+                                        : busyMessageVisible && loadingChunk !== null
                                             ? 'Busy, please try again later'
                                             : <><MdOutlineDownload size={16} className="m-auto" />&nbsp;{`Part ${index + 1}`}</>}
                                 </span>
@@ -164,8 +166,84 @@ const AuditReport = () => {
         );
     };
 
-
-
+    const ChunkedReportDownload = ({ chunks }) => {
+        const [loadingChunk, setLoadingChunk] = useState(null);
+        const [downloadedChunks, setDownloadedChunks] = useState([]);
+        const [busyParts, setBusyParts] = useState([]);
+    
+        const onChangeHandler = async (page) => {
+            // If a download is in progress, mark other parts as busy
+            if (loadingChunk !== null && loadingChunk !== page) {
+                if (!busyParts.includes(page)) {
+                    setBusyParts((prev) => [...prev, page]);
+                    setTimeout(() => {
+                        setBusyParts((prev) => prev.filter((part) => part !== page));
+                    }, 3000); // Show "Busy" message for 3 seconds
+                }
+                return;
+            }
+    
+            setLoadingChunk(page);
+            try {
+                const user = await GetAuthData();
+                const file = await generateBrandAuditTemplate({
+                    key: user.x_access_token,
+                    Ids: JSON.stringify([brandSelect.Id]),
+                    currentPage: page
+                });
+    
+                if (file) {
+                    const a = document.createElement('a');
+                    let fileName = `${brandSelect.Name}-Audit-Report-Part-${page}-${new Date().toISOString()}.pdf`.replaceAll(" ", "-");
+                    a.href = `${originAPi}/files${file}/${fileName}/index`;
+                    a.download = fileName;
+                    a.click();
+                    setDownloadedChunks((prev) => [...prev, page]);
+                }
+            } catch (error) {
+                console.error('Error generating or downloading PDF:', error);
+            } finally {
+                // Ensure this runs regardless of success or failure
+                setLoadingChunk(null);
+            }
+        };
+    
+        return (
+            <div style={styles.optionContainer}>
+                <div style={styles.chunkList}>
+                    {chunks.map((chunk, index) => {
+                        const partNumber = index + 1;
+                        const isBusy = busyParts.includes(partNumber);
+                        const isDownloading = loadingChunk === partNumber;
+                        const isDownloaded = downloadedChunks.includes(partNumber);
+    
+                        return (
+                            <button
+                                key={index}
+                                style={styles.chunkButton}
+                                onClick={() => onChangeHandler(partNumber)}
+                                disabled={isDownloading || isBusy}
+                            >
+                                <span style={{ display: 'flex', alignItems: 'center' }}>
+                                    {isDownloading && <div style={styles.loader}></div>}
+                                    <span style={{ marginLeft: isDownloading ? '10px' : '0', display: 'flex' }}>
+                                        {isDownloading
+                                            ? 'Downloading...'
+                                            : isBusy
+                                                ? 'Busy, please try again later'
+                                                : <><MdOutlineDownload size={16} className="m-auto" />&nbsp;{`Part ${partNumber}`}</>}
+                                    </span>
+                                </span>
+                                {isDownloaded && (
+                                    <span style={styles.checkmark}>&#10003;</span>
+                                )}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    };
 
     // Main UI component to compare both options
     const ReportDownloadComparison = () => {
