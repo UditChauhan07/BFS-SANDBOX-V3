@@ -100,7 +100,7 @@ const AuditReport = () => {
         const [loadingChunk, setLoadingChunk] = useState(null);
         const [downloadedChunks, setDownloadedChunks] = useState([]);
         const [busyMessageVisible, setBusyMessageVisible] = useState(false);
-    
+
         const onChangeHandler = async (page) => {
             // Prevent multiple downloads at the same time
             if (loadingChunk !== null) {
@@ -110,7 +110,7 @@ const AuditReport = () => {
                 }
                 return;
             }
-    
+
             setLoadingChunk(page);
             try {
                 const user = await GetAuthData();
@@ -119,7 +119,7 @@ const AuditReport = () => {
                     Ids: JSON.stringify([brandSelect.Id]),
                     currentPage: page
                 });
-    
+
                 if (file) {
                     const a = document.createElement('a');
                     let fileName = `${brandSelect.Name}-Audit-Report-Part-${page}-${new Date().toISOString()}.pdf`.replaceAll(" ", "-");
@@ -135,7 +135,7 @@ const AuditReport = () => {
                 setLoadingChunk(null);
             }
         };
-    
+
         return (
             <div style={styles.optionContainer}>
                 <div style={styles.chunkList}>
@@ -170,7 +170,7 @@ const AuditReport = () => {
         const [loadingChunk, setLoadingChunk] = useState(null);
         const [downloadedChunks, setDownloadedChunks] = useState([]);
         const [busyParts, setBusyParts] = useState([]);
-    
+
         const onChangeHandler = async (page) => {
             // If a download is in progress, mark other parts as busy
             if (loadingChunk !== null && loadingChunk !== page) {
@@ -182,7 +182,7 @@ const AuditReport = () => {
                 }
                 return;
             }
-    
+
             setLoadingChunk(page);
             try {
                 const user = await GetAuthData();
@@ -191,7 +191,7 @@ const AuditReport = () => {
                     Ids: JSON.stringify([brandSelect.Id]),
                     currentPage: page
                 });
-    
+
                 if (file) {
                     const a = document.createElement('a');
                     let fileName = `${brandSelect.Name}-Audit-Report-Part-${page}-${new Date().toISOString()}.pdf`.replaceAll(" ", "-");
@@ -207,7 +207,7 @@ const AuditReport = () => {
                 setLoadingChunk(null);
             }
         };
-    
+
         return (
             <div style={styles.optionContainer}>
                 <div style={styles.chunkList}>
@@ -216,7 +216,7 @@ const AuditReport = () => {
                         const isBusy = busyParts.includes(partNumber);
                         const isDownloading = loadingChunk === partNumber;
                         const isDownloaded = downloadedChunks.includes(partNumber);
-    
+
                         return (
                             <button
                                 key={index}
@@ -292,7 +292,7 @@ const AuditReport = () => {
         <ModalPage content={<AuditForm brandStep={brandStep} />} onClose={onCloseModal} open={isShowBrandModal} />
         {isLoading ? <Loading height={'40vh'} /> : <>
             {/* <div>
-                <h2>
+                <h2 className="font-['Arial-400'] text-[26px] tracking-[2.20px] text-left">
                     Audit Report
                 </h2>
             </div> */}
