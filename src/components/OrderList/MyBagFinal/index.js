@@ -222,6 +222,23 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
       return null;
     }
   }
+  const caseChangeHandler=(type,reason)=>{
+    console.log({type,reason,oldSupport});
+    
+    if(oldSupport){
+      if(Object.keys(oldSupport)){
+        if(oldSupport?.[type]){
+          if(oldSupport?.[type]?.[reason]){
+            if(oldSupport?.[type]?.[reason].Id){
+              setRestrict(reason)
+              return
+            }
+          }
+        }
+      }
+    }
+    setConfirm("Invoice") 
+  }
 
   return (
     <div>
@@ -440,7 +457,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
                         <button className="py-1 d-flex justify-content-center" onClick={() => downloadFiles(invoices)}>
                           <span style={{ margin: 'auto 0' }}><MdOutlineDownload size={16} /></span>&nbsp;Download INVOICE
                         </button>
-                      ) : <button className="py-1 d-flex justify-content-center" nClick={() => { oldSupport?.["0123b0000007zc8AAA"]?.["Invoice"]?.Id ? setRestrict("Invoice") : setConfirm("Invoice") }}>
+                      ) : <button className="py-1 d-flex justify-content-center" onClick={() => caseChangeHandler("0123b0000007zc8AAA","Invoice")}>
                         <span style={{ margin: 'auto 0' }}><VscGitPullRequestNewChanges size={16} /></span>&nbsp;Request Invoice
                       </button>}
                     </div>
@@ -450,7 +467,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
                         <button className="py-1 d-flex justify-content-center" onClick={() => setShowTracking(!showTracking)}>
                           <span style={{ margin: 'auto 0' }} >{showTracking ? <RxEyeOpen size={16} style={{ transition: 'all 500s linear' }} /> : <TbEyeClosed size={16} style={{ transition: 'all 250s linear' }} />}</span>&nbsp;Tracking Status
                         </button>
-                      ) : <button className="py-1 d-flex justify-content-center" onClick={() => { oldSupport?.["0123b0000007zc8AAA"]?.["Tracking Status"]?.Id ? setRestrict("Tracking Status") : setConfirm("Tracking Status") }}>
+                      ) : <button className="py-1 d-flex justify-content-center" onClick={() =>  caseChangeHandler("0123b0000007zc8AAA","Tracking Status") }>
                         <span style={{ margin: 'auto 0' }}><VscGitPullRequestNewChanges size={16} /></span>&nbsp;Request Tracking
                       </button>}
                     </div>
