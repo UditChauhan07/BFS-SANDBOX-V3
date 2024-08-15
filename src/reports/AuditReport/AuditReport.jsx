@@ -203,7 +203,7 @@ const AuditReport = () => {
                         <section>
                             <div className="d-flex align-items-center justify-content-between gap-5 mb-4">
                                 <h3 className="font-[Montserrat-500] text-[22px] tracking-[2.20px] text-left">Download Audit Report for {brandSelect?.Name || 'NA'} in Parts</h3>
-                                <button type="button" onClose={onCloseModal}>
+                                <button type="button" onClick={onCloseModal}>
                                     <CloseButton />
                                 </button>
                             </div>
