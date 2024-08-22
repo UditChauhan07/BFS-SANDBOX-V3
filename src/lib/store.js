@@ -1,7 +1,7 @@
 // export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 // export const originAPi = "https://dev.beautyfashionsales.com"
 // export const originAPi = "http://localhost:6194"
-export const originAPi = "https://www.uditchauhan.com"
+export const originAPi = "https://bfs-sandbox-v2.vercel.app"
 
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;

@@ -39,7 +39,7 @@ function Table() {
     setModalLoading(true); // Start loading for modal
     try {
       const response = await axios.post(
-        `https://www.uditchauhan.com/file/${contentVersionId}`,
+        `https://bfs-sandbox-v2.vercel.app/file/${contentVersionId}`,
         {},
         { responseType: 'arraybuffer' } // Handle binary data
       );
