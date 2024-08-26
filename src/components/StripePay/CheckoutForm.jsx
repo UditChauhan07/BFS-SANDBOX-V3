@@ -1,73 +1,40 @@
-// CheckoutForm.js
-import React, { useState } from 'react';
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
-import { originAPi } from '../../lib/store';
+import React from 'react';
+import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 
 const CheckoutForm = () => {
     const stripe = useStripe();
     const elements = useElements();
-    const [errorMessage, setErrorMessage] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (!stripe || !elements) return;
-
-        const cardElement = elements.getElement(CardElement);
-
-        if (!cardElement) {
-            setErrorMessage('CardElement is not available.');
+        if (!stripe || !elements) {
+            // Stripe.js has not loaded yet.
             return;
         }
 
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
-            type: 'card',
-            card: cardElement,
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                // Optional: Return URL where the customer should be redirected after payment
+                return_url: 'https://your-website.com/order/complete',
+            },
         });
-        console.log({error,paymentMethod});
-        
 
         if (error) {
-            console.error('Payment error:', error);
-            setErrorMessage(error.message);
-            return;
-        }
-
-        try {
-            const response = await fetch(originAPi+'/payment-intent', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    payment_method_id: paymentMethod.id,
-                    amount: 1000 // Amount in cents, adjust as needed
-                }),
-            });
-
-            const paymentIntentResponse = await response.json();
-            const { clientSecret } = paymentIntentResponse;
-
-            const { error: confirmError } = await stripe.confirmCardPayment(clientSecret);
-
-            if (confirmError) {
-                console.error('Payment confirmation error:', confirmError);
-                setErrorMessage(confirmError.message);
-            } else {
-                console.log('Payment successful!');
-                setErrorMessage(null);
-            }
-        } catch (err) {
-            console.error('Fetch error:', err);
-            setErrorMessage('An error occurred during the payment process.');
+            // Show error to your customer
+            console.error('Payment error:', error.message);
+        } else {
+            console.log('Payment successful!');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <CardElement />
-            <button type="submit" disabled={!stripe || !elements}>
+            <PaymentElement />
+            <button type="submit" disabled={!stripe}>
                 Pay
             </button>
-            {errorMessage && <div>{errorMessage}</div>}
         </form>
     );
 };

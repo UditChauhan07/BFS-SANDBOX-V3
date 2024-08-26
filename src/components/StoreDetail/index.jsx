@@ -144,7 +144,7 @@ const StoreDetailCard = ({ account, brandList }) => {
                     let url = res[account[0]][brand[0]];
                     const a = document.createElement('a');
                     var date_time = new Date();
-                    a.href = originAPi + "/files" + url + '/Audit' + accountName + '`s ' + brandName + ' ' + date_time + '.pdf/index'
+                    a.href = originAPi + "/files" + url + '/Audit' + accountName.replaceAll("/","") + '`s ' + brandName + ' ' + date_time + '.pdf/index'
                     a.click();
                     setLoader(false)
                 }

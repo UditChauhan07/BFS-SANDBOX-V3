@@ -1,7 +1,6 @@
-// export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
+export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 // export const originAPi = "https://dev.beautyfashionsales.com"
-export const originAPi = "http://localhost:2611"
-
+// export const originAPi = "http://localhost:2611"
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
 const orderKey = "orders";
@@ -432,7 +431,7 @@ export async function getDashboardata({ user }) {
 
   headersList = { ...headersList, key: user.x_access_token, SalesRepId: user.Sales_Rep__c }
 
-  let response = await fetch(originAPi + "/95zWpMEFtbAr8lq/FlEpv2cw4VbxgDF", {
+  let response = await fetch(originAPi + "/95zWpMEFtbAr8lqn/FlEpv2cw4VbxgDF", {
     // let response = await fetch(url + "v3/3kMMguJj62cyyf0", {
     method: "POST",
     body: null,
