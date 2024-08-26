@@ -9,13 +9,16 @@ const useSalesReport = () => {
       if (admins.includes(salesRepId)) {
         reportUrl = originAPi+"/salesReport/4i1cKeDt9"
       }
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const response = await axios.post(
         reportUrl,
         {
           salesRepId: salesRepId,
           yearFor: yearFor,
-          dateFilter
-        }
+          dateFilter,
+        },{headers: {
+          'Timezone': timezone,
+      },}
       );
       // const response = await axios.post("https://dev.beautyfashionsales.com/report/4i1cKeDt9");
       if (admins.includes(salesRepId)) {
