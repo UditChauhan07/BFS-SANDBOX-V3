@@ -1,6 +1,7 @@
 export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 // export const originAPi = "https://dev.beautyfashionsales.com"
 // export const originAPi = "http://localhost:2611"
+
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
 const orderKey = "orders";
@@ -1281,6 +1282,19 @@ export async function getStoreDetails({ key, Id }) {
     DestoryAuth();
   } else {
     return data.data || {};
+  }
+}
+
+export async function refreshTargetRollOver() {
+
+  let response = await fetch(originAPi + "/95zWpMEFtbAr8lqn/GtRomPJiUPtVfwx");
+  let data = JSON.parse(await response.text());
+  console.log({data});
+  
+  if (data.status == 200) {
+    return true;
+  } else {
+    return false;
   }
 }
 
