@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import AppLayout from "../../components/AppLayout";
 import Styles from "./index.module.css";
-import { DateConvert, GetAuthData, getRollOver, getTargetReportAll } from "../../lib/store";
+import { DateConvert, GetAuthData, getRollOver } from "../../lib/store";
 import Loading from "../../components/Loading";
 import { useManufacturer } from "../../api/useManufacturer";
 import { FilterItem } from "../../components/FilterItem";
@@ -163,9 +163,9 @@ const TargetReport = () => {
                     DecemberSale: target.December.sales,
                     DecemberDiff: target.December.diff,
 
-                    TotalTarget: target.Total.monthTarget,
+                    TotalTarget: target.Total.staticTarget,
                     TotalSale: target.Total.sales,
-                    TotalDiff: target.Total.diff,
+                    TotalDiff: target.Total.staticTarget-target.Total.sales,
                 };
                 finalData.push(temp);
             });
@@ -287,9 +287,9 @@ const TargetReport = () => {
 
             // Repeat the same for other months and total columns
             // ...
-            totalRow.TotalTarget += parseFloat(element.Total.monthTarget);
+            totalRow.TotalTarget += parseFloat(element.Total.staticTarget);
             totalRow.TotalSale += parseFloat(element.Total.sales);
-            totalRow.TotalDiff += parseFloat(element.Total.diff);
+            totalRow.TotalDiff += parseFloat(element.Total.staticTarget-element.Total.sales);
         });
 
         const dataWithTotalRow = [...csvData(), totalRow];
@@ -400,36 +400,7 @@ const TargetReport = () => {
             diff: 0,
         },
     };
-    const sendApiCall = () => {
-        setIsLoaded(false);
-        GetAuthData()
-            .then((user) => {
-                console.log(user)
-                getTargetReportAll({ user, year, preOrder })
-                    .then((targetRes) => {
 
-                        if (targetRes) {
-                            setIsLoaded(true);
-                        }
-                        let salesRep = [];
-                        targetRes.list.map((tar) => {
-                            if (!salesRep.includes(tar.salesRepName)) {
-                                salesRep.push(tar.salesRepName);
-                            }
-                        });
-                        setSalesRepList(salesRep);
-                        setTarget(targetRes);
-                        setManufacturerFilter(targetRes.ownerPermission ? state?.manufacturerId : manufacturerFilter);
-                        setSearchSaleBy(targetRes.ownerPermission ? state?.salesRepId : searchSaleBy);
-                    })
-                    .catch((targetErr) => {
-                        console.error({ targetErr });
-                    });
-            })
-            .catch((userErr) => {
-                console.error({ userErr });
-            });
-    };
     let reportStatus = [
         { label: "With Pre-Order", value: true },
         { label: "With out Pre-Order", value: false },
@@ -735,9 +706,9 @@ const TargetReport = () => {
                                             monthTotalAmount.Dec.target += Number(element.December.monthTarget);
                                             monthTotalAmount.Dec.sale += Number(element.December.sales);
                                             monthTotalAmount.Dec.diff += Number(element.December.diff);
-                                            monthTotalAmount.Total.target += Number(element.Total.monthTarget);
+                                            monthTotalAmount.Total.target += Number(element.Total.staticTarget);
                                             monthTotalAmount.Total.sale += Number(element.Total.sales);
-                                            monthTotalAmount.Total.diff += Number(element.Total.diff);
+                                            monthTotalAmount.Total.diff += Number(element.Total.staticTarget-element.Total.sales);
                                             return (
                                                 <tr key={index}>
                                                     <td className={`${Styles.td} ${Styles.stickyFirstColumn}`}>{element?.salesRepName}</td>
@@ -817,9 +788,9 @@ const TargetReport = () => {
                                                     </td>
                                                     <td className={`${Styles.td}`}>${formentAcmount(element.December.sales)}</td>
                                                     <td className={`${Styles.td}`}>${element.December.diff >= 0 ? formentAcmount(element.December.diff) : <b style={{ color: 'green' }}>{formentAcmount(Math.abs(element.December.diff))}</b>}</td>
-                                                    <td className={`${Styles.td} ${Styles.stickyThirdLastColumn}`}>${formentAcmount(element.Total.monthTarget)}</td>
+                                                    <td className={`${Styles.td} ${Styles.stickyThirdLastColumn}`}>${formentAcmount(element.Total.staticTarget)}</td>
                                                     <td className={`${Styles.td} ${Styles.stickySecondLastColumn}`}>${formentAcmount(element.Total.sales)}</td>
-                                                    <td className={`${Styles.td} ${Styles.stickyLastColumn}`}>${formentAcmount(element.Total.diff)}</td>
+                                                    <td className={`${Styles.td} ${Styles.stickyLastColumn}`}>${formentAcmount(element.Total.staticTarget-element.Total.sales)}</td>
                                                 </tr>
                                             );
                                         })}
