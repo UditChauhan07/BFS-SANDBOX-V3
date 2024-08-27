@@ -7,7 +7,7 @@ import img3 from "./Images/Group.png";
 import img4 from "./Images/Group1.png";
 import { PieChart, Pie, Cell } from "recharts";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthCheck, GetAuthData, formatNumber, getDashboardata, hexabrand, refreshTargetRollOver } from "../../lib/store";
+import { AuthCheck, GetAuthData, admins, formatNumber, getDashboardata, hexabrand, refreshTargetRollOver } from "../../lib/store";
 import { getRandomColors } from "../../lib/color";
 import ContentLoader from "react-content-loader";
 import SelectBrandModel from "../My Retailers/SelectBrandModel/SelectBrandModel";
@@ -219,6 +219,7 @@ function Dashboard({ dashboardData }) {
     },
   });
   const [manufacturerSalesYear, setManufacturerSalesYaer] = useState([]);
+  const [salesRepAdmin,setSalesRepAdmin]=useState();
 
   // API INTEGRATION
 
@@ -247,9 +248,11 @@ function Dashboard({ dashboardData }) {
         if (headers) {
           user.headers = headers;
         }
+        if(admins.includes(user.Sales_Rep__c)){
+          setSalesRepAdmin(true)
+        }
         getDashboardata({ user })
           .then((dashboard) => {
-            console.log({dashboard});
             let oldSalesAmount = dashboard?.oldSalesAmount || 0;
             let currentSalesAmount = dashboard.monthlySalesRepData?.[user.Sales_Rep__c]?.sale || 0
             let growth = parseInt(((currentSalesAmount - oldSalesAmount) / oldSalesAmount) * 100)
@@ -599,7 +602,7 @@ function Dashboard({ dashboardData }) {
         <div className="row mt-4 justify-between">
           <div className="col-lg-6 my-2">
             <div className={Styles.DashboardWidth}>
-              <p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Month to date(MTD): Sales By Rep <span>{Monthlydataa.isLoaded ?<BiRefresh className="cursor-pointer" size={25} onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>
+              {salesRepAdmin?<p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Month to date(MTD): Sales By Rep <span>{Monthlydataa.isLoaded ?<BiRefresh className="cursor-pointer" size={25} onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>:<p className={Styles.Tabletext}>Month to date(MTD): Sales By Rep</p>}
               <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className="">
                   <div className={Styles.table_scroll}>
@@ -669,7 +672,7 @@ function Dashboard({ dashboardData }) {
           {/* Yearly SALESBYREP */}
           <div className="col-lg-6 my-2">
             <div className={Styles.DashboardWidth}>
-            <p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Year to date(YTD): Sales By Rep<span>{Yearlydataa.isLoaded ?<BiRefresh size={25} className="cursor-pointer" onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>
+            {salesRepAdmin?<p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Year to date(YTD): Sales By Rep<span>{Yearlydataa.isLoaded ?<BiRefresh size={25} className="cursor-pointer" onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>:<p className={Styles.Tabletext}>Year to date(YTD): Sales By Rep</p>}
               <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className="">
                   <div className={Styles.table_scroll}>
@@ -739,7 +742,7 @@ function Dashboard({ dashboardData }) {
           {/* monthly data goal by brand*/}
           <div className="col-lg-6 col-sm-12 my-2">
             <div className={Styles.DashboardWidth}>
-            <p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Month to date(MTD): Goal by Brand<span>{brandData.isLoaded ?<BiRefresh size={25} className="cursor-pointer" onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>
+            {salesRepAdmin?<p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Month to date(MTD): Goal by Brand<span>{brandData.isLoaded ?<BiRefresh size={25} className="cursor-pointer" onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>:<p className={Styles.Tabletext}>Month to date(MTD): Goal by Brand</p>}
               <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className={Styles.table_scroll}>
                   <table className="table table-borderless ">
