@@ -3,7 +3,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import FileModal from './FileModal';
 import { marketingProducts } from '../../api/useMarketingMaterial';
-import OrderLoader from '../loader';
+
 import { originAPi } from '../../lib/store';
 import { MdSlideshow } from "react-icons/md";
 import './style.css';

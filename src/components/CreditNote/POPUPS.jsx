@@ -4,45 +4,46 @@ import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Loading from '../Loading';
 
-function POPUPS({ onProductSelect, onClose }) { // Accept onClose as a prop
+function POPUPS({ onProductSelect, onClose, onManufacturersFetched }) {
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [loading, setLoading] = useState(true); // State to manage loading status
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchProducts = async () => {
-            setLoading(true); // Start loading
+            setLoading(true);
             try {
                 const res = await getCreditNote();
-                console.log("res", res);
-
                 if (Array.isArray(res)) {
                     setProducts(res);
-                    console.log("products", res);
+
+                    // Extract manufacturers and pass to parent
+                    const uniqueManufacturers = [...new Set(res.flatMap(item => item.manufacturers))];
+                    onManufacturersFetched(uniqueManufacturers);
                 }
             } catch (error) {
-                console.log('Error', error);
+                console.error('Error fetching products:', error);
             }
-            setLoading(false); // End loading
+            setLoading(false);
         };
         fetchProducts();
-    }, []);
+    }, [onManufacturersFetched]);
 
     const handleProductSelection = (product) => {
         setSelectedProduct(product);
-        console.log('Selected Product:', product);
     };
 
     const handleSubmit = () => {
         if (selectedProduct) {
             onProductSelect(selectedProduct.manufacturers);
+            onClose(); // Close modal after selection
         }
     };
 
     return (
         <>
             {loading ? (
-                <Loading /> 
+                <Loading />
             ) : (
                 <form>
                     <div className="heading">
@@ -62,13 +63,15 @@ function POPUPS({ onProductSelect, onClose }) { // Accept onClose as a prop
                                 <label className="form-check-label" htmlFor={`product${index}`}>
                                     {item.accountName} 
                                 </label>
-                                <span className='wallet'>${item.totalWalletAmount} <div className='available'>Available Bal</div> </span>
-                                <br /> 
+                                <span className='wallet'>
+                                    ${item.totalWalletAmount}
+                                    <div className='available'>Available Bal</div>
+                                </span>
+                                <br />
                             </div>
                         ))}
 
                         <div className="btn">
-                            {/* Close the modal when Cancel button is clicked */}
                             <button type="button" className='btn-cancel' onClick={onClose}>Cancel</button>
                             <button type="button" className='btn-submit' onClick={handleSubmit}>Submit</button>
                         </div>
