@@ -7,7 +7,7 @@ import img3 from "./Images/Group.png";
 import img4 from "./Images/Group1.png";
 import { PieChart, Pie, Cell } from "recharts";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthCheck, GetAuthData, formatNumber, getDashboardata, hexabrand } from "../../lib/store";
+import { AuthCheck, GetAuthData, formatNumber, getDashboardata, hexabrand, refreshTargetRollOver } from "../../lib/store";
 import { getRandomColors } from "../../lib/color";
 import ContentLoader from "react-content-loader";
 import SelectBrandModel from "../My Retailers/SelectBrandModel/SelectBrandModel";
@@ -15,6 +15,7 @@ import ModalPage from "../Modal UI/index";
 import AppLayout from "../AppLayout";
 import { FilterItem } from "../FilterItem";
 import { UserIcon } from "../../lib/svg";
+import { BiRefresh } from "react-icons/bi";
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const monthList = [
   {
@@ -557,6 +558,23 @@ function Dashboard({ dashboardData }) {
   const sendDataTargetHandler = ({ salesRepId = null, manufacturerId = null }) => {
     navigate('/Target-Report', { state: { salesRepId, manufacturerId } });
   }
+  const targeetRollReferesh=()=>{
+    setIsLoading(false);
+    setleadsbtbrand({ isLoaded: false, data: [] })
+    setAccountPerformance({ isLoaded: false, data: [] })
+    setMonthlydata({ isLoaded: false, data: [] })
+    setYearlydata({ isLoaded: false, data: [] })
+    setBrandData({ isLoaded: false, data: [] })
+    setManufacturerSalesYaer([]);
+    setBox({ RETAILERS: 0, GROWTH: 0, ORDERS: 0, REVENUE: 0, TARGET: 0 })
+    refreshTargetRollOver().then((status)=>{
+      if(status){
+        getDataHandler({ month: selectMonth, year: selectYear });
+      }
+    }).catch((statusErr)=>{
+      console.log({statusErr});
+    })
+  }
   return (
     <AppLayout
       filterNodes={
@@ -581,7 +599,7 @@ function Dashboard({ dashboardData }) {
         <div className="row mt-4 justify-between">
           <div className="col-lg-6 my-2">
             <div className={Styles.DashboardWidth}>
-              <p className={Styles.Tabletext}>Month to date(MTD): Sales By Rep</p>
+              <p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Month to date(MTD): Sales By Rep <span>{Monthlydataa.isLoaded ?<BiRefresh className="cursor-pointer" size={25} onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>
               <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className="">
                   <div className={Styles.table_scroll}>
@@ -651,7 +669,7 @@ function Dashboard({ dashboardData }) {
           {/* Yearly SALESBYREP */}
           <div className="col-lg-6 my-2">
             <div className={Styles.DashboardWidth}>
-              <p className={Styles.Tabletext}>Year to date(YTD): Sales By Rep</p>
+            <p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Year to date(YTD): Sales By Rep<span>{Yearlydataa.isLoaded ?<BiRefresh size={25} className="cursor-pointer" onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>
               <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className="">
                   <div className={Styles.table_scroll}>
@@ -673,19 +691,19 @@ function Dashboard({ dashboardData }) {
                           {Yearlydataa.data ? (
                             <tbody>
                               {Yearlydataa.data?.map((e, index) => {
-                                totalTargetForYTDSalesRep = Number(e?.MonthlyTarget || 0) + Number(totalTargetForYTDSalesRep);
+                                totalTargetForYTDSalesRep = Number(e?.StaticTarget || 0) + Number(totalTargetForYTDSalesRep);
                                 totalAmountForYTDSalesRep = Number(e.MonthlySale || 0) + Number(totalAmountForYTDSalesRep);
-                                totalDiffForYTDSalesRep = Number(e?.Difference || 0) + Number(totalDiffForYTDSalesRep);
+                                totalDiffForYTDSalesRep = Number(e?.StaticTarget-e.MonthlySale || 0) + Number(totalDiffForYTDSalesRep);
                                 let targetDiff = e.TargetRollover
                                 return (
                                   <tr key={e}>
                                     <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.SalesRepName }) }} style={{ cursor: 'pointer' }}>
                                       <UserIcon /> {e.SalesRepName}
                                     </td>
-                                    <td className={Styles.tabletd}>${formatNumber(e?.MonthlyTarget || 0)} {targetDiff ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.StaticTarget)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.StaticTarget)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null}</td>
+                                    <td className={Styles.tabletd}>${formatNumber(e?.StaticTarget || 0)} {targetDiff ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.StaticTarget)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.StaticTarget)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null}</td>
                                     <td className={Styles.tabletd}>${formatNumber(e.MonthlySale || 0)}</td>
                                     {/* <td className={Styles.tabletd}>${formatNumber(e?.diff || 0)}</td> */}
-                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${formatNumber(e.Difference || 0)}</span><span className={e.Difference <= 0 ? Styles.matchHolder : Styles.shortHolder}>{e.Difference <= 0 ? 'MATCH' : 'SHORT'}</span></td></tr>
+                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${formatNumber(e?.StaticTarget-e.MonthlySale || 0)}</span><span className={e?.StaticTarget-e.MonthlySale <= 0 ? Styles.matchHolder : Styles.shortHolder}>{e?.StaticTarget-e.MonthlySale <= 0 ? 'MATCH' : 'SHORT'}</span></td></tr>
                                 );
                               })}
                               <tr className={`${Styles.tablerow} ${Styles.stickyBottom}`}>
@@ -721,7 +739,7 @@ function Dashboard({ dashboardData }) {
           {/* monthly data goal by brand*/}
           <div className="col-lg-6 col-sm-12 my-2">
             <div className={Styles.DashboardWidth}>
-              <p className={Styles.Tabletext}>Month to date(MTD): Goal by Brand</p>
+            <p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Month to date(MTD): Goal by Brand<span>{brandData.isLoaded ?<BiRefresh size={25} className="cursor-pointer" onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>
               <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className={Styles.table_scroll}>
                   <table className="table table-borderless ">
