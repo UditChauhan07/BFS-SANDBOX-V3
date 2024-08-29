@@ -64,7 +64,7 @@ const EmailReport = ({ setting, setSetting, onCheckout }) => {
                 />
                 <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
                     <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}>
-                        <h2>NewLetter</h2>
+                        <h2>Newsletter</h2>
                         <div className="d-flex">
                             <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} onClick={() => { setSetting(true) }}>
                                 <BiBoltCircle />&nbsp;Setting
@@ -80,11 +80,11 @@ const EmailReport = ({ setting, setSetting, onCheckout }) => {
                     <thead className={Styles.table} style={{ position: 'sticky', top: '265px', zIndex: 11 }}>
                         <tr>
                             <th style={{ width: '200px' }}>Publish On</th>
-                            <th style={{ width: '200px' }}>Layout</th>
+                            <th style={{ width: '200px' }}>Newsletter</th>
                             <th>Subscribes</th>
-                            <th>Send NewLetter</th>
-                            <th>Fail NewLetter</th>
-                            <th>Waiting NewLetter</th>
+                            <th>Sent</th>
+                            <th>Failed</th>
+                            <th>Waiting</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,7 +99,7 @@ const EmailReport = ({ setting, setSetting, onCheckout }) => {
                                             {frame.Month} {frame.Day}, {frame.Year}
                                         </p>
                                     </td>
-                                    <td style={{ width: '200px' }}><p title="click to see Layout for this newletter" onClick={() => { setShowLayout(frame?.FirstBody.replaceAll("{{token}}", token)) }} style={{ cursor: 'pointer' }}>click to see Layout</p></td>
+                                    <td style={{ width: '200px' }}><p title="click to see Layout for this newletter" onClick={() => { setShowLayout(frame?.FirstBody.replaceAll("{{token}}", token)) }} style={{ cursor: 'pointer' }}>Fall 2024 New Launches</p></td>
                                     <td>{frame.Total}</td>
                                     <td>{frame.SendMail}</td>
                                     <td>{frame.FailMail}</td>

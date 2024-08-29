@@ -167,7 +167,9 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
     }
     const resetHandler = () => {
         let contactSearch = document.getElementById("contactSearch");
-        contactSearch.value = null
+        if(contactSearch){
+            contactSearch.value = null
+        }
         setSearchValue(null); setCurrentPage(1)
         setCheckId([])
     }
@@ -284,7 +286,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
             />
             <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
                 <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}>
-                    <h2 className="d-flex justify-content-center align-items-center"><span style={{ cursor: 'pointer' }} onClick={() => { setMonth(); setDay(); setYear(); setMonthList([]); setDayList([]); }}><BiLeftArrow /></span><p>Subscribers List for {months[month - 1]} {day}, {year}`s NewLetter</p></h2>
+                    <h2 className="d-flex justify-content-center align-items-center"><span style={{ cursor: 'pointer' }} onClick={() => { setMonth(); setDay(); setYear(); setMonthList([]); setDayList([]); }}><BiLeftArrow /></span><p>Subscribers List for {months[month - 1]} {day}, {year}`s Newsletter</p></h2>
                     <div className="d-flex">
                         {checkId.length ?
                             <>
