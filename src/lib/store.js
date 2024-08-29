@@ -1297,6 +1297,23 @@ export async function refreshTargetRollOver() {
     return false;
   }
 }
+export async function getBrandPaymentDetails({ key, Id }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+  let response = await fetch(originAPi + "/stripe/e8IZytvGI1IJX74", {
+    method: "POST",
+    body: JSON.stringify({ key, Id }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data || {};
+  }
+}
 
 export const brandDetails =
 {
