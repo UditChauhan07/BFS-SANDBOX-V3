@@ -318,8 +318,8 @@ const MarketingCalendar = () => {
         </>
       }
     >
-      {isPDFLoaded ? <div className="d-flex" style={{ height: '50vh' }}><p className="m-auto">Generating Pdf..<span>{pdfLoadingText}</span></p></div> :
-        isLoaded ? <LaunchCalendar brand={brand} month={month} productList={productList} /> : <Loading />}
+      {isPDFLoaded ? <div><img src="https://i.giphy.com/7jtU9sxHNLZuv8HZCa.webp" style={{margin:'auto'}} width="480" height="480" /><p className="text-center mt-2">{`Generating PDF`}</p></div> :
+        isLoaded ? <LaunchCalendar brand={brand} month={month} productList={productList} /> : <Loading height={'50vh'}/>}
 
     </AppLayout>
   );
