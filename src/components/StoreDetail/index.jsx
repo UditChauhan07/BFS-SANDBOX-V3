@@ -221,7 +221,7 @@ const StoreDetailCard = ({ account, brandList }) => {
 
                                     <div className="m-auto d-flex">
                                         {account.Brands.map((element, index) => (
-                                            <p className={Styles.webLinkHolder} style={{ textAlign: 'center', color: '#3296ED', textDecoration: 'underline', marginRight: '2rem' }} key={index}>{element.ManufacturerName__c}</p>
+                                            <p className={Styles.webLinkHolder} onClick={() => AuditHandler(element.ManufacturerId__c, account.Name, element.ManufacturerName__c)} style={{ textAlign: 'center', color: '#3296ED', textDecoration: 'underline', marginRight: '2rem' }} key={index}>{element.ManufacturerName__c}</p>
                                         ))}
                                     </div>
                                 </div>

@@ -45,6 +45,7 @@ import BrandDetails from "./pages/BrandDetails";
 import Tier from "./reports/TierStanding";
 import HelpSection from "./pages/HelpSection";
 import AuditReport from "./reports/AuditReport/AuditReport";
+import OrderComplete from "./pages/OrderComplete";
 function App() {
   // const Redirect = ({ href }) => {
   //   window.location.href = href;
@@ -72,6 +73,7 @@ function App() {
             {/* <Route path="/product/:name" element={<ProductDetails/>}></Route> */}
             <Route path="/my-bag" element={<MyBag />}></Route>
             <Route path="/brand" element={<BrandsPage />}></Route>
+            <Route path="/order/complete" element={<OrderComplete/>}></Route>
             {/*  */}
             <Route path="/customer-care" element={<CustomerCare />}></Route>
             <Route
