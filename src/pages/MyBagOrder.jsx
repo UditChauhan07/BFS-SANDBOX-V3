@@ -154,7 +154,7 @@ function MyBagOrder(props) {
       </div>
     }>
       <div className="col-12">
-        {isPDFLoaded ? <div className="d-flex" style={{ height: '50vh' }}><p className="m-auto">Generating Pdf..<span>{pdfLoadingText}</span></p></div> :
+        {isPDFLoaded ? <div><img src="https://i.giphy.com/7jtU9sxHNLZuv8HZCa.webp" style={{margin:'auto'}} width="480" height="480" /><p className="text-center mt-2">{`Generating PDF`}</p></div> :
           <MyBagFinal setOrderDetail={setOrderDetail} generatePdfServerSide={generatePdfServerSide} generateXLSX={generateXLSX}/>}
       </div>
     </AppLayout>
