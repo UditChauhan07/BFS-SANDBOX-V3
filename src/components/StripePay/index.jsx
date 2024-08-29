@@ -3,28 +3,33 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from './CheckoutForm';
 import { originAPi } from '../../lib/store';
+import Loading from '../Loading';
 
-
-const StripePay = ({ PK_KEY,amount }) => {
+const StripePay = ({ PK_KEY, SK_KEY, amount = 100 }) => {
     const stripePromise = loadStripe(PK_KEY);
     const [clientSecret, setClientSecret] = useState('');
 
     useEffect(() => {
-        // Fetch the client secret from your backend
-        fetch(originAPi+'/stripe/payment-intent', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ amount:amount*100,paymentId:"" }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setClientSecret(data.clientSecret)
-                
+        if (PK_KEY && SK_KEY) {
+            // Fetch the client secret from your backend
+            fetch(originAPi + '/stripe/payment-intent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ amount: amount * 100, paymentId: SK_KEY }),
             })
-            .catch((error) => console.error('Error fetching client secret:', error));
+                .then((response) => response.json())
+                .then((data) => {
+                    setClientSecret(data.clientSecret)
+
+                })
+                .catch((error) => console.error('Error fetching client secret:', error));
+        }
     }, [amount]);
+    if (!PK_KEY || !SK_KEY){
+        return null
+    }else{
 
     const options = {
         clientSecret, // Pass the clientSecret to the Elements provider
@@ -38,8 +43,10 @@ const StripePay = ({ PK_KEY,amount }) => {
             <CheckoutForm />
         </Elements>
     ) : (
-        <div>Loading...</div> // Loading state while fetching clientSecret
+        <Loading height={'50vh'} />
+        // Loading state while fetching clientSecret
     );
+}
 };
 
 export default StripePay;

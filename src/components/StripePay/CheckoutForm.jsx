@@ -1,5 +1,7 @@
 import React from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
+import Styles from "./Styles.module.css";
+import Swal from 'sweetalert2';
 
 const CheckoutForm = () => {
     const stripe = useStripe();
@@ -17,7 +19,7 @@ const CheckoutForm = () => {
             elements,
             confirmParams: {
                 // Optional: Return URL where the customer should be redirected after payment
-                return_url: 'https://your-website.com/order/complete',
+                return_url: 'http://localhost:3000/order/complete',
             },
         });
 
@@ -28,13 +30,14 @@ const CheckoutForm = () => {
             console.log('Payment successful!');
         }
     };
-
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={Styles.container}>
             <PaymentElement />
-            <button type="submit" disabled={!stripe}>
-                Pay
-            </button>
+            <div className={Styles.btnHolder}>
+                <button type="submit" disabled={!stripe} className={Styles.btn}>
+                    Pay
+                </button>
+            </div>
         </form>
     );
 };
