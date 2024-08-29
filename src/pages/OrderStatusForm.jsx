@@ -6,7 +6,7 @@ import CustomerSupportLayout from "../components/customerSupportLayout";
 
 const OrderStatusForm = () => {
   const [submitLoad,setSubmitLoad] = useState(false)
-  if(submitLoad) return <Loading height={'80vh'} />
+  if(submitLoad) return <AppLayout><Loading height={'80vh'} /></AppLayout>
   return (
     <CustomerSupportLayout>
       <OrderStatusFormSection setSubmitLoad={setSubmitLoad}/>
