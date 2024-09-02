@@ -1,0 +1,98 @@
+/* MultiSelectSearch.css */
+
+.multi-select-container {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    background-color: #f4f4f4;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.multi-select-container input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #fff;
+}
+.multi-select-container input[type="text"]:focus{
+    background-color: #fff;
+}
+.user-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 15px;
+    gap: 10px;
+    height: 175px;
+    overflow-y: auto;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #fff;
+    font-family:Montserrat-400;
+    transition: background-color 0.3s, border-color 0.3s;
+    flex: 1 1 calc(45% - 20px); /* Responsive design: Adjust width based on available space */
+}
+
+.user-item:hover {
+    background-color: #f0f0f0;
+}
+
+.user-item.selected {
+    background-color: #e0e0e0;
+    border-color: #bbb;
+}
+.select-user-list{
+    display: flex;
+    padding: 0;
+    color: #000;
+}
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+    display: grid;
+    place-content: center;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+}
+.user-etc{
+    font-size: 10px;
+    color: #ccc;
+}
+.user-etc b{
+font-size: 11px;
+color: #000;
+}
+.user-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.user-email {
+    font-size: 14px;
+    color: #666;
+}

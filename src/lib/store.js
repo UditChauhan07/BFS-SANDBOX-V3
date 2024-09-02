@@ -13,7 +13,7 @@ const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
 export const salesRepIdKey = "BzQIEAjzCEHmlXc";
-export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3"]; //, "0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
+export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3", "0051O00000CvAVTQA3"]; //, "0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
 
 export const months = [
   "January",
@@ -536,13 +536,13 @@ export async function getAllAccount({ user }) {
   }
 }
 
-export async function getAccountAllContact({ key,Id }) {
+export async function getAccountAllContact({ key, Id }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
   };
   let body = {
-    key,Id
+    key, Id
   };
   let response = await fetch(url + "v3/PP1Rx34VLTBuUqK", {
     method: "POST",
@@ -679,7 +679,7 @@ export async function getProductDetails({ rawData }) {
     Accept: "*/*",
     "Content-Type": "application/json",
   };
-  
+
   let response = await fetch(url + "v3/V59WN1CMm8Pjxay", {
     method: "POST",
     body: JSON.stringify(rawData),
@@ -731,11 +731,11 @@ export async function getBrandList({ key, userId }) {
   }
 }
 //
-export async function getRetailerList({ key, userId,manufacturerid=null }) {
+export async function getRetailerList({ key, userId, manufacturerid = null }) {
   let headersList = {
     Accept: "*/*",
     key,
-    userId,manufacturerid,
+    userId, manufacturerid,
     "Content-Type": "application/json",
   };
   let response = await fetch(url + "v3/JbUxci", {
@@ -809,7 +809,7 @@ export async function getBrandAuditPaginate({ key, Ids }) {
 }
 
 
-export async function generateBrandAuditTemplate({ key, Ids,currentPage }) {
+export async function generateBrandAuditTemplate({ key, Ids, currentPage }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -817,7 +817,7 @@ export async function generateBrandAuditTemplate({ key, Ids,currentPage }) {
 
   let response = await fetch(originAPi + "/audit/8rM04B63RFDXH9Z", {
     method: "POST",
-    body: JSON.stringify({ key, Ids,currentPage }),
+    body: JSON.stringify({ key, Ids, currentPage }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -882,6 +882,64 @@ export async function getEmailBlast({ key, Id, day = null, month = null, year = 
     return data.data;
   }
 }
+
+export async function fetchNewsletterData({ token }) {
+  if (!token) {
+    throw new Error('Access token is missing');
+  }
+
+  try {
+    let headersList = {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+    };
+    let response = await fetch(originAPi + "/newsletter/CUq6TE3KT8", {
+      method: "POST",
+      body: JSON.stringify({
+        key: token
+      }),
+      headers: headersList,
+    });
+    let data = JSON.parse(await response.text());
+    if (data.status == 300) {
+      DestoryAuth();
+    } else {
+      return data.data;
+    }
+  } catch (err) {
+    console.error('Error fetching newsletter data:', err.message);
+    throw err;
+  }
+};
+
+export async function createNewsletter(body) {
+  // if (!body) {
+  //   throw new Error('Access token is missing');
+  // }
+
+  try {
+    let headersList = {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+    };
+    let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/3Se95gppZqEB03UASAA", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: headersList,
+    });
+    let data = JSON.parse(await response.text());
+    
+    if (data.message == "Processing complete") {
+      return {status:true,message:null};
+    } else {
+      // DestoryAuth();
+      return {status:false,message:data.message};
+    }
+  } catch (err) {
+    console.error('Error fetching newsletter data:', err.message);
+    return {status:false,message:err.message};
+  }
+};
 
 export async function publicProductDetails({ token, id }) {
   let headersList = {
@@ -1289,8 +1347,8 @@ export async function refreshTargetRollOver() {
 
   let response = await fetch(originAPi + "/95zWpMEFtbAr8lqn/GtRomPJiUPtVfwx");
   let data = JSON.parse(await response.text());
-  console.log({data});
-  
+  console.log({ data });
+
   if (data.status == 200) {
     return true;
   } else {
@@ -1560,7 +1618,7 @@ export const productGuides = {
 };
 
 export function DateConvert(dateString, timeStamp = false) {
-  if (dateString&&timeStamp) {
+  if (dateString && timeStamp) {
     const options = { year: "numeric", month: "long", day: "numeric" }
     dateString = new Date(dateString).toLocaleDateString(undefined, options)
     return dateString

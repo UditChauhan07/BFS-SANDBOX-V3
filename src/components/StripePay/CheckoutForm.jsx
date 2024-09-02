@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
+import { useStripe, useElements, PaymentElement,CardElement } from '@stripe/react-stripe-js';
 import Styles from "./Styles.module.css";
 import Swal from 'sweetalert2';
 
@@ -32,7 +32,7 @@ const CheckoutForm = () => {
     };
     return (
         <form onSubmit={handleSubmit} className={Styles.container}>
-            <PaymentElement />
+            <CardElement />
             <div className={Styles.btnHolder}>
                 <button type="submit" disabled={!stripe} className={Styles.btn}>
                     Pay
