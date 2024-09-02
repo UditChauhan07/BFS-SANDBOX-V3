@@ -167,7 +167,9 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
     }
     const resetHandler = () => {
         let contactSearch = document.getElementById("contactSearch");
-        contactSearch.value = null
+        if(contactSearch){
+            contactSearch.value = null
+        }
         setSearchValue(null); setCurrentPage(1)
         setCheckId([])
     }
@@ -211,7 +213,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
                 content={<div className="d-flex flex-column gap-3" style={{ maxWidth: '700px' }}>
                     <h2 className={`${Styles.warning} `}>Confirm</h2>
                     <p className={`${Styles.warningContent} `}>
-                        Are you Sure you want to {confirm == 1 ? <b>Delete</b> : confirm == 2 ? <b>Add to Queue</b> : confirm == 3 ? <b>Re-send mail to</b> : confirm == 4 ? <b>Export</b>: null} selected Subscriber?<br /> This action cannot be undone.
+                        Are you sure you want to {confirm == 1 ? <b>Delete</b> : confirm == 2 ? <b>Add to Queue</b> : confirm == 3 ? <b>Re-send mail to</b> : confirm == 4 ? <b>Export</b>: null} selected Subscriber?<br /> This action cannot be undone.
                     </p>
                     <div className="d-flex justify-content-around ">
                         <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '100px' }} onClick={() => confirmHandler()}>
@@ -284,7 +286,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
             />
             <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
                 <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}>
-                    <h2 className="d-flex justify-content-center align-items-center"><span style={{ cursor: 'pointer' }} onClick={() => { setMonth(); setDay(); setYear(); setMonthList([]); setDayList([]); }}><BiLeftArrow /></span><p>Subscribers List for {months[month - 1]} {day}, {year}`s NewLetter</p></h2>
+                    <h2 className="d-flex justify-content-center align-items-center"><span style={{ cursor: 'pointer' }} onClick={() => { setMonth(); setDay(); setYear(); setMonthList([]); setDayList([]); }}><BiLeftArrow /></span><p>Subscribers List for {months[month - 1]} {day}, {year}`s Newsletter</p></h2>
                     <div className="d-flex">
                         {checkId.length ?
                             <>
@@ -313,7 +315,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
                             <BiTrash size={23} title={'Delete selected rows'} />
                         </div>
                     </div>
-                    <input type="text" autoComplete="off" id="SubscribesSearch" title="search for Subscribes" placeholder="Search Subscribes" className={Styles.searchBox} onKeyUp={(e) => { setSearchValue(e.target.value); setCurrentPage(1) }} />
+                    <input type="text" autoComplete="off" id="SubscribesSearch" title="search for Subscribers" placeholder="Search Subscribers" className={Styles.searchBox} onKeyUp={(e) => { setSearchValue(e.target.value); setCurrentPage(1) }} />
                 </div>
             </div>
             {isLoaded ?
