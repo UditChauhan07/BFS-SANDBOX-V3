@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import './MultiStepForm.css'; // Import the CSS file
 import MultiSelectSearch from '../../SearchBox';
-import { createNewsletter, fetchNewsletterData, GetAuthData, originAPi } from '../../../lib/store';
+import { createNewsletter, fetchNewsletterData, GetAuthData, originAPi, ShareDrive } from '../../../lib/store';
 import Styles from './index.module.css';
 import { useManufacturer } from '../../../api/useManufacturer';
 import Loading from '../../Loading';
 import ModalPage from '../../Modal UI';
 import { BiExit } from 'react-icons/bi';
-const MultiStepForm = ({ onSubmit = null }) => {
+import ToggleSwitch from '../../ToggleButton';
+import { FaEye } from 'react-icons/fa';
+import FilterDate from '../../FilterDate';
+const contactLocalKey = "lCpFhWZtGKKejSX"
+
+const MultiStepForm = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [Subscribers, setSubscribers] = useState({ isLoaded: false, users: [], contacts: [] })
     const [allSubscribers, setAllSubscribers] = useState([]);
     const [callBackError, setCallbackError] = useState();
     const [isSubmit, setIsSubmit] = useState(false)
+    const [isSchedule, setIsSchedule] = useState(false)
     const [formData, setFormData] = useState({
         subscriber: [],
         template: '',
@@ -28,9 +34,12 @@ const MultiStepForm = ({ onSubmit = null }) => {
             setCallbackError('Please select a subscriber first.')
             return;
         }
-        if (step === 3 && (!formData.template || !formData.brand.length)) {
-            // alert('Please select a template and brand first.');
-            setCallbackError('Please select a template and brand first.')
+        if (step === 3 && (!formData.template)) {
+            setCallbackError('Please select a template')
+            return;
+        }
+        if (step === 4 && (!formData.brand.length)) {
+            setCallbackError('Please select a brand')
             return;
         }
         setCurrentStep(step);
@@ -52,6 +61,7 @@ const MultiStepForm = ({ onSubmit = null }) => {
         } else {
             setFormData({ ...formData, [name]: value });
         }
+        console.log({ formData });
     };
 
     const handleSubmit = (e) => {
@@ -75,7 +85,7 @@ const MultiStepForm = ({ onSubmit = null }) => {
         }
         createNewsletter(body).then((result) => {
             if (result.status) {
-                onSubmit?.();
+                window.location.href = "/newsletter"
                 setCurrentStep(1);
                 setIsSubmit(false);
                 setFormData({
@@ -110,6 +120,9 @@ const MultiStepForm = ({ onSubmit = null }) => {
                     }
 
                     const response = await fetchNewsletterData({ token });
+                    console.log({ response });
+
+                    ShareDrive(response, false, contactLocalKey)
 
 
                     setSubscribers({ isLoaded: true, users: response.userList, contacts: response.contactList })
@@ -120,9 +133,17 @@ const MultiStepForm = ({ onSubmit = null }) => {
             } finally {
             }
         };
+        let localCall = ShareDrive(null, null, contactLocalKey)
+        console.log({ localCall });
 
-        loadData();
-    }, [Subscribers]);
+        if (localCall) {
+            setSubscribers({ isLoaded: true, users: localCall.userList, contacts: localCall.contactList })
+            setAllSubscribers([...localCall.userList, ...localCall.contactList])
+        } else {
+            loadData();
+        }
+
+    }, []);
 
 
     useEffect(() => {
@@ -144,7 +165,12 @@ const MultiStepForm = ({ onSubmit = null }) => {
 
         return <img src={src} alt={alt} onError={handleError} {...props} />;
     };
+    function getDate() {
+        var today = new Date();
+        console.log({ today });
 
+        document.getElementById("date").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+    }
     return (
         <div className="form-container create-newsletter">
             {isSubmit ? <Loading height={'500px'} /> :
@@ -153,7 +179,7 @@ const MultiStepForm = ({ onSubmit = null }) => {
                         open={callBackError ?? false}
                         content={<div className="d-flex flex-column gap-3">
                             <h2>
-                                Error
+                                Alert!!!
                             </h2>
                             <p className={Styles.modalContent}>
                                 {callBackError}
@@ -219,7 +245,7 @@ const MultiStepForm = ({ onSubmit = null }) => {
                                 <div className="accordion-body">
                                     <div className="text-start">
                                         Select Template:
-                                        <div className={Styles.dFlex}>
+                                        <div className={`${Styles.dFlex} mt-4`}>
                                             <div
                                                 className={`${Styles.templateHolder} ${formData.template == 1 ? Styles.selected : ''}`}
                                                 onClick={() => handleChange({ target: { value: 1, name: "template" } })}
@@ -232,7 +258,16 @@ const MultiStepForm = ({ onSubmit = null }) => {
                                                     required
                                                     className={Styles.hiddenRadio}
                                                 />
-                                            <img src="/assets/templates/1.png" alt="Template 2" />
+                                                <img src="/assets/templates/1.png" alt="Template 2" />
+                                                <div
+                                                    className={Styles.previewIcon}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Prevent triggering the brand selection
+                                                        window.open(`/assets/templates/1.png`, '_blank');
+                                                    }}
+                                                >
+                                                    <FaEye />
+                                                </div>
                                             </div>
                                             <div
                                                 className={`${Styles.templateHolder} ${formData.template == 2 ? Styles.selected : ''}`}
@@ -247,10 +282,20 @@ const MultiStepForm = ({ onSubmit = null }) => {
                                                     className={Styles.hiddenRadio}
                                                 />
                                                 <img src="/assets/templates/2.png" alt="Template 1" />
+                                                <div
+                                                    className={Styles.previewIcon}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Prevent triggering the brand selection
+                                                        window.open(`/assets/templates/2.png`, '_blank');
+                                                    }}
+                                                >
+                                                    <FaEye />
+                                                </div>
                                             </div>
                                             <div
                                                 className={`${Styles.templateHolder} ${formData.template == 3 ? Styles.selected : ''}`}
-                                            // onClick={() => handleChange({ target: { value: 3, name: "template" } })}
+                                                // onClick={() => handleChange({ target: { value: 3, name: "template" } })}
+                                                onClick={() => { setCallbackError('Comming soon...') }}
                                             >
                                                 <input
                                                     type="radio"
@@ -261,14 +306,37 @@ const MultiStepForm = ({ onSubmit = null }) => {
                                                     className={Styles.hiddenRadio}
                                                 />
                                                 <img src="/assets/templates/3.png" alt="Template 2" />
+                                                <div
+                                                    className={Styles.previewIcon}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Prevent triggering the brand selection
+                                                        window.open(`/assets/templates/3.png`, '_blank');
+                                                    }}
+                                                >
+                                                    <FaEye />
+                                                </div>
                                             </div>
                                         </div>
 
 
                                     </div>
+
+                                </div>
+                            )}
+                        </div>
+                        <div className="accordion-item text-[12px] font-['Montserrat-400']">
+                            <div
+                                className={`accordion-header ${currentStep === 3 ? 'active' : ''}`}
+                                onClick={() => handleAccordionClick(3)}
+                            >
+                                <h3>Brand Selection</h3>
+                                <span>{currentStep === 3 ? '-' : '+'}</span>
+                            </div>
+                            {currentStep === 3 && (
+                                <div className="accordion-body">
                                     <div className="text-start">
                                         Select Brand:
-                                        <div className={`${Styles.dFlex} ${Styles.gap10}`}>
+                                        <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
                                             {!isLoading ? (
                                                 manufacturers.data.map((brand) => (
                                                     <div
@@ -284,7 +352,22 @@ const MultiStepForm = ({ onSubmit = null }) => {
                                                             required
                                                             className={Styles.hiddenRadio}
                                                         />
-                                                        <ImageWithFallback src={`${originAPi}brandImage/${brand.Id}.png`} title={`click to ${brand.Name} select`} style={{ maxHeight: '100px', mixBlendMode: 'luminosity' }} alt={`Brand ${brand.Id}`} />
+                                                        <ImageWithFallback
+                                                            src={`${originAPi}brandImage/${brand.Id}.png`}
+                                                            title={`click to ${brand.Name} select`}
+                                                            style={{ maxHeight: '100px', mixBlendMode: 'luminosity' }}
+                                                            alt={`Brand ${brand.Id}`}
+                                                        />
+                                                        <p className={Styles.labelHolder}>{brand.Name}</p>
+                                                        {/* <div
+                                                            className={Styles.previewIcon}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation(); // Prevent triggering the brand selection
+                                                                window.open(`${originAPi}brandImage/${brand.Id}.png`, '_blank');
+                                                            }}
+                                                        >
+                                                            <FaEye />
+                                                        </div> */}
                                                     </div>
                                                 ))
                                             ) : (
@@ -297,48 +380,63 @@ const MultiStepForm = ({ onSubmit = null }) => {
                         </div>
                         <div className="accordion-item">
                             <div
-                                className={`accordion-header ${currentStep === 3 ? 'active' : ''}`}
-                                onClick={() => handleAccordionClick(3)}
+                                className={`accordion-header ${currentStep === 4 ? 'active' : ''}`}
+                                onClick={() => handleAccordionClick(4)}
                             >
                                 <h3>Newsletter Details</h3>
-                                <span>{currentStep === 3 ? '-' : '+'}</span>
+                                <span>{currentStep === 4 ? '-' : '+'}</span>
                             </div>
-                            {currentStep === 3 && (
+                            {currentStep === 4 && (
                                 <div className="accordion-body">
-                                    <div className='d-flex justify-content-between'>
-                                        <label style={{ width: '68%' }} className="text-[12px] font-['Montserrat-400'] text-start">
-                                            Subject:
-                                            <input
-                                                type="text"
-                                                name="subject"
-                                                value={formData.subject}
-                                                onChange={handleChange}
-                                                placeholder="Enter subject"
-                                                required
-                                            />
-                                        </label>
-                                        <label style={{ width: '30%' }} className="text-[12px] font-['Montserrat-400'] text-start">
-                                            Date:
-                                            <input
-                                                type="date"
-                                                name="date"
-                                                value={formData.date}
-                                                onChange={handleChange}
-                                                required
-                                            />
-                                        </label>
+                                    <div className='mt-4 pt-3'>
+                                        <div className='d-flex justify-content-between'>
+
+                                            <label style={{ width: '68%' }} className="text-[12px] text-[#000] font-['Montserrat-400'] text-start">
+                                                Newsletter Title:
+                                                <input
+                                                    type="text"
+                                                    name="newsletter"
+                                                    value={formData.newsletter}
+                                                    onChange={handleChange}
+                                                    placeholder="Enter newsletter"
+                                                    required
+                                                />
+                                            </label>
+                                            <label style={{ width: '30%' }} className="text-[12px] text-[#000] font-['Montserrat-400'] text-start">
+                                                Send Type:
+                                                <div className="d-flex mt-3 h-full text-[12px] text-[#000]">
+                                                    Send Now:&nbsp;<ToggleSwitch onToggle={(value) => { setIsSchedule(value) }} />&nbsp;:Schedule later
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <div className='d-flex justify-content-between'>
+                                            <label style={{ width: '68%' }} className="text-[12px] font-['Montserrat-400'] text-start">
+                                                Subject:
+                                                <input
+                                                    type="text"
+                                                    name="subject"
+                                                    value={formData.subject}
+                                                    onChange={handleChange}
+                                                    placeholder="Enter subject"
+                                                    required
+                                                />
+                                            </label>
+                                            <label style={{ width: '30%' }} className="text-[12px] font-['Montserrat-400'] text-start">
+                                                Date:
+                                                <input
+                                                    type="date"
+                                                    name="date"
+                                                    id="date"
+                                                    value={formData.date}
+                                                    onChange={handleChange}
+                                                    required={isSchedule}
+                                                    disabled={!isSchedule}
+                                                    onLoad={getDate}
+                                                />
+                                                {/* <DatePicker selected={new Date()} onChange={() => handleChange({ target: { value: null, name: "date" } })} dateFormat="MMM/dd/yyyy" customInput={<ExampleCustomInput />} /> */}
+                                            </label>
+                                        </div>
                                     </div>
-                                    <label className="text-[12px] font-['Montserrat-400'] text-start">
-                                        Newness:
-                                        <input
-                                            type="text"
-                                            name="newsletter"
-                                            value={formData.newsletter}
-                                            onChange={handleChange}
-                                            placeholder="Enter newsletter"
-                                            required
-                                        />
-                                    </label>
                                 </div>
                             )}
                         </div>
@@ -351,7 +449,7 @@ const MultiStepForm = ({ onSubmit = null }) => {
                                 Previous
                             </button> : null}&nbsp;
 
-                            {currentStep == 3 ? <button type="submit" className="submit-btn">
+                            {currentStep == 4 ? <button type="submit" className="submit-btn">
                                 Submit
                             </button> : <button
                                 type="button"

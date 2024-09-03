@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import './MultiSelectSearch.css';
 import { UserIcon } from '../../lib/svg';
+import ToggleSwitch from '../ToggleButton';
 
-const MultiSelectSearch = ({ options, selectedValues, onChange,loading=null }) => {
+const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null }) => {
     const [searchTerm, setSearchTerm] = useState('');
-
+    const [showSelected, setShowSelected] = useState(false);
+    const [autoSelectIds, setAutoSelectIds] = useState(false);
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
         const isSelected = selectedValues.some(selected => selected.Id === item.Id);
@@ -12,7 +14,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange,loading=null }) =
             ? selectedValues.filter(selected => selected.Id !== item.Id) // Deselect item
             : [...selectedValues, item]; // Select item
 
-        onChange(newSelectedValues); // Notify parent component of selection change
+        onChange?.(newSelectedValues); // Notify parent component of selection change
     };
 
     // Filter options based on search term
@@ -22,15 +24,28 @@ const MultiSelectSearch = ({ options, selectedValues, onChange,loading=null }) =
         option?.Account?.Name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const AutoSelectChangeHandler = (value) => {
+        setAutoSelectIds(value)
+        if (value) {
+            onChange?.(filteredOptions);
+        } else {
+            onChange?.([]);
+        }
+    }
+
     return (
         <div className="multi-select-container">
             <header>
                 {/* <h1>User Search</h1> */}
-                <ul className="select-user-list">
-                    <b>Selected Users:&nbsp;</b>
-                    {selectedValues.length ? selectedValues.length<3? selectedValues.map((user, index) => (
-                        <li key={user.Id}>{user.Name}{index != (selectedValues.length - 1) ? "," : ""}</li>
-                    )):selectedValues.length+" Users selected":"No Users selected"}
+                <ul className="select-user-list justify-content-between align-items-center">
+                    <div className='d-flex'>
+
+                        <b className='d-flex justify-content-center align-items-center'><input type='checkbox' value={1} onChange={() => setShowSelected(!showSelected)} style={{ width: '15px', height: '15px', margin: 0 }} />&nbsp;Selected Users:&nbsp;</b>
+                        {selectedValues.length ? selectedValues.length < 3 ? selectedValues.map((user, index) => (
+                            <li key={user.Id}>{user.Name}{index != (selectedValues.length - 1) ? "," : ""}</li>
+                        )) : selectedValues.length + " Users selected" : "No Users selected"}
+                    </div>
+                    <div className='d-flex align-items-center justify-content-end'><b>Select</b>: reset&nbsp;<ToggleSwitch onToggle={AutoSelectChangeHandler} />&nbsp;all</div>
                 </ul>
                 <input
                     type="text"
@@ -40,24 +55,24 @@ const MultiSelectSearch = ({ options, selectedValues, onChange,loading=null }) =
                 />
             </header>
             <div className="user-list">
-                {loading?loading:
-                filteredOptions.length?
-                filteredOptions.map((option) => (
-                    <div
-                        key={option.Id}
-                        className={`user-item ${selectedValues.some(selected => selected.Id === option.Id) ? 'selected' : ''}`}
-                        onClick={() => handleSelect(option)}
-                    >
-                        <div className="user-avatar"><UserIcon width={25} height={25}/></div>
-                        <div className="user-info">
-                            <span className="user-name">{option.Name}</span>
-                            <span className="user-email">{option.Email}</span>
-                            {option?.Title?<span className="user-etc"><b>Title:&nbsp;</b>{option?.Title}</span>:null}
-                            {option?.Phone?<span className="user-etc"><b>Phone:&nbsp;</b>{option?.Phone}</span>:null}
-                            {option?.Account?.Name?<span className="user-etc"><b>Store:&nbsp;</b>{option?.Account?.Name}</span>:null}
-                        </div>
-                    </div>
-                )):"No record found."}
+                {loading ? loading :
+                    filteredOptions.length ?
+                        filteredOptions.map((option) => (
+                            <div
+                                key={option.Id}
+                                className={`user-item ${selectedValues.some(selected => selected.Id === option.Id) ? 'selected' : showSelected ? 'd-none' : ''}`}
+                                onClick={() => handleSelect(option)}
+                            >
+                                <div className="user-avatar"><UserIcon width={25} height={25} /></div>
+                                <div className="user-info">
+                                    <span className="user-name">{option.Name}</span>
+                                    <span className="user-email">{option.Email}</span>
+                                    {option?.Title ? <span className="user-etc"><b className="text-['Arial']">Title:&nbsp;</b>{option?.Title}</span> : null}
+                                    {option?.Phone ? <span className="user-etc"><b>Phone:&nbsp;</b>{option?.Phone}</span> : null}
+                                    {option?.Account?.Name ? <span className="user-etc"><b>Store:&nbsp;</b>{option?.Account?.Name}</span> : null}
+                                </div>
+                            </div>
+                        )) : "No record found."}
             </div>
         </div>
     );

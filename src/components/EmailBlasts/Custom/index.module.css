@@ -20,12 +20,19 @@
   place-content: center;
 }
 
+.gap10 .templateHolder img {
+  display: block;
+  border-radius: 8px;
+  width: 200px;
+  height: 60px;
+  object-fit: contain;
+}
 .templateHolder img {
   display: block;
-  width: 100%;
-  height: auto;
   border-radius: 8px;
-  max-height: 200px;
+  width: 150px;
+  height: 200px;
+  object-fit: contain;
 }
 .btn {
   padding: 0.5rem 2rem;
@@ -45,6 +52,33 @@
 .templateHolder:hover {
   box-shadow: 0 0 10px rgba(13, 41, 71, 0.5);
   transform: scale(1.05);
+}
+.templateHolder .labelHolder{
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+.templateHolder .previewIcon {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  transform: translate(50px, -50px);
+  opacity: 0;
+  font-size: 2rem;
+  color: #fff;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+  background-color: #ccc;
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-content: center;
+  border-radius: 45px;
+}
+
+.templateHolder:hover .previewIcon {
+  opacity: 1;
 }
 
 .hiddenRadio {
