@@ -20,6 +20,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
 
     // Filter options based on search term
     const [filteredOptions, setFilteredOptions] = useState();
+   
     useEffect(function() {
         // Call the filtering function when searchTerm or brand changes
         var results = options.filter(function(option) {
@@ -59,7 +60,6 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
         setFilteredOptions(results); // Assuming you have a state to store the filtered results
     }, [searchTerm, brand, options]);
     
-
 
     const AutoSelectChangeHandler = () => {
         onChange?.([...selectedValues, ...filteredOptions]);

@@ -348,7 +348,7 @@ const MultiStepForm = () => {
                                         Select Brand:
                                         <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
                                             {!isLoading ? (
-                                                showBrandList.map((brand) => (
+                                                manufacturers?.data?.map((brand) => (
                                                     <div
                                                         key={brand.Id}
                                                         className={`${Styles.templateHolder} ${formData.brand.includes(brand.Id) ? Styles.selected : ''}`}
