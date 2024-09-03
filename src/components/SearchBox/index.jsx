@@ -6,7 +6,6 @@ import ToggleSwitch from '../ToggleButton';
 const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showSelected, setShowSelected] = useState(false);
-    const [autoSelectIds, setAutoSelectIds] = useState(false);
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
         const isSelected = selectedValues.some(selected => selected.Id === item.Id);
@@ -24,13 +23,11 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null }
         option?.Account?.Name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const AutoSelectChangeHandler = (value) => {
-        setAutoSelectIds(value)
-        if (value) {
-            onChange?.(filteredOptions);
-        } else {
-            onChange?.([]);
-        }
+    const AutoSelectChangeHandler = () => {
+        onChange?.([...selectedValues, ...filteredOptions]);
+    }
+    const resetSelectChangeHandler = () => {
+        onChange?.([]);
     }
 
     return (
@@ -45,7 +42,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null }
                             <li key={user.Id}>{user.Name}{index != (selectedValues.length - 1) ? "," : ""}</li>
                         )) : selectedValues.length + " Users selected" : "No Users selected"}
                     </div>
-                    <div className='d-flex align-items-center justify-content-end'><b>Select</b>: reset&nbsp;<ToggleSwitch onToggle={AutoSelectChangeHandler} />&nbsp;all</div>
+                    <div className='d-flex align-items-center justify-content-end cursor-pointer'><span onClick={AutoSelectChangeHandler}>Select All</span>&nbsp;|&nbsp;<span onClick={resetSelectChangeHandler}>Reset</span></div>
                 </ul>
                 <input
                     type="text"
