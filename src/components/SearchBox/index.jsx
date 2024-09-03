@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './MultiSelectSearch.css';
 import { UserIcon } from '../../lib/svg';
 import ToggleSwitch from '../ToggleButton';
 
-const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null }) => {
+const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, manufacturers = [] }) => {
+
     const [searchTerm, setSearchTerm] = useState('');
     const [showSelected, setShowSelected] = useState(false);
+    const [brand, setBrand] = useState();
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
         const isSelected = selectedValues.some(selected => selected.Id === item.Id);
@@ -17,11 +19,22 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null }
     };
 
     // Filter options based on search term
-    const filteredOptions = options.filter(option =>
-        option?.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        option?.Title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        option?.Account?.Name?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const [filteredOptions, setFilteredOptions] = useState();
+    useEffect(() => {
+        // Call the filtering function when searchTerm or brand changes
+        const results = options.filter(option => {
+            const brandMatch = brand ? option?.BrandIds?.includes(brand) : true;
+            const lowerSearchTerm = searchTerm.toLowerCase();
+            const nameMatch = option?.Name?.toLowerCase().includes(lowerSearchTerm);
+            const titleMatch = option?.Title?.toLowerCase().includes(lowerSearchTerm);
+            const accountNameMatch = option?.Account?.Name?.toLowerCase().includes(lowerSearchTerm);
+            return brandMatch && (nameMatch || titleMatch || accountNameMatch);
+        });
+
+        setFilteredOptions(results); // Assuming you have a state to store the filtered results
+    }, [searchTerm, brand, options]);
+
+
 
     const AutoSelectChangeHandler = () => {
         onChange?.([...selectedValues, ...filteredOptions]);
@@ -29,20 +42,37 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null }
     const resetSelectChangeHandler = () => {
         onChange?.([]);
     }
-
+    const brandSelectionHandler = (event) => {
+        const { target } = event;
+        if (target.value != 0) {
+            setBrand(target.value);
+        } else {
+            setBrand();
+        }
+    }
     return (
         <div className="multi-select-container">
             <header>
                 {/* <h1>User Search</h1> */}
                 <ul className="select-user-list justify-content-between align-items-center">
-                    <div className='d-flex'>
+                    <div className='d-flex flex-column align-items-center justify-content-start'>
 
-                        <b className='d-flex justify-content-center align-items-center'><input type='checkbox' value={1} onChange={() => setShowSelected(!showSelected)} style={{ width: '15px', height: '15px', margin: 0 }} />&nbsp;Selected Users:&nbsp;</b>
-                        {selectedValues.length ? selectedValues.length < 3 ? selectedValues.map((user, index) => (
-                            <li key={user.Id}>{user.Name}{index != (selectedValues.length - 1) ? "," : ""}</li>
-                        )) : selectedValues.length + " Users selected" : "No Users selected"}
+                        <b className='d-flex justify-content-start align-items-center w-[100%]'><input type='checkbox' value={1} onChange={() => setShowSelected(!showSelected)} style={{ width: '15px', height: '15px', margin: 0 }} />&nbsp;Selected Users:&nbsp;</b>
+                        <div className='d-flex justify-content-start'>
+                            {selectedValues?.length ? selectedValues.length < 3 ? selectedValues.map((user, index) => (
+                                <li key={user.Id}>{user.Name}{index != (selectedValues.length - 1) ? "," : ""}</li>
+                            )) : selectedValues.length + " Users selected" : "No Users selected"}
+                        </div>
                     </div>
-                    <div className='d-flex align-items-center justify-content-end cursor-pointer'><span onClick={AutoSelectChangeHandler}>Select All</span>&nbsp;|&nbsp;<span onClick={resetSelectChangeHandler}>Reset</span></div>
+                    <div className='d-flex flex-column align-items-center justify-content-end cursor-pointer'>
+                        <span className='text-end w-[100%]'><span onClick={AutoSelectChangeHandler}>Select All</span>&nbsp;|&nbsp;<span onClick={resetSelectChangeHandler}>Reset</span></span>
+                        {manufacturers?.length ? <select className={"brandSearch form-control"} onChange={brandSelectionHandler}>
+                            <option value={0} selected>All Brand</option>
+                            {manufacturers.map((brand) => (
+                                <option value={brand.Id}>{brand.Name}</option>
+                            ))}
+                        </select> : null}
+                    </div>
                 </ul>
                 <input
                     type="text"
@@ -53,7 +83,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null }
             </header>
             <div className="user-list">
                 {loading ? loading :
-                    filteredOptions.length ?
+                    filteredOptions?.length ?
                         filteredOptions.map((option) => (
                             <div
                                 key={option.Id}

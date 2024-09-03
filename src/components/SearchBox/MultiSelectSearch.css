@@ -62,6 +62,7 @@ header {
   display: flex;
   padding: 0;
   color: #000;
+  margin: 0;
 }
 .user-avatar {
   width: 40px;
@@ -95,4 +96,13 @@ header {
 .user-email {
   font-size: 14px;
   color: #666;
+}
+.brandSearch{
+  padding: 5px;
+  font-size: 15px;
+}
+.brandSearch:focus {
+  box-shadow: none;
+  border-color: 0;
+  border: 1px solid #ddd;
 }
