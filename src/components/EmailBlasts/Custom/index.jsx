@@ -353,7 +353,7 @@ const MultiStepForm = () => {
                                                             className={Styles.hiddenRadio}
                                                         />
                                                         <ImageWithFallback
-                                                            src={`${originAPi}brandImage/${brand.Id}.png`}
+                                                            src={`${originAPi}/brandImage/${brand.Id}.png`}
                                                             title={`click to ${brand.Name} select`}
                                                             style={{ maxHeight: '100px', mixBlendMode: 'luminosity' }}
                                                             alt={`Brand ${brand.Id}`}
