@@ -14,6 +14,7 @@ const contactLocalKey = "lCpFhWZtGKKejSX"
 
 const MultiStepForm = () => {
     const [currentStep, setCurrentStep] = useState(1);
+    const { data: manufacturers, isLoading, error } = useManufacturer();
     const [Subscribers, setSubscribers] = useState({ isLoaded: false, users: [], contacts: [] })
     const [allSubscribers, setAllSubscribers] = useState([]);
     const [callBackError, setCallbackError] = useState();
@@ -27,6 +28,15 @@ const MultiStepForm = () => {
         subject: '',
         newsletter: ''
     });
+    const [showBrandList,setshowBrandList]=useState([]);
+
+    useEffect(()=>{
+        let brandIdsArray = formData.subscriber.map(item => item?.BrandIds);
+        const allBrandIds = brandIdsArray.flat();
+        const uniqueBrandIds = [...new Set(allBrandIds)];
+        const filteredBrands = manufacturers?.data?.filter(brand => uniqueBrandIds.includes(brand.Id));
+        setshowBrandList(filteredBrands)
+    },[formData])
 
     const handleAccordionClick = (step) => {
         if (step === 2 && !formData.subscriber.length) {
@@ -61,7 +71,6 @@ const MultiStepForm = () => {
         } else {
             setFormData({ ...formData, [name]: value });
         }
-        console.log({ formData });
     };
 
     const handleSubmit = (e) => {
@@ -106,7 +115,7 @@ const MultiStepForm = () => {
 
         })
     };
-    const { data: manufacturers, isLoading, error } = useManufacturer();
+
 
 
     useEffect(() => {
@@ -225,6 +234,7 @@ const MultiStepForm = () => {
                                             options={allSubscribers}
                                             selectedValues={formData.subscriber}
                                             onChange={handleSelectionChange}
+                                            manufacturers={manufacturers?.data || []}
                                         />
 
                                     </div>
@@ -338,7 +348,7 @@ const MultiStepForm = () => {
                                         Select Brand:
                                         <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
                                             {!isLoading ? (
-                                                manufacturers.data.map((brand) => (
+                                                showBrandList.map((brand) => (
                                                     <div
                                                         key={brand.Id}
                                                         className={`${Styles.templateHolder} ${formData.brand.includes(brand.Id) ? Styles.selected : ''}`}
