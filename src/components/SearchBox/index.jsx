@@ -20,27 +20,45 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
 
     // Filter options based on search term
     const [filteredOptions, setFilteredOptions] = useState();
-    useEffect(() => {
-        console.log('searchTerm:', searchTerm);
-        console.log('brand:', brand);
-        console.log('options:', options);
-
-        const results = options.filter(option => {
-            const brandMatch = brand ? option?.BrandIds?.includes(brand) : true;
-            console.log({ option, brandMatch });
-
-            const lowerSearchTerm = searchTerm.toLowerCase();
-            const nameMatch = option?.Name?.toLowerCase().includes(lowerSearchTerm);
-            const titleMatch = option?.Title?.toLowerCase().includes(lowerSearchTerm);
-            const accountNameMatch = option?.Account?.Name?.toLowerCase().includes(lowerSearchTerm);
-
+    useEffect(function() {
+        // Call the filtering function when searchTerm or brand changes
+        var results = options.filter(function(option) {
+            var brandMatch = true;
+            var nameMatch = false;
+            var titleMatch = false;
+            var accountNameMatch = false;
+            
+            // Check for brand match
+            if (brand) {
+                if (option && option.BrandIds) {
+                    brandMatch = option.BrandIds.includes(brand);
+                } else {
+                    brandMatch = false;
+                }
+            }
+            
+            // Check for name match
+            if (option && option.Name) {
+                nameMatch = option.Name.toLowerCase().includes(searchTerm.toLowerCase());
+            }
+    
+            // Check for title match
+            if (option && option.Title) {
+                titleMatch = option.Title.toLowerCase().includes(searchTerm.toLowerCase());
+            }
+    
+            // Check for account name match
+            if (option && option.Account && option.Account.Name) {
+                accountNameMatch = option.Account.Name.toLowerCase().includes(searchTerm.toLowerCase());
+            }
+    
+            // Return true if brandMatch is true and any of the other conditions match
             return brandMatch && (nameMatch || titleMatch || accountNameMatch);
         });
-
-        console.log('filtered results:', results);
-        setFilteredOptions(results);
+    
+        setFilteredOptions(results); // Assuming you have a state to store the filtered results
     }, [searchTerm, brand, options]);
-    console.log({ filteredOptions, searchTerm, brand });
+    
 
 
     const AutoSelectChangeHandler = () => {
