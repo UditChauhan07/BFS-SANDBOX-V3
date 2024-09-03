@@ -99,7 +99,7 @@ const TopNav = () => {
                   <div className="dropdown d-flex justify-content-center align-items-center " role="button" data-bs-toggle="dropdown" style={{ zIndex: 1021 }}>
                     Admin
                     <ul className="dropdown-menu">
-                      <li onClick={() => navigate("/emailSetting")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
+                      <li onClick={() => navigate("/newsletter")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
                         <BiMailSend />&nbsp;Email Blast
                       </li>
                       <li onClick={() => navigate("/TierStanding")} className={`dropdown-item rounded ${styles.nameText} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>

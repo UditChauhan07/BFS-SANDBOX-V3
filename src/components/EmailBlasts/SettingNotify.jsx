@@ -4,9 +4,11 @@ import { BiArrowBack, BiSave } from "react-icons/bi";
 import ModalPage from "../Modal UI";
 import { GetAuthData, getEmailBlastFromData, storeDatesHandler, storeRandomHandler } from "../../lib/store";
 import Loading from "../Loading";
-import Switch from "react-switch";
+import { useNavigate } from "react-router-dom";
+
 
 const SettingNotify = ({ setSetting}) => {
+    const navigate = useNavigate();
     const [notifyFrom,setNotifyDate] = useState({isLoaded:false,data:{notifyDate:[],random:false}})
     useEffect(()=>{
         getEmailBlastFromData({key:"qsjwijufhudeyvdwud"}).then((form)=>{
@@ -80,7 +82,7 @@ const SettingNotify = ({ setSetting}) => {
             GetAuthData().then((user) => {
                 storeDatesHandler({ key: user.x_access_token, dates: values }).then((resposne) => {
                     if (resposne) {
-                        setSetting(false)
+                        navigate('/newsletter')
                     }
                 }).catch((resErr) => {
                     console.log({ resErr });
@@ -94,7 +96,7 @@ const SettingNotify = ({ setSetting}) => {
     }
     const randomSubmitHandler = ()=>{
         storeRandomHandler({key:'12dffsw33rffd',random:isRandom}).then((result)=>{
-            setSetting(false)
+            navigate('/newsletter')
         }).catch((error)=>{
             console.log({error});
         })
@@ -173,7 +175,7 @@ const SettingNotify = ({ setSetting}) => {
                             }) : null}
 
                             <div className="mt-4 d-flex">
-                                <button className={`${StyleSheet.submitButton} d-flex  justify-content-center align-items-center`} onClick={() => setSetting(false)}><BiArrowBack />&nbsp;Back</button>
+                                <button className={`${StyleSheet.submitButton} d-flex  justify-content-center align-items-center`} onClick={() => navigate('/newsletter')}><BiArrowBack />&nbsp;Back</button>
                                 {size ? <button onClick={submitHandler} className={`${StyleSheet.submitButton} d-flex  justify-content-center align-items-center`}><BiSave />&nbsp;Submit</button> : null}
                             </div>
                         </> : <div>
@@ -181,10 +183,10 @@ const SettingNotify = ({ setSetting}) => {
                                 <label className={StyleSheet.labelHolder}>
                                     Select box for Random Dates:
                                     &nbsp;
-                                    <Switch onChange={(e) => setRandom(e)} checked={isRandom} onColor={"#000"}/>
+                                    {/* <Switch onChange={(e) => setRandom(e)} checked={isRandom} onColor={"#000"}/> */}
                                 </label>
                                 <div className="mt-4 d-flex">
-                                    <button className={`${StyleSheet.submitButton} d-flex  justify-content-center align-items-center`} onClick={() => setSetting(false)}><BiArrowBack />&nbsp;Back</button>
+                                    <button className={`${StyleSheet.submitButton} d-flex  justify-content-center align-items-center`} onClick={() => navigate('/newsletter')}><BiArrowBack />&nbsp;Back</button>
                                     {size ? <button onClick={randomSubmitHandler} className={`${StyleSheet.submitButton} d-flex  justify-content-center align-items-center`}><BiSave />&nbsp;Submit</button> : null}
                                 </div>
                             </div>
