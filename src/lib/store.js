@@ -30,16 +30,16 @@ export const months = [
   "December",
 ];
 
-export function ShareDrive(data, remove = false) {
+export function ShareDrive(data, remove = false,keyValue=shareKey) {
   if (remove) {
-    localStorage.removeItem(shareKey);
+    localStorage.removeItem(keyValue);
     return true;
   }
   if (data) {
-    localStorage.setItem(shareKey, JSON.stringify(data));
+    localStorage.setItem(keyValue, JSON.stringify(data));
     return true;
   } else {
-    let strData = localStorage.getItem(shareKey);
+    let strData = localStorage.getItem(keyValue);
     return JSON.parse(strData);
   }
 }

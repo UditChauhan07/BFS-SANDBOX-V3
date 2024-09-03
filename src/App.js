@@ -46,6 +46,9 @@ import Tier from "./reports/TierStanding";
 import HelpSection from "./pages/HelpSection";
 import AuditReport from "./reports/AuditReport/AuditReport";
 import OrderComplete from "./pages/OrderComplete";
+import CreateNewsletter from "./components/EmailBlasts/createNewsletter";
+import NewsLetterReport from "./pages/NewsLetterReport";
+import NewsletterSetting from "./pages/NewsletterSetting";
 function App() {
   // const Redirect = ({ href }) => {
   //   window.location.href = href;
@@ -106,7 +109,10 @@ function App() {
             <Route path="/customerService" element={<CustomerService />}></Route>
             <Route path="/orderStatus" element={<OrderStatusIssues />}></Route>
             <Route path="/orderStatusForm" element={<OrderStatusForm />}></Route>
-            <Route path="/emailSetting" element={<EmailSetting />}></Route>
+            <Route path="/newsletter" element={<EmailSetting />}></Route>
+            <Route path="/newsletter/report" element={<NewsLetterReport />}></Route>
+            <Route path="/newsletter/create" element={<CreateNewsletter />}></Route>
+            <Route path="/newsletter/setting" element={<NewsletterSetting />}></Route>
             <Route path="/brandManagementApproval" element={<BMAIssues />}></Route>
             <Route path="/public/product/:id/:token/details" element={<PublicProduct />}></Route>
             <Route path="/Help-Section" element={<HelpSection/>}></Route>

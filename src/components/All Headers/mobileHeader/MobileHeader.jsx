@@ -129,7 +129,7 @@ const MobileHeader = () => {
                       {activeIndex === 1 && (
                         <div className={styles.panelContent}>
                           <ul>
-                            <li onClick={() => navigate("/emailSetting")} className={`dropdown-item rounded ${styles.text} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
+                            <li onClick={() => navigate("/newsletter")} className={`dropdown-item rounded ${styles.text} hover:bg-[#eeeeef] p-1 hover:rounded-lg d-flex align-items-center`} style={{ lineHeight: '15px' }}>
                               <BiMailSend />&nbsp;Email Blast
                             </li>
 
