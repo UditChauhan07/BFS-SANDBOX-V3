@@ -21,17 +21,24 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
     // Filter options based on search term
     const [filteredOptions, setFilteredOptions] = useState();
     useEffect(() => {
-        // Call the filtering function when searchTerm or brand changes
+        console.log('searchTerm:', searchTerm);
+        console.log('brand:', brand);
+        console.log('options:', options);
+    
         const results = options.filter(option => {
             const brandMatch = brand ? option?.BrandIds?.includes(brand) : true;
+            console.log({option,brandMatch});
+            
             const lowerSearchTerm = searchTerm.toLowerCase();
             const nameMatch = option?.Name?.toLowerCase().includes(lowerSearchTerm);
             const titleMatch = option?.Title?.toLowerCase().includes(lowerSearchTerm);
             const accountNameMatch = option?.Account?.Name?.toLowerCase().includes(lowerSearchTerm);
+    
             return brandMatch && (nameMatch || titleMatch || accountNameMatch);
         });
-
-        setFilteredOptions(results); // Assuming you have a state to store the filtered results
+    
+        console.log('filtered results:', results);
+        setFilteredOptions(results); 
     }, [searchTerm, brand, options]);
 console.log({filteredOptions,searchTerm,brand});
 
