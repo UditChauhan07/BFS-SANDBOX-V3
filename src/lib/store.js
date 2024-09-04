@@ -30,7 +30,7 @@ export const months = [
   "December",
 ];
 
-export function ShareDrive(data, remove = false,keyValue=shareKey) {
+export function ShareDrive(data, remove = false, keyValue = shareKey) {
   if (remove) {
     localStorage.removeItem(keyValue);
     return true;
@@ -208,19 +208,21 @@ export async function OrderPlaced({ order }) {
 export async function DestoryAuth() {
   try {
     localStorage.clear();
+    localStorage.removeItem("lCpFhWZtGKKejSX")
     console.log('All localStorage keys have been removed.');
     window.location.href = window.location.origin;
     return true;
-} catch (e) {
+  } catch (e) {
+    localStorage.removeItem("lCpFhWZtGKKejSX")
     console.error('Error clearing localStorage:', e);
     for (var key in localStorage) {
       if (localStorage.hasOwnProperty(key)) {
-          localStorage.removeItem(key);
+        localStorage.removeItem(key);
       }
+    }
+    window.location.href = window.location.origin;
+    return true;
   }
-  window.location.href = window.location.origin;
-  return true;
-}
 }
 
 export async function GetAuthData() {
@@ -940,16 +942,16 @@ export async function createNewsletter(body) {
       headers: headersList,
     });
     let data = JSON.parse(await response.text());
-    
+
     if (data.message == "Processing complete") {
-      return {status:true,message:null};
+      return { status: true, message: null };
     } else {
       // DestoryAuth();
-      return {status:false,message:data.message};
+      return { status: false, message: data.message };
     }
   } catch (err) {
     console.error('Error fetching newsletter data:', err.message);
-    return {status:false,message:err.message};
+    return { status: false, message: err.message };
   }
 };
 

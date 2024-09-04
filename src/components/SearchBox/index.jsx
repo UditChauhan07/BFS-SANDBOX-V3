@@ -74,7 +74,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                 </ul>
                 <input
                     type="text"
-                    placeholder="Search for a user..."
+                    placeholder="Search for users..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />

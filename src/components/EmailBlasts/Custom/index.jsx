@@ -347,8 +347,8 @@ const MultiStepForm = () => {
                                     <div className="text-start">
                                         Select Brand:
                                         <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
-                                            {!isLoading ? (
-                                                showBrandList.map((brand) => (
+                                            {!isLoading ?
+                                                showBrandList?.length?(showBrandList.map((brand) => (
                                                     <div
                                                         key={brand.Id}
                                                         className={`${Styles.templateHolder} ${formData.brand.includes(brand.Id) ? Styles.selected : ''}`}
@@ -380,7 +380,7 @@ const MultiStepForm = () => {
                                                         </div> */}
                                                     </div>
                                                 ))
-                                            ) : (
+                                            ):"No Brand found." : (
                                                 <Loading />
                                             )}
                                         </div>
@@ -415,7 +415,7 @@ const MultiStepForm = () => {
                                             <label style={{ width: '30%' }} className="text-[12px] text-[#000] font-['Montserrat-400'] text-start">
                                                 Send Type:
                                                 <div className="d-flex mt-3 h-full text-[12px] text-[#000]">
-                                                    Send Now:&nbsp;<ToggleSwitch onToggle={(value) => { setIsSchedule(value) }} />&nbsp;:Schedule later
+                                                    Send Now&nbsp;&nbsp;<ToggleSwitch onToggle={(value) => { setIsSchedule(value) }} />&nbsp;&nbsp;Schedule later
                                                 </div>
                                             </label>
                                         </div>
