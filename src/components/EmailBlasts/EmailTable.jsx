@@ -322,7 +322,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
             {isLoaded ?
                 <>
                     <table style={{ width: '100%' }}>
-                        <thead className={Styles.table} style={{ position: 'sticky', top: '265px', zIndex: 11 }}>
+                        <thead className={Styles.table} style={{ position: 'sticky', top: '285px', zIndex: 11 }}>
                             <tr>
                                 <th style={{ width: '200px' }}>Store Name</th>
                                 <th style={{ width: '200px' }}>Brand Name</th>
