@@ -195,7 +195,7 @@ const MultiStepForm = () => {
                             </p>
                             <div className="d-flex justify-content-around">
                                 <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => setCallbackError(false)}>
-                                    <BiExit /> &nbsp;Cancel
+                                    <BiExit /> &nbsp;Ok
                                 </button>
                             </div>
                         </div>}
