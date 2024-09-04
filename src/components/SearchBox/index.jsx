@@ -35,8 +35,16 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
     }, [searchTerm, brand, options]);
 
     const AutoSelectChangeHandler = () => {
-        onChange?.([...selectedValues, ...filteredOptions]);
-    }
+        // Create a new array that contains only the options that are not already selected
+        const newOptions = filteredOptions.filter(
+            option => !selectedValues.some(selected => selected.Id === option.Id)
+        );
+    
+        // If there are any new options to add, call onChange with the updated list
+        if (newOptions.length > 0) {
+            onChange?.([...selectedValues, ...newOptions]);
+        }
+    };
     const resetSelectChangeHandler = () => {
         onChange?.([]);
     }
