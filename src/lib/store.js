@@ -206,9 +206,21 @@ export async function OrderPlaced({ order }) {
 }
 
 export async function DestoryAuth() {
-  localStorage.clear();
+  try {
+    localStorage.clear();
+    console.log('All localStorage keys have been removed.');
+    window.location.href = window.location.origin;
+    return true;
+} catch (e) {
+    console.error('Error clearing localStorage:', e);
+    for (var key in localStorage) {
+      if (localStorage.hasOwnProperty(key)) {
+          localStorage.removeItem(key);
+      }
+  }
   window.location.href = window.location.origin;
   return true;
+}
 }
 
 export async function GetAuthData() {

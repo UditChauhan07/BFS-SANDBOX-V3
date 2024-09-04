@@ -58,8 +58,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
         });
     
         setFilteredOptions(results); // Assuming you have a state to store the filtered results
-    }, [searchTerm, brand, options]);
-    
+    }, [searchTerm, brand, options]); 
 
     const AutoSelectChangeHandler = () => {
         onChange?.([...selectedValues, ...filteredOptions]);
