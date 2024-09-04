@@ -32,7 +32,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
         });
 
         setFilteredOptions(results); // Assuming you have a state to store the filtered results
-    }, [searchTerm, brand, options]); 
+    }, [searchTerm, brand, options]);
 
     const AutoSelectChangeHandler = () => {
         onChange?.([...selectedValues, ...filteredOptions]);
@@ -62,22 +62,26 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                             )) : selectedValues.length + " Users selected" : "No Users selected"}
                         </div>
                     </div>
-                    <div className='d-flex flex-column align-items-center justify-content-end cursor-pointer'>
-                        <span className='text-end w-[100%]'><span onClick={AutoSelectChangeHandler}>Select All</span>&nbsp;|&nbsp;<span onClick={resetSelectChangeHandler}>Reset</span></span>
-                        {manufacturers?.length ? <select className={"brandSearch form-control"} onChange={brandSelectionHandler}>
-                            <option value={0} selected>All Brand</option>
-                            {manufacturers.map((brand) => (
-                                <option value={brand.Id}>{brand.Name}</option>
-                            ))}
-                        </select> : null}
+                    <div className='d-flex flex-column align-items-center justify-content-end'>
+                        <span className='text-end w-[100%]'><span onClick={AutoSelectChangeHandler} className='cursor-pointer'>Select All</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span className='cursor-pointer' onClick={resetSelectChangeHandler}>Reset</span></span>
                     </div>
                 </ul>
-                <input
-                    type="text"
-                    placeholder="Search for users..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
+                <div className='d-flex justify-content-between align-items-center'>
+
+                    <input
+                        type="text"
+                        placeholder="Search for users..."
+                        value={searchTerm}
+                        style={{width:'70%'}}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    {manufacturers?.length ? <select className={"brandSearch"} style={{width:'27%',height:'45px',marginTop:'8px'}} onChange={brandSelectionHandler}>
+                        <option value={0} selected>All Brand</option>
+                        {manufacturers.map((brand) => (
+                            <option value={brand.Id}>{brand.Name}</option>
+                        ))}
+                    </select> : null}
+                </div>
             </header>
             <div className="user-list">
                 {loading ? loading :
