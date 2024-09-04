@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import AppLayout from "./AppLayout";
+import Loading from "./Loading";
 
 const Logout = () => {
   useEffect(() => {
@@ -26,7 +28,7 @@ const Logout = () => {
     // Navigate to the homepage after clearing localStorage
     window.location.href = "/";
 }, []);
-  return <></>;
+  return <AppLayout><Loading height={'50vh'}/></AppLayout>;
 };
 
 export default Logout;
