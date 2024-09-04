@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../Loading"
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import { BackArrow } from "../../lib/svg"
 
 let PageSize = 10;
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -286,7 +287,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
             />
             <div style={{ position: 'sticky', top: '150px', background: '#ffffff', padding: '2px 0', zIndex: 1 }}>
                 <div className={Styles.titleHolder} style={{ marginBottom: '0px' }}>
-                    <h2 className="d-flex justify-content-center align-items-center"><span style={{ cursor: 'pointer' }} onClick={() => { navigate('/newsletter')}}><BiLeftArrow /></span><p>Subscribers List for {months[month - 1]} {day}, {year}`s Newsletter</p></h2>
+                    <h2 className="d-flex justify-content-center align-items-center"><span style={{ cursor: 'pointer' }} onClick={() => { navigate('/newsletter')}}><BackArrow /></span><p>Subscribers List for {months[month - 1]} {day}, {year}`s Newsletter</p></h2>
                     <div className="d-flex">
                         {checkId.length ?
                             <>
