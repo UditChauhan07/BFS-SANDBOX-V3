@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 
 const Logout = () => {
   useEffect(() => {
+    // Remove specific items
     localStorage.removeItem("Name");
     localStorage.removeItem("Api Data");
     localStorage.removeItem("response");
@@ -10,14 +11,21 @@ const Logout = () => {
     localStorage.removeItem("ManufacturerId__c");
     localStorage.removeItem("Account");
     localStorage.removeItem("address");
-    for (var key in localStorage) {
-      if (localStorage.hasOwnProperty(key)) {
-        if(key!="passwordB2B"&&key!="emailB2B")
-        localStorage.removeItem(key);
-      }
+
+    // Remove all other items except "passwordB2B" and "emailB2B"
+    Object.keys(localStorage).forEach((key) => {
+        if (key !== "passwordB2B" && key !== "emailB2B") {
+            localStorage.removeItem(key);
+        }
+    });
+    let data = localStorage.getItem("lCpFhWZtGKKejSX");
+    if (data) {
+      localStorage.removeItem("lCpFhWZtGKKejSX");
     }
+
+    // Navigate to the homepage after clearing localStorage
     window.location.href = "/";
-  }, []);
+}, []);
   return <></>;
 };
 
