@@ -10,6 +10,12 @@ const Logout = () => {
     localStorage.removeItem("ManufacturerId__c");
     localStorage.removeItem("Account");
     localStorage.removeItem("address");
+    for (var key in localStorage) {
+      if (localStorage.hasOwnProperty(key)) {
+        if(key!="passwordB2B"&&key!="emailB2B")
+        localStorage.removeItem(key);
+      }
+    }
     window.location.href = "/";
   }, []);
   return <></>;

@@ -20,6 +20,7 @@ const MultiStepForm = () => {
     const [callBackError, setCallbackError] = useState();
     const [isSubmit, setIsSubmit] = useState(false)
     const [isSchedule, setIsSchedule] = useState(false)
+    const [isUserSelected, setIsUserSelected] = useState(false);
     const [formData, setFormData] = useState({
         subscriber: [],
         template: '',
@@ -28,15 +29,29 @@ const MultiStepForm = () => {
         subject: '',
         newsletter: ''
     });
-    const [showBrandList,setshowBrandList]=useState([]);
+    const [showBrandList, setshowBrandList] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
         let brandIdsArray = formData.subscriber.map(item => item?.BrandIds);
         const allBrandIds = brandIdsArray.flat();
         const uniqueBrandIds = [...new Set(allBrandIds)];
         const filteredBrands = manufacturers?.data?.filter(brand => uniqueBrandIds.includes(brand.Id));
-        setshowBrandList(filteredBrands)
-    },[formData])
+        formData.subscriber?.some((user) => {
+            if (!user.AccountId) {
+                setIsUserSelected(true);
+                return true; // This stops the iteration once AccountId is found
+            }
+            setIsUserSelected(false)
+            return false; // Continue the iteration if AccountId is not found
+        });
+        if(isUserSelected){
+
+            setshowBrandList(manufacturers?.data)
+        }else{
+            
+            setshowBrandList(filteredBrands)
+        }
+    }, [formData,isUserSelected])
 
     const handleAccordionClick = (step) => {
         if (step === 2 && !formData.subscriber.length) {
@@ -157,6 +172,7 @@ const MultiStepForm = () => {
 
     useEffect(() => {
 
+
     }, [formData.subscriber])
 
     const handleSelectionChange = (newSelectedValues) => {
@@ -195,7 +211,7 @@ const MultiStepForm = () => {
                             </p>
                             <div className="d-flex justify-content-around">
                                 <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => setCallbackError(false)}>
-                                    <BiExit /> &nbsp;Cancel
+                                    <BiExit /> &nbsp;Ok
                                 </button>
                             </div>
                         </div>}
@@ -347,8 +363,8 @@ const MultiStepForm = () => {
                                     <div className="text-start">
                                         Select Brand:
                                         <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
-                                            {!isLoading ? (
-                                                manufacturers?.data?.map((brand) => (
+                                            {!isLoading ?
+                                                showBrandList?.length ? (showBrandList.map((brand) => (
                                                     <div
                                                         key={brand.Id}
                                                         className={`${Styles.templateHolder} ${formData.brand.includes(brand.Id) ? Styles.selected : ''}`}
@@ -364,7 +380,7 @@ const MultiStepForm = () => {
                                                         />
                                                         <ImageWithFallback
                                                             src={`${originAPi}/brandImage/${brand.Id}.png`}
-                                                            title={`click to ${brand.Name} select`}
+                                                            title={`Click to select ${brand.Name}`}
                                                             style={{ maxHeight: '100px', mixBlendMode: 'luminosity' }}
                                                             alt={`Brand ${brand.Id}`}
                                                         />
@@ -380,9 +396,9 @@ const MultiStepForm = () => {
                                                         </div> */}
                                                     </div>
                                                 ))
-                                            ) : (
-                                                <Loading />
-                                            )}
+                                                ) : "No Brand found." : (
+                                                    <Loading />
+                                                )}
                                         </div>
                                     </div>
                                 </div>
@@ -415,7 +431,7 @@ const MultiStepForm = () => {
                                             <label style={{ width: '30%' }} className="text-[12px] text-[#000] font-['Montserrat-400'] text-start">
                                                 Send Type:
                                                 <div className="d-flex mt-3 h-full text-[12px] text-[#000]">
-                                                    Send Now:&nbsp;<ToggleSwitch onToggle={(value) => { setIsSchedule(value) }} />&nbsp;:Schedule later
+                                                    Send Now&nbsp;&nbsp;<ToggleSwitch onToggle={(value) => { setIsSchedule(value) }} />&nbsp;&nbsp;Schedule later
                                                 </div>
                                             </label>
                                         </div>
