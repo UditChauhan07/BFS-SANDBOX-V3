@@ -48,6 +48,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
             setBrand();
         }
     }
+    
     return (
         <div className="multi-select-container">
             <header>
@@ -59,7 +60,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                         <div className='d-flex justify-content-start'>
                             {selectedValues?.length ? selectedValues.length < 3 ? selectedValues.map((user, index) => (
                                 <li key={user.Id}>{user.Name}{index != (selectedValues.length - 1) ? "," : ""}</li>
-                            )) : selectedValues.length + " Users selected" : "No Users selected"}
+                            )) : `${selectedValues.filter(e => !e.AccountId).length ? `${selectedValues.filter(e => !e.AccountId).length} Users selected`:''} ${selectedValues.filter(e => !e.AccountId).length && selectedValues.filter(e => e.AccountId).length?' and ':''} ${selectedValues.filter(e => e.AccountId).length ? `${selectedValues.filter(e => e.AccountId).length} contact selected`:''}` : "No Users selected"}
                         </div>
                     </div>
                     <div className='d-flex flex-column align-items-center justify-content-end'>
