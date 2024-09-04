@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import AppLayout from "../AppLayout"
 import MultiStepForm from "./Custom"
 import { BiLeftArrow } from "react-icons/bi";
+import { BackArrow } from "../../lib/svg";
 
 const CreateNewsletter = () => {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ const CreateNewsletter = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}>
-                <h2 className="d-flex justify-content-start align-items-center" style={{ color: '#000', fontFamily: "Montserrat-400", fontSize: '20px', fontStyle: 'normal', fontWeight: 500, lineHeight: 'normal', letterSpacing: '2px'}}><span style={{ cursor: 'pointer' }} onClick={() => { navigate('/newsletter') }}><BiLeftArrow /></span><p style={{margin:0}}>&nbsp;Create Newsletter</p></h2>
+                <h2 className="d-flex justify-content-start align-items-center" style={{ color: '#000', fontFamily: "Montserrat-400", fontSize: '20px', fontStyle: 'normal', fontWeight: 500, lineHeight: 'normal', letterSpacing: '2px'}}><span style={{ cursor: 'pointer' }} onClick={() => { navigate('/newsletter') }}><BackArrow /></span><p style={{margin:0}}>&nbsp;Create Newsletter</p></h2>
             </div>
             <MultiStepForm />
         </div>

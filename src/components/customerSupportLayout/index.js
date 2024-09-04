@@ -4,7 +4,7 @@ import Styles from "../CustomerSupportPage/Style.module.css"
 import Styles1 from "./Style.module.css"
 import ModalPage from "../Modal UI";
 import { Link, useNavigate } from "react-router-dom";
-import { CustomerServiceIcon, OrderStatusIcon, DefaultSupportIcon, MarketingSupportIcon, DIFTestIcon, DisplayIssuesIcon } from "../../lib/svg";
+import { CustomerServiceIcon, OrderStatusIcon, DefaultSupportIcon, MarketingSupportIcon, DIFTestIcon, DisplayIssuesIcon, BackArrow } from "../../lib/svg";
 import { BiLeftArrow } from "react-icons/bi";
 
 const CustomerSupportLayout = ({ children, filterNodes }) => {
@@ -118,7 +118,7 @@ const CustomerSupportLayout = ({ children, filterNodes }) => {
                             </div>
 
                             <div className="col-lg-9 col-md-12 col-sm-12">
-                                <Link to={to} style={{ color: "#000", display: 'flex', alignItems: 'center' }}><BiLeftArrow />&nbsp;Go Back</Link>
+                                <Link to={to} style={{ color: "#000", display: 'flex', alignItems: 'center' }}><BackArrow />&nbsp;Go Back</Link>
                                 {children}
                             </div>
                         </div>
