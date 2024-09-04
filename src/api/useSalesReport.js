@@ -7,7 +7,7 @@ const useSalesReport = () => {
       let salesRepId = JSON.parse(localStorage.getItem("Api Data")).data.Sales_Rep__c;
       let reportUrl = originAPi+"/9kJs2I6Bn/i0IT68Q8&0";
       if (admins.includes(salesRepId)) {
-        reportUrl = originAPi+"/report/4i1cKeDt9"
+        reportUrl = originAPi+"/salesReport/4i1cKeDt9"
       }
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const response = await axios.post(
