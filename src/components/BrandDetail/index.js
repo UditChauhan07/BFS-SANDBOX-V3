@@ -4,7 +4,7 @@ import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
-import { GetAuthData, ShareDrive, brandDetails, getProductImageAll, topProduct } from "../../lib/store";
+import { GetAuthData, ShareDrive, brandDetails, getProductImageAll, originAPi, topProduct } from "../../lib/store";
 import LoaderV2 from "../loader/v2";
 import { Link } from "react-router-dom";
 import ContentLoader from "react-content-loader";
@@ -97,13 +97,13 @@ const BrandDetailCard = ({ brandId }) => {
                     <div className="row">
                         <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12 m-auto">
                             <div className={`${Styles.BnadLogo} w-100`}>
-                                <img className="img-fluid" src={brand?.img?.src || "/assets/images/dummy.png"} />
+                                <img className={`img-fluid ${Styles.brandLogoHolder}`}  src={brand?.img?.src || "/assets/images/dummy.png"} />
                             </div>
                         </div>
                         <div className="col-xl-8 col-lg-8 col-md-12 col-sm-12 m-auto ">
                             <div className="row">
                                 <div className={`col-xl-7 col-lg-6 col-md-12 col-sm-12 ${brand?.tagLine ? Styles.borderRight : null}`}>
-                                    <img className="img-fluid" src={`http://3.223.209.6:6194/brandImage/${brandId}.png`} />
+                                    <img className={`img-fluid ${Styles.brandLogoHolder}`} src={`${originAPi}/brandImage/${brandId}.png`} />
                                 </div>
                                 {brand?.tagLine ?
                                     <div className="col-xl-5 col-lg-6 col-md-12 col-sm-12 m-auto ">
