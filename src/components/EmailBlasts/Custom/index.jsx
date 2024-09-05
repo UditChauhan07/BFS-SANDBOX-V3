@@ -44,14 +44,14 @@ const MultiStepForm = () => {
             setIsUserSelected(false)
             return false; // Continue the iteration if AccountId is not found
         });
-        if(isUserSelected){
+        if (isUserSelected) {
 
             setshowBrandList(manufacturers?.data)
-        }else{
-            
+        } else {
+
             setshowBrandList(filteredBrands)
         }
-    }, [formData,isUserSelected])
+    }, [formData, isUserSelected])
 
     const handleAccordionClick = (step) => {
         if (step === 2 && !formData.subscriber.length) {
@@ -107,6 +107,7 @@ const MultiStepForm = () => {
             contactIds: JSON.stringify(contactIds),
             userIds: JSON.stringify(userIds)
         }
+
         createNewsletter(body).then((result) => {
             if (result.status) {
                 window.location.href = "/newsletter"
@@ -177,7 +178,7 @@ const MultiStepForm = () => {
 
     const handleSelectionChange = (newSelectedValues) => {
         setFormData((prev) => {
-            return { ...prev, subscriber: newSelectedValues };
+            return { ...prev, subscriber: newSelectedValues, brand: [] };
         }
         )
     };
@@ -431,7 +432,7 @@ const MultiStepForm = () => {
                                             <label style={{ width: '30%' }} className="text-[12px] text-[#000] font-['Montserrat-400'] text-start">
                                                 Send Type:
                                                 <div className="d-flex mt-3 h-full text-[12px] text-[#000]">
-                                                    Send Now&nbsp;&nbsp;<ToggleSwitch onToggle={(value) => { setIsSchedule(value);handleChange({ target: { value: null, name: "date" } }) }} />&nbsp;&nbsp;Schedule later
+                                                    Send Now&nbsp;&nbsp;<ToggleSwitch onToggle={(value) => { setIsSchedule(value); handleChange({ target: { value: null, name: "date" } }) }} />&nbsp;&nbsp;Schedule later
                                                 </div>
                                             </label>
                                         </div>

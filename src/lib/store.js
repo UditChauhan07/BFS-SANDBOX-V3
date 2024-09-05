@@ -950,7 +950,7 @@ export async function createNewsletter(body) {
       return { status: false, message: data.message };
     }
   } catch (err) {
-    console.error('Error fetching newsletter data:', err.message);
+    console.error('Error fetching newsletter data:', err);
     return { status: false, message: err.message };
   }
 };
