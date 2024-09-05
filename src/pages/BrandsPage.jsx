@@ -30,7 +30,8 @@ const brandsImageMap = {
   "Victoria Beckham Beauty": "victoria.png",
   "Re-Nutriv": "Re-Nutriv-2.png",
   "LOccitane": "LOccitane.png",
-  "111Skin":"a0ORb000001EbK5MAK.png"
+  "111Skin":"a0ORb000001EbK5MAK.png",
+  "SuperGoop":"SUPERGOOP_BRAND_CAMP.jpg"
 };
 
 const defaultImage = "dummy.png";
