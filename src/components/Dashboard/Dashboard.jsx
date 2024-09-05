@@ -639,8 +639,8 @@ function Dashboard({ dashboardData }) {
                                       </td>
                                     <td className={Styles.tabletd}>${formatNumber(e.MonthlySale || 0)}</td>
                                     {/* <td className={Styles.tabletd}>${formatNumber(e?.diff || 0)}</td> */}
-                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${formatNumber(e?.StaticTarget-e.MonthlySale || 0)}</span>
-                                    {/* <span className={e.Difference <= 0 ? Styles.matchHolder : Styles.shortHolder}>{e.Difference <= 0 ? 'MATCH' : 'SHORT'}</span> */}
+                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${formatNumber((Math.abs(e?.StaticTarget-e.MonthlySale)) || 0)}</span>
+                                    <span className={e?.StaticTarget-e.MonthlySale <= 0 ? Styles.matchHolder : Styles.shortHolder}>{e?.StaticTarget-e.MonthlySale <= 0 ? 'MATCH' : 'SHORT'}</span>
                                     </td>
                                   </tr>
                                 );
@@ -712,9 +712,10 @@ function Dashboard({ dashboardData }) {
                                       </td>
                                     <td className={Styles.tabletd}>${formatNumber(e.MonthlySale || 0)}</td>
                                     {/* <td className={Styles.tabletd}>${formatNumber(e?.diff || 0)}</td> */}
-                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${formatNumber(e?.StaticTarget-e.MonthlySale || 0)}</span>
-                                    {/* <span className={e?.StaticTarget-e.MonthlySale <= 0 ? Styles.matchHolder : Styles.shortHolder}>{e?.StaticTarget-e.MonthlySale <= 0 ? 'MATCH' : 'SHORT'}</span> */}
-                                    </td></tr>
+                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${formatNumber((Math.abs(e?.StaticTarget-e.MonthlySale)) || 0)}</span>
+                                    <span className={e?.StaticTarget-e.MonthlySale <= 0 ? Styles.matchHolder : Styles.shortHolder}>{e?.StaticTarget-e.MonthlySale <= 0 ? 'MATCH' : 'SHORT'}</span>
+                                    </td>
+                                    </tr>
                                 );
                               })}
                               <tr className={`${Styles.tablerow} ${Styles.stickyBottom}`}>
@@ -786,9 +787,10 @@ function Dashboard({ dashboardData }) {
                                       </td>
                                     <td className={Styles.tabletd}>${formatNumber(e.MonthlySale || 0)}</td>
                                     {/* <td className={Styles.tabletd}>${formatNumber(e?.diff || 0)}</td> */}
-                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${formatNumber(e?.StaticTarget-e.MonthlySale || 0)}</span>
-                                    {/* <span className={e.Difference <= 0 ? Styles.matchHolder : Styles.shortHolder}>{e.Difference <= 0 ? 'MATCH' : 'SHORT'}</span> */}
-                                    </td></tr>
+                                    <td className={`${Styles.tabletd} ${Styles.flex}`}><span style={{ lineHeight: '20px' }}>${formatNumber((Math.abs(e?.StaticTarget-e.MonthlySale)) || 0)}</span>
+                                    <span className={e?.StaticTarget-e.MonthlySale <= 0 ? Styles.matchHolder : Styles.shortHolder}>{e?.StaticTarget-e.MonthlySale <= 0 ? 'MATCH' : 'SHORT'}</span>
+                                    </td>
+                                    </tr>
                                 );
                               })}
                               <tr className={`${Styles.tablerow} ${Styles.stickyBottom}`}>
