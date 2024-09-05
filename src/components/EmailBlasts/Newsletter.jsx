@@ -100,7 +100,7 @@ const Newsletter = () => {
                                 <td style={{ width: '200px' }}>
                                     <p style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={() => {
                                         navigate('/newsletter/report', {
-                                            state: { day: frame.Day, month: frame.MonthValue, year: frame.Year }
+                                            state: { day: frame.Day, month: frame.MonthValue, year: frame.Year,newsletter:frame.newsletterAlice }
                                         })
                                     }}>
                                         {frame.Month} {frame.Day}, {frame.Year}

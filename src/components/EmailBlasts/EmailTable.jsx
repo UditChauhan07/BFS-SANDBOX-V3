@@ -14,7 +14,7 @@ let PageSize = 10;
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
 
-const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, setYear, setDay, setMonth }) => {
+const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList,newsletter}) => {
     const navigate = useNavigate();
     const [contactList, setContactList] = useState({ isLoaded: false, data: [] })
     const [alert, setAlert] = useState(false)
@@ -92,14 +92,10 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
         GetAuthData().then((user) => {
             if (admins.includes(user.Sales_Rep__c)) {
                 setUser(user)
-                getEmailBlast({ key: user.access_token, Id: user.Sales_Rep__c, month, day, year }).then((list) => {
-                    if (list?.notifyMail) {
-                        let contactList = sortArrayHandler(JSON.parse(list?.notifyMail || "[]") || [], g => g?.updatedAt, 'desc')
+                getEmailBlast({ key: user.access_token, Id: user.Sales_Rep__c, month, day, year,newsletter }).then((list) => {
+                    if (list) {
+                        let contactList = sortArrayHandler(JSON.parse(list || "[]") || [], g => g?.updatedAt, 'desc')
                         setContactList({ isLoaded: true, data: contactList })
-                        let monthList = Object.keys(list.filter);
-                        setMonthList(monthList)
-                        setDayList(list.filter[months[list.month - 1]] || []);
-                        setFilter(list.filter)
                     } else {
                         setContactList({ isLoaded: true, data: [] })
                     }
@@ -346,7 +342,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, set
                                                 &nbsp;{contact.Account}
                                             </label>
                                         </td>
-                                        <td style={{ width: '200px' }} onMouseEnter={() => setShowBrands(index)} onMouseLeave={() => setShowBrands(null)}>{(contact.Brands.length < 50 || showBrands == index) ? contact.Brands : contact.Brands.slice(0, 50) + "..."}</td>
+                                        <td style={{ width: '200px' }} onMouseEnter={() => setShowBrands(index)} onMouseLeave={() => setShowBrands(null)} dangerouslySetInnerHTML={{__html:(contact.Brands.length < 50 || showBrands == index) ? contact.Brands : contact.Brands.slice(0, 50) + "..."}}></td>
                                         <td>{contact.ContactName}</td>
                                         <td>{contact.ContactEmail}</td>
                                         <td>{DateConvert(contact.Date, true)}</td>
