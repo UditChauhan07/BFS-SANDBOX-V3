@@ -21,6 +21,7 @@ const MultiStepForm = () => {
     const [isSubmit, setIsSubmit] = useState(false)
     const [isSchedule, setIsSchedule] = useState(false)
     const [isUserSelected, setIsUserSelected] = useState(false);
+    const [loading,setLoading]=useState(true);
     const [formData, setFormData] = useState({
         subscriber: [],
         template: '',
@@ -135,6 +136,7 @@ const MultiStepForm = () => {
 
 
     useEffect(() => {
+        setLoading(true);
         const loadData = async () => {
             try {
                 if (!Subscribers.isLoaded) {
@@ -156,19 +158,23 @@ const MultiStepForm = () => {
             } catch (err) {
                 console.error('Error:', err);
             } finally {
+                setLoading(false);
             }
         };
         let localCall = ShareDrive(null, null, contactLocalKey)
-        console.log({ localCall });
 
         if (localCall) {
             setSubscribers({ isLoaded: true, users: localCall.userList, contacts: localCall.contactList })
             setAllSubscribers([...localCall.userList, ...localCall.contactList])
+            setTimeout(() => {
+                
+                setLoading(false); 
+            }, 1000);
         } else {
             loadData();
         }
 
-    }, []);
+    }, [currentStep]);
 
 
     useEffect(() => {
@@ -247,7 +253,7 @@ const MultiStepForm = () => {
                                 <>
                                     <div className="accordion-body">
                                         <MultiSelectSearch
-                                            loading={!Subscribers.isLoaded ? <div className='m-auto'><Loading height={'100px'} /></div> : null}
+                                            loading={(!Subscribers.isLoaded||loading) ? <div className='m-auto'><Loading height={'100px'} /></div> : null}
                                             options={allSubscribers}
                                             selectedValues={formData.subscriber}
                                             onChange={handleSelectionChange}
