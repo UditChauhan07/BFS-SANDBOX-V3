@@ -878,15 +878,15 @@ export async function getEmailBlastReport({ key, Id }) {
     return data.data;
   }
 }
-export async function getEmailBlast({ key, Id, day = null, month = null, year = null }) {
+export async function getEmailBlast({ key, Id, day = null, month = null, year = null,newsletter=null }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
   };
 
-  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/m9w6uFie8U3EGuC", {
+  let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/T0pxZkWoI3zKNd5", {
     method: "POST",
-    body: JSON.stringify({ key, Id, day, month, year }),
+    body: JSON.stringify({ key, Id, day, month, year,newsletter }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
