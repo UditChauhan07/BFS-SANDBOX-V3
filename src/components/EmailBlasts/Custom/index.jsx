@@ -9,7 +9,7 @@ import ModalPage from '../../Modal UI';
 import { BiExit } from 'react-icons/bi';
 import ToggleSwitch from '../../ToggleButton';
 import { FaEye } from 'react-icons/fa';
-import FilterDate from '../../FilterDate';
+
 const contactLocalKey = "lCpFhWZtGKKejSX"
 
 const MultiStepForm = () => {
@@ -431,7 +431,7 @@ const MultiStepForm = () => {
                                             <label style={{ width: '30%' }} className="text-[12px] text-[#000] font-['Montserrat-400'] text-start">
                                                 Send Type:
                                                 <div className="d-flex mt-3 h-full text-[12px] text-[#000]">
-                                                    Send Now&nbsp;&nbsp;<ToggleSwitch onToggle={(value) => { setIsSchedule(value) }} />&nbsp;&nbsp;Schedule later
+                                                    Send Now&nbsp;&nbsp;<ToggleSwitch onToggle={(value) => { setIsSchedule(value);handleChange({ target: { value: null, name: "date" } }) }} />&nbsp;&nbsp;Schedule later
                                                 </div>
                                             </label>
                                         </div>
