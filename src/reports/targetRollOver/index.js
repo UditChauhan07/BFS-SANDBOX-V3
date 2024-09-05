@@ -117,51 +117,51 @@ const TargetReport = () => {
                     Status: target.Status,
                     JanuaryTarget: target.January.staticTarget,
                     JanuarySale: target.January.sales,
-                    JanuaryDiff: target.January.diff,
+                    JanuaryDiff: target.January.staticTarget-target.January.sales,
 
                     FebruaryTarget: target.February.staticTarget,
                     FebruarySale: target.February.sales,
-                    FebruaryDiff: target.February.diff,
+                    FebruaryDiff: target.February.staticTarget-target.February.sales,
 
                     MarchTarget: target.March.staticTarget,
                     MarchSale: target.March.sales,
-                    MarchDiff: target.March.diff,
+                    MarchDiff: target.March.staticTarget-target.March.sales,
 
                     AprilTarget: target.April.staticTarget,
                     AprilSale: target.April.sales,
-                    AprilDiff: target.April.diff,
+                    AprilDiff: target.April.staticTarget-target.April.sales,
 
                     MayTarget: target.May.staticTarget,
                     MaySale: target.May.sales,
-                    MayDiff: target.May.diff,
+                    MayDiff: target.May.staticTarget-target.May.sales,
 
                     JuneTarget: target.June.staticTarget,
                     JuneSale: target.June.sales,
-                    JuneDiff: target.June.diff,
+                    JuneDiff: target.June.staticTarget-target.June.sales,
 
                     JulyTarget: target.July.staticTarget,
                     JulySale: target.July.sales,
-                    JulyDiff: target.July.diff,
+                    JulyDiff: target.July.staticTarget-target.July.sales,
 
                     AugustTarget: target.August.staticTarget,
                     AugustSale: target.August.sales,
-                    AugustDiff: target.August.diff,
+                    AugustDiff: target.August.staticTarget-target.August.sales,
 
                     SeptemberTarget: target.September.staticTarget,
                     SeptemberSale: target.September.sales,
-                    SeptemberDiff: target.September.diff,
+                    SeptemberDiff: target.September.staticTarget-target.September.sales,
 
                     OctoberTarget: target.October.staticTarget,
                     OctoberSale: target.October.sales,
-                    OctoberDiff: target.October.diff,
+                    OctoberDiff: target.October.staticTarget-target.October.sales,
 
                     NovemberTarget: target.November.staticTarget,
                     NovemberSale: target.November.sales,
-                    NovemberDiff: target.November.diff,
+                    NovemberDiff: target.November.staticTarget-target.November.sales,
 
                     DecemberTarget: target.December.staticTarget,
                     DecemberSale: target.December.sales,
-                    DecemberDiff: target.December.diff,
+                    DecemberDiff: target.December.staticTarget-target.December.sales,
 
                     TotalTarget: target.Total.staticTarget,
                     TotalSale: target.Total.sales,
