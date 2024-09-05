@@ -44,6 +44,7 @@ const Newsletter = () => {
                             frame.NotSend,
                             frame.FailMail,
                             frame.SendMail,
+                            frame.newsletterAlice,
                             frame.Total,
                             `${frame.Month} ${frame.Day}, ${frame.Year}`,
                         ].some(property => {
