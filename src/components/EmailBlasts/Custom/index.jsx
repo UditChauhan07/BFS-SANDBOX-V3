@@ -133,7 +133,7 @@ const MultiStepForm = () => {
         })
     };
 
-
+useEffect(()=>{},[callBackError])
 
     useEffect(() => {
         setLoading(true);
@@ -217,7 +217,7 @@ const MultiStepForm = () => {
                                 {callBackError}
                             </p>
                             <div className="d-flex justify-content-around">
-                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => setCallbackError(false)}>
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => setCallbackError()}>
                                     <BiExit /> &nbsp;Ok
                                 </button>
                             </div>
