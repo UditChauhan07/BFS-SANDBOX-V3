@@ -17,7 +17,8 @@ const MultiStepForm = () => {
     const { data: manufacturers, isLoading, error } = useManufacturer();
     const [Subscribers, setSubscribers] = useState({ isLoaded: false, users: [], contacts: [] })
     const [allSubscribers, setAllSubscribers] = useState([]);
-    const [callBackError, setCallbackError] = useState();
+    const [callBackError, setCallbackError] = useState(false);
+    const [callBackErrorMsg, setCallbackErrorMsg] = useState();
     const [isSubmit, setIsSubmit] = useState(false)
     const [isSchedule, setIsSchedule] = useState(false)
     const [isUserSelected, setIsUserSelected] = useState(false);
@@ -57,14 +58,17 @@ const MultiStepForm = () => {
     const handleAccordionClick = (step) => {
         if (step === 2 && !formData.subscriber.length) {
             // alert('Please select a subscriber first.');
-            setCallbackError('Please select a subscriber first.')
+            setCallbackError(true)
+            setCallbackErrorMsg('Please select a subscriber first.')
             return;
         }
         if (step === 3 && (!formData.template)) {
+            setCallbackError(true)
             setCallbackError('Please select a template')
             return;
         }
         if (step === 4 && (!formData.brand.length)) {
+            setCallbackError(true)
             setCallbackError('Please select a brand')
             return;
         }
@@ -124,7 +128,8 @@ const MultiStepForm = () => {
                 });
             } else {
                 setIsSubmit(false)
-                setCallbackError(result.message)
+                setCallbackError(true)
+                setCallbackErrorMsg(result.message)
             }
 
         }).catch((err) => {
@@ -207,23 +212,23 @@ useEffect(()=>{},[callBackError])
         <div className="form-container create-newsletter">
             {isSubmit ? <Loading height={'500px'} /> :
                 <>
-                    <ModalPage
+                    {callBackError?<ModalPage
                         open={callBackError ?? false}
                         content={<div className="d-flex flex-column gap-3">
                             <h2>
                                 Alert!!!
                             </h2>
                             <p className={Styles.modalContent}>
-                                {callBackError}
+                                {callBackErrorMsg}
                             </p>
                             <div className="d-flex justify-content-around">
-                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => setCallbackError()}>
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => {setCallbackError(false);setCallbackErrorMsg(); }}>
                                     <BiExit /> &nbsp;Ok
                                 </button>
                             </div>
                         </div>}
-                        onClose={() => setCallbackError()}
-                    />
+                        onClose={() => {setCallbackError(false);setCallbackErrorMsg(); }}
+                    />:null}
                     <form onSubmit={handleSubmit} className="multi-step-form">
                         {/* Progress Bar */}
                         {/* <div className="progress-bar">
@@ -328,7 +333,7 @@ useEffect(()=>{},[callBackError])
                                             <div
                                                 className={`${Styles.templateHolder} ${formData.template == 3 ? Styles.selected : ''}`}
                                                 // onClick={() => handleChange({ target: { value: 3, name: "template" } })}
-                                                onClick={() => { setCallbackError('Comming soon...') }}
+                                                onClick={() => { setCallbackError(true);setCallbackErrorMsg('Comming soon...') }}
                                             >
                                                 <input
                                                     type="radio"

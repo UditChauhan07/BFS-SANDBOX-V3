@@ -186,7 +186,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
         });
     }
   };
-  if (!isLoading) return <Loading />;
+  if (!isLoading) return <Loading height={'50vh'}/>;
   const openInNewTab = (url) => {
     window.open(url, "_blank", "noreferrer");
   };
