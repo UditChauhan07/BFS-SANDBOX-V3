@@ -64,12 +64,12 @@ const MultiStepForm = () => {
         }
         if (step === 3 && (!formData.template)) {
             setCallbackError(true)
-            setCallbackError('Please select a template')
+            setCallbackErrorMsg('Please select a template')
             return;
         }
         if (step === 4 && (!formData.brand.length)) {
             setCallbackError(true)
-            setCallbackError('Please select a brand')
+            setCallbackErrorMsg('Please select a brand')
             return;
         }
         setCurrentStep(step);
@@ -271,7 +271,7 @@ useEffect(()=>{},[callBackError])
                         </div>
 
                         {/* Step 2: Template and Brand Selection */}
-                        <div className="accordion-item text-[12px] font-['Montserrat-400']">
+                        <div className="accordion-item text-[16px] font-[Montserrat-400]">
                             <div
                                 className={`accordion-header ${currentStep === 2 ? 'active' : ''}`}
                                 onClick={() => handleAccordionClick(2)}
@@ -282,7 +282,7 @@ useEffect(()=>{},[callBackError])
                             {currentStep === 2 && (
                                 <div className="accordion-body">
                                     <div className="text-start">
-                                        Select Template:
+                                        <b>Select Template:</b>
                                         <div className={`${Styles.dFlex} mt-4`}>
                                             <div
                                                 className={`${Styles.templateHolder} ${formData.template == 1 ? Styles.selected : ''}`}
@@ -362,7 +362,7 @@ useEffect(()=>{},[callBackError])
                                 </div>
                             )}
                         </div>
-                        <div className="accordion-item text-[12px] font-['Montserrat-400']">
+                        <div className="accordion-item text-[16px] font-['Montserrat-400']">
                             <div
                                 className={`accordion-header ${currentStep === 3 ? 'active' : ''}`}
                                 onClick={() => handleAccordionClick(3)}
@@ -373,7 +373,7 @@ useEffect(()=>{},[callBackError])
                             {currentStep === 3 && (
                                 <div className="accordion-body">
                                     <div className="text-start">
-                                        Select Brand:
+                                        <b>Select Brand:</b>
                                         <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
                                             {!isLoading ?
                                                 showBrandList?.length ? (showBrandList.map((brand) => (
@@ -429,8 +429,8 @@ useEffect(()=>{},[callBackError])
                                     <div className='mt-4 pt-3'>
                                         <div className='d-flex justify-content-between'>
 
-                                            <label style={{ width: '68%' }} className="text-[12px] text-[#000] font-['Montserrat-400'] text-start">
-                                                Newsletter Title:
+                                            <label style={{ width: '68%' }} className="text-[15px] text-[#000] font-['Montserrat-400'] text-start">
+                                               <b>Newsletter Title:</b>
                                                 <input
                                                     type="text"
                                                     name="newsletter"
@@ -440,16 +440,16 @@ useEffect(()=>{},[callBackError])
                                                     required
                                                 />
                                             </label>
-                                            <label style={{ width: '30%' }} className="text-[12px] text-[#000] font-['Montserrat-400'] text-start">
-                                                Send Type:
-                                                <div className="d-flex mt-3 h-full text-[12px] text-[#000]">
+                                            <label style={{ width: '30%' }} className="text-[16px] text-[#000] font-['Montserrat-400'] text-start">
+                                                <b>Send Type:</b>
+                                                <div className="d-flex mt-3 h-full text-[16px] text-[#000]">
                                                     Send Now&nbsp;&nbsp;<ToggleSwitch onToggle={(value) => { setIsSchedule(value); handleChange({ target: { value: null, name: "date" } }) }} />&nbsp;&nbsp;Schedule later
                                                 </div>
                                             </label>
                                         </div>
                                         <div className='d-flex justify-content-between'>
-                                            <label style={{ width: '68%' }} className="text-[12px] font-['Montserrat-400'] text-start">
-                                                Subject:
+                                            <label style={{ width: '68%' }} className="text-[16px] font-['Montserrat-400'] text-start">
+                                                <b>Subject:</b>
                                                 <input
                                                     type="text"
                                                     name="subject"
@@ -459,8 +459,8 @@ useEffect(()=>{},[callBackError])
                                                     required
                                                 />
                                             </label>
-                                            <label style={{ width: '30%' }} className="text-[12px] font-['Montserrat-400'] text-start">
-                                                Date:
+                                            <label style={{ width: '30%' }} className="text-[16px] font-['Montserrat-400'] text-start">
+                                                <b>Date:</b>
                                                 <input
                                                     type="date"
                                                     name="date"
