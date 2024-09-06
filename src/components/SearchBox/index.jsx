@@ -81,10 +81,10 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                         style={{width:'70%'}}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    {manufacturers?.length ? <select className={"brandSearch"} style={{width:'27%',height:'45px',marginTop:'8px'}} onChange={brandSelectionHandler}>
+                    {manufacturers?.length ? <select className={"brandSearch"} style={{width:'27%',maxWidth: '200px',height:'45px',marginTop:'8px'}} onChange={brandSelectionHandler}>
                         <option value={0} selected>All Brand</option>
                         {manufacturers.map((brand) => (
-                            <option value={brand.Id}>{brand.Name}</option>
+                            <option style={{appearance: 'none'}} value={brand.Id}>{brand.Name}</option>
                         ))}
                     </select> : null}
                 </div>
