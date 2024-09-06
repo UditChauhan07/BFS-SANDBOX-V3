@@ -31,7 +31,7 @@ const brandsImageMap = {
   "Re-Nutriv": "Re-Nutriv-2.png",
   "LOccitane": "LOccitane.png",
   "111Skin":"a0ORb000001EbK5MAK.png",
-  "SuperGoop":"11.jpg"
+  "SuperGoop":"30.jpg"
 };
 
 const defaultImage = "dummy.png";
