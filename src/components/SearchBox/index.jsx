@@ -90,12 +90,9 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                 <ul className="select-user-list justify-content-between align-items-center">
                     <div className='d-flex flex-column align-items-center justify-content-start'>
 
-                        <b className='d-flex justify-content-start align-items-center w-[100%]'><input type='checkbox' value={1} onChange={() => setShowSelected(!showSelected)} style={{ width: '15px', height: '15px', margin: 0 }} />&nbsp;Selected Users:&nbsp;</b>
-                        <div className='d-flex justify-content-start'>
-                            {selectedValues?.length ? selectedValues.length < 3 ? selectedValues.map((user, index) => (
+                        <b className='d-flex justify-content-start align-items-center w-[100%]'><input type='checkbox' value={1} onChange={() => setShowSelected(!showSelected)} style={{ width: '15px', height: '15px', margin: 0 }} />&nbsp;Selected Users:&nbsp;<span style={{fontWeight:'400'}}>                 {selectedValues?.length ? selectedValues.length < 3 ? selectedValues.map((user, index) => (
                                 <li key={user.Id}>{user.Name}{index != (selectedValues.length - 1) ? "," : ""}</li>
-                            )) : `${selectedValues.filter(e => !e.AccountId).length ? `${selectedValues.filter(e => !e.AccountId).length} Users selected`:''} ${selectedValues.filter(e => !e.AccountId).length && selectedValues.filter(e => e.AccountId).length?' and ':''} ${selectedValues.filter(e => e.AccountId).length ? `${selectedValues.filter(e => e.AccountId).length} contact selected`:''}` : "No Users selected"}
-                        </div>
+                            )) : `${selectedValues.filter(e => !e.AccountId).length ? `${selectedValues.filter(e => !e.AccountId).length} Users selected`:''} ${selectedValues.filter(e => !e.AccountId).length && selectedValues.filter(e => e.AccountId).length?' and ':''} ${selectedValues.filter(e => e.AccountId).length ? `${selectedValues.filter(e => e.AccountId).length} contact selected`:''}` : "No Users selected"}</span></b>
                     </div>
                     <div className='d-flex flex-column align-items-center justify-content-end'>
                         <span className='text-end w-[100%]'><span onClick={AutoSelectChangeHandler} className='cursor-pointer'>Select All</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span className='cursor-pointer' onClick={resetSelectChangeHandler}>Reset</span></span>
@@ -110,10 +107,10 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                         style={{width:'70%'}}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    {manufacturers?.length ? <select className={"brandSearch"} style={{width:'27%',height:'45px',marginTop:'8px'}} onChange={brandSelectionHandler}>
+                    {manufacturers?.length ? <select className={"brandSearch"} style={{width:'27%',maxWidth: '200px',height:'45px',marginTop:'8px'}} onChange={brandSelectionHandler}>
                         <option value={0} selected>All Brand</option>
                         {manufacturers.map((brand) => (
-                            <option value={brand.Id}>{brand.Name}</option>
+                            <option style={{appearance: 'none'}} value={brand.Id}>{brand.Name}</option>
                         ))}
                     </select> : null}
                 </div>
