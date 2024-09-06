@@ -1480,7 +1480,7 @@ export const brandDetails =
     desc: null
   },
   a0ORb000001KCNpMAO:{
-    img: {src: "/assets/images/11.jpg"},
+    img: {src: "/assets/images/30.jpg"},
     tagLine: null,
     desc: "<p>Short blurb next to the logo: Every. Single. Day.™</p><p>SPF is the #1 thing you can do for your skin, so we put it first in all we do. Founded in 2005 by mom and former elementary school teacher Holly Thaggard, Supergoop! is made with a mission: To change the way the world thinks about sunscreen and end the epidemic of skin cancer. As the Experts in SPF™, we’ve been raising the bar for effective, feel-good sunscreen for nearly 20 years. Discover our 40+ dermatologist-tested formulas for all skin types, tones and routines, and find the SPF you want to wear. Every. Single. Day.™</p>"
   }

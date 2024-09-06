@@ -79,30 +79,30 @@ const YearlyComparisonReportTable = ({ comparisonData, status }) => {
                     </th>
                     <th className={`${styles.th} ${styles.stickyMonth}`}> Sales Rep</th>
                     <th className={`${styles.th} ${styles.stickyMonth}`}> Status</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>Jan Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>Jan Wholesale Amount</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>Feb Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>Feb Wholesale Amount</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>Mar Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>Mar Wholesale Amount</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>Apr Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>Apr Wholesale Amount</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>May Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>May Wholesale Amount</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>Jun Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>Jun Wholesale Amount</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>Jul Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>Jul Wholesale Amount</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>Aug Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>Aug Wholesale Amount</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>Set Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>Set Wholesale Amount</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>Oct Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>Oct Wholesale Amount</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>Nov Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>Nov Wholesale Amount</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'200px'}}>Dec Retail Revenue</th>
-                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{minWidth:'250px'}}>Dec Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>Jan Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>Jan Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>Feb Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>Feb Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>Mar Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>Mar Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>Apr Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>Apr Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>May Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>May Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>Jun Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>Jun Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>Jul Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>Jul Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>Aug Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>Aug Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>Set Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>Set Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>Oct Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>Oct Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>Nov Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>Nov Wholesale Amount</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '200px' }}>Dec Retail Revenue</th>
+                    <th className={`${styles.th} ${styles.stickyMonth} `} style={{ minWidth: '250px' }}>Dec Wholesale Amount</th>
                     <th className={`${styles.th} ${styles.stickyMonth} ${styles.stickySecondLastColumnHeading2}`} style={{ maxWidth: "200px" }}>
                       Total Retail Revenue
                     </th>
@@ -117,6 +117,9 @@ const YearlyComparisonReportTable = ({ comparisonData, status }) => {
                     <>
                       {comparisonData?.map((ele, index) => {
                         if ((status == 1 && ele.Status == "Active") || status == 2) {
+                          // console.log({ele});
+                          totalretailer = 0;
+                          totalwholesale = 0;
                           totalretailer += ele.Jan.retail_revenue__c;
                           monthTotalAmount.Jan.retailer += ele.Jan.retail_revenue__c;
                           monthTotalAmount.Jan.wholesale += ele.Jan.Whole_Sales_Amount;
@@ -234,7 +237,7 @@ const YearlyComparisonReportTable = ({ comparisonData, status }) => {
                     </>
                   </tbody>
                 ) : (
-                  <tbody><tr  className="d-flex justify-content-center align-items-center position-absolute top-200 start-50">No data found</tr></tbody>
+                  <tbody><tr className="d-flex justify-content-center align-items-center position-absolute top-200 start-50">No data found</tr></tbody>
                 )}
                 <tfoot>
                   <tr>
