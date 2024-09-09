@@ -27,7 +27,7 @@ const brandsImageMap = {
   "EVE LOM": "Evelom.png",
   AERIN: "Aerin.png",
   ARAMIS: "Aramis.png",
-  "Victoria Beckham Beauty": "victoria.png",
+  "Victoria Beckham Beauty": "32.png",
   "Re-Nutriv": "Re-Nutriv-2.png",
   "LOccitane": "LOccitane.png",
   "111Skin":"a0ORb000001EbK5MAK.png",
