@@ -1,45 +1,64 @@
-import React from 'react';
-import { useStripe, useElements, PaymentElement,CardElement } from '@stripe/react-stripe-js';
-import Styles from "./Styles.module.css";
-import Swal from 'sweetalert2';
+import React, { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import axios from 'axios';
+import { originAPi } from '../../lib/store';
 
-const CheckoutForm = () => {
-    const stripe = useStripe();
-    const elements = useElements();
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+const CheckoutForm = ({clientSecret}) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [error, setError] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-        if (!stripe || !elements) {
-            // Stripe.js has not loaded yet.
-            return;
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsProcessing(true);
 
-        const { error } = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                // Optional: Return URL where the customer should be redirected after payment
-                return_url: 'http://localhost:3000/order/complete',
-            },
-        });
+    const cardElement = elements.getElement(CardElement);
 
-        if (error) {
-            // Show error to your customer
-            console.error('Payment error:', error.message);
-        } else {
-            console.log('Payment successful!');
-        }
-    };
-    return (
-        <form onSubmit={handleSubmit} className={Styles.container}>
-            <CardElement />
-            <div className={Styles.btnHolder}>
-                <button type="submit" disabled={!stripe} className={Styles.btn}>
-                    Pay
-                </button>
-            </div>
-        </form>
-    );
+    // Get the client secret from your backend
+    const { data: { clientSecret } } = await axios.post(originAPi+'/stripe/create-payment-intent', {
+      amount: 2000, // Example: $20.00, must be in cents
+    });
+
+    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: cardElement,
+      },
+    });
+
+    if (error) {
+      setError(error.message);
+      setIsProcessing(false);
+    } else if (paymentIntent.status === 'succeeded') {
+      setSuccess(true);
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <CardElement options={{
+        style: {
+          base: {
+            fontSize: '16px',
+            color: '#424770',
+            '::placeholder': { color: '#aab7c4' },
+          },
+          invalid: {
+            color: '#9e2146',
+          },
+        },
+      }} />
+      {error && <div>{error}</div>}
+      <button type="submit" disabled={!stripe || isProcessing}>
+        {isProcessing ? 'Processing...' : 'Pay $20'}
+      </button>
+      {success && <div>Payment Successful!</div>}
+    </form>
+  );
 };
 
 export default CheckoutForm;

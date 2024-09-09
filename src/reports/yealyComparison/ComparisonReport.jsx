@@ -100,6 +100,8 @@ const YearlyComparisonReport = () => {
   if (apiData?.length) {
     apiData?.map((ele, index) => {
       if ((status == 1 && ele.Status == "Active") || status == 2) {
+        totalwholesale=0
+        totalretailer=0
         totalretailer += ele.Jan.retail_revenue__c;
         monthTotalAmount.Jan.retailer += ele.Jan.retail_revenue__c;
         monthTotalAmount.Jan.wholesale += ele.Jan.Whole_Sales_Amount;
