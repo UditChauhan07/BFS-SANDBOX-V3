@@ -185,7 +185,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, new
                     "Brands Name": element.Brands,
                     "Subscriber Name": element.ContactName,
                     "Subscriber Email": element.ContactEmail,
-                    "Publish On": DateConvert(element.Date),
+                    "Publish On": DateConvert(element.Date,true),
                     "Status": element.mailStatus == 1 ? "Send" : element.mailSend == 2 ? "Failed" : "Not Sent",
                 }
                 exportData.push(temp)

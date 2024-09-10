@@ -129,13 +129,16 @@ const MultiStepForm = () => {
             return;
         }
         e.preventDefault();
+        const contactList = Subscribers.contacts.filter(item1 =>
+            formData.subscriber.some(item2 => item2.Id === item1.Id)
+        )
+        // console.log({contactList});
+        // return;
         setIsSubmit(true)
         const userIds = Subscribers.users.filter(item1 =>
             formData.subscriber.some(item2 => item2.Id === item1.Id)
         ).map(item => item.Id);
-        const contactIds = Subscribers.contacts.filter(item1 =>
-            formData.subscriber.some(item2 => item2.Id === item1.Id)
-        ).map(item => item.Id);
+        const contactIds = contactList.map(item => item.Id);
 
         let body = {
             newsletter: formData.newsletter,
