@@ -783,6 +783,24 @@ export async function getSalesRepList({ key }) {
     return data;
   }
 }
+export async function getAuditReportView({ key }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/audit/8rM04B63RFDXH9Z1", {
+    method: "POST",
+    body: JSON.stringify({ key }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
 export async function generateAuditTemplate({ key, Ids, brandId = null }) {
   let headersList = {
     Accept: "*/*",
