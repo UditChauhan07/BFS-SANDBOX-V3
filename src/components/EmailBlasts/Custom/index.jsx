@@ -121,7 +121,10 @@ const MultiStepForm = () => {
     const handleDateChange = (value)=>(   
         setFormData({ ...formData, date:value})
     )
-
+    const contactList = Subscribers.contacts.filter(item1 =>
+        formData.subscriber.some(item2 => item2.Id === item1.Id)
+    )
+    console.log({contactList});
     const handleSubmit = (e) => {
         if (currentStep === 4 && (!formData.brand.length)) {
             setCallbackError(true)
@@ -129,13 +132,16 @@ const MultiStepForm = () => {
             return;
         }
         e.preventDefault();
+        const contactList = Subscribers.contacts.filter(item1 =>
+            formData.subscriber.some(item2 => item2.Id === item1.Id)
+        )
+        console.log({contactList});
+        return;
         setIsSubmit(true)
         const userIds = Subscribers.users.filter(item1 =>
             formData.subscriber.some(item2 => item2.Id === item1.Id)
         ).map(item => item.Id);
-        const contactIds = Subscribers.contacts.filter(item1 =>
-            formData.subscriber.some(item2 => item2.Id === item1.Id)
-        ).map(item => item.Id);
+        const contactIds = contactList.map(item => item.Id);
 
         let body = {
             newsletter: formData.newsletter,
@@ -187,12 +193,12 @@ const MultiStepForm = () => {
 
                     const response = await fetchNewsletterData({ token });
                     console.log({ response });
+                    
 
                     ShareDrive(response, false, contactLocalKey)
-
-
-                    setSubscribers({ isLoaded: true, users: response.userList, contacts: response.contactList })
-                    setAllSubscribers([...response.userList, ...response.contactList])
+                    const contactList = response.contactList.filter(item => item.BrandIds && item.BrandIds.length);
+                    setSubscribers({ isLoaded: true, users: response.userList, contacts: contactList })
+                    setAllSubscribers([...response.userList, ...contactList])
                 }
             } catch (err) {
                 console.error('Error:', err);
@@ -203,8 +209,9 @@ const MultiStepForm = () => {
         let localCall = ShareDrive(null, null, contactLocalKey)
 
         if (localCall) {
-            setSubscribers({ isLoaded: true, users: localCall.userList, contacts: localCall.contactList })
-            setAllSubscribers([...localCall.userList, ...localCall.contactList])
+            const contactList = localCall.contactList.filter(item => item.BrandIds && item.BrandIds.length);
+            setSubscribers({ isLoaded: true, users: localCall.userList, contacts: contactList})
+            setAllSubscribers([...localCall.userList, ...contactList])
             setTimeout(() => {
 
                 setLoading(false);
