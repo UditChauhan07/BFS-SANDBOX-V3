@@ -179,7 +179,12 @@
   border: 1px solid #000;
   background: #fff;
 }
-
+#newsletterDateSelector .react-datepicker-wrapper {
+  border: 1px solid #ccc;
+  width: 100%;
+  border-radius: 5px;
+  margin-top: 8px;
+}
 .create-newsletter .next-btn:active,
 .create-newsletter .prev-btn:active,
 .create-newsletter .submit-btn:active {
