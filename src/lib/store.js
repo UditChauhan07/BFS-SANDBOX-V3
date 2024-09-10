@@ -878,7 +878,7 @@ export async function getEmailBlastReport({ key, Id }) {
     return data.data;
   }
 }
-export async function getEmailBlast({ key, Id, day = null, month = null, year = null,newsletter=null }) {
+export async function getEmailBlast({ key, Id, day = null, month = null, year = null, newsletter = null }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -886,7 +886,7 @@ export async function getEmailBlast({ key, Id, day = null, month = null, year = 
 
   let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/T0pxZkWoI3zKNd5", {
     method: "POST",
-    body: JSON.stringify({ key, Id, day, month, year,newsletter }),
+    body: JSON.stringify({ key, Id, day, month, year, newsletter }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -911,6 +911,34 @@ export async function fetchNewsletterData({ token }) {
       method: "POST",
       body: JSON.stringify({
         key: token
+      }),
+      headers: headersList,
+    });
+    let data = JSON.parse(await response.text());
+    if (data.status == 300) {
+      DestoryAuth();
+    } else {
+      return data.data;
+    }
+  } catch (err) {
+    console.error('Error fetching newsletter data:', err.message);
+    throw err;
+  }
+};
+export async function fetchNextMonthNewsletterBrand({ key, date = null }) {
+  if (!key) {
+    throw new Error('Access token is missing');
+  }
+
+  try {
+    let headersList = {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+    };
+    let response = await fetch(originAPi + "/newsletter/Cfe5pdfgpUBjnw9", {
+      method: "POST",
+      body: JSON.stringify({
+        key, date
       }),
       headers: headersList,
     });
@@ -1479,8 +1507,8 @@ export const brandDetails =
     tagLine: null,
     desc: null
   },
-  a0ORb000001KCNpMAO:{
-    img: {src: "/assets/images/30.jpg"},
+  a0ORb000001KCNpMAO: {
+    img: { src: "/assets/images/30.jpg" },
     tagLine: "Short blurb next to the logo: Every. Single. Day.™",
     desc: "<p>SPF is the #1 thing you can do for your skin, so we put it first in all we do. Founded in 2005 by mom and former elementary school teacher Holly Thaggard, Supergoop! is made with a mission: To change the way the world thinks about sunscreen and end the epidemic of skin cancer. As the Experts in SPF™, we’ve been raising the bar for effective, feel-good sunscreen for nearly 20 years. Discover our 40+ dermatologist-tested formulas for all skin types, tones and routines, and find the SPF you want to wear. Every. Single. Day.™</p>"
   }

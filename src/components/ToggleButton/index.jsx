@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './ToggleSwitch.css'; // Import the CSS file
 
-const ToggleSwitch = ({ onToggle }) => {
-  const [isToggled, setIsToggled] = useState(false);
+const ToggleSwitch = ({ onToggle,selected=false }) => {
+  const [isToggled, setIsToggled] = useState(selected);
 
   const handleToggle = () => {
     setIsToggled(!isToggled);

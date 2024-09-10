@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useState, useCallback } from 'react';
 import './MultiStepForm.css'; // Import the CSS file
 import MultiSelectSearch from '../../SearchBox';
-import { createNewsletter, fetchNewsletterData, GetAuthData, originAPi, ShareDrive } from '../../../lib/store';
+import { createNewsletter, fetchNewsletterData, fetchNextMonthNewsletterBrand, GetAuthData, originAPi, ShareDrive } from '../../../lib/store';
 import Styles from './index.module.css';
-import { useManufacturer } from '../../../api/useManufacturer';
 import Loading from '../../Loading';
 import ModalPage from '../../Modal UI';
 import { BiExit } from 'react-icons/bi';
 import ToggleSwitch from '../../ToggleButton';
 import { FaEye } from 'react-icons/fa';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { CalenderIcon } from '../../../lib/svg';
 
 const contactLocalKey = "lCpFhWZtGKKejSX"
 
 const MultiStepForm = () => {
     const [currentStep, setCurrentStep] = useState(1);
-    const { data: manufacturers, isLoading, error } = useManufacturer();
+    const [manufacturers, setManufacturers] = useState({ isLoaded: false, data: [] })
     const [Subscribers, setSubscribers] = useState({ isLoaded: false, users: [], contacts: [] })
     const [allSubscribers, setAllSubscribers] = useState([]);
     const [callBackError, setCallbackError] = useState(false);
@@ -22,14 +24,14 @@ const MultiStepForm = () => {
     const [isSubmit, setIsSubmit] = useState(false)
     const [isSchedule, setIsSchedule] = useState(false)
     const [isUserSelected, setIsUserSelected] = useState(false);
-    const [loading,setLoading]=useState(true);
+    const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
         subscriber: [],
-        template: '',
+        template: null,
         brand: [],
-        date: '',
-        subject: '',
-        newsletter: ''
+        date: null,
+        subject: null,
+        newsletter: null
     });
     const [showBrandList, setshowBrandList] = useState([]);
 
@@ -55,25 +57,48 @@ const MultiStepForm = () => {
         }
     }, [formData, isUserSelected])
 
+    useEffect(() => {
+        GetAuthData().then((user) => {
+            
+            fetchNextMonthNewsletterBrand({ key: user.x_access_token, date: formData.date?formData.date.toLocaleDateString("en-GB"):null }).then((brandRes) => {
+                setFormData({ ...formData, brand: [] });
+                setManufacturers({ isLoaded: true, data: brandRes })
+            }).catch((brandErr) => {
+                console.log({ brandErr });
+            })
+
+        }).catch((userErr) => {
+            console.log(userErr)
+        })
+    }, [formData.date])
+
     const handleAccordionClick = (step) => {
-        if (step === 2 && !formData.subscriber.length) {
+
+        if (step === 3 && !formData.subscriber.length) {
             // alert('Please select a subscriber first.');
             setCallbackError(true)
             setCallbackErrorMsg('Please select a subscriber first.')
             return;
         }
-        if (step === 3 && (!formData.template)) {
+        if (step === 4 && (!formData.template)) {
             setCallbackError(true)
             setCallbackErrorMsg('Please select a template')
             return;
         }
-        if (step === 4 && (!formData.brand.length)) {
-            setCallbackError(true)
-            setCallbackErrorMsg('Please select a brand')
+        if (step === 2 && (!formData.newsletter || !formData.subject)) {
+            if (!formData.newsletter) {
+                setCallbackError(true)
+                setCallbackErrorMsg('Please enter newsletter name');
+            }
+            if (!formData.subject) {
+                setCallbackError(true)
+                setCallbackErrorMsg('Please enter subject');
+            }
             return;
         }
         setCurrentStep(step);
     };
+
 
     const handleChange = (e) => {
         const { value, name } = e.target;
@@ -93,7 +118,16 @@ const MultiStepForm = () => {
         }
     };
 
+    const handleDateChange = (value)=>(   
+        setFormData({ ...formData, date:value})
+    )
+
     const handleSubmit = (e) => {
+        if (currentStep === 4 && (!formData.brand.length)) {
+            setCallbackError(true)
+            setCallbackErrorMsg('Please select a brand')
+            return;
+        }
         e.preventDefault();
         setIsSubmit(true)
         const userIds = Subscribers.users.filter(item1 =>
@@ -108,7 +142,7 @@ const MultiStepForm = () => {
             subject: formData.subject,
             template: formData.template,
             brandIds: JSON.stringify(formData.brand),
-            date: formData.date,
+            date: formData.date?formData.date.toLocaleDateString("en-GB"):null,
             contactIds: JSON.stringify(contactIds),
             userIds: JSON.stringify(userIds)
         }
@@ -138,7 +172,7 @@ const MultiStepForm = () => {
         })
     };
 
-useEffect(()=>{},[callBackError])
+    useEffect(() => { }, [callBackError])
 
     useEffect(() => {
         setLoading(true);
@@ -172,8 +206,8 @@ useEffect(()=>{},[callBackError])
             setSubscribers({ isLoaded: true, users: localCall.userList, contacts: localCall.contactList })
             setAllSubscribers([...localCall.userList, ...localCall.contactList])
             setTimeout(() => {
-                
-                setLoading(false); 
+
+                setLoading(false);
             }, 1000);
         } else {
             loadData();
@@ -204,15 +238,21 @@ useEffect(()=>{},[callBackError])
     };
     function getDate() {
         var today = new Date();
-        console.log({ today });
 
         document.getElementById("date").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
     }
+    
+    const DatePickerLabel = forwardRef(({ value, onClick }, ref) => (
+        <button type='button' className='w-[100%] d-flex justify-content-between align-items-center m-0' style={{ background: '#fff', color: '#000', height: '50px', padding: '15px' }} onClick={onClick} ref={ref}>
+            <span>{value}</span>
+            <CalenderIcon fill='#000' />
+        </button>
+    ));
     return (
         <div className="form-container create-newsletter">
             {isSubmit ? <Loading height={'500px'} /> :
                 <>
-                    {callBackError?<ModalPage
+                    {callBackError ? <ModalPage
                         open={callBackError ?? false}
                         content={<div className="d-flex flex-column gap-3">
                             <h2>
@@ -222,13 +262,13 @@ useEffect(()=>{},[callBackError])
                                 {callBackErrorMsg}
                             </p>
                             <div className="d-flex justify-content-around">
-                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => {setCallbackError(false);setCallbackErrorMsg(); }}>
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { setCallbackError(false); setCallbackErrorMsg(); }}>
                                     <BiExit /> &nbsp;Ok
                                 </button>
                             </div>
                         </div>}
-                        onClose={() => {setCallbackError(false);setCallbackErrorMsg(); }}
-                    />:null}
+                        onClose={() => { setCallbackError(false); setCallbackErrorMsg(); }}
+                    /> : null}
                     <form onSubmit={handleSubmit} className="multi-step-form">
                         {/* Progress Bar */}
                         {/* <div className="progress-bar">
@@ -245,20 +285,99 @@ useEffect(()=>{},[callBackError])
                     </div>
                 </div> */}
 
-                        {/* Step 1: Subscribers */}
                         <div className="accordion-item">
                             <div
                                 className={`accordion-header ${currentStep === 1 ? 'active' : ''}`}
                                 onClick={() => handleAccordionClick(1)}
                             >
-                                <h3>Subscribers</h3>
+                                <h3>Newsletter Details</h3>
                                 <span>{currentStep === 1 ? '-' : '+'}</span>
                             </div>
                             {currentStep === 1 && (
+                                <div className="accordion-body">
+                                    <div className='mt-4 pt-3'>
+                                        <div className='d-flex justify-content-between'>
+
+                                            <label style={{ width: '68%' }} className="text-[15px] text-[#000] font-['Montserrat-400'] text-start">
+                                                <b>Newsletter Title:</b>
+                                                <input
+                                                    type="text"
+                                                    name="newsletter"
+                                                    value={formData.newsletter}
+                                                    onChange={handleChange}
+                                                    placeholder="Enter newsletter"
+                                                    required
+                                                />
+                                            </label>
+                                            <label style={{ width: '30%' }} className="text-[16px] text-[#000] font-['Montserrat-400'] text-start">
+                                                <b>Send Type:</b>
+                                                <div className="d-flex mt-3 h-full text-[16px] text-[#000]">
+                                                    Send Now&nbsp;&nbsp;<ToggleSwitch selected={isSchedule} onToggle={(value) => { setIsSchedule(value); handleChange({ target: { value: null, name: "date" } }) }} />&nbsp;&nbsp;Schedule later
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <div className='d-flex justify-content-between'>
+                                            <label style={{ width: '68%' }} className="text-[16px] font-['Montserrat-400'] text-start">
+                                                <b>Subject:</b>
+                                                <input
+                                                    type="text"
+                                                    name="subject"
+                                                    value={formData.subject}
+                                                    onChange={handleChange}
+                                                    placeholder="Enter subject"
+                                                    required
+                                                />
+                                            </label>
+                                            <label style={{ width: '30%' }} className="text-[16px] font-['Montserrat-400'] text-start">
+                                                <b>Date:</b>
+                                                <div id='newsletterDateSelector'>
+                                                    <DatePicker
+                                                        selected={formData.date}
+                                                        onChange={handleDateChange}
+                                                        dateFormat="MMM/dd/yyyy"
+                                                        popperPlacement="auto"
+                                                        popperModifiers={{
+                                                            preventOverflow: {
+                                                                enabled: true,
+                                                            },
+                                                        }}
+                                                        disabled={!isSchedule}
+                                                        customInput={<DatePickerLabel />}
+                                                    // showMonthDropdown // Allows users to change the month easily
+                                                    // showYearDropdown  // Allows users to change the year easily
+                                                    // dropdownMode="select" // Avoid closing on month/year change
+                                                    />
+                                                </div>
+                                                {/* <input
+                                                    type="date"
+                                                    name="date"
+                                                    id="date"
+                                                    value={formData.date}
+                                                    onChange={handleChange}
+                                                    required={isSchedule}
+                                                    disabled={!isSchedule}
+                                                    onLoad={getDate}
+                                                /> */}
+                                                {/* <DatePicker selected={new Date()} onChange={() => handleChange({ target: { value: null, name: "date" } })} dateFormat="MMM/dd/yyyy" customInput={<ExampleCustomInput />} /> */}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                        <div className="accordion-item">
+                            <div
+                                className={`accordion-header ${currentStep === 2 ? 'active' : ''}`}
+                                onClick={() => handleAccordionClick(2)}
+                            >
+                                <h3>Subscribers</h3>
+                                <span>{currentStep === 2 ? '-' : '+'}</span>
+                            </div>
+                            {currentStep === 2 && (
                                 <>
                                     <div className="accordion-body">
                                         <MultiSelectSearch
-                                            loading={(!Subscribers.isLoaded||loading) ? <div className='m-auto'><Loading height={'100px'} /></div> : null}
+                                            loading={(!Subscribers.isLoaded || loading) ? <div className='m-auto'><Loading height={'100px'} /></div> : null}
                                             options={allSubscribers}
                                             selectedValues={formData.subscriber}
                                             onChange={handleSelectionChange}
@@ -273,13 +392,13 @@ useEffect(()=>{},[callBackError])
                         {/* Step 2: Template and Brand Selection */}
                         <div className="accordion-item text-[16px] font-[Montserrat-400]">
                             <div
-                                className={`accordion-header ${currentStep === 2 ? 'active' : ''}`}
-                                onClick={() => handleAccordionClick(2)}
+                                className={`accordion-header ${currentStep === 3 ? 'active' : ''}`}
+                                onClick={() => handleAccordionClick(3)}
                             >
                                 <h3>Template Selection</h3>
-                                <span>{currentStep === 2 ? '-' : '+'}</span>
+                                <span>{currentStep === 3 ? '-' : '+'}</span>
                             </div>
-                            {currentStep === 2 && (
+                            {currentStep === 3 && (
                                 <div className="accordion-body">
                                     <div className="text-start">
                                         <b>Select Template:</b>
@@ -333,7 +452,7 @@ useEffect(()=>{},[callBackError])
                                             <div
                                                 className={`${Styles.templateHolder} ${formData.template == 3 ? Styles.selected : ''}`}
                                                 // onClick={() => handleChange({ target: { value: 3, name: "template" } })}
-                                                onClick={() => { setCallbackError(true);setCallbackErrorMsg('Comming soon...') }}
+                                                onClick={() => { setCallbackError(true); setCallbackErrorMsg('Comming soon...') }}
                                             >
                                                 <input
                                                     type="radio"
@@ -364,18 +483,18 @@ useEffect(()=>{},[callBackError])
                         </div>
                         <div className="accordion-item text-[16px] font-['Montserrat-400']">
                             <div
-                                className={`accordion-header ${currentStep === 3 ? 'active' : ''}`}
-                                onClick={() => handleAccordionClick(3)}
+                                className={`accordion-header ${currentStep === 4 ? 'active' : ''}`}
+                                onClick={() => handleAccordionClick(4)}
                             >
                                 <h3>Brand Selection</h3>
-                                <span>{currentStep === 3 ? '-' : '+'}</span>
+                                <span>{currentStep === 4 ? '-' : '+'}</span>
                             </div>
-                            {currentStep === 3 && (
+                            {currentStep === 4 && (
                                 <div className="accordion-body">
                                     <div className="text-start">
                                         <b>Select Brand:</b>
                                         <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
-                                            {!isLoading ?
+                                            {!manufacturers.isLoading ?
                                                 showBrandList?.length ? (showBrandList.map((brand) => (
                                                     <div
                                                         key={brand.Id}
@@ -416,68 +535,7 @@ useEffect(()=>{},[callBackError])
                                 </div>
                             )}
                         </div>
-                        <div className="accordion-item">
-                            <div
-                                className={`accordion-header ${currentStep === 4 ? 'active' : ''}`}
-                                onClick={() => handleAccordionClick(4)}
-                            >
-                                <h3>Newsletter Details</h3>
-                                <span>{currentStep === 4 ? '-' : '+'}</span>
-                            </div>
-                            {currentStep === 4 && (
-                                <div className="accordion-body">
-                                    <div className='mt-4 pt-3'>
-                                        <div className='d-flex justify-content-between'>
 
-                                            <label style={{ width: '68%' }} className="text-[15px] text-[#000] font-['Montserrat-400'] text-start">
-                                               <b>Newsletter Title:</b>
-                                                <input
-                                                    type="text"
-                                                    name="newsletter"
-                                                    value={formData.newsletter}
-                                                    onChange={handleChange}
-                                                    placeholder="Enter newsletter"
-                                                    required
-                                                />
-                                            </label>
-                                            <label style={{ width: '30%' }} className="text-[16px] text-[#000] font-['Montserrat-400'] text-start">
-                                                <b>Send Type:</b>
-                                                <div className="d-flex mt-3 h-full text-[16px] text-[#000]">
-                                                    Send Now&nbsp;&nbsp;<ToggleSwitch onToggle={(value) => { setIsSchedule(value); handleChange({ target: { value: null, name: "date" } }) }} />&nbsp;&nbsp;Schedule later
-                                                </div>
-                                            </label>
-                                        </div>
-                                        <div className='d-flex justify-content-between'>
-                                            <label style={{ width: '68%' }} className="text-[16px] font-['Montserrat-400'] text-start">
-                                                <b>Subject:</b>
-                                                <input
-                                                    type="text"
-                                                    name="subject"
-                                                    value={formData.subject}
-                                                    onChange={handleChange}
-                                                    placeholder="Enter subject"
-                                                    required
-                                                />
-                                            </label>
-                                            <label style={{ width: '30%' }} className="text-[16px] font-['Montserrat-400'] text-start">
-                                                <b>Date:</b>
-                                                <input
-                                                    type="date"
-                                                    name="date"
-                                                    id="date"
-                                                    value={formData.date}
-                                                    onChange={handleChange}
-                                                    required={isSchedule}
-                                                    disabled={!isSchedule}
-                                                    onLoad={getDate}
-                                                />
-                                                {/* <DatePicker selected={new Date()} onChange={() => handleChange({ target: { value: null, name: "date" } })} dateFormat="MMM/dd/yyyy" customInput={<ExampleCustomInput />} /> */}
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
                         <div className="button-group">
                             {currentStep != 1 ? <button
                                 type="button"
@@ -487,7 +545,13 @@ useEffect(()=>{},[callBackError])
                                 Previous
                             </button> : null}&nbsp;
 
-                            {currentStep == 4 ? <button type="submit" className="submit-btn">
+                            {currentStep == 4 ? <button type="submit" onClick={() => {
+                                if (currentStep === 4 && (!formData.brand.length)) {
+                                    setCallbackError(true)
+                                    setCallbackErrorMsg('Please select a brand')
+                                    return;
+                                }
+                            }} className="submit-btn">
                                 Submit
                             </button> : <button
                                 type="button"
