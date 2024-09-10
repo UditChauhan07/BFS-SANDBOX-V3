@@ -25,6 +25,8 @@ const MultiStepForm = () => {
     const [isSchedule, setIsSchedule] = useState(false)
     const [isUserSelected, setIsUserSelected] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [errorContact, setErrorContact] = useState([])
+    const [showErrorList, setShowErrorList] = useState(false)
     const [formData, setFormData] = useState({
         subscriber: [],
         template: null,
@@ -59,8 +61,8 @@ const MultiStepForm = () => {
 
     useEffect(() => {
         GetAuthData().then((user) => {
-            
-            fetchNextMonthNewsletterBrand({ key: user.x_access_token, date: formData.date?formData.date.toLocaleDateString("en-GB"):null }).then((brandRes) => {
+
+            fetchNextMonthNewsletterBrand({ key: user.x_access_token, date: formData.date ? formData.date.toLocaleDateString("en-GB") : null }).then((brandRes) => {
                 setFormData({ ...formData, brand: [] });
                 setManufacturers({ isLoaded: true, data: brandRes })
             }).catch((brandErr) => {
@@ -98,7 +100,17 @@ const MultiStepForm = () => {
         }
         setCurrentStep(step);
     };
+useEffect(()=>{
+    setErrorContact([])
+    const contactList = Subscribers.contacts.filter(item1 =>
+        formData.subscriber.some(item2 => item2.Id === item1.Id)
+    )
+    const nonMatchingBrands = contactList.filter(item =>
+        !item.BrandIds.some(brandId => formData.brand.includes(brandId))
+    );
 
+    setErrorContact(nonMatchingBrands)
+},[formData.subscriber])
 
     const handleChange = (e) => {
         const { value, name } = e.target;
@@ -118,25 +130,23 @@ const MultiStepForm = () => {
         }
     };
 
-    const handleDateChange = (value)=>(   
-        setFormData({ ...formData, date:value})
+    const handleDateChange = (value) => (
+        setFormData({ ...formData, date: value })
     )
-    const contactList = Subscribers.contacts.filter(item1 =>
-        formData.subscriber.some(item2 => item2.Id === item1.Id)
-    )
-    console.log({contactList});
     const handleSubmit = (e) => {
+        e.preventDefault();
         if (currentStep === 4 && (!formData.brand.length)) {
             setCallbackError(true)
             setCallbackErrorMsg('Please select a brand')
             return;
         }
-        e.preventDefault();
+        // if(errorContact.length){
+        //     setShowErrorList(true);
+        //     return;
+        // }
         const contactList = Subscribers.contacts.filter(item1 =>
             formData.subscriber.some(item2 => item2.Id === item1.Id)
         )
-        console.log({contactList});
-        return;
         setIsSubmit(true)
         const userIds = Subscribers.users.filter(item1 =>
             formData.subscriber.some(item2 => item2.Id === item1.Id)
@@ -148,7 +158,7 @@ const MultiStepForm = () => {
             subject: formData.subject,
             template: formData.template,
             brandIds: JSON.stringify(formData.brand),
-            date: formData.date?formData.date.toLocaleDateString("en-GB"):null,
+            date: formData.date ? formData.date.toLocaleDateString("en-GB") : null,
             contactIds: JSON.stringify(contactIds),
             userIds: JSON.stringify(userIds)
         }
@@ -193,7 +203,7 @@ const MultiStepForm = () => {
 
                     const response = await fetchNewsletterData({ token });
                     console.log({ response });
-                    
+
 
                     ShareDrive(response, false, contactLocalKey)
                     const contactList = response.contactList.filter(item => item.BrandIds && item.BrandIds.length);
@@ -210,7 +220,7 @@ const MultiStepForm = () => {
 
         if (localCall) {
             const contactList = localCall.contactList.filter(item => item.BrandIds && item.BrandIds.length);
-            setSubscribers({ isLoaded: true, users: localCall.userList, contacts: contactList})
+            setSubscribers({ isLoaded: true, users: localCall.userList, contacts: contactList })
             setAllSubscribers([...localCall.userList, ...contactList])
             setTimeout(() => {
 
@@ -227,6 +237,7 @@ const MultiStepForm = () => {
 
 
     }, [formData.subscriber])
+    
 
     const handleSelectionChange = (newSelectedValues) => {
         setFormData((prev) => {
@@ -248,7 +259,7 @@ const MultiStepForm = () => {
 
         document.getElementById("date").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
     }
-    
+
     const DatePickerLabel = forwardRef(({ value, onClick }, ref) => (
         <button type='button' className='w-[100%] d-flex justify-content-between align-items-center m-0' style={{ background: '#fff', color: '#000', height: '50px', padding: '15px' }} onClick={onClick} ref={ref}>
             <span>{value}</span>
@@ -276,6 +287,45 @@ const MultiStepForm = () => {
                         </div>}
                         onClose={() => { setCallbackError(false); setCallbackErrorMsg(); }}
                     /> : null}
+                    {/* {showErrorList ? <ModalPage
+                        open={showErrorList ?? false}
+                        width={'90vw'}
+                        content={<div className="d-flex flex-column gap-3">
+                            <h2>
+                                Alert!!!
+                            </h2>
+                            <p className={Styles.modalContent}>
+                                following Subscriber not get newletter due to they won't work with select brand.
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Subscriber name</th>
+                                            <th>Email</th>
+                                            <th>Brands</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    {errorContact.length ?
+                                        errorContact.map((element) => (
+                                            <tr>
+                                                <td>{element.Name}{element?.Account?.Name?<><br/><small>{element?.Account?.Name}</small></>:null}</td>
+                                                <td>{element.Email}</td>
+                                                <td>{element?.BrandIds?.length?
+                                                showBrandList?.filter(brand => element?.BrandIds?.includes(brand.Id)).map((brand,index)=>(<small>{brand.Name}{index != (showBrandList?.filter(brand => element?.BrandIds?.includes(brand.Id)).length-1)?", ":""}</small>)):"brand don't match with current celender"}</td>
+                                            </tr>
+                                        ))
+                                        : null}
+                                </table>
+                            </p>
+                            <div className="d-flex justify-content-around">
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { setShowErrorList(false); setErrorContact([]); }}>
+                                    <BiExit /> &nbsp;Ok
+                                </button>
+                            </div>
+                        </div>}
+                        onClose={() => { setShowErrorList(false); setErrorContact([]); }}
+                    /> : null} */}
                     <form onSubmit={handleSubmit} className="multi-step-form">
                         {/* Progress Bar */}
                         {/* <div className="progress-bar">

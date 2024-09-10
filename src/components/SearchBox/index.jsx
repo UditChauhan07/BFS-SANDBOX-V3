@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import './MultiSelectSearch.css';
 import { UserIcon } from '../../lib/svg';
 import ToggleSwitch from '../ToggleButton';
+import ModalPage from '../Modal UI';
+import { BiExit } from 'react-icons/bi';
 
 const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, manufacturers = [] }) => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [showSelected, setShowSelected] = useState(false);
     const [brand, setBrand] = useState();
+    const [warning,setWarning]= useState(false)
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
         const isSelected = selectedValues.some(selected => selected.Id === item.Id);
@@ -59,13 +62,30 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
     
     return (
         <div className="multi-select-container">
+            {warning ? <ModalPage
+                        open={warning ?? false}
+                        content={<div className="d-flex flex-column gap-3">
+                            <h2>
+                                Alert!!!
+                            </h2>
+                            <p className="modalContent">
+                                following contact not get mail to due they won't work with select brand.
+                            </p>
+                            <div className="d-flex justify-content-around">
+                                <button className={`btn d-flex align-items-center`} onClick={() => { setWarning(false)}}>
+                                    <BiExit /> &nbsp;Ok
+                                </button>
+                            </div>
+                        </div>}
+                        onClose={() => { setWarning(false)}}
+                    /> : null}
             <header>
                 {/* <h1>User Search</h1> */}
                 <ul className="select-user-list justify-content-between align-items-center">
                     <div className='d-flex flex-column align-items-center justify-content-start'>
 
-                        <b className='d-flex justify-content-start align-items-center w-[100%]'><input type='checkbox' value={1} onChange={() => setShowSelected(!showSelected)} style={{ width: '15px', height: '15px', margin: 0 }} />&nbsp;Selected Users:&nbsp;<span style={{fontWeight:'400'}}>                 {selectedValues?.length ? selectedValues.length < 3 ? selectedValues.map((user, index) => (
-                                <li key={user.Id}>{user.Name}{index != (selectedValues.length - 1) ? "," : ""}</li>
+                        <b className='d-flex justify-content-start align-items-center w-[100%]'><input type='checkbox' value={1} onChange={() => setShowSelected(!showSelected)} style={{ width: '15px', height: '15px', margin: 0 }} />&nbsp;Selected Users:&nbsp;<span style={{fontWeight:'400',display:'flex'}}>                 {selectedValues?.length ? selectedValues.length < 3 ? selectedValues.map((user, index) => (
+                                <li key={user.Id}>{user.Name}{index != (selectedValues.length - 1) ? `,` : ""}&nbsp;</li>
                             )) : `${selectedValues.filter(e => !e.AccountId).length ? `${selectedValues.filter(e => !e.AccountId).length} Users selected`:''} ${selectedValues.filter(e => !e.AccountId).length && selectedValues.filter(e => e.AccountId).length?' and ':''} ${selectedValues.filter(e => e.AccountId).length ? `${selectedValues.filter(e => e.AccountId).length} contact selected`:''}` : "No Users selected"}</span></b>
                     </div>
                     <div className='d-flex flex-column align-items-center justify-content-end'>
