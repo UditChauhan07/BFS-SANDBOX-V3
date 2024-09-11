@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState , useMemo } from "react";
 import BrandManagementPage from "../components/Brand Management Approval/BrandManagementPage"
 import Loading from "../components/Loading";
 import CustomerSupportLayout from "../components/customerSupportLayout"
 import { GetAuthData, admins, getAllAccount, getSalesRepList } from "../lib/store";
 import { FilterItem } from "../components/FilterItem";
-
+import { getPermissions } from "../lib/permission";
 const BMAIssues = () => {
     const [sumitForm, setSubmitForm] = useState(false)
     const [accountList, setAccountList] = useState([]);
@@ -12,7 +12,7 @@ const BMAIssues = () => {
     const [salesRepList, setSalesRepList] = useState([])
     const [selectedSalesRepId, setSelectedSalesRepId] = useState();
     const [loaded, setLoaded] = useState(false);
-
+    const [permissions, setPermissions] = useState(null);
     useEffect(() => {
         GetAuthData().then((user) => {
             setUserData(user)
@@ -40,12 +40,29 @@ const BMAIssues = () => {
                 console.error({ actError });
             });
     }
+    useEffect(() => {
+        async function fetchPermissions() {
+          try {
+            const user = await GetAuthData(); // Fetch user data
+            const userPermissions = await getPermissions(); // Fetch permissions
+            setPermissions(userPermissions); // Set permissions in state
+          } catch (err) {
+            console.error("Error fetching permissions", err);
+          }
+        }
+    
+        fetchPermissions(); // Fetch permissions on mount
+      }, []);
+      const memoizedPermissions = useMemo(() => permissions, [permissions]);
 
     if (sumitForm) return <Loading height={'80vh'} />;
     return (
         <CustomerSupportLayout
-            filterNodes={(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
-                <FilterItem
+            filterNodes={
+                <>
+
+                {memoizedPermissions?.modules?.filter?.view ? <>
+                    <FilterItem
                     minWidth="220px"
                     label="salesRep"
                     name="salesRep"
@@ -56,6 +73,10 @@ const BMAIssues = () => {
                     }))}
                     onChange={(value) => getAccountBasedSales({ x_access_token: userData.x_access_token, Sales_Rep__c: value })}
                 />
+                 </> : null}
+               
+                </>
+                
             }>
             {!loaded ? <Loading height={'50vh'} /> :
                 <BrandManagementPage setSubmitForm={setSubmitForm} accountList={accountList} />}

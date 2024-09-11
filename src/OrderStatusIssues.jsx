@@ -8,6 +8,8 @@ import Pagination from "./components/Pagination/Pagination";
 import OrderListContent from "./components/OrderList/OrderListContent";
 import { FilterItem } from "./components/FilterItem";
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getPermissions } from "./lib/permission";
 
 let PageSize = 5;
 const OrderStatusIssues = () => {
@@ -18,6 +20,8 @@ const OrderStatusIssues = () => {
     const [searchShipBy, setSearchShipBy] = useState();
     const [userData, setUserData] = useState({});
     const [salesRepList, setSalesRepList] = useState([])
+    const [hasPermission, setHasPermission] = useState(null); // State to store permission status
+    const [permissions, setPermissions] = useState(null);
     const [selectedSalesRepId, setSelectedSalesRepId] = useState();
     const [filterValue, onFilterChange] = useState({
         month: "",
@@ -40,6 +44,28 @@ const OrderStatusIssues = () => {
         });
         return data;
     }
+
+    const navigate = useNavigate()
+    useEffect(()=>{
+
+    })
+
+    useEffect(() => {
+        async function fetchPermissions() {
+          try {
+            const user = await GetAuthData(); // Fetch user data
+            const userPermissions = await getPermissions(); // Fetch permissions
+            setPermissions(userPermissions); // Set permissions in state
+          } catch (err) {
+            console.error("Error fetching permissions", err);
+          }
+        }
+    
+        fetchPermissions(); // Fetch permissions on mount
+      }, []);
+    
+      // Memoize permissions to avoid unnecessary re-calculations
+      const memoizedPermissions = useMemo(() => permissions, [permissions]);
 
     const orderData = useMemo(() => {
         return (
@@ -133,11 +159,52 @@ const OrderStatusIssues = () => {
         setOrders([])
         getOrderlIsthandler({ key: userData.x_access_token, Sales_Rep__c: value })
     }
+
+    useEffect(() => {
+        async function fetchData() {
+          try {
+            const user = await GetAuthData();
+            setUserData(user);
+            if (!selectedSalesRepId) setSelectedSalesRepId(user.Sales_Rep__c);
+      
+            // Fetch permissions
+            const userPermissions = await getPermissions();
+            setHasPermission(userPermissions?.modules?.TopNav?.childModules?.order_Status);
+      
+            // Fetch orders
+            getOrderlIsthandler({
+              key: user.x_access_token,
+              Sales_Rep__c: selectedSalesRepId ?? user.Sales_Rep__c,
+            });
+      
+            // Fetch sales reps if admin
+            if (admins.includes(user.Sales_Rep__c)) {
+              getSalesRepList({ key: user.x_access_token })
+                .then((repRes) => {
+                  setSalesRepList(repRes.data);
+                })
+                .catch((repErr) => {
+                  console.log({ repErr });
+                });
+            }
+          } catch (err) {
+            console.log({ err });
+          }
+        }
+      
+        fetchData();
+      }, [filterValue.month]);
+      useEffect(() => {
+        if (hasPermission === false) {
+          navigate("/dashboard"); // Redirect to dashboard if no permission
+        }
+      }, [hasPermission, navigate]);
+            
     return (<CustomerSupportLayout
         filterNodes={
             <>
-                {(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
-                    <FilterItem
+               {memoizedPermissions?.modules?.filter?.view  ? <>
+                <FilterItem
                         minWidth="220px"
                         label="salesRep"
                         name="salesRep"
@@ -148,7 +215,7 @@ const OrderStatusIssues = () => {
                         }))}
                         onChange={(value) => orderListBasedOnRepHandler(value)}
                     />
-                }
+                
                 <Filters
                     onChange={handleFilterChange}
                     value={filterValue}
@@ -163,6 +230,8 @@ const OrderStatusIssues = () => {
                         setSelectedSalesRepId(userData.Sales_Rep__c);
                     }}
                 />
+                </> : null}
+                    
             </>
         }
     >

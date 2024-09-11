@@ -13,6 +13,8 @@ import { MdOutlineDownload } from "react-icons/md";
 import ModalPage from "../../components/Modal UI";
 import styles from "../../components/Modal UI/Styles.module.css";
 import { CloseButton, SearchIcon } from "../../lib/svg";
+import { GetAuthData } from "../../lib/store";
+import { getPermissions } from "../../lib/permission";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
 
@@ -31,6 +33,10 @@ const SalesReport = () => {
   const [salesRepList, setSalesRepList] = useState([]);
   const [yearForTableSort, setYearForTableSort] = useState(2024);
   const [exportToExcelState, setExportToExcelState] = useState(false);
+  const [selectedSalesRepId, setSelectedSalesRepId] = useState();
+  const [userData, setUserData] = useState({});
+  const [hasPermission, setHasPermission] = useState(null); 
+  const [permissions, setPermissions] = useState(null);
   const [dateFilter, setDateFilter] = useState("Created-Date")
   const filteredSalesReportData = useMemo(() => {
     let filtered = salesReportData.filter((ele) => {
@@ -280,93 +286,129 @@ const SalesReport = () => {
     { value: 2015, label: 2015 },
   ]
 
+  // Fetch user data and permissions
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await GetAuthData();
+        setUserData(user);
 
+        if (!selectedSalesRepId) {
+          setSelectedSalesRepId(user.Sales_Rep__c);
+        }
+
+        const userPermissions = await getPermissions();
+        setHasPermission(userPermissions?.modules?.Header?.childModules?.salesReport);
+
+        // If no permission, redirect to dashboard
+        if (userPermissions?.modules?.Header?.childModules?.salesReport === false) {
+          navigate("/dashboard");
+        }
+        
+      } catch (error) {
+        console.log({ error });
+      }
+    };
+    
+    fetchData();
+  }, [navigate, selectedSalesRepId]);
+
+  // Check permission and handle redirection
+  useEffect(() => {
+    if (hasPermission === false) {
+      navigate("/dashboard");  // Redirect if no permission
+    }
+  }, [hasPermission, navigate]);
+  useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+
+  // Memoize permissions to avoid unnecessary re-calculations
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
   return (
     <AppLayout
       filterNodes={
-        <div className="d-flex justify-content-between m-auto" style={{ width: '99%' }}>
-          <div className="d-flex justify-content-start gap-4 col-4">
-            <FilterItem
-              label="year"
-              name="Year"
-              value={yearFor}
-              options={yearList}
-              onChange={(value) => setYearFor(value)}
-            />
-            <FilterItem
-              label="date"
-              name="date"
-              value={dateFilter}
-              options={[{ label: "Created Date", value: "Created-Date" }, { label: "Closed Date", value: "Closed-Date" }]}
-              onChange={(value) => setDateFilter(value)}
-            />
-            <button onClick={() => sendApiCall()} className="border px-2 py-1 leading-tight d-grid"> <SearchIcon fill="#fff" width={20} height={20} />
-              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>search</small>
-            </button>
-          </div>
-          <div className="d-flex justify-content-end col-1"><hr className={Styles.breakHolder} /></div>
-          <div className="d-flex justify-content-end gap-4 col-7">
-            {ownerPermission && <FilterItem minWidth="220px" label="All Sales Rep" name="AllSalesRep" value={searchBySalesRep} options={salesRepList} onChange={(value) => setSearchBySalesRep(value)} />}
-            <FilterItem
-              minWidth="220px"
-              label="All Brands"
-              name="AllManufacturers1"
-              value={manufacturerFilter}
-              options={manufacturers}
-              onChange={(value) => setManufacturerFilter(value)}
-            />
-            <FilterItem
-              minWidth="220px"
-              label="Lowest Amount Orders"
-              name="LowestOrders"
-              value={highestOrders}
-              options={[
-                {
-                  label: "Highest Amount Orders",
-                  value: true,
-                },
-                {
-                  label: "Lowest Amount Orders",
-                  value: false,
-                },
-              ]}
-              onChange={(value) => setHighestOrders(value)}
-            />
-            <FilterItem
-              minWidth="220px"
-              label="Status"
-              name="Status"
-              value={activeAccounts}
-              options={[
-                {
-                  label: "Active Account",
-                  value: "Active Account",
-                },
-                {
-                  label: "All Account",
-                  value: "All Account",
-                },
-              ]}
-              onChange={(value) => {
-                setActiveAccounts(value);
-              }}
-            />
+        <>
+        {memoizedPermissions?.modules?.filter?.view ? <>
+          <div className="d-flex justify-content-between m-auto" style={{ width: '99%' }}>
+         
+       
+         <div className="d-flex justify-content-end col-1"><hr className={Styles.breakHolder} /></div>
+         <div className="d-flex justify-content-end gap-4 col-7">
+           {ownerPermission && <FilterItem minWidth="220px" label="All Sales Rep" name="AllSalesRep" value={searchBySalesRep} options={salesRepList} onChange={(value) => setSearchBySalesRep(value)} />}
+           <FilterItem
+             minWidth="220px"
+             label="All Brands"
+             name="AllManufacturers1"
+             value={manufacturerFilter}
+             options={manufacturers}
+             onChange={(value) => setManufacturerFilter(value)}
+           />
+           <FilterItem
+             minWidth="220px"
+             label="Lowest Amount Orders"
+             name="LowestOrders"
+             value={highestOrders}
+             options={[
+               {
+                 label: "Highest Amount Orders",
+                 value: true,
+               },
+               {
+                 label: "Lowest Amount Orders",
+                 value: false,
+               },
+             ]}
+             onChange={(value) => setHighestOrders(value)}
+           />
+           <FilterItem
+             minWidth="220px"
+             label="Status"
+             name="Status"
+             value={activeAccounts}
+             options={[
+               {
+                 label: "Active Account",
+                 value: "Active Account",
+               },
+               {
+                 label: "All Account",
+                 value: "All Account",
+               },
+             ]}
+             onChange={(value) => {
+               setActiveAccounts(value);
+             }}
+           />
 
-            {/* First Calender Filter-- start date */}
-            <FilterSearch onChange={(e) => setSearchBy(e.target.value)} value={searchBy} placeholder={"Search by account"} minWidth={"167px"} />
-            <div className="d-flex gap-3">
-              <button className="border px-2 py-1 leading-tight d-grid" onClick={resetFilter}>
-                <CloseButton crossFill={'#fff'} height={20} width={20} />
-                <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
-              </button>
-            </div>
-            <button className="border px-2 py-1 leading-tight d-grid" onClick={handleExportToExcel}>
+           {/* First Calender Filter-- start date */}
+           <FilterSearch onChange={(e) => setSearchBy(e.target.value)} value={searchBy} placeholder={"Search by account"} minWidth={"167px"} />
+           <div className="d-flex gap-3">
+             <button className="border px-2 py-1 leading-tight d-grid" onClick={resetFilter}>
+               <CloseButton crossFill={'#fff'} height={20} width={20} />
+               <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
+             </button>
+           </div>
+           <button className="border px-2 py-1 leading-tight d-grid" onClick={handleExportToExcel}>
 
-              <MdOutlineDownload size={16} className="m-auto" />
-              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>EXPORT</small>
-            </button>
-          </div>
-        </div>
+             <MdOutlineDownload size={16} className="m-auto" />
+             <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>EXPORT</small>
+           </button>
+         </div>
+       </div>
+          </> : null}
+       
+        </>
       }
     >
       {exportToExcelState && (

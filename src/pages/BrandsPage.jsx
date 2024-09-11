@@ -8,7 +8,8 @@ import { useNavigate } from "react-router";
 import Page from "./page.module.css";
 import AppLayout from "../components/AppLayout";
 import { CloseButton } from "../lib/svg";
-
+import { GetAuthData } from "../lib/store";
+import { getPermissions } from "../lib/permission";
 const brandsImageMap = {
   Diptyque: "Diptyque.png",
   Byredo: "Byredo-1.png",
@@ -41,7 +42,10 @@ const BrandsPage = () => {
   // const [highestRetailers, setHighestRetailers] = useState(true);
   const [searchBy, setSearchBy] = useState("");
   const [sortBy, setSortBy] = useState("");
-
+  const [selectedSalesRepId, setSelectedSalesRepId] = useState();
+  const [userData, setUserData] = useState({});
+  const [hasPermission, setHasPermission] = useState(null);
+  const [permissions, setPermissions] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     const userData = localStorage.getItem("Name");
@@ -79,11 +83,62 @@ const BrandsPage = () => {
     return newValues;
   }, 
   [ searchBy, manufacturers, sortBy]);
+
+    // Fetch user data and permissions
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const user = await GetAuthData();
+          setUserData(user);
+  
+          if (!selectedSalesRepId) {
+            setSelectedSalesRepId(user.Sales_Rep__c);
+          }
+  
+          const userPermissions = await getPermissions();
+          setHasPermission(userPermissions?.modules?.LogoNav?.childModules?.brands);
+  
+          // If no permission, redirect to dashboard
+          if (userPermissions?.modules?.LogoNav?.childModules?.brands === false) {
+            navigate("/dashboard");
+          }
+          
+        } catch (error) {
+          console.log({ error });
+        }
+      };
+      
+      fetchData();
+    }, [navigate, selectedSalesRepId]);
+  
+    // Check permission and handle redirection
+    useEffect(() => {
+      if (hasPermission === false) {
+        navigate("/dashboard");  // Redirect if no permission
+      }
+    }, [hasPermission, navigate]);
+    useEffect(() => {
+      async function fetchPermissions() {
+        try {
+          const user = await GetAuthData(); // Fetch user data
+          const userPermissions = await getPermissions(); // Fetch permissions
+          setPermissions(userPermissions); // Set permissions in state
+        } catch (err) {
+          console.error("Error fetching permissions", err);
+        }
+      }
+  
+      fetchPermissions(); // Fetch permissions on mount
+    }, []);
+  
+    // Memoize permissions to avoid unnecessary re-calculations
+    const memoizedPermissions = useMemo(() => permissions, [permissions]);
   return (
     <>
       <AppLayout
         filterNodes={
           <>
+          {memoizedPermissions?.modules?.filter?.view ? <>
             <FilterItem
               label="Sort by"
               name="Sort-by"
@@ -144,6 +199,8 @@ const BrandsPage = () => {
               <CloseButton crossFill={'#fff'} height={20} width={20} />
               <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
             </button>
+           </> : null}
+          
           </>
         }
       >

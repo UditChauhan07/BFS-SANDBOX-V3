@@ -7,7 +7,8 @@ import { useManufacturer } from "../../api/useManufacturer";
 import Loading from "../../components/Loading";
 import { generateBrandAuditTemplate, GetAuthData, getBrandAuditPaginate, originAPi } from "../../lib/store";
 import { CloseButton } from "../../lib/svg";
-
+import { getPermissions } from "../../lib/permission";
+import { useNavigate } from "react-router-dom";
 // Styling
 const styles = {
     optionContainer: {
@@ -68,7 +69,11 @@ const AuditReport = () => {
     const [brandStep, setBrandStep] = useState(0);
     const [brandPages, setBrandPages] = useState({ isLoaded: false, value: 0 });
     const [totalAccount,setTotalAccount]=useState();
-
+    const [currentFileName, setCurrentFileName] = useState('');
+    const [selectedSalesRepId, setSelectedSalesRepId] = useState();
+    const [userData, setUserData] = useState({});
+    const [hasPermission, setHasPermission] = useState(null);
+    const navigate = useNavigate()
     const onCloseModal = () => {
         setBrandStep(0);
         setTotalAccount()
@@ -139,6 +144,40 @@ const AuditReport = () => {
                 setLoadingChunk(null);
             }
         };
+
+  // Fetch user data and permissions
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await GetAuthData();
+        setUserData(user);
+
+        if (!selectedSalesRepId) {
+          setSelectedSalesRepId(user.Sales_Rep__c);
+        }
+
+        const userPermissions = await getPermissions();
+        setHasPermission(userPermissions?.modules?.TopNav?.childModules?.auditReport);
+
+        // If no permission, redirect to dashboard
+        if (userPermissions?.modules?.TopNav?.childModules?.auditReport === false) {
+          navigate("/dashboard");
+        }
+        
+      } catch (error) {
+        console.log({ error });
+      }
+    };
+    
+    fetchData();
+  }, [navigate, selectedSalesRepId]);
+
+  // Check permission and handle redirection
+  useEffect(() => {
+    if (hasPermission === false) {
+      navigate("/dashboard");  // Redirect if no permission
+    }
+  }, [hasPermission, navigate]);
 
         return (
             <div style={styles.optionContainer}>
