@@ -627,7 +627,7 @@ const MultiStepForm = () => {
                                                         </div> */}
                                                     </div>
                                                 ))
-                                                ) : "No brand available. Select subscribers's brand does not have any product in marketing calendar" : (
+                                                ) : "No brand available. Selected subscribers's brand does not have any product in marketing calendar" : (
                                                     <Loading />
                                                 )}
                                         </div>
