@@ -16,9 +16,8 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
             const isBrandMatched = item.BrandIds.some(brandId =>
                 manufacturers.some(brand => brand.Id === brandId)
             );
-            console.log({ isBrandMatched });
 
-            if (isBrandMatched) {
+            if (!isBrandMatched) {
                 setWarning?.(true);
             }
         }
