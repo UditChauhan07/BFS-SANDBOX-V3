@@ -79,23 +79,11 @@ function App() {
             <Route path="/order/complete" element={<OrderComplete/>}></Route>
             {/*  */}
             <Route path="/customer-care" element={<CustomerCare />}></Route>
-            <Route
-              path="/customer-support"
-              element={<CustomerSupport />}
-            ></Route>
-            <Route
-              path="/CustomerSupportDetails"
-              element={<CustomerSupportDetails />}
-            ></Route>
+            <Route path="/customer-support" element={<CustomerSupport />}></Route>
+            <Route path="/CustomerSupportDetails" element={<CustomerSupportDetails />}></Route>
             <Route path="/new-arrivals" element={<NewArrivals />}></Route>
-            <Route
-              path="/marketing-calendar"
-              element={<MarketingCalendar />}
-            ></Route>
-            <Route
-              path="/education-center"
-              element={<EducationCenter />}
-            ></Route>
+            <Route path="/marketing-calendar" element={<MarketingCalendar />}></Route>
+            <Route path="/education-center" element={<EducationCenter />}></Route>
             <Route path="/about-us" element={<AboutUs />}></Route>
             <Route path="/wholesale-inquiry" element={<WholesaleInquiry />}></Route>
             <Route path="/careers" element={<Careers/>}></Route>
@@ -120,7 +108,6 @@ function App() {
             <Route path="/Brand/:id" element={<BrandDetails/>}/>
             <Route path="/TierStanding" element={<Tier/>}/>
             <Route path="/AuditReport" element={<AuditReport/>}/>
-     
             <Route path="*" element={<PageNotFound />}></Route>
             
             {/* 1234 */}
