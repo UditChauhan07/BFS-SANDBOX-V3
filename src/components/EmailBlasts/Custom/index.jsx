@@ -403,6 +403,7 @@ const MultiStepForm = () => {
                                                     onChange={handleChange}
                                                     placeholder="Enter newsletter"
                                                     required
+                                                    maxLength={100}
                                                 />
                                             </label>
                                             <label style={{ width: '30%' }} className="text-[16px] text-[#000] font-['Montserrat-400'] text-start">
@@ -422,6 +423,7 @@ const MultiStepForm = () => {
                                                     onChange={handleChange}
                                                     placeholder="Enter subject"
                                                     required
+                                                    maxLength={100}
                                                 />
                                             </label>
                                             <label style={{ width: '30%' }} className="text-[16px] font-['Montserrat-400'] text-start">
@@ -432,6 +434,7 @@ const MultiStepForm = () => {
                                                         onChange={handleDateChange}
                                                         dateFormat="MMM/dd/yyyy"
                                                         popperPlacement="auto"
+                                                        minDate={new Date()}
                                                         popperModifiers={{
                                                             preventOverflow: {
                                                                 enabled: true,
