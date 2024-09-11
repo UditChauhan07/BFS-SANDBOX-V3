@@ -27,6 +27,7 @@ const MultiStepForm = () => {
     const [loading, setLoading] = useState(true);
     const [errorContact, setErrorContact] = useState([])
     const [showErrorList, setShowErrorList] = useState(false)
+    const [warning, setWarning] = useState(false)
     const [formData, setFormData] = useState({
         subscriber: [],
         template: null,
@@ -277,6 +278,25 @@ const MultiStepForm = () => {
         <div className="form-container create-newsletter">
             {isSubmit ? <Loading height={'500px'} /> :
                 <>
+                {warning ? <ModalPage
+                open={warning ?? false}
+                content={<div className="d-flex flex-column gap-3">
+                    <h2>
+                        Alert!!!
+                    </h2>
+                    <p className="modalContent">
+                        You can't send newletter to this contact.
+                        <br />
+                        As there are no products available for marketing calender.
+                    </p>
+                    <div className="d-flex justify-content-around">
+                        <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { setWarning(false) }}>
+                            <BiExit /> &nbsp;Ok
+                        </button>
+                    </div>
+                </div>}
+                onClose={() => { setWarning(false) }}
+            /> : null}
                     {callBackError ? <ModalPage
                         open={callBackError ?? false}
                         content={<div className="d-flex flex-column gap-3">
@@ -301,8 +321,10 @@ const MultiStepForm = () => {
                             <h2>
                                 Warning!!!
                             </h2>
+                            <hr style={{marginTop:0}}/>
                             <p className={`${Styles.modalContent} text-start`}>
-                                following subscribers not get newletter due to they won't work with select brand.
+                            The following subscribers will not get newletter,
+                        as there are no products available for marketing calender.
                                 <table className="table table-hover text-start mt-2">
                                     <thead>
                                         <tr>
@@ -328,7 +350,11 @@ const MultiStepForm = () => {
                                         : null}
                                 </table>
                             </p>
+                            <hr style={{margin:0}}/>
                             <div className="d-flex justify-content-around">
+                            <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { setShowErrorList(false) }}>
+                                    <BiExit /> &nbsp;Go Back
+                                </button>
                                 <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { generateOrderNow() }}>
                                     <BiSave /> &nbsp;Proceed
                                 </button>
@@ -449,6 +475,7 @@ const MultiStepForm = () => {
                                             selectedValues={formData.subscriber}
                                             onChange={handleSelectionChange}
                                             manufacturers={manufacturers?.data || []}
+                                            setWarning={setWarning}
                                         />
 
                                     </div>

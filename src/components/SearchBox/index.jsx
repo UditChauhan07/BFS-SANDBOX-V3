@@ -1,30 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import './MultiSelectSearch.css';
 import { UserIcon } from '../../lib/svg';
-import ToggleSwitch from '../ToggleButton';
-import ModalPage from '../Modal UI';
-import { BiExit } from 'react-icons/bi';
 
-const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, manufacturers = [] }) => {
+const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, manufacturers = [],setWarning }) => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [showSelected, setShowSelected] = useState(false);
     const [brand, setBrand] = useState();
-    const [warning, setWarning] = useState(false)
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
-        if (item?.AccountId && manufacturers.length) {
+
+        const isSelected = selectedValues.some(selected => selected.Id === item.Id);
+
+        if (item?.AccountId && manufacturers.length && !isSelected) {
             const isBrandMatched = item.BrandIds.some(brandId =>
                 manufacturers.some(brand => brand.Id === brandId)
             );
-            console.log({isBrandMatched});
-            
+            console.log({ isBrandMatched });
+
             if (isBrandMatched) {
-                setWarning(true);
+                setWarning?.(true);
             }
         }
-
-        const isSelected = selectedValues.some(selected => selected.Id === item.Id);
         const newSelectedValues = isSelected
             ? selectedValues.filter(selected => selected.Id !== item.Id) // Deselect item
             : [...selectedValues, item]; // Select item
@@ -99,23 +96,6 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
 
     return (
         <div className="multi-select-container">
-            {warning ? <ModalPage
-                open={warning ?? false}
-                content={<div className="d-flex flex-column gap-3">
-                    <h2>
-                        Alert!!!
-                    </h2>
-                    <p className="modalContent">
-                        following contact not get mail to due they won't work with select brand.
-                    </p>
-                    <div className="d-flex justify-content-around">
-                        <button className={`btn d-flex align-items-center`} onClick={() => { setWarning(false) }}>
-                            <BiExit /> &nbsp;Ok
-                        </button>
-                    </div>
-                </div>}
-                onClose={() => { setWarning(false) }}
-            /> : null}
             <header>
                 {/* <h1>User Search</h1> */}
                 <ul className="select-user-list justify-content-between align-items-center">
