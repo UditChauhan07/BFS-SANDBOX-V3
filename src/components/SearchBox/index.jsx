@@ -10,16 +10,20 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
     const [searchTerm, setSearchTerm] = useState('');
     const [showSelected, setShowSelected] = useState(false);
     const [brand, setBrand] = useState();
-    const [warning,setWarning]= useState(false)
+    const [warning, setWarning] = useState(false)
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
-        // if(item?.AccountId&&manufacturers.length){
-        //     const MatchingItem = manufacturers.filter(brand =>
-        //         (item.BrandIds.includes(brand.Id))
-        //     );
-        //     console.log({MatchingItem});
-        // }
-        
+        if (item?.AccountId && manufacturers.length) {
+            const isBrandMatched = item.BrandIds.some(brandId =>
+                manufacturers.some(brand => brand.Id === brandId)
+            );
+            console.log({isBrandMatched});
+            
+            if (isBrandMatched) {
+                setWarning(true);
+            }
+        }
+
         const isSelected = selectedValues.some(selected => selected.Id === item.Id);
         const newSelectedValues = isSelected
             ? selectedValues.filter(selected => selected.Id !== item.Id) // Deselect item
@@ -75,7 +79,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
         const newOptions = filteredOptions.filter(
             option => !selectedValues.some(selected => selected.Id === option.Id)
         );
-    
+
         // If there are any new options to add, call onChange with the updated list
         if (newOptions.length > 0) {
             onChange?.([...selectedValues, ...newOptions]);
@@ -92,34 +96,34 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
             setBrand();
         }
     }
-    
+
     return (
         <div className="multi-select-container">
             {warning ? <ModalPage
-                        open={warning ?? false}
-                        content={<div className="d-flex flex-column gap-3">
-                            <h2>
-                                Alert!!!
-                            </h2>
-                            <p className="modalContent">
-                                following contact not get mail to due they won't work with select brand.
-                            </p>
-                            <div className="d-flex justify-content-around">
-                                <button className={`btn d-flex align-items-center`} onClick={() => { setWarning(false)}}>
-                                    <BiExit /> &nbsp;Ok
-                                </button>
-                            </div>
-                        </div>}
-                        onClose={() => { setWarning(false)}}
-                    /> : null}
+                open={warning ?? false}
+                content={<div className="d-flex flex-column gap-3">
+                    <h2>
+                        Alert!!!
+                    </h2>
+                    <p className="modalContent">
+                        following contact not get mail to due they won't work with select brand.
+                    </p>
+                    <div className="d-flex justify-content-around">
+                        <button className={`btn d-flex align-items-center`} onClick={() => { setWarning(false) }}>
+                            <BiExit /> &nbsp;Ok
+                        </button>
+                    </div>
+                </div>}
+                onClose={() => { setWarning(false) }}
+            /> : null}
             <header>
                 {/* <h1>User Search</h1> */}
                 <ul className="select-user-list justify-content-between align-items-center">
                     <div className='d-flex flex-column align-items-center justify-content-start'>
 
-                        <b className='d-flex justify-content-start align-items-center w-[100%]'><input type='checkbox' value={1} onChange={() => setShowSelected(!showSelected)} style={{ width: '15px', height: '15px', margin: 0 }} />&nbsp;Selected Users:&nbsp;<span style={{fontWeight:'400',display:'flex'}}>                 {selectedValues?.length ? selectedValues.length < 3 ? selectedValues.map((user, index) => (
-                                <li key={user.Id}>{user.Name}{index != (selectedValues.length - 1) ? `,` : ""}&nbsp;</li>
-                            )) : `${selectedValues.filter(e => !e.AccountId).length ? `${selectedValues.filter(e => !e.AccountId).length} Users selected`:''} ${selectedValues.filter(e => !e.AccountId).length && selectedValues.filter(e => e.AccountId).length?' and ':''} ${selectedValues.filter(e => e.AccountId).length ? `${selectedValues.filter(e => e.AccountId).length} contact selected`:''}` : "No Users selected"}</span></b>
+                        <b className='d-flex justify-content-start align-items-center w-[100%]'><input type='checkbox' value={1} onChange={() => setShowSelected(!showSelected)} style={{ width: '15px', height: '15px', margin: 0 }} />&nbsp;Selected Users:&nbsp;<span style={{ fontWeight: '400', display: 'flex' }}>                 {selectedValues?.length ? selectedValues.length < 3 ? selectedValues.map((user, index) => (
+                            <li key={user.Id}>{user.Name}{index != (selectedValues.length - 1) ? `,` : ""}&nbsp;</li>
+                        )) : `${selectedValues.filter(e => !e.AccountId).length ? `${selectedValues.filter(e => !e.AccountId).length} Users selected` : ''} ${selectedValues.filter(e => !e.AccountId).length && selectedValues.filter(e => e.AccountId).length ? ' and ' : ''} ${selectedValues.filter(e => e.AccountId).length ? `${selectedValues.filter(e => e.AccountId).length} contact selected` : ''}` : "No Users selected"}</span></b>
                     </div>
                     <div className='d-flex flex-column align-items-center justify-content-end'>
                         <span className='text-end w-[100%]'><span onClick={AutoSelectChangeHandler} className='cursor-pointer'>Select All</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span className='cursor-pointer' onClick={resetSelectChangeHandler}>Reset</span></span>
@@ -131,13 +135,13 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                         type="text"
                         placeholder="Search for users..."
                         value={searchTerm}
-                        style={{width:'70%'}}
+                        style={{ width: '70%' }}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    {manufacturers?.length ? <select className={"brandSearch"} style={{width:'27%',maxWidth: '200px',height:'45px',marginTop:'8px'}} onChange={brandSelectionHandler}>
+                    {manufacturers?.length ? <select className={"brandSearch"} style={{ width: '27%', maxWidth: '200px', height: '45px', marginTop: '8px' }} onChange={brandSelectionHandler}>
                         <option value={0} selected>All Brand</option>
                         {manufacturers.map((brand) => (
-                            <option style={{appearance: 'none'}} value={brand.Id}>{brand.Name}</option>
+                            <option style={{ appearance: 'none' }} value={brand.Id}>{brand.Name}</option>
                         ))}
                     </select> : null}
                 </div>
