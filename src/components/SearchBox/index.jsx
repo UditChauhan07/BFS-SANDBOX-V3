@@ -13,6 +13,13 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
     const [warning,setWarning]= useState(false)
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
+        // if(item?.AccountId&&manufacturers.length){
+        //     const MatchingItem = manufacturers.filter(brand =>
+        //         (item.BrandIds.includes(brand.Id))
+        //     );
+        //     console.log({MatchingItem});
+        // }
+        
         const isSelected = selectedValues.some(selected => selected.Id === item.Id);
         const newSelectedValues = isSelected
             ? selectedValues.filter(selected => selected.Id !== item.Id) // Deselect item
