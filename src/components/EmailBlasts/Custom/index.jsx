@@ -149,6 +149,7 @@ const MultiStepForm = () => {
         generateOrderNow();
     };
     const generateOrderNow = () => {
+        setShowErrorList(false);
         if (currentStep === 4 && (!formData.brand.length)) {
             setCallbackError(true)
             setCallbackErrorMsg('Please select a brand')
