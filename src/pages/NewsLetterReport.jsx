@@ -16,7 +16,6 @@ const NewsLetterReport = () => {
     const [filterHelper, setFilterHelper] = useState({ day: null, month: null, year: null,newsletter:null })
 
     useEffect(() => {
-        console.log({year, month, day,newsletter});
         if (!year || !month || !day||!newsletter) {
             
             alert("no found.")
