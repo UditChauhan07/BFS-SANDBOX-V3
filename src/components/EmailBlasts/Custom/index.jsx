@@ -108,9 +108,11 @@ const MultiStepForm = () => {
         const nonMatchingBrands = contactList.filter(item =>
             !item.BrandIds.some(brandId => formData.brand.includes(brandId))
         );
+        console.log({nonMatchingBrands});
+        
 
         setErrorContact(nonMatchingBrands)
-    }, [formData.subscriber])
+    }, [formData.subscriber,formData.brand,Subscribers.contacts])
 
     const handleChange = (e) => {
         const { value, name } = e.target;
