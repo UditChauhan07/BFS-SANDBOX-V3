@@ -344,7 +344,7 @@ const MultiStepForm = () => {
                                                 <td><div>{element.Name}{element?.Account?.Name ? <><br /><b className='text-[9px]'>{element?.Account?.Name}</b></> : null}</div></td>
                                                 <td>{element.Email}</td>
                                                 <td><div>
-                                                    {element?.BrandIds?.length ?
+                                                    {showBrandList?.filter(brand => element?.BrandIds?.includes(brand.Id))?.length ?
                                                         showBrandList?.filter(brand => element?.BrandIds?.includes(brand.Id)).map((brand, index) => (<small>{brand.Name}{index != (showBrandList?.filter(brand => element?.BrandIds?.includes(brand.Id)).length - 1) ? ", " : ""}</small>)) : "brand don't match with current celender"}
                                                 </div>
                                                 </td>
