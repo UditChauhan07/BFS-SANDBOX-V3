@@ -311,7 +311,7 @@ const MarketingCalendar = () => {
     <AppLayout
       filterNodes={
         <>
-        {memoizedPermissions?.modules?.filter?.view ? <>
+  
         
           <FilterItem
             minWidth="220px"
@@ -376,7 +376,7 @@ const MarketingCalendar = () => {
               </li>
             </ul>
           </div>
-        </> : null}
+       
        
         </>
       }

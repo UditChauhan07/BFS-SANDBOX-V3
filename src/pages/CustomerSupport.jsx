@@ -36,13 +36,13 @@ const CustomerSupport = () => {
           supportHandler({ key: user.x_access_token, salesRepId: selectedSalesRepId ?? user.Sales_Rep__c })
           reatilerHandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c })
           brandhandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c })
-          if (admins.includes(user.Sales_Rep__c)) {
-            getSalesRepList({ key: user.x_access_token }).then((repRes) => {
-              setSalesRepList(repRes.data)
-            }).catch((repErr) => {
-              console.log({ repErr });
-            })
-          }
+          // if (admins.includes(user.Sales_Rep__c)) {
+          //   getSalesRepList({ key: user.x_access_token }).then((repRes) => {
+          //     setSalesRepList(repRes.data)
+          //   }).catch((repErr) => {
+          //     console.log({ repErr });
+          //   })
+          // }
         } else {
           DestoryAuth()
         }
@@ -115,15 +115,15 @@ const CustomerSupport = () => {
     
   
         // Fetch sales reps if admin
-        if (admins.includes(user.Sales_Rep__c)) {
-          getSalesRepList({ key: user.x_access_token })
-            .then((repRes) => {
-              setSalesRepList(repRes.data);
-            })
-            .catch((repErr) => {
-              console.log({ repErr });
-            });
-        }
+        // if (admins.includes(user.Sales_Rep__c)) {
+        //   getSalesRepList({ key: user.x_access_token })
+        //     .then((repRes) => {
+        //       setSalesRepList(repRes.data);
+        //     })
+        //     .catch((repErr) => {
+        //       console.log({ repErr });
+        //     });
+        // }
       } catch (err) {
         console.log({ err });
       }
@@ -169,7 +169,7 @@ const CustomerSupport = () => {
               }))}
               onChange={(value) => supportBasedOnSalesRep(value)}
             />
-          
+           </> : null}
           {retailerList?.length > 0 &&
             <FilterItem
               minWidth="220px"
@@ -182,6 +182,7 @@ const CustomerSupport = () => {
               }))}
               onChange={(value) => setRetailerFilter(value)}
             />}
+              
           {brandList?.length > 0 &&
             <FilterItem
               minWidth="220px"
@@ -231,7 +232,7 @@ const CustomerSupport = () => {
             <CloseButton crossFill={'#fff'} height={20} width={20} />
             <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
           </button>
-        </> : null}
+     
         
            
         </>
@@ -262,5 +263,5 @@ const CustomerSupport = () => {
     </AppLayout>
   );
 };
+export default CustomerSupport 
 
-export default CustomerSupport;

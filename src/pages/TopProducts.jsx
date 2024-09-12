@@ -173,7 +173,7 @@ const TopProducts = () => {
 
   return (
     <AppLayout filterNodes={<>
-    {memoizedPermissions?.modules?.filter?.view ? 
+  
     <>
       <FilterItem
       minWidth="220px"
@@ -204,7 +204,7 @@ const TopProducts = () => {
         <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
       </button>
   </>
-    : null }
+   
  
   
     </>

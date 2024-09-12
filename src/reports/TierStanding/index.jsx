@@ -186,12 +186,12 @@ useEffect(() => {
         <AppLayout
             filterNodes={
                 <>
-            {memoizedPermissions?.modules?.filter?.view ? <>
+            
                 <button className="border px-2 d-grid py-1 leading-tight d-grid" onClick={excelExportHandler}>
                 <MdOutlineDownload size={16} className="m-auto" />
                 <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>export</small>
             </button>
-                </> : null}
+               
                 </>}
         >
             <section>

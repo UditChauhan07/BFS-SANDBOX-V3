@@ -43,14 +43,14 @@ const MyRetailersPage = () => {
         setHasPermission(userPermissions?.modules?.myRetailers?.view);
 
         // Fetch retailer list
-        getRetailerListHandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c });
+        // getRetailerListHandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c });
 
-        // Fetch sales reps if admin
-        if (admins.includes(user.Sales_Rep__c)) {
-          getSalesRepList({ key: user.x_access_token })
-            .then((repRes) => setSalesRepList(repRes.data))
-            .catch((repErr) => console.log({ repErr }));
-        }
+        // // Fetch sales reps if admin
+        // if (admins.includes(user.Sales_Rep__c)) {
+        //   getSalesRepList({ key: user.x_access_token })
+        //     .then((repRes) => setSalesRepList(repRes.data))
+        //     .catch((repErr) => console.log({ repErr }));
+        // }
       } catch (err) {
         console.log({ err });
         DestoryAuth();
@@ -98,7 +98,8 @@ const MyRetailersPage = () => {
     <AppLayout
       filterNodes={
         <>
-        {memoizedPermissions?.modules?.filter?.view  ?  <>
+        {memoizedPermissions?.modules?.filter?.view  ? 
+         <>
           <FilterItem
         minWidth="220px"
         label="salesRep"
@@ -110,6 +111,7 @@ const MyRetailersPage = () => {
         }))}
         onChange={(value) => salesRepHandler(value)}
       />
+       </>  : null}
         
           <FilterItem
             label="Sort by"
@@ -159,7 +161,7 @@ const MyRetailersPage = () => {
             <CloseButton crossFill={'#fff'} height={20} width={20} />
             <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
           </button>
-         </>  : null}
+        
 
         </>
       }

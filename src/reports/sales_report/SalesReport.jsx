@@ -339,7 +339,7 @@ const SalesReport = () => {
     <AppLayout
       filterNodes={
         <>
-        {memoizedPermissions?.modules?.filter?.view ? <>
+        
           <div className="d-flex justify-content-between m-auto" style={{ width: '99%' }}>
          
        
@@ -406,7 +406,7 @@ const SalesReport = () => {
            </button>
          </div>
        </div>
-          </> : null}
+         
        
         </>
       }

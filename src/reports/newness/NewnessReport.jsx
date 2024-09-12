@@ -269,7 +269,7 @@ const NewnessReport = () => {
       filterNodes={
         <>
 
-        {memoizedPermissions?.modules?.filter?.view ? <>
+      
           <FilterItem
             minWidth="200px"
             label="All Manufacturers"
@@ -361,7 +361,7 @@ const NewnessReport = () => {
             <MdOutlineDownload size={16} className="m-auto" />
             <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>export</small>
           </button>
-         </> : null}
+        
          
         </>
       }

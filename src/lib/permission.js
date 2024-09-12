@@ -5,7 +5,7 @@ import { GetAuthData } from "./store";
 export const permissionsArray = [
     {
         userType: 'superadmin',
-        allows: ["00530000005AdvsAAC", "0053b00000DgEVEAA3", "0051O00000CvAVTQA3" ],
+        allows: ["00530000005AdvsAAC", "0053b00000DgEVEAA3", "0051O00000CvAVTQA3"   ],
         permissions: {
             modules: {
               orderCreate :  {
@@ -70,7 +70,7 @@ export const permissionsArray = [
                         view : true , 
                         admins : true
                     },  targetReport : {
-                        view : false , 
+                        view : true , 
                         admins : true
                     }
 
@@ -88,19 +88,7 @@ export const permissionsArray = [
                         myOrders: true
                     },
                 },
-                Header: {
-                    hasAccess: true,
-                    childModules: {
-                        
-                        reports: true ,
-                        salesReport : true  , 
-                        newnessReport : true , 
-                        comparisonReport: true , 
-                        yearlyComparisonReport : true,
-                        targetReport : true
-                    },
-              
-                }
+               
             }
         }
     },
@@ -171,7 +159,7 @@ export const permissionsArray = [
                         view : true , 
                         admins : true
                     },  targetReport : {
-                        view : true , 
+                        view : false , 
                         admins : true
                     }
 
@@ -189,19 +177,7 @@ export const permissionsArray = [
                         myOrders: true
                     },
                 },
-                Header: {
-                    hasAccess: true,
-                    childModules: {
-                        
-                        reports: true ,
-                        salesReport : true  , 
-                        newnessReport : true , 
-                        comparisonReport: true , 
-                        yearlyComparisonReport : true,
-                        targetReport : true
-                    },
-              
-                }
+            
             }
         }
     },
@@ -290,19 +266,7 @@ export const permissionsArray = [
                         myOrders: false
                     },
                 },
-                Header: {
-                    hasAccess: false,
-                    childModules: {
-                        
-                        reports: false ,
-                        salesReport : false  , 
-                        newnessReport : false , 
-                        comparisonReport: false , 
-                        yearlyComparisonReport : false,
-                        targetReport : false
-                    },
-              
-                }
+             
             }
         }
     }

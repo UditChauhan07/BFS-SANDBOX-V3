@@ -1,6 +1,6 @@
 export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 // export const originAPi = "https://dev.beautyfashionsales.com"
-// export const originAPi = "http://localhost:2611"
+// export const originAPi = "http://localhost:2612"
 
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
@@ -13,7 +13,7 @@ const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
 export const salesRepIdKey = "BzQIEAjzCEHmlXc";
-export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3", "0051O00000CvAVTQA3"]; //, "0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
+export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3", "0051O00000CvAVTQA3"   ]; 
 
 export const months = [
   "January",

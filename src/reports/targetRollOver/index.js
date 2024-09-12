@@ -431,10 +431,10 @@ const TargetReport = () => {
         }
 
         const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.Header?.childModules?.targetReport);
+        setHasPermission(userPermissions?.modules?.reports?.targetReport?.view);
 
         // If no permission, redirect to dashboard
-        if (userPermissions?.modules?.Header?.childModules?.targetReport === false) {
+        if (userPermissions?.modules?.reports?.targetReport?.view === false) {
           navigate("/dashboard");
         }
         
@@ -472,7 +472,7 @@ const TargetReport = () => {
         <AppLayout
             filterNodes={
                 <>
-                {memoizedPermissions?.modules?.filter?.view  ? <>
+               
                     <div className="d-flex justify-content-center gap-3" style={{ width: "99%" }}>
                     {target.ownerPermission && (
                         <FilterItem
@@ -529,7 +529,7 @@ const TargetReport = () => {
                         </button>
                     </div>
                 </div>
-                 </> : null}
+             
       
                 </>
             }

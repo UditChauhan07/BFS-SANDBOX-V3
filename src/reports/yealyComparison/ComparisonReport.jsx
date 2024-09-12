@@ -314,7 +314,7 @@ const navigate = useNavigate()
     <AppLayout
       filterNodes={
         <>
-        {memoizedPermissions?.modules?.filter?.view ? <>
+       
           <FilterItem
             minWidth="220px"
             label="All Manufacturers"
@@ -358,7 +358,7 @@ const navigate = useNavigate()
             <MdOutlineDownload size={16} className="m-auto" />
             <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>export</small>
           </button>
-         </>  : null}
+
         
         </>
       }
