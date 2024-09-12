@@ -37,7 +37,7 @@ const Header = () => {
   return (
     <div className="d-none-print">
       <div id={`${styles.main}`} className="d-flex justify-content-between align-items-center gap-1">
-        {memoizedPermissions?.modules?.Header?.childModules?.topProducts ? (
+        {memoizedPermissions?.modules?.topProducts?.view ? (
           <p className={`m-0 ${styles.text}`}>
             <Link to="/top-products" className="linkStyle">Top Products</Link>
           </p>
@@ -53,7 +53,7 @@ const Header = () => {
           </p>
         )}
 
-        {memoizedPermissions?.modules?.Header?.childModules?.marketingCalender ? (
+        {memoizedPermissions?.modules?.marketingCalender.view ? (
           <p className={`m-0 ${styles.text}`}>
             <Link to="/marketing-calendar" className="linkStyle">Marketing Calendar</Link>
           </p>
@@ -69,7 +69,7 @@ const Header = () => {
           </p>
         )}
 
-        {memoizedPermissions?.modules?.Header?.childModules?.educationCenter ? (
+        {memoizedPermissions?.modules?.educationCenter?.view ? (
           <p className={`m-0 ${styles.text}`}>
             <Link to="/education-center" className="linkStyle">Education Center</Link>
           </p>
@@ -85,7 +85,7 @@ const Header = () => {
           </p>
         )}
 
-        {memoizedPermissions?.modules?.Header?.childModules?.customerSupport ? (
+        {memoizedPermissions?.modules?.customerSupport.view  ? (
           <p className={`m-0 ${styles.text}`}>
             <Link to="/customer-support" className="linkStyle">Customer Support</Link>
           </p>
@@ -110,7 +110,7 @@ const Header = () => {
                path === "/comparison" ? "Yearly Comparison Report" : null ||
                path === "/Target-Report" ? "Target Report" : "Reports"}
               <ul className="dropdown-menu">
-                {memoizedPermissions?.modules?.Header?.childModules?.salesReport ? (
+                {memoizedPermissions?.modules?.reports?.salesReport?.view ? (
                   <li>
                     <Link
                       to="/sales-report"
@@ -124,7 +124,7 @@ const Header = () => {
                 style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
                 > Sales Report</li>}
 
-                {memoizedPermissions?.modules?.Header?.childModules?.newnessReport ? (
+                {memoizedPermissions?.modules?.reports?.newnessReport?.view  ? (
                   <li>
                     <Link
                       to="/newness-report"
@@ -138,7 +138,7 @@ const Header = () => {
                 style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
                 > Newness Report</li>}
 
-                {memoizedPermissions?.modules?.Header?.childModules?.comparisonReport ? (
+                {memoizedPermissions?.modules?.reports?.comparisonReport?.view ? (
                   <li>
                     <Link
                       to="/comparison-report"
@@ -152,7 +152,7 @@ const Header = () => {
                 style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
                 > Comparison Report</li> }
 
-                {memoizedPermissions?.modules?.Header?.childModules?.yearlyComparisonReport ? (
+                {memoizedPermissions?.modules?.reports?.yearlyComparisonReport?.view ? (
                   <li>
                     <Link
                       to="/comparison"
@@ -166,7 +166,7 @@ const Header = () => {
                 style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
                 > Yearly Comparison Report</li>}
 
-                {memoizedPermissions?.modules?.Header?.childModules?.targetReport ? (
+                {memoizedPermissions?.modules?.reports?.targetReport?.view  ? (
                   <li>
                     <Link
                       to="/Target-Report"
@@ -179,6 +179,18 @@ const Header = () => {
                 ) : <li className="dropdown-item text-start" onClick={()=>handleRestrictedAccess('Target Report')} 
                 style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
                 > Target Report</li>}
+
+<li>
+                  <Link
+                    to="/account-contact-detailed-Report"
+                    className="dropdown-item  text-start"
+                    onClick={() => {
+                      navigate("/account-contact-detailed-Report");
+                    }}
+                  >
+                    Account Contact Detailed Report
+                  </Link>
+                </li>
               </ul>
             </div>
           </Link>

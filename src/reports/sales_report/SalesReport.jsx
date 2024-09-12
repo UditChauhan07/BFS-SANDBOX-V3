@@ -298,10 +298,10 @@ const SalesReport = () => {
         }
 
         const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.Header?.childModules?.salesReport);
+        setHasPermission(userPermissions?.modules?.reports?.salesReport?.view);
 
         // If no permission, redirect to dashboard
-        if (userPermissions?.modules?.Header?.childModules?.salesReport === false) {
+        if (userPermissions?.modules?.reports?.salesReport?.view  === false) {
           navigate("/dashboard");
         }
         

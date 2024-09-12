@@ -37,7 +37,7 @@ const LogoHeader = () => {
         {/* My Retailers */}
         <div className={`${styles.lapSetting} d-none-print`}>
           <p className={`m-0  ${styles.language}`}>
-            {memoizedPermissions?.modules?.LogoNav?.childModules?.myRetailers ? (
+            {memoizedPermissions?.modules?.myRetailers?.view ? (
               <Link to="/my-retailers" className="linkStyle">
                 My Retailers
               </Link>
@@ -54,7 +54,7 @@ const LogoHeader = () => {
 
           {/* New Arrivals */}
           <p className={`m-0   ${styles.language}`}>
-            {memoizedPermissions?.modules?.LogoNav?.childModules?.newArrivals ? (
+            {memoizedPermissions?.modules?.newArrivals?.view  ? (
               <Link to="/new-arrivals" className="linkStyle">
                 New Arrivals
               </Link>
@@ -71,7 +71,7 @@ const LogoHeader = () => {
 
           {/* Brands */}
           <p className={`m-0   ${styles.language}`}>
-            {memoizedPermissions?.modules?.LogoNav?.childModules?.brands ? (
+            {memoizedPermissions?.modules?.brands?.view  ? (
               <Link to="/brand" className="linkStyle">
                 Brands
               </Link>
@@ -98,7 +98,7 @@ const LogoHeader = () => {
         <div className={`${styles.lapSetting} d-none-print`}>
           {/* Dashboard */}
           <p className={`m-0  ${styles.language}`}>
-            {memoizedPermissions?.modules?.LogoNav?.childModules?.dashboard ? (
+            {memoizedPermissions?.modules?.dashboard?.view ? (
               <Link to="/dashboard" className="linkStyle">
                 Dashboard
               </Link>

@@ -96,10 +96,10 @@ const BrandsPage = () => {
           }
   
           const userPermissions = await getPermissions();
-          setHasPermission(userPermissions?.modules?.LogoNav?.childModules?.brands);
+          setHasPermission(userPermissions?.modules?.brands?.view);
   
           // If no permission, redirect to dashboard
-          if (userPermissions?.modules?.LogoNav?.childModules?.brands === false) {
+          if (userPermissions?.modules?.brands?.view === false) {
             navigate("/dashboard");
           }
           

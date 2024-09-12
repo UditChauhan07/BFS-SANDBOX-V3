@@ -226,10 +226,10 @@ const NewnessReport = () => {
           }
   
           const userPermissions = await getPermissions();
-          setHasPermission(userPermissions?.modules?.Header?.childModules?.newnessReport);
+          setHasPermission(userPermissions?.modules?.reports?.newnessReport?.view );
   
           // If no permission, redirect to dashboard
-          if (userPermissions?.modules?.Header?.childModules?.newnessReport === false) {
+          if (userPermissions?.modules?.reports?.newnessReport?.view === false) {
             navigate("/dashboard");
           }
           

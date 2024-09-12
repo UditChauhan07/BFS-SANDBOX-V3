@@ -96,10 +96,10 @@ useEffect(() => {
         }
 
         const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.LogoNav?.childModules?.newArrivals);
+        setHasPermission(userPermissions?.modules?.newArrivals?.view);
 
         // If no permission, redirect to dashboard
-        if (userPermissions?.modules?.LogoNav?.childModules?.newArrivals === false) {
+        if (userPermissions?.modules?.newArrivals?.view === false) {
           navigate("/dashboard");
         }
         

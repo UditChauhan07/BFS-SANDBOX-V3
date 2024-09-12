@@ -132,10 +132,10 @@ const TopProducts = () => {
           }
   
           const userPermissions = await getPermissions();
-          setHasPermission(userPermissions?.modules?.Header?.childModules?.topProducts);
+          setHasPermission(userPermissions?.modules?.topProducts?.view);
   
           // If no permission, redirect to dashboard
-          if (userPermissions?.modules?.Header?.childModules?.topProducts === false) {
+          if (userPermissions?.modules?.topProducts?.view === false) {
             navigate("/dashboard");
           }
           

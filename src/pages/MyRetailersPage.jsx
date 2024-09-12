@@ -40,7 +40,7 @@ const MyRetailersPage = () => {
 
         // Fetch permissions
         const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.LogoNav?.childModules?.myRetailers);
+        setHasPermission(userPermissions?.modules?.myRetailers?.view);
 
         // Fetch retailer list
         getRetailerListHandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c });

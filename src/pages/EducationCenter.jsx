@@ -27,10 +27,10 @@ const EducationCenter = () => {
         }
 
         const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.Header?.childModules?.educationCenter);
+        setHasPermission(userPermissions?.modules?.educationCenter?.view);
 
         // If no permission, redirect to dashboard
-        if (userPermissions?.modules?.Header?.childModules?.educationCenter === false) {
+        if (userPermissions?.modules?.educationCenter?.view === false) {
           navigate("/dashboard");
         }
         

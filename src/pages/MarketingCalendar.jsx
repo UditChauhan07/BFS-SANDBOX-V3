@@ -268,10 +268,10 @@ const MarketingCalendar = () => {
         }
 
         const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.Header?.childModules?.marketingCalender);
+        setHasPermission(userPermissions?.modules?.marketingCalender.view);
 
         // If no permission, redirect to dashboard
-        if (userPermissions?.modules?.Header?.childModules?.marketingCalender === false) {
+        if (userPermissions?.modules?.marketingCalender.view === false) {
           navigate("/dashboard");
         }
         

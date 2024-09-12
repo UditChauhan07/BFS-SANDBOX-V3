@@ -110,7 +110,7 @@ const CustomerSupport = () => {
   
         // Fetch permissions
         const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.Header?.childModules?.customerSupport);
+        setHasPermission(userPermissions?.modules?.customerSupport?.view);
   
     
   
