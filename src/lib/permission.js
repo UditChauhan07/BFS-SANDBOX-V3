@@ -5,7 +5,7 @@ import { GetAuthData } from "./store";
 export const permissionsArray = [
     {
         userType: 'superadmin',
-        allows: ["00530000005AdvsAAC", "0053b00000DgEVEAA3", "0051O00000CvAVTQA3" , "0053b00000CwOnLAAV"],
+        allows: ["00530000005AdvsAAC", "0053b00000DgEVEAA3", "0051O00000CvAVTQA3" ],
         permissions: {
             modules: {
               orderCreate :  {
@@ -70,7 +70,7 @@ export const permissionsArray = [
                         view : true , 
                         admins : true
                     },  targetReport : {
-                        view : true , 
+                        view : false , 
                         admins : true
                     }
 

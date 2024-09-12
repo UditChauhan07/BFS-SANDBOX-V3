@@ -271,10 +271,10 @@ const navigate = useNavigate()
         }
 
         const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.Header?.childModules?.yearlyComparisonReport);
+        setHasPermission(userPermissions?.modules?.reports?.yearlyComparisonReport?.view);
 
         // If no permission, redirect to dashboard
-        if (userPermissions?.modules?.Header?.childModules?.yearlyComparisonReport === false) {
+        if (userPermissions?.modules?.reports?.yearlyComparisonReport?.view === false) {
           navigate("/dashboard");
         }
         

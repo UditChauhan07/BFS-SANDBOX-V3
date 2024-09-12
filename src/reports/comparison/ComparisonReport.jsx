@@ -124,10 +124,10 @@ const ComparisonReport = () => {
         }
 
         const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.Header?.childModules?.comparisonReport);
+        setHasPermission(userPermissions?.modules?.reports?.comparisonReport?.view);
 
         // If no permission, redirect to dashboard
-        if (userPermissions?.modules?.Header?.childModules?.comparisonReport === false) {
+        if (userPermissions?.modules?.reports?.comparisonReport?.view === false) {
           navigate("/dashboard");
         }
         
