@@ -183,7 +183,7 @@ export const permissionsArray = [
     },
     {
         userType: 'custom 1',
-        allows : ["0053b00000C75e8AAB" , "0053b00000DgGqOAAV" , "0053b00000CwOnLAAV" ] ,
+        allows : ["0053b00000C75e8AAB" , "0053b00000DgGqOAAV"  ] ,
         permissions: {
             modules: {
               orderCreate :  {
