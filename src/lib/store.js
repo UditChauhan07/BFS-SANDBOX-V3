@@ -943,7 +943,7 @@ export async function fetchNewsletterData({ token }) {
     throw err;
   }
 };
-export async function fetchNextMonthNewsletterBrand({ key, date = null }) {
+export async function fetchNextMonthNewsletterBrand({ key, date = null,forMonth=1 }) {
   if (!key) {
     throw new Error('Access token is missing');
   }
@@ -956,12 +956,12 @@ export async function fetchNextMonthNewsletterBrand({ key, date = null }) {
     let response = await fetch(originAPi + "/newsletter/Cfe5pdfgpUBjnw9", {
       method: "POST",
       body: JSON.stringify({
-        key, date
+        key, date,forMonth
       }),
       headers: headersList,
     });
     let data = JSON.parse(await response.text());
-    console.log({data});
+
     
     if (data.status == 300) {
       DestoryAuth();
