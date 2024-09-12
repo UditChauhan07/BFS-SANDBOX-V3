@@ -109,7 +109,7 @@ const Tier = () => {
                     console.log({ resErr });
                 })
             } else {
-                navigate('/dashboard')
+                
             }
         })
     }
