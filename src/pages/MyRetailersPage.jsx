@@ -43,14 +43,14 @@ const MyRetailersPage = () => {
         setHasPermission(userPermissions?.modules?.myRetailers?.view);
 
         // Fetch retailer list
-        // getRetailerListHandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c });
+        getRetailerListHandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c });
 
         // // Fetch sales reps if admin
-        // if (admins.includes(user.Sales_Rep__c)) {
-        //   getSalesRepList({ key: user.x_access_token })
-        //     .then((repRes) => setSalesRepList(repRes.data))
-        //     .catch((repErr) => console.log({ repErr }));
-        // }
+        if (admins.includes(user.Sales_Rep__c)) {
+          getSalesRepList({ key: user.x_access_token })
+            .then((repRes) => setSalesRepList(repRes.data))
+            .catch((repErr) => console.log({ repErr }));
+        }
       } catch (err) {
         console.log({ err });
         DestoryAuth();

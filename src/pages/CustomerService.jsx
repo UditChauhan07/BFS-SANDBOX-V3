@@ -89,14 +89,14 @@ const CustomerService = () => {
         // Continue with data fetching if permission is granted
         await orderListBasedOnRepHandler(user.x_access_token, Reason ? SalesRepId : user.Sales_Rep__c, Reason ? false : true, OrderId);
   
-        // if (admins.includes(user.Sales_Rep__c)) {
-        //   try {
-        //     const repRes = await getSalesRepList({ key: user.x_access_token });
-        //     setSalesRepList(repRes.data);
-        //   } catch (repErr) {
-        //     console.log('SalesRepList Error:', repErr);
-        //   }
-        // }
+        if (admins.includes(user.Sales_Rep__c)) {
+          try {
+            const repRes = await getSalesRepList({ key: user.x_access_token });
+            setSalesRepList(repRes.data);
+          } catch (repErr) {
+            console.log('SalesRepList Error:', repErr);
+          }
+        }
       } catch (err) {
         console.log('Fetch Data Error:', err);
       }

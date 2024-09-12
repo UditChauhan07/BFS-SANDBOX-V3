@@ -120,13 +120,13 @@ const OrderStatusIssues = () => {
                 setUserData(response)
                 if (!selectedSalesRepId) setSelectedSalesRepId(response.Sales_Rep__c)
                 getOrderlIsthandler({ key: response.x_access_token, Sales_Rep__c: selectedSalesRepId ?? response.Sales_Rep__c })
-                // if (admins.includes(response.Sales_Rep__c)) {
-                //     getSalesRepList({ key: response.x_access_token }).then((repRes) => {
-                //         setSalesRepList(repRes.data)
-                //     }).catch((repErr) => {
-                //         console.log({ repErr });
-                //     })
-                // }
+                if (admins.includes(response.Sales_Rep__c)) {
+                    getSalesRepList({ key: response.x_access_token }).then((repRes) => {
+                        setSalesRepList(repRes.data)
+                    }).catch((repErr) => {
+                        console.log({ repErr });
+                    })
+                }
             })
             .catch((err) => {
                 console.log({ err });
@@ -178,15 +178,15 @@ const OrderStatusIssues = () => {
             });
       
             // Fetch sales reps if admin
-            // if (admins.includes(user.Sales_Rep__c)) {
-            //   getSalesRepList({ key: user.x_access_token })
-            //     .then((repRes) => {
-            //       setSalesRepList(repRes.data);
-            //     })
-            //     .catch((repErr) => {
-            //       console.log({ repErr });
-            //     });
-            // }
+            if (admins.includes(user.Sales_Rep__c)) {
+              getSalesRepList({ key: user.x_access_token })
+                .then((repRes) => {
+                  setSalesRepList(repRes.data);
+                })
+                .catch((repErr) => {
+                  console.log({ repErr });
+                });
+            }
           } catch (err) {
             console.log({ err });
           }

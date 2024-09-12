@@ -36,13 +36,13 @@ const CustomerSupport = () => {
           supportHandler({ key: user.x_access_token, salesRepId: selectedSalesRepId ?? user.Sales_Rep__c })
           reatilerHandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c })
           brandhandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c })
-          // if (admins.includes(user.Sales_Rep__c)) {
-          //   getSalesRepList({ key: user.x_access_token }).then((repRes) => {
-          //     setSalesRepList(repRes.data)
-          //   }).catch((repErr) => {
-          //     console.log({ repErr });
-          //   })
-          // }
+          if (admins.includes(user.Sales_Rep__c)) {
+            getSalesRepList({ key: user.x_access_token }).then((repRes) => {
+              setSalesRepList(repRes.data)
+            }).catch((repErr) => {
+              console.log({ repErr });
+            })
+          }
         } else {
           DestoryAuth()
         }
@@ -115,15 +115,15 @@ const CustomerSupport = () => {
     
   
         // Fetch sales reps if admin
-        // if (admins.includes(user.Sales_Rep__c)) {
-        //   getSalesRepList({ key: user.x_access_token })
-        //     .then((repRes) => {
-        //       setSalesRepList(repRes.data);
-        //     })
-        //     .catch((repErr) => {
-        //       console.log({ repErr });
-        //     });
-        // }
+        if (admins.includes(user.Sales_Rep__c)) {
+          getSalesRepList({ key: user.x_access_token })
+            .then((repRes) => {
+              setSalesRepList(repRes.data);
+            })
+            .catch((repErr) => {
+              console.log({ repErr });
+            });
+        }
       } catch (err) {
         console.log({ err });
       }
