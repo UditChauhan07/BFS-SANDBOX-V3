@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './MultiSelectSearch.css';
 import { UserIcon } from '../../lib/svg';
+import ToggleSwitch from '../ToggleButton';
 
-const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, manufacturers = [],setWarning }) => {
-
+const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, manufacturers = [], setWarning }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showSelected, setShowSelected] = useState(false);
     const [brand, setBrand] = useState();
+    const [showAll, stShowAll] = useState(false)
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
 
@@ -18,7 +19,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
             );
 
             if (!isBrandMatched) {
-                setWarning?.(true);
+                setWarning?.(item.Id);
             }
         }
         const newSelectedValues = isSelected
@@ -27,6 +28,17 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
 
         onChange?.(newSelectedValues); // Notify parent component of selection change
     };
+    let result = [
+        {
+            id: 1,
+            BrandIds: [3, 5, 6]
+        }
+    ]
+    let brands = [
+        { id: 3, name: 'test' },
+        { id: 4, name: 'test' },
+        { id: 5, name: 'test' },
+    ]
 
     // Filter options based on search term
     const [filteredOptions, setFilteredOptions] = useState();
@@ -66,9 +78,21 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
             // Return true if brandMatch is true and any of the other conditions match
             return brandMatch && (nameMatch || titleMatch || accountNameMatch);
         });
-    
-        setFilteredOptions(results); // Assuming you have a state to store the filtered results
-    }, [searchTerm, brand, options]);
+        if (!showAll) {
+            // Extract the brand IDs from the brands list
+            let validBrandIds = new Set(manufacturers.map(brand => brand.Id));
+            
+
+            // Filter results to include only those with at least one matching brand ID
+            let matchedResults = results.filter(result =>
+                result.BrandIds?.some(brandId => validBrandIds.has(brandId))
+            );
+            
+            setFilteredOptions(matchedResults); // brand only subscribers
+        } else {
+            setFilteredOptions(results); // all subscribers
+        }
+    }, [searchTerm, brand, options, showAll]);
 
     const AutoSelectChangeHandler = () => {
         // Create a new array that contains only the options that are not already selected
@@ -114,15 +138,16 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                         type="text"
                         placeholder="Search for users..."
                         value={searchTerm}
-                        style={{ width: '70%' }}
+                        style={{ width: '55%' }}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    {manufacturers?.length ? <select className={"brandSearch"} style={{ width: '27%', maxWidth: '200px', height: '45px', marginTop: '8px' }} onChange={brandSelectionHandler}>
+                    {manufacturers?.length ? <select className={"brandSearch"} style={{ width: '25%', maxWidth: '200px', height: '45px', marginTop: '8px' }} onChange={brandSelectionHandler}>
                         <option value={0} selected>All Brand</option>
                         {manufacturers.map((brand) => (
                             <option style={{ appearance: 'none' }} value={brand.Id}>{brand.Name}</option>
                         ))}
                     </select> : null}
+                    <div className='w-[20%] d-flex justify-content-center align-items-center text-[13px]'><span>Subscribers for<br /> selected brand</span>&nbsp;&nbsp;<ToggleSwitch selected={showAll} onToggle={(value) => { stShowAll(value) }} />&nbsp;&nbsp;All</div>
                 </div>
             </header>
             <div className="user-list">
@@ -136,7 +161,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                             >
                                 <div className="user-avatar"><UserIcon width={25} height={25} /></div>
                                 <div className="user-info">
-                                    <span className="user-name">{option.Name}</span>
+                                    <span className="user-name d-flex align-items-center">{(!manufacturers.some(brand => option.BrandIds?.includes(brand.Id))&&selectedValues.some(selected => selected.Id === option.Id))?<div className='redBlock mr-1'></div>:null}{option.Name}</span>
                                     <span className="user-email">{option.Email}</span>
                                     {option?.Title ? <span className="user-etc"><b className="text-['Arial']">Title:&nbsp;</b>{option?.Title}</span> : null}
                                     {option?.Phone ? <span className="user-etc"><b>Phone:&nbsp;</b>{option?.Phone}</span> : null}

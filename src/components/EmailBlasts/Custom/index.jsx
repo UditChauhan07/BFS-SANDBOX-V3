@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, useState, useCallback } from 'react';
 import './MultiStepForm.css'; // Import the CSS file
 import MultiSelectSearch from '../../SearchBox';
-import { createNewsletter, fetchNewsletterData, fetchNextMonthNewsletterBrand, GetAuthData, originAPi, ShareDrive } from '../../../lib/store';
+import { createNewsletter, fetchNewsletterData, fetchNextMonthNewsletterBrand, GetAuthData, months, originAPi, ShareDrive } from '../../../lib/store';
 import Styles from './index.module.css';
 import Loading from '../../Loading';
 import ModalPage from '../../Modal UI';
@@ -28,43 +28,48 @@ const MultiStepForm = () => {
     const [errorContact, setErrorContact] = useState([])
     const [showErrorList, setShowErrorList] = useState(false)
     const [warning, setWarning] = useState(false)
+    const [minDate, setMinDate] = useState(new Date());
+    const [maxDate, setMaxDate] = useState(new Date());
     const [formData, setFormData] = useState({
         subscriber: [],
         template: null,
         brand: [],
         date: null,
         subject: null,
-        newsletter: null
+        newsletter: null,
+        forMonth: 1
     });
     const [showBrandList, setshowBrandList] = useState([]);
 
-    useEffect(() => {
-        let brandIdsArray = formData.subscriber.map(item => item?.BrandIds);
-        const allBrandIds = brandIdsArray.flat();
-        const uniqueBrandIds = [...new Set(allBrandIds)];
-        const filteredBrands = manufacturers?.data?.filter(brand => uniqueBrandIds.includes(brand.Id));
-        formData.subscriber?.some((user) => {
-            if (!user.AccountId) {
-                setIsUserSelected(true);
-                return true; // This stops the iteration once AccountId is found
-            }
-            setIsUserSelected(false)
-            return false; // Continue the iteration if AccountId is not found
-        });
-        if (isUserSelected) {
+    // useEffect(() => {
+    //     let brandIdsArray = formData.subscriber.map(item => item?.BrandIds);
+    //     const allBrandIds = brandIdsArray.flat();
+    //     const uniqueBrandIds = [...new Set(allBrandIds)];
+    //     const filteredBrands = manufacturers?.data?.filter(brand => uniqueBrandIds.includes(brand.Id));
+    //     formData.subscriber?.some((user) => {
+    //         if (!user.AccountId) {
+    //             setIsUserSelected(true);
+    //             return true; // This stops the iteration once AccountId is found
+    //         }
+    //         setIsUserSelected(false)
+    //         return false; // Continue the iteration if AccountId is not found
+    //     });
+    //     if (isUserSelected) {
 
-            setshowBrandList(manufacturers?.data)
-        } else {
+    //         setshowBrandList(manufacturers?.data)
+    //     } else {
 
-            setshowBrandList(filteredBrands)
-        }
-    }, [formData, isUserSelected])
+    //         setshowBrandList(filteredBrands)
+    //     }
+    // }, [formData, isUserSelected])
 
     useEffect(() => {
         GetAuthData().then((user) => {
-            fetchNextMonthNewsletterBrand({ key: user.x_access_token, date: formData.date ? getDate(formData.date) : null }).then((brandRes) => {
+            setManufacturers({ isLoaded: false, data: [] })
+            fetchNextMonthNewsletterBrand({ key: user.x_access_token, date: formData.date ? getDate(formData.date) : null, forMonth: formData.forMonth }).then((brandRes) => {
                 setFormData({ ...formData, brand: [] });
-                setManufacturers({ isLoaded: true, data: brandRes })
+                setshowBrandList(brandRes?.brandList)
+                setManufacturers({ isLoaded: true, data: brandRes?.brandList || [], nonReady: brandRes?.brandnonList || [] })
             }).catch((brandErr) => {
                 console.log({ brandErr });
             })
@@ -72,14 +77,13 @@ const MultiStepForm = () => {
         }).catch((userErr) => {
             console.log(userErr)
         })
-    }, [formData.date])
+    }, [formData.date, formData.forMonth])
 
     const handleAccordionClick = (step) => {
 
-        if (step === 3 && !formData.subscriber.length) {
-            // alert('Please select a subscriber first.');
+        if (currentStep === 3 && (!formData.brand.length)) {
             setCallbackError(true)
-            setCallbackErrorMsg('Please select a subscriber first.')
+            setCallbackErrorMsg('Please select a brand')
             return;
         }
         if (step === 4 && (!formData.template)) {
@@ -108,11 +112,8 @@ const MultiStepForm = () => {
         const nonMatchingBrands = contactList.filter(item =>
             !item.BrandIds.some(brandId => formData.brand.includes(brandId))
         );
-        console.log({nonMatchingBrands});
-        
-
         setErrorContact(nonMatchingBrands)
-    }, [formData.subscriber,formData.brand,Subscribers.contacts])
+    }, [formData.subscriber, formData.brand, Subscribers.contacts])
 
     const handleChange = (e) => {
         const { value, name } = e.target;
@@ -137,22 +138,24 @@ const MultiStepForm = () => {
     )
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (currentStep === 4 && (!formData.brand.length)) {
+        if (currentStep === 4 && !formData.subscriber.length) {
+            // alert('Please select a subscriber first.');
             setCallbackError(true)
-            setCallbackErrorMsg('Please select a brand')
+            setCallbackErrorMsg('Please select a subscriber first.')
             return;
         }
-        if (errorContact.length) {
-            setShowErrorList(true);
-            return;
-        }
+        // if (errorContact.length) {
+        //     setShowErrorList(true);
+        //     return;
+        // }
         generateOrderNow();
     };
     const generateOrderNow = () => {
         setShowErrorList(false);
-        if (currentStep === 4 && (!formData.brand.length)) {
+        if (currentStep === 4 && !formData.subscriber.length) {
+            // alert('Please select a subscriber first.');
             setCallbackError(true)
-            setCallbackErrorMsg('Please select a brand')
+            setCallbackErrorMsg('Please select a subscriber first.')
             return;
         }
         const contactList = Subscribers.contacts.filter(item1 =>
@@ -171,21 +174,23 @@ const MultiStepForm = () => {
             brandIds: JSON.stringify(formData.brand),
             date: formData.date ? getDate(formData.date) : null,
             contactIds: JSON.stringify(contactIds),
-            userIds: JSON.stringify(userIds)
+            userIds: JSON.stringify(userIds),
+            forMonth:formData.forMonth
         }
 
         createNewsletter(body).then((result) => {
             if (result.status) {
                 window.location.href = "/newsletter"
-                setCurrentStep(1);
                 setIsSubmit(false);
+                setCurrentStep(1);
                 setFormData({
                     subscriber: [],
                     template: '',
                     brand: [],
                     date: '',
                     subject: '',
-                    newsletter: ''
+                    newsletter: '',
+                    forMonth: 1
                 });
             } else {
                 setIsSubmit(false)
@@ -213,11 +218,10 @@ const MultiStepForm = () => {
                     }
 
                     const response = await fetchNewsletterData({ token });
-                    console.log({ response });
-
 
                     ShareDrive(response, false, contactLocalKey)
-                    const contactList = response.contactList.filter(item => item.BrandIds && item.BrandIds.length);
+                    const contactList = response.contactList;
+                    // const contactList = response.contactList.filter(item => item.BrandIds && item.BrandIds.length);
                     setSubscribers({ isLoaded: true, users: response.userList, contacts: contactList })
                     setAllSubscribers([...response.userList, ...contactList])
                 }
@@ -228,9 +232,9 @@ const MultiStepForm = () => {
             }
         };
         let localCall = ShareDrive(null, null, contactLocalKey)
-
         if (localCall) {
-            const contactList = localCall.contactList.filter(item => item.BrandIds && item.BrandIds.length);
+            const contactList = localCall.contactList;
+            // const contactList = localCall.contactList.filter(item => item.BrandIds && item.BrandIds.length);
             setSubscribers({ isLoaded: true, users: localCall.userList, contacts: contactList })
             setAllSubscribers([...localCall.userList, ...contactList])
             setTimeout(() => {
@@ -242,6 +246,16 @@ const MultiStepForm = () => {
         }
 
     }, [currentStep]);
+    useEffect(() => {
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1); // Set to tomorrow
+
+        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0); // Last day of current month
+
+        setMinDate(tomorrow);
+        setMaxDate(endOfMonth);
+    }, [])
 
 
     useEffect(() => {
@@ -252,10 +266,16 @@ const MultiStepForm = () => {
 
     const handleSelectionChange = (newSelectedValues) => {
         setFormData((prev) => {
-            return { ...prev, subscriber: newSelectedValues, brand: [] };
+            return { ...prev, subscriber: newSelectedValues };
         }
         )
     };
+    const removeWaringSubscriber = () => {
+        setFormData((prev) => {
+            return { ...prev, subscriber: formData.subscriber.filter(selected => selected.Id !== warning) };
+        });
+        setWarning(false);
+    }
     const ImageWithFallback = ({ src, alt, fallbackSrc, ...props }) => {
         if (!fallbackSrc) fallbackSrc = originAPi + "/dummy.png"
         const handleError = (e) => {
@@ -281,25 +301,28 @@ const MultiStepForm = () => {
         <div className="form-container create-newsletter">
             {isSubmit ? <Loading height={'500px'} /> :
                 <>
-                {warning ? <ModalPage
-                open={warning ?? false}
-                content={<div className="d-flex flex-column gap-3">
-                    <h2>
-                        Alert!!!
-                    </h2>
-                    <p className="modalContent">
-                        You can't send newletter to this contact.
-                        <br />
-                        As there are no products available for marketing calender.
-                    </p>
-                    <div className="d-flex justify-content-around">
-                        <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { setWarning(false) }}>
-                            <BiExit /> &nbsp;Ok
-                        </button>
-                    </div>
-                </div>}
-                onClose={() => { setWarning(false) }}
-            /> : null}
+                    {warning ? <ModalPage
+                        open={warning ?? false}
+                        content={<div className="d-flex flex-column gap-3">
+                            <h2>
+                                Alert!!!
+                            </h2>
+                            <p className="modalContent">
+                                {Subscribers.contacts.filter(selected => selected.Id === warning).length ? Subscribers.contacts.filter(selected => selected.Id === warning)[0].Name : "User"} doesn't subscribe for {manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).map((brand, index) => (<>{brand.Name}{index != (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 2) ? ', ' : index != (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 1) ? ' and ' : null}</>))}
+                                <br />
+                                Are you sure, you want to send the newsletter.
+                            </p>
+                            <div className="d-flex justify-content-around">
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={removeWaringSubscriber}>
+                                    <BiExit /> &nbsp;No
+                                </button>
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { setWarning(false) }}>
+                                    <BiSave /> &nbsp;Yes
+                                </button>
+                            </div>
+                        </div>}
+                        onClose={() => { setWarning(false) }}
+                    /> : null}
                     {callBackError ? <ModalPage
                         open={callBackError ?? false}
                         content={<div className="d-flex flex-column gap-3">
@@ -324,10 +347,10 @@ const MultiStepForm = () => {
                             <h2>
                                 Warning!!!
                             </h2>
-                            <hr style={{marginTop:0}}/>
+                            <hr style={{ marginTop: 0 }} />
                             <p className={`${Styles.modalContent} text-start`}>
-                            The following subscribers will not get newletter,
-                        as there are no products available for marketing calender.
+                                The following subscribers will not get newletter,
+                                as there are no products available for marketing calender.
                                 <table className="table table-hover text-start mt-2">
                                     <thead>
                                         <tr>
@@ -353,9 +376,9 @@ const MultiStepForm = () => {
                                         : null}
                                 </table>
                             </p>
-                            <hr style={{margin:0}}/>
+                            <hr style={{ margin: 0 }} />
                             <div className="d-flex justify-content-around">
-                            <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { setShowErrorList(false) }}>
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { setShowErrorList(false) }}>
                                     <BiExit /> &nbsp;Go Back
                                 </button>
                                 <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { generateOrderNow() }}>
@@ -394,7 +417,7 @@ const MultiStepForm = () => {
                                     <div className='mt-4 pt-3'>
                                         <div className='d-flex justify-content-between'>
 
-                                            <label style={{ width: '68%' }} className="text-[15px] text-[#000] font-['Montserrat-400'] text-start">
+                                            <label style={{ width: '45%' }} className="text-[15px] text-[#000] font-['Montserrat-400'] text-start">
                                                 <b>Newsletter Title:</b>
                                                 <input
                                                     type="text"
@@ -405,6 +428,14 @@ const MultiStepForm = () => {
                                                     required
                                                     maxLength={100}
                                                 />
+                                            </label>
+                                            <label style={{ width: '21%' }} className="text-[15px] text-[#000] font-['Montserrat-400'] text-start">
+                                                <b>Include Months:</b>
+                                                <select name="forMonth" onChange={handleChange} value={formData.forMonth}>
+                                                    <option value={1} selected>upto 1 month</option>
+                                                    <option value={2}>upto 2 month</option>
+                                                    <option value={3}>upto 3 month</option>
+                                                </select>
                                             </label>
                                             <label style={{ width: '30%' }} className="text-[16px] text-[#000] font-['Montserrat-400'] text-start">
                                                 <b>Send Type:</b>
@@ -434,7 +465,8 @@ const MultiStepForm = () => {
                                                         onChange={handleDateChange}
                                                         dateFormat="MMM/dd/yyyy"
                                                         popperPlacement="auto"
-                                                        minDate={new Date()}
+                                                        minDate={minDate}
+                                                        maxDate={maxDate}
                                                         popperModifiers={{
                                                             preventOverflow: {
                                                                 enabled: true,
@@ -464,30 +496,109 @@ const MultiStepForm = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="accordion-item">
+                        <div className="accordion-item text-[16px] font-['Montserrat-400']">
                             <div
                                 className={`accordion-header ${currentStep === 2 ? 'active' : ''}`}
                                 onClick={() => handleAccordionClick(2)}
                             >
-                                <h3>Subscribers</h3>
+                                <h3>Brand Selection</h3>
                                 <span>{currentStep === 2 ? '-' : '+'}</span>
                             </div>
                             {currentStep === 2 && (
-                                <>
-                                    <div className="accordion-body">
-                                        <MultiSelectSearch
-                                            loading={(!Subscribers.isLoaded || loading) ? <div className='m-auto'><Loading height={'100px'} /></div> : null}
-                                            options={allSubscribers}
-                                            selectedValues={formData.subscriber}
-                                            onChange={handleSelectionChange}
-                                            manufacturers={manufacturers?.data || []}
-                                            setWarning={setWarning}
-                                        />
+                                <div className="accordion-body">
+                                    <div className="text-start">
+                                        <div className='d-flex justify-content-between'>
 
+                                            <b className='d-flex gap-2'>Select Brand: <p style={{ fontWeight: 'normal' }}>This Brand are ready to be include in newsletter for&nbsp;{months[new Date().getMonth() + 1]}{formData.forMonth == 2 ? ' and ' : formData.forMonth == 3 ? ', ' : null}{formData.forMonth >= 2 ? months[new Date().getMonth() + 2] : null}{formData.forMonth == 3 ? ' and ' : null}{formData.forMonth >= 3 ? months[new Date().getMonth() + 3] : null}</p></b>
+                                            <div className='d-flex gap-2'>
+                                                <p className='cursor-pointer' onClick={() => { setFormData({ ...formData, brand: showBrandList.map(element => (element.Id)) }); }}>Select all</p>|
+                                                <p className='cursor-pointer' onClick={() => { setFormData({ ...formData, brand: [] }); }}>reset</p>
+                                            </div>
+                                        </div>
+                                        <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
+                                            {!manufacturers.isLoading ?
+                                                showBrandList?.length ? (showBrandList.map((brand) => (
+                                                    <div
+                                                        key={brand.Id}
+                                                        className={`${Styles.templateHolder} ${formData.brand.includes(brand.Id) ? Styles.selected : ''}`}
+                                                        onClick={() => handleChange({ target: { value: brand.Id, name: "brand" } })}
+                                                    >
+                                                        <input
+                                                            type="radio"
+                                                            name="brand"
+                                                            checked={formData.brand.includes(brand.Id)}
+                                                            value={brand.Id}
+                                                            required
+                                                            className={Styles.hiddenRadio}
+                                                        />
+                                                        <ImageWithFallback
+                                                            src={`${originAPi}/brandImage/${brand.Id}.png`}
+                                                            title={`Click to select ${brand.Name}`}
+                                                            style={{ maxHeight: '100px', mixBlendMode: 'luminosity' }}
+                                                            alt={`Brand ${brand.Id}`}
+                                                        />
+                                                        <p className={Styles.labelHolder}>{brand.Name}</p>
+                                                        {/* <div
+                                                            className={Styles.previewIcon}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation(); // Prevent triggering the brand selection
+                                                                window.open(`${originAPi}brandImage/${brand.Id}.png`, '_blank');
+                                                            }}
+                                                        >
+                                                            <FaEye />
+                                                        </div> */}
+                                                    </div>
+                                                ))
+                                                ) : "No brand available. Selected subscribers's brands does not have any product in marketing calendar" : (
+                                                    <Loading />
+                                                )}
+                                        </div>
                                     </div>
-                                </>
+                                    <div className="text-start mt-2 mb-2">
+                                        <b className='d-flex gap-2'>Other Brand: <p style={{ fontWeight: 'normal' }}>These brands not ready for newsletter as per now.</p></b>
+                                        <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
+                                            {!manufacturers.isLoading ?
+                                                manufacturers?.nonReady?.length ? (manufacturers?.nonReady.map((brand) => (
+                                                    <div
+                                                        key={brand.Id}
+                                                        className={`${Styles.templateHolder} ${formData.brand.includes(brand.Id) ? Styles.selected : ''}`}
+                                                        onClick={() => { setCallbackError(true); setCallbackErrorMsg("you can't send newsletter for this brand") }}
+                                                    >
+                                                        <input
+                                                            type="radio"
+                                                            name="brand"
+                                                            checked={formData.brand.includes(brand.Id)}
+                                                            value={brand.Id}
+                                                            required
+                                                            className={Styles.hiddenRadio}
+                                                        />
+                                                        <ImageWithFallback
+                                                            src={`${originAPi}/brandImage/${brand.Id}.png`}
+                                                            title={`Click to select ${brand.Name}`}
+                                                            style={{ maxHeight: '100px', mixBlendMode: 'luminosity' }}
+                                                            alt={`Brand ${brand.Id}`}
+                                                        />
+                                                        <p className={Styles.labelHolder}>{brand.Name}</p>
+                                                        {/* <div
+                                                            className={Styles.previewIcon}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation(); // Prevent triggering the brand selection
+                                                                window.open(`${originAPi}brandImage/${brand.Id}.png`, '_blank');
+                                                            }}
+                                                        >
+                                                            <FaEye />
+                                                        </div> */}
+                                                    </div>
+                                                ))
+                                                ) : "No brand available. Selected subscribers's brands does not have any product in marketing calendar" : (
+                                                    <Loading />
+                                                )}
+                                        </div>
+                                    </div>
+                                </div>
                             )}
                         </div>
+
 
                         {/* Step 2: Template and Brand Selection */}
                         <div className="accordion-item text-[16px] font-[Montserrat-400]">
@@ -581,58 +692,28 @@ const MultiStepForm = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="accordion-item text-[16px] font-['Montserrat-400']">
+                        <div className="accordion-item">
                             <div
                                 className={`accordion-header ${currentStep === 4 ? 'active' : ''}`}
                                 onClick={() => handleAccordionClick(4)}
                             >
-                                <h3>Brand Selection</h3>
+                                <h3>Subscribers</h3>
                                 <span>{currentStep === 4 ? '-' : '+'}</span>
                             </div>
                             {currentStep === 4 && (
-                                <div className="accordion-body">
-                                    <div className="text-start">
-                                        <b>Select Brand:</b>
-                                        <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
-                                            {!manufacturers.isLoading ?
-                                                showBrandList?.length ? (showBrandList.map((brand) => (
-                                                    <div
-                                                        key={brand.Id}
-                                                        className={`${Styles.templateHolder} ${formData.brand.includes(brand.Id) ? Styles.selected : ''}`}
-                                                        onClick={() => handleChange({ target: { value: brand.Id, name: "brand" } })}
-                                                    >
-                                                        <input
-                                                            type="radio"
-                                                            name="brand"
-                                                            checked={formData.brand.includes(brand.Id)}
-                                                            value={brand.Id}
-                                                            required
-                                                            className={Styles.hiddenRadio}
-                                                        />
-                                                        <ImageWithFallback
-                                                            src={`${originAPi}/brandImage/${brand.Id}.png`}
-                                                            title={`Click to select ${brand.Name}`}
-                                                            style={{ maxHeight: '100px', mixBlendMode: 'luminosity' }}
-                                                            alt={`Brand ${brand.Id}`}
-                                                        />
-                                                        <p className={Styles.labelHolder}>{brand.Name}</p>
-                                                        {/* <div
-                                                            className={Styles.previewIcon}
-                                                            onClick={(e) => {
-                                                                e.stopPropagation(); // Prevent triggering the brand selection
-                                                                window.open(`${originAPi}brandImage/${brand.Id}.png`, '_blank');
-                                                            }}
-                                                        >
-                                                            <FaEye />
-                                                        </div> */}
-                                                    </div>
-                                                ))
-                                                ) : "No brand available. Selected subscribers's brands does not have any product in marketing calendar" : (
-                                                    <Loading />
-                                                )}
-                                        </div>
+                                <>
+                                    <div className="accordion-body">
+                                        <MultiSelectSearch
+                                            loading={(!Subscribers.isLoaded || loading) ? <div className='m-auto'><Loading height={'100px'} /></div> : null}
+                                            options={allSubscribers}
+                                            selectedValues={formData.subscriber}
+                                            onChange={handleSelectionChange}
+                                            manufacturers={manufacturers?.data || []}
+                                            setWarning={setWarning}
+                                        />
+
                                     </div>
-                                </div>
+                                </>
                             )}
                         </div>
 

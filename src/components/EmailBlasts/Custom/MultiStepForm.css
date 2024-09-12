@@ -129,7 +129,7 @@
   /* color: #ddd; */
 }
 
-.create-newsletter .accordion-body input {
+.create-newsletter .accordion-body input,.create-newsletter .accordion-body select {
   width: 100%;
   padding: 12px 15px;
   margin-top: 8px;
@@ -141,7 +141,7 @@
   color: #000;
 }
 
-.create-newsletter .accordion-body input:focus {
+.create-newsletter .accordion-body input:focus,.create-newsletter .accordion-body select:focus {
   outline: none;
   /* background-color: #444; */
 }
