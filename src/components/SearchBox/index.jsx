@@ -85,10 +85,16 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
             let validBrandIds = new Set(manufacturers?.map(brand => brand.Id));
 
 
-            // Filter results to include only those with at least one matching brand ID
-            let matchedResults = results.filter(result =>
-                result.BrandIds?.some(brandId => validBrandIds.has(brandId))
-            );
+            let matchedResults = results.filter(result => {
+                // Check if AccountId exists
+                if (result.AccountId) {
+                    // If AccountId exists, compare BrandIds with validBrandIds
+                    return result.BrandIds?.some(brandId => validBrandIds.has(brandId));
+                } else {
+                    // If AccountId does not exist, return the result as is
+                    return result;
+                }
+            });
 
             setFilteredOptions(matchedResults); // brand only subscribers
         } else {
@@ -200,10 +206,9 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                                 className={`user-item ${selectedValues.some(selected => selected.Id === option.Id) ? 'selected' : showSelected ? 'd-none' : ''}`}
                                 onClick={() => handleSelect(option)}
                             >
-
                                 <div className="user-avatar"><UserIcon width={25} height={25} /></div>
                                 <div className="user-info">
-                                    <span className="user-name d-flex align-items-center">{(!manufacturers.some(brand => option.BrandIds?.includes(brand.Id)) && selectedValues.some(selected => selected.Id === option.Id)) ? <div className='redBlock mr-1' title="the subscriber doesn't have the selected brand"></div> : null}{option.Name}</span>
+                                    <span className="user-name d-flex align-items-center">{(!manufacturers.some(brand => option.BrandIds?.includes(brand.Id)) && selectedValues.some(selected => selected.Id === option.Id)&&option.AccountId) ? <div className='redBlock mr-1' title="the subscriber doesn't have the selected brand"></div> : null}{option.Name}</span>
                                     <span className="user-email maxSizeDiv">{option.Email}</span>
                                     {option?.Title ? <span className="user-etc maxSizeDiv"><b className="text-['Arial']">Title:&nbsp;</b>{option?.Title}</span> : null}
                                     {option?.Phone ? <span className="user-etc"><b>Phone:&nbsp;</b>{option?.Phone}</span> : null}
