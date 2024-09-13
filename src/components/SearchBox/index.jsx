@@ -141,7 +141,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                             <option style={{ appearance: 'none' }} value={brand.Id}>{brand.Name}</option>
                         ))}
                     </select> : null}
-                    <div className='w-[20%] d-flex justify-content-center align-items-center text-[13px]'><span>Subscribers for<br /> <span title={brandNames} className='cursor-pointer'>Selected brand</span></span>&nbsp;&nbsp;<ToggleSwitch selected={showAll} onToggle={(value) => { stShowAll(value) }} />&nbsp;&nbsp;All</div>
+                    <div className='w-[20%] d-flex justify-content-center align-items-center text-[13px]'><span>Subscribers for<br /> <span title={brandNames} className='cursor-pointer text-[#509fde] text-underline'>Selected brand</span></span>&nbsp;&nbsp;<ToggleSwitch selected={showAll} onToggle={(value) => { stShowAll(value) }} />&nbsp;&nbsp;All</div>
 
                 </div>
             </header>
