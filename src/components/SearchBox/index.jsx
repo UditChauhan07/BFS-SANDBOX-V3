@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import './MultiSelectSearch.css';
 import { UserIcon } from '../../lib/svg';
 import ToggleSwitch from '../ToggleButton';
+import Loading from '../Loading';
 
-const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, manufacturers = [], setWarning }) => {
+const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, manufacturers = [], setWarning, brandSelected = [],manufacturersList=[] }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showSelected, setShowSelected] = useState(false);
     const [brand, setBrand] = useState();
     const [showAll, stShowAll] = useState(false);
+    const [isLoadings, setIsLoading] = useState(loading ? true : false);
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
 
@@ -28,22 +30,12 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
 
         onChange?.(newSelectedValues); // Notify parent component of selection change
     };
-    let result = [
-        {
-            id: 1,
-            BrandIds: [3, 5, 6]
-        }
-    ]
-    let brands = [
-        { id: 3, name: 'test' },
-        { id: 4, name: 'test' },
-        { id: 5, name: 'test' },
-    ]
 
     // Filter options based on search term
     const [filteredOptions, setFilteredOptions] = useState();
-   
-    useEffect(function() {
+  
+    useEffect(() => {
+        setIsLoading(true)
         // Call the filtering function when searchTerm or brand changes
         var results = options.filter(function(option) {
             var brandMatch = true;
@@ -81,18 +73,27 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
         if (!showAll) {
             // Extract the brand IDs from the brands list
             let validBrandIds = new Set(manufacturers.map(brand => brand.Id));
-            
+
 
             // Filter results to include only those with at least one matching brand ID
             let matchedResults = results.filter(result =>
                 result.BrandIds?.some(brandId => validBrandIds.has(brandId))
             );
-            
+
             setFilteredOptions(matchedResults); // brand only subscribers
         } else {
             setFilteredOptions(results); // all subscribers
         }
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 1500);
     }, [searchTerm, brand, options, showAll]);
+    useEffect(() => {
+        if (!loading) {
+            setIsLoading(false)
+        }
+    }, [loading])
+
 
     const AutoSelectChangeHandler = () => {
         // Create a new array that contains only the options that are not already selected
@@ -116,7 +117,26 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
             setBrand();
         }
     }
+    const brandNames = brandSelected
+        ?.map((brand, index) => brand.Name)
+        ?.reduce((acc, curr, index) => {
+            if (index === brandSelected.length - 1) {
+                return `${acc} and ${curr}`;
+            }
+            return `${acc}, ${curr}`;
+        });
 
+    const BrandNameGenerator = (Brandids) => {
+        return manufacturersList
+            ?.filter(brand => Brandids.includes(brand.Id))
+            ?.map((brand, index) => brand.Name)
+            ?.reduce((acc, curr, index) => {
+                if (index === brandSelected.length - 1) {
+                    return `${acc} and ${curr}`;
+                }
+                return `${acc}, ${curr}`;
+            });
+    }
     return (
         <div className="multi-select-container">
             <header>
@@ -147,11 +167,12 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                             <option style={{ appearance: 'none' }} value={brand.Id}>{brand.Name}</option>
                         ))}
                     </select> : null}
-                    <div className='w-[20%] d-flex justify-content-center align-items-center text-[13px]'><span>Subscribers for<br /> selected brand</span>&nbsp;&nbsp;<ToggleSwitch selected={showAll} onToggle={(value) => { stShowAll(value) }} />&nbsp;&nbsp;All</div>
+                    <div className='w-[20%] d-flex justify-content-center align-items-center text-[13px]'><span>Subscribers for<br /> <span title={brandNames} className='cursor-pointer'>Selected brand</span></span>&nbsp;&nbsp;<ToggleSwitch selected={showAll} onToggle={(value) => { stShowAll(value) }} />&nbsp;&nbsp;All</div>
+
                 </div>
             </header>
             <div className="user-list">
-                {loading ? loading :
+                {!isLoadings ?
                     filteredOptions?.length ?
                         filteredOptions.map((option) => (
                             <div
@@ -159,16 +180,22 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                                 className={`user-item ${selectedValues.some(selected => selected.Id === option.Id) ? 'selected' : showSelected ? 'd-none' : ''}`}
                                 onClick={() => handleSelect(option)}
                             >
+
                                 <div className="user-avatar"><UserIcon width={25} height={25} /></div>
                                 <div className="user-info">
-                                    <span className="user-name d-flex align-items-center">{(!manufacturers.some(brand => option.BrandIds?.includes(brand.Id))&&selectedValues.some(selected => selected.Id === option.Id))?<div className='redBlock mr-1'></div>:null}{option.Name}</span>
+                                    <span className="user-name d-flex align-items-center">{(!manufacturers.some(brand => option.BrandIds?.includes(brand.Id)) && selectedValues.some(selected => selected.Id === option.Id)) ? <div className='redBlock mr-1'></div> : null}{option.Name}</span>
                                     <span className="user-email">{option.Email}</span>
                                     {option?.Title ? <span className="user-etc"><b className="text-['Arial']">Title:&nbsp;</b>{option?.Title}</span> : null}
                                     {option?.Phone ? <span className="user-etc"><b>Phone:&nbsp;</b>{option?.Phone}</span> : null}
                                     {option?.Account?.Name ? <span className="user-etc"><b>Store:&nbsp;</b>{option?.Account?.Name}</span> : null}
                                 </div>
+                                {(option.BrandIds?.length) ?
+                                    <div className='user-brands'>
+                                        <b>Brands Subscribed</b>
+                                        <span className='user-etc text-end text-[10px] max-w-[150px]'>{BrandNameGenerator(option.BrandIds)}</span>
+                                    </div> : null}
                             </div>
-                        )) : "No record found."}
+                        )) : "No record found." : <div className='m-auto'><Loading height={'100px'} /></div>}
             </div>
         </div>
     );

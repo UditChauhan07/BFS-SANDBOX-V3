@@ -49,6 +49,9 @@
   font-size: 14px;
   line-height: 18px;
 }
+.maxHeightNinty{
+  max-height: 90vh !important;
+}
 .templateHolder:hover {
   box-shadow: 0 0 10px rgba(13, 41, 71, 0.5);
   transform: scale(1.05);

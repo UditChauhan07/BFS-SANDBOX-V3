@@ -1,20 +1,22 @@
-import React, { forwardRef, useEffect, useState, useCallback } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import './MultiStepForm.css'; // Import the CSS file
 import MultiSelectSearch from '../../SearchBox';
 import { createNewsletter, fetchNewletterPreview, fetchNewsletterData, fetchNextMonthNewsletterBrand, GetAuthData, months, originAPi, ShareDrive } from '../../../lib/store';
 import Styles from './index.module.css';
 import Loading from '../../Loading';
 import ModalPage from '../../Modal UI';
-import { BiExit, BiLeftArrow, BiSave } from 'react-icons/bi';
+import { BiExit, BiSave } from 'react-icons/bi';
 import ToggleSwitch from '../../ToggleButton';
 import { FaEye } from 'react-icons/fa';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { BackArrow, CalenderIcon } from '../../../lib/svg';
+import { CalenderIcon } from '../../../lib/svg';
+import { useManufacturer } from '../../../api/useManufacturer';
 
 const contactLocalKey = "lCpFhWZtGKKejSX"
 
 const MultiStepForm = () => {
+    const { data: manufacturersList, isLoading, error } = useManufacturer();
     const [currentStep, setCurrentStep] = useState(1);
     const [manufacturers, setManufacturers] = useState({ isLoaded: false, data: [] })
     const [Subscribers, setSubscribers] = useState({ isLoaded: false, users: [], contacts: [] })
@@ -25,13 +27,14 @@ const MultiStepForm = () => {
     const [isSchedule, setIsSchedule] = useState(false)
     const [isUserSelected, setIsUserSelected] = useState(false);
     const [isPreview, setIsPreview] = useState();
-    const [isPreviewHtml, setIsPreviewHtml] = useState();
+    const [isPreviewHtml, setIsPreviewHtml] = useState({isLoaded:false,preview:null});
     const [loading, setLoading] = useState(true);
     const [errorContact, setErrorContact] = useState([])
     const [showErrorList, setShowErrorList] = useState(false)
     const [warning, setWarning] = useState(false)
     const [minDate, setMinDate] = useState(new Date());
     const [maxDate, setMaxDate] = useState(new Date());
+    
     const [formData, setFormData] = useState({
         subscriber: [],
         template: null,
@@ -86,23 +89,30 @@ const MultiStepForm = () => {
         if (step === 3 && (!formData.brand.length)) {
             setCallbackError(true)
             setCallbackErrorMsg('Please select a brand')
+            handleAccordionClick(2)
             return;
         }
         if (step === 4 && (!formData.template)) {
             setCallbackError(true)
             setCallbackErrorMsg('Please select a template')
+            handleAccordionClick(2)
             return;
         }
         if (step === 2 && (!formData.newsletter || !formData.subject)) {
             if (!formData.newsletter) {
                 setCallbackError(true)
                 setCallbackErrorMsg('Please enter newsletter name');
+                handleAccordionClick(1)
             }
             if (!formData.subject) {
                 setCallbackError(true)
                 setCallbackErrorMsg('Please enter subject');
+                handleAccordionClick(1)
             }
             return;
+        }
+        if(step == 5){
+            setIsPreview(isPreviewHtml.preview)
         }
         setCurrentStep(step);
     };
@@ -119,6 +129,8 @@ const MultiStepForm = () => {
 
     const handleChange = (e) => {
         const { value, name } = e.target;
+        console.log({ name, value, formData });
+
         if (name === "brand") {
             setFormData((prevFormData) => {
                 const brandAlreadySelected = prevFormData.brand.includes(value);
@@ -140,10 +152,11 @@ const MultiStepForm = () => {
     )
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (currentStep === 4 && !formData.subscriber.length) {
+        if (currentStep === 5 && !formData.subscriber.length) {
             // alert('Please select a subscriber first.');
             setCallbackError(true)
             setCallbackErrorMsg('Please select a subscriber first.')
+            handleAccordionClick(5)
             return;
         }
         // if (errorContact.length) {
@@ -153,14 +166,13 @@ const MultiStepForm = () => {
         generateOrderNow();
     };
 
-    useEffect(()=>{
-        if(formData.newsletter&&formData.template&&formData.brand.length&&formData.forMonth){
+    useEffect(() => {
+        setIsPreview()
+        if (currentStep==4) {
+            setIsPreviewHtml({isLoaded:false,preview:null})
             generateNewsletterPreview();
-        }else{
-            setIsPreview()
-            setIsPreviewHtml()
         }
-    },[formData.newsletter,formData.template,formData.brand,formData.forMonth])
+    }, [currentStep])
 
     const generateNewsletterPreview = () => {
         let body = {
@@ -171,13 +183,13 @@ const MultiStepForm = () => {
             date: formData.date ? getDate(formData.date) : null,
             forMonth: formData.forMonth
         }
-        fetchNewletterPreview(body).then((result) => {      
-            console.log({result});
-                  
+        fetchNewletterPreview(body).then((result) => {
+            console.log({ result });
+
             if (result.status) {
-                if(result.data){
+                if (result.data) {
                     setIsPreview(result.data)
-                    setIsPreviewHtml(result.data)
+                    setIsPreviewHtml({isLoaded:true,preview:result.data})
                 }
             }
         }).catch((err) => {
@@ -187,10 +199,11 @@ const MultiStepForm = () => {
     }
     const generateOrderNow = () => {
         setShowErrorList(false);
-        if (currentStep === 4 && !formData.subscriber.length) {
+        if (currentStep === 5 && !formData.subscriber.length) {
             // alert('Please select a subscriber first.');
             setCallbackError(true)
             setCallbackErrorMsg('Please select a subscriber first.')
+            handleAccordionClick(5)
             return;
         }
         const contactList = Subscribers.contacts.filter(item1 =>
@@ -216,7 +229,9 @@ const MultiStepForm = () => {
         createNewsletter(body).then((result) => {
             if (result.status) {
                 window.location.href = "/newsletter"
-                setIsSubmit(false);
+                setTimeout(() => {
+                    setIsSubmit(false);
+                }, 2000);
                 setCurrentStep(1);
                 setFormData({
                     subscriber: [],
@@ -330,6 +345,8 @@ const MultiStepForm = () => {
             <CalenderIcon fill='#000' />
         </button>
     ));
+    console.log({isPreviewHtml});
+    
     return (
         <div className="form-container create-newsletter">
             {isSubmit ? <Loading height={'500px'} /> :
@@ -341,7 +358,9 @@ const MultiStepForm = () => {
                                 Alert!!!
                             </h2>
                             <p className="modalContent">
-                                {Subscribers.contacts.filter(selected => selected.Id === warning).length ? Subscribers.contacts.filter(selected => selected.Id === warning)[0].Name : "User"} doesn't subscribe for {manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).map((brand, index) => (<>{brand.Name}{index != (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 2) ? ', ' : index != (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 1) ? ' and ' : null}</>))}
+                                {Subscribers.contacts.filter(selected => selected.Id === warning).length ? Subscribers.contacts.filter(selected => selected.Id === warning)[0].Name : "User"}&nbsp;
+                                doesn't subscribe for <br />
+                                {manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).map((brand, index) => (<>{brand.Name}{index < (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 2) ? ', ' : index != (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 1) ? ' and ' : null}</>))}
                                 <br />
                                 Are you sure, you want to send the newsletter.
                             </p>
@@ -373,20 +392,26 @@ const MultiStepForm = () => {
                         </div>}
                         onClose={() => { setCallbackError(false); setCallbackErrorMsg(); }}
                     /> : null}
-                    {isPreview ? <ModalPage
-                        open={isPreview ?? false}
-                        styles={{ width: '80%' }}
+                    {currentStep==4||isPreview ? <ModalPage
+                        open={(currentStep==4||isPreview) ?? false}
+                        styles={{ width: '90%', position: 'fixed', bottom: 0 }}
+                        classes={` ${Styles.maxHeightNinty}`}
                         content={<div className="d-flex flex-column gap-3">
                             <h2 className='text-start' style={{ position: 'sticky', top: '-20px', background: '#fff', zIndex: '111', paddingTop: '20px' }}>
                                 Newsletter Preview
                                 <hr />
                             </h2>
-                            <div className={Styles.modalContent} dangerouslySetInnerHTML={{ __html: isPreview }} />
-                            {/* <div className="d-flex justify-content-around">
-                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { setCallbackError(false); setCallbackErrorMsg(); }}>
-                                    <BiExit /> &nbsp;Ok
+                            {isPreviewHtml.isLoaded?
+                            <div className={`${Styles.modalContent}`} dangerouslySetInnerHTML={{ __html: isPreview }} />
+                            :(<Loading height={'55vh'}/>)}
+                            <div className="d-flex justify-content-around" style={{ position: 'sticky', bottom: '-20px', zIndex: 11,background:'#fff',padding:'1rem 0' }}>
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { handleAccordionClick(3); setIsPreview(); }}>
+                                    Go Back
                                 </button>
-                            </div> */}
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { handleAccordionClick(5); setIsPreview(); }}>
+                                    Select Subscribers
+                                </button>
+                            </div>
                         </div>}
                         onClose={() => { setIsPreview() }}
                     /> : null}
@@ -457,7 +482,7 @@ const MultiStepForm = () => {
                         <div className="accordion-item">
                             <div
                                 className={`accordion-header ${currentStep === 1 ? 'active' : ''}`}
-                                onClick={() => handleAccordionClick(1)}
+                                // onClick={() => handleAccordionClick(1)}
                             >
                                 <h3>Newsletter Details</h3>
                                 <span>{currentStep === 1 ? '-' : '+'}</span>
@@ -535,7 +560,7 @@ const MultiStepForm = () => {
                         <div className="accordion-item text-[16px] font-['Montserrat-400']">
                             <div
                                 className={`accordion-header ${currentStep === 2 ? 'active' : ''}`}
-                                onClick={() => handleAccordionClick(2)}
+                                // onClick={() => handleAccordionClick(2)}
                             >
                                 <h3>Brand Selection</h3>
                                 <span>{currentStep === 2 ? '-' : '+'}</span>
@@ -545,7 +570,7 @@ const MultiStepForm = () => {
                                     <div className="text-start">
                                         <div className='d-flex justify-content-between'>
 
-                                            <b className='d-flex gap-2'>Select Brand: <p style={{ fontWeight: 'normal' }}>This Brand are ready to be include in newsletter for&nbsp;{months[new Date().getMonth() + 1]}{formData.forMonth == 2 ? ' and ' : formData.forMonth == 3 ? ', ' : null}{formData.forMonth >= 2 ? months[new Date().getMonth() + 2] : null}{formData.forMonth == 3 ? ' and ' : null}{formData.forMonth >= 3 ? months[new Date().getMonth() + 3] : null}</p></b>
+                                            <b className='d-flex gap-2'>Newsletter ready brands: <p style={{ fontWeight: 'normal' }}>Theese Brands are ready to be include in newsletter for&nbsp;{months[new Date().getMonth() + 1]}{formData.forMonth == 2 ? ' and ' : formData.forMonth == 3 ? ', ' : null}{formData.forMonth >= 2 ? months[new Date().getMonth() + 2] : null}{formData.forMonth == 3 ? ' and ' : null}{formData.forMonth >= 3 ? months[new Date().getMonth() + 3] : null}</p></b>
                                             <div className='d-flex gap-2'>
                                                 <p className='cursor-pointer' onClick={() => { setFormData({ ...formData, brand: showBrandList.map(element => (element.Id)) }); }}>Select all</p>|
                                                 <p className='cursor-pointer' onClick={() => { setFormData({ ...formData, brand: [] }); }}>reset</p>
@@ -640,7 +665,7 @@ const MultiStepForm = () => {
                         <div className="accordion-item text-[16px] font-[Montserrat-400]">
                             <div
                                 className={`accordion-header ${currentStep === 3 ? 'active' : ''}`}
-                                onClick={() => handleAccordionClick(3)}
+                                // onClick={() => handleAccordionClick(3)}
                             >
                                 <h3>Template Selection</h3>
                                 <span>{currentStep === 3 ? '-' : '+'}</span>
@@ -730,13 +755,13 @@ const MultiStepForm = () => {
                         </div>
                         <div className="accordion-item">
                             <div
-                                className={`accordion-header ${currentStep === 4 ? 'active' : ''}`}
-                                onClick={() => handleAccordionClick(4)}
+                                className={`accordion-header ${currentStep === 5 ? 'active' : ''}`}
+                                // onClick={() => handleAccordionClick(4)}
                             >
                                 <h3>Subscribers</h3>
-                                <span>{currentStep === 4 ? '-' : '+'}</span>
+                                <span>{currentStep === 5 ? '-' : '+'}</span>
                             </div>
-                            {currentStep === 4 && (
+                            {currentStep === 5 && (
                                 <>
                                     <div className="accordion-body">
                                         <MultiSelectSearch
@@ -746,6 +771,8 @@ const MultiStepForm = () => {
                                             onChange={handleSelectionChange}
                                             manufacturers={manufacturers?.data || []}
                                             setWarning={setWarning}
+                                            brandSelected={manufacturers.data.filter(brand => formData.brand.includes(brand.Id))}
+                                            manufacturersList={manufacturersList?.data||[]}
                                         />
 
                                     </div>
@@ -757,20 +784,20 @@ const MultiStepForm = () => {
                             {currentStep != 1 ? <button
                                 type="button"
                                 className="prev-btn"
-                                onClick={() => handleAccordionClick(currentStep - 1)}
+                                onClick={() => handleAccordionClick(currentStep==5?3:currentStep-1)}
                             >
                                 Previous
                             </button> : null}&nbsp;
                             <div>
-                                {isPreviewHtml ? <button
+                                {isPreviewHtml.isLoaded ? <button
                                     type="button"
                                     className="next-btn"
-                                    onClick={() => setIsPreview(isPreviewHtml)}
+                                    onClick={() => setIsPreview(isPreviewHtml.preview)}
                                 >
                                     Preview
                                 </button> : null}&nbsp;
-                                {currentStep == 4 ? <button type="submit" onClick={() => {
-                                    if (currentStep === 4 && (!formData.brand.length)) {
+                                {currentStep == 5 ? <button type="submit" onClick={() => {
+                                    if (currentStep === 5 && (!formData.brand.length)) {
                                         setCallbackError(true)
                                         setCallbackErrorMsg('Please select a brand')
                                         return;
