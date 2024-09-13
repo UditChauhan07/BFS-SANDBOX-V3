@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import Styles from "./Styles.module.css";
-const Modal = ({ isOpen, onClose, children,styles }) => {
+const Modal = ({ isOpen, onClose, children,styles,classes }) => {
   return (
     <>
       {isOpen && (
         <div className={Styles.modalOverlay} onClick={onClose}>
           <div 
-            className={`${Styles.modal} `}
+            className={`${Styles.modal} ${classes}`}
             style={{...styles}}
             onClick={(e) => {
               // do not close modal if anything inside modal content is clicked
@@ -20,7 +20,7 @@ const Modal = ({ isOpen, onClose, children,styles }) => {
     </>
   );
 };
-const ModalPage = ({ open, content, onClose,styles={} }) => {
+const ModalPage = ({ open, content, onClose,styles={},classes=null }) => {
   const [isOpen, setIsOpen] = useState(open);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const ModalPage = ({ open, content, onClose,styles={} }) => {
   };
 
   return isOpen ? (
-    <Modal isOpen={isOpen} onClose={onModalClose} styles={styles}>
+    <Modal isOpen={isOpen} onClose={onModalClose} styles={styles} classes={classes}>
       <div id={"alertBox"}>
         <div className={Styles.ModalControl}>
           {content}
