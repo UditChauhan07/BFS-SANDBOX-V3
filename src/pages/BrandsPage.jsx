@@ -138,7 +138,7 @@ const BrandsPage = () => {
       <AppLayout
         filterNodes={
           <>
-          {memoizedPermissions?.modules?.filter?.view ? <>
+         
             <FilterItem
               label="Sort by"
               name="Sort-by"
@@ -199,7 +199,7 @@ const BrandsPage = () => {
               <CloseButton crossFill={'#fff'} height={20} width={20} />
               <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
             </button>
-           </> : null}
+           
           
           </>
         }

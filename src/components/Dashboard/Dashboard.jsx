@@ -599,7 +599,7 @@ function Dashboard({ dashboardData }) {
     <AppLayout
       filterNodes={
         <>
-        {memoizedPermissions?.modules?.filter?.view ? <>
+      
           <FilterItem
             minWidth="220px"
             label="Month-Year"
@@ -613,7 +613,7 @@ function Dashboard({ dashboardData }) {
             }}
             name={"dashboard-manu"}
           />
-         </> : null}
+      
      
         </>
       }
