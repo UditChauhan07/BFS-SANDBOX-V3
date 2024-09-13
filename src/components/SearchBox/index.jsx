@@ -3,20 +3,23 @@ import './MultiSelectSearch.css';
 import { UserIcon } from '../../lib/svg';
 import ToggleSwitch from '../ToggleButton';
 import Loading from '../Loading';
+let limit = 500;
 
-const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, manufacturers = [], setWarning, brandSelected = [],manufacturersList=[] }) => {
+const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, manufacturers = [], setWarning, brandSelected = [],manufacturersList=[],errorMessage }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showSelected, setShowSelected] = useState(false);
     const [brand, setBrand] = useState();
     const [showAll, stShowAll] = useState(false);
     const [isLoadings, setIsLoading] = useState(loading ? true : false);
+    const [alert,setAlert]=useState(false);
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
         const isSelected = selectedValues.some(selected => selected.Id === item.Id);
     
         // Check if selected values exceed the limit of 250
-        if (!isSelected && selectedValues.length >= 250) {
-            alert("You cannot select more than 250 items.");
+        if (!isSelected && selectedValues.length >= limit) {
+            // alert("You cannot select more than 250 items.");
+            errorMessage?.("You cannot select more than "+limit+" items.")
             return; // Prevent further selection
         }
     
@@ -78,7 +81,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
 
     const AutoSelectChangeHandler = () => {
         // Calculate how many more items can be selected without exceeding the limit
-        const remainingSelections = 250 - selectedValues.length;
+        const remainingSelections = limit - selectedValues.length;
     
         // Filter out options that are already selected
         const newOptions = filteredOptions.filter(
@@ -87,7 +90,8 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
     
         // Check if adding new options would exceed the 250-item limit
         if (newOptions.length > remainingSelections) {
-            alert(`You can only select up to 250 items. You have ${remainingSelections} remaining.`);
+            // alert(`You can only select up to 250 items. You have ${remainingSelections} remaining.`);
+            errorMessage?.(`You can only select up to ${limit} items. You have ${remainingSelections} remaining.`)
             return; // Prevent adding more than the limit
         }
     

@@ -27,14 +27,14 @@ const MultiStepForm = () => {
     const [isSchedule, setIsSchedule] = useState(false)
     const [isUserSelected, setIsUserSelected] = useState(false);
     const [isPreview, setIsPreview] = useState();
-    const [isPreviewHtml, setIsPreviewHtml] = useState({isLoaded:false,preview:null});
+    const [isPreviewHtml, setIsPreviewHtml] = useState({ isLoaded: false, preview: null });
     const [loading, setLoading] = useState(true);
     const [errorContact, setErrorContact] = useState([])
     const [showErrorList, setShowErrorList] = useState(false)
     const [warning, setWarning] = useState(false)
     const [minDate, setMinDate] = useState(new Date());
     const [maxDate, setMaxDate] = useState(new Date());
-    
+
     const [formData, setFormData] = useState({
         subscriber: [],
         template: null,
@@ -111,7 +111,7 @@ const MultiStepForm = () => {
             }
             return;
         }
-        if(step == 5){
+        if (step == 5) {
             setIsPreview(isPreviewHtml.preview)
         }
         setCurrentStep(step);
@@ -168,11 +168,12 @@ const MultiStepForm = () => {
 
     useEffect(() => {
         setIsPreview()
-        if (currentStep==4) {
-            setIsPreviewHtml({isLoaded:false,preview:null})
+        if (currentStep == 4) {
+            setIsPreviewHtml({ isLoaded: false, preview: null })
             generateNewsletterPreview();
         }
     }, [currentStep])
+    
 
     const generateNewsletterPreview = () => {
         let body = {
@@ -188,14 +189,19 @@ const MultiStepForm = () => {
 
             if (result.status) {
                 if (result.data) {
-                    setIsPreview(result.data)
-                    setIsPreviewHtml({isLoaded:true,preview:result.data})
+                        setIsPreviewHtml({ isLoaded: true, preview: result.data })
                 }
             }
         }).catch((err) => {
             console.log({ err });
 
         })
+    }
+    const errorMessage = (message) => {
+        if (message) {
+            setCallbackError(true)
+            setCallbackErrorMsg(message)
+        }
     }
     const generateOrderNow = () => {
         setShowErrorList(false);
@@ -345,8 +351,8 @@ const MultiStepForm = () => {
             <CalenderIcon fill='#000' />
         </button>
     ));
-    console.log({isPreviewHtml});
-    
+    console.log({ isPreviewHtml });
+
     return (
         <div className="form-container create-newsletter">
             {isSubmit ? <Loading height={'500px'} /> :
@@ -358,7 +364,7 @@ const MultiStepForm = () => {
                                 Alert!!!
                             </h2>
                             <p className="modalContent">
-                                {Subscribers.contacts.filter(selected => selected.Id === warning).length ? Subscribers.contacts.filter(selected => selected.Id === warning)[0].Name : "User"}&nbsp;
+                                {Subscribers.contacts.filter(selected => selected.Id === warning).length ? Subscribers.contacts.filter(selected => selected.Id === warning)[0].Name : "User"}
                                 doesn't subscribe for <br />
                                 {manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).map((brand, index) => (<>{brand.Name}{index < (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 2) ? ', ' : index != (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 1) ? ' and ' : null}</>))}
                                 <br />
@@ -392,8 +398,8 @@ const MultiStepForm = () => {
                         </div>}
                         onClose={() => { setCallbackError(false); setCallbackErrorMsg(); }}
                     /> : null}
-                    {currentStep==4||isPreview ? <ModalPage
-                        open={(currentStep==4||isPreview) ?? false}
+                    {currentStep == 4 ? <ModalPage
+                        open={(currentStep == 4) ?? false}
                         styles={{ width: '90%', position: 'fixed', bottom: 0 }}
                         classes={` ${Styles.maxHeightNinty}`}
                         content={<div className="d-flex flex-column gap-3">
@@ -401,19 +407,19 @@ const MultiStepForm = () => {
                                 Newsletter Preview
                                 <hr />
                             </h2>
-                            {isPreviewHtml.isLoaded?
-                            <div className={`${Styles.modalContent}`} dangerouslySetInnerHTML={{ __html: isPreview }} />
-                            :(<Loading height={'55vh'}/>)}
-                            <div className="d-flex justify-content-around" style={{ position: 'sticky', bottom: '-20px', zIndex: 11,background:'#fff',padding:'1rem 0' }}>
-                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { handleAccordionClick(3); setIsPreview(); }}>
+                            {isPreviewHtml.isLoaded ?
+                                <div className={`${Styles.modalContent}`} dangerouslySetInnerHTML={{ __html: isPreviewHtml.preview }} />
+                                : (<Loading height={'55vh'} />)}
+                            <div className="d-flex justify-content-around" style={{ position: 'sticky', bottom: '-20px', zIndex: 11, background: '#fff', padding: '1rem 0' }}>
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { handleAccordionClick(3); }}>
                                     Go Back
                                 </button>
-                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { handleAccordionClick(5); setIsPreview(); }}>
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { handleAccordionClick(5); }}>
                                     Select Subscribers
                                 </button>
                             </div>
                         </div>}
-                        onClose={() => { setIsPreview() }}
+                        onClose={() => { handleAccordionClick(3); }}
                     /> : null}
                     {showErrorList ? <ModalPage
                         open={showErrorList ?? false}
@@ -482,7 +488,7 @@ const MultiStepForm = () => {
                         <div className="accordion-item">
                             <div
                                 className={`accordion-header ${currentStep === 1 ? 'active' : ''}`}
-                                // onClick={() => handleAccordionClick(1)}
+                            // onClick={() => handleAccordionClick(1)}
                             >
                                 <h3>Newsletter Details</h3>
                                 <span>{currentStep === 1 ? '-' : '+'}</span>
@@ -560,7 +566,7 @@ const MultiStepForm = () => {
                         <div className="accordion-item text-[16px] font-['Montserrat-400']">
                             <div
                                 className={`accordion-header ${currentStep === 2 ? 'active' : ''}`}
-                                // onClick={() => handleAccordionClick(2)}
+                            // onClick={() => handleAccordionClick(2)}
                             >
                                 <h3>Brand Selection</h3>
                                 <span>{currentStep === 2 ? '-' : '+'}</span>
@@ -570,7 +576,7 @@ const MultiStepForm = () => {
                                     <div className="text-start">
                                         <div className='d-flex justify-content-between'>
 
-                                            <b className='d-flex gap-2'>Newsletter ready brands: <p style={{ fontWeight: 'normal' }}>Theese Brands are ready to be include in newsletter for&nbsp;{months[new Date().getMonth() + 1]}{formData.forMonth == 2 ? ' and ' : formData.forMonth == 3 ? ', ' : null}{formData.forMonth >= 2 ? months[new Date().getMonth() + 2] : null}{formData.forMonth == 3 ? ' and ' : null}{formData.forMonth >= 3 ? months[new Date().getMonth() + 3] : null}</p></b>
+                                            <b className='d-flex gap-2'>Newsletter ready brands: <p style={{ fontWeight: 'normal' }}>These Brands are ready to be included in newsletter for&nbsp;{months[new Date().getMonth() + 1]}{formData.forMonth == 2 ? ' and ' : formData.forMonth == 3 ? ', ' : null}{formData.forMonth >= 2 ? months[new Date().getMonth() + 2] : null}{formData.forMonth == 3 ? ' and ' : null}{formData.forMonth >= 3 ? months[new Date().getMonth() + 3] : null}</p></b>
                                             <div className='d-flex gap-2'>
                                                 <p className='cursor-pointer text-[#509fde] hover:underline' onClick={() => { setFormData({ ...formData, brand: showBrandList.map(element => (element.Id)) }); }}>Select all</p>|
                                                 <p className='cursor-pointer text-[#509fde] hover:underline' onClick={() => { setFormData({ ...formData, brand: [] }); }}>reset</p>
@@ -665,7 +671,7 @@ const MultiStepForm = () => {
                         <div className="accordion-item text-[16px] font-[Montserrat-400]">
                             <div
                                 className={`accordion-header ${currentStep === 3 ? 'active' : ''}`}
-                                // onClick={() => handleAccordionClick(3)}
+                            // onClick={() => handleAccordionClick(3)}
                             >
                                 <h3>Template Selection</h3>
                                 <span>{currentStep === 3 ? '-' : '+'}</span>
@@ -756,7 +762,7 @@ const MultiStepForm = () => {
                         <div className="accordion-item">
                             <div
                                 className={`accordion-header ${currentStep === 5 ? 'active' : ''}`}
-                                // onClick={() => handleAccordionClick(4)}
+                            // onClick={() => handleAccordionClick(4)}
                             >
                                 <h3>Subscribers</h3>
                                 <span>{currentStep === 5 ? '-' : '+'}</span>
@@ -772,7 +778,8 @@ const MultiStepForm = () => {
                                             manufacturers={manufacturers?.data || []}
                                             setWarning={setWarning}
                                             brandSelected={manufacturers.data.filter(brand => formData.brand.includes(brand.Id))}
-                                            manufacturersList={manufacturersList?.data||[]}
+                                            manufacturersList={manufacturersList?.data || []}
+                                            errorMessage={errorMessage}
                                         />
 
                                     </div>
@@ -784,7 +791,7 @@ const MultiStepForm = () => {
                             {currentStep != 1 ? <button
                                 type="button"
                                 className="prev-btn"
-                                onClick={() => handleAccordionClick(currentStep==5?3:currentStep-1)}
+                                onClick={() => handleAccordionClick(currentStep == 5 ? 3 : currentStep - 1)}
                             >
                                 Previous
                             </button> : null}&nbsp;
@@ -792,7 +799,7 @@ const MultiStepForm = () => {
                                 {isPreviewHtml.isLoaded ? <button
                                     type="button"
                                     className="next-btn"
-                                    onClick={() => setIsPreview(isPreviewHtml.preview)}
+                                    onClick={() => handleAccordionClick(4)}
                                 >
                                     Preview
                                 </button> : null}&nbsp;
