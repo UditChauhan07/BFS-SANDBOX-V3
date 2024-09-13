@@ -4,248 +4,333 @@ import AppLayout from '../../components/AppLayout';
 import Styles from "./index.module.css";
 import { FilterItem } from '../../components/FilterItem';
 import { GetAuthData, originAPi, DestoryAuth } from '../../lib/store';
-
+import Loading from '../../components/Loading';
+import styles from "../../components/newness report table/table.module.css";
+import * as XLSX from 'xlsx';
+import { CloseButton } from "../../lib/svg";
+import { MdOutlineDownload } from "react-icons/md";
 function ContactDetailedReport() {
     const [accountManufacturerRecords, setAccountManufacturerRecords] = useState([]);
     const [filteredRecords, setFilteredRecords] = useState([]);
-    const [accountFilter, setAccountFilter] = useState('');
-    const [saleRepFilter, setSaleRepFilter] = useState('');
+    const [filters, setFilters] = useState({
+        accountFilter: '',
+        saleRepFilter: '',
+        manufacturerFilter: '',
+    });
     const [accounts, setAccounts] = useState([]);
     const [salesReps, setSalesReps] = useState([]);
+    const [manufacturers, setManufacturers] = useState([]);
+    const [loading, setLoading] = useState(true); // Loading state
 
     // Debounce filter changes
-    const [debouncedAccountFilter, setDebouncedAccountFilter] = useState(accountFilter);
-    const [debouncedSaleRepFilter, setDebouncedSaleRepFilter] = useState(saleRepFilter);
+    const [debouncedFilters, setDebouncedFilters] = useState(filters);
 
-    // UseEffect for debouncing account filter
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            setDebouncedAccountFilter(accountFilter);
+            setDebouncedFilters(filters);
         }, 300);
         return () => clearTimeout(timeoutId);
-    }, [accountFilter]);
+    }, [filters]);
 
-    // UseEffect for debouncing sales rep filter
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            setDebouncedSaleRepFilter(saleRepFilter);
-        }, 300);
-        return () => clearTimeout(timeoutId);
-    }, [saleRepFilter]);
-
-    useEffect(() => {
-        const fetchAccountDetails = async () => {
-            try {
-                const data = await GetAuthData();
-                if (!data) {
-                    console.log("No data found, destroying auth");
-                    DestoryAuth();
-                    return;
-                }
-
-                const accessToken = data.access_token;
-                console.log("Access Token:", accessToken);
-
-                // Fetch account manufacturer records
-                const apiUrl = `${originAPi}/new-report/fetch-account-data`;
-                const res = await axios.post(apiUrl, { accessToken });
-
-                console.log("API Response:", res.data);
-
-                if (res.data && res.data.accountManufacturerRecords) {
-                    const records = res.data.accountManufacturerRecords;
-
-                    // Flatten the contact records with the main account manufacturer records
-                    const expandedRecords = records.flatMap((record) => {
-                        const contacts = record.contacts || [];
-                        return contacts.length
-                            ? contacts.map((contact) => ({
-                                ...record,
-                                contact // Embed each contact into the record
-                            }))
-                            : [{ ...record, contact: null }]; // Handle case where there are no contacts
-                    });
-
-                    setAccountManufacturerRecords(expandedRecords);
-                    setFilteredRecords(expandedRecords);
-
-                    // Extract accounts and sales reps for filter dropdowns
-                    const accountList = expandedRecords.map((record) => ({
-                        label: record.AccountId__r?.Name,
-                        value: record.AccountId__r?.Name,
-                    }));
-
-                    const saleRepList = expandedRecords.map((record) => ({
-                        label: record.Sales_Rep__r?.Name,
-                        value: record.Sales_Rep__r?.Name,
-                    }));
-
-                    // Remove duplicates using Map
-                    setAccounts([...new Map(accountList.map(account => [account.value, account])).values()]);
-                    setSalesReps([...new Map(saleRepList.map(rep => [rep.value, rep])).values()]);
-                }
-            } catch (error) {
-                console.error("Error fetching account details:", error);
+    const fetchAccountDetails = async () => {
+        setLoading(true); // Show loader
+        try {
+            const data = await GetAuthData();
+            if (!data) {
+                console.log("No data found, destroying auth");
+                DestoryAuth();
+                return;
             }
-        };
-
+    
+            const accessToken = data.access_token;
+            console.log("Access Token:", accessToken);
+    
+            // Fetch account manufacturer records
+            const apiUrl = `${originAPi}/skahHqskfz/NbvBPAyVSQ`;
+            const res = await axios.post(apiUrl, { accessToken });
+    
+            console.log("API Response:", res.data);
+    
+            if (res.data && res.data.accountManufacturerRecords) {
+                const records = res.data.accountManufacturerRecords;
+    
+                // Flatten the contact records with the main account manufacturer records
+                const expandedRecords = records.flatMap((record) => {
+                    const contacts = record.contacts || [];
+                    return contacts.length
+                        ? contacts.map((contact) => ({
+                            ...record,
+                            contact // Embed each contact into the record
+                        }))
+                        : [{ ...record, contact: null }]; // Handle case where there are no contacts
+                });
+    
+                setAccountManufacturerRecords(expandedRecords);
+                setFilteredRecords(expandedRecords);
+    
+                // Extract accounts, sales reps, and manufacturers for filter dropdowns
+                const accountList = expandedRecords.map((record) => ({
+                    label: record.AccountId__r?.Name,
+                    value: record.AccountId__r?.Name,
+                }));
+    
+                const saleRepList = expandedRecords.map((record) => ({
+                    label: record.Sales_Rep__r?.Name,
+                    value: record.Sales_Rep__r?.Name,
+                }));
+    
+                const manufacturerList = expandedRecords.map((record) => ({
+                    label: record.ManufacturerName__c,
+                    value: record.ManufacturerName__c,
+                }));
+    
+                // Remove duplicates using Map
+                setAccounts([...new Map(accountList.map(account => [account.value, account])).values()]);
+                setSalesReps([...new Map(saleRepList.map(rep => [rep.value, rep])).values()]);
+                setManufacturers([...new Map(manufacturerList.map(manufacturer => [manufacturer.value, manufacturer])).values()]);
+            }
+        } catch (error) {
+            console.error("Error fetching account details:", error);
+        } finally {
+            setLoading(false); // Hide loader
+        }
+    };
+    useEffect(() => {
         fetchAccountDetails();
     }, []);
-
-    // Filter records by account name and sales rep
+    
+    
+    // Filter records by account name, sales rep, and manufacturer
     useEffect(() => {
         const newFilteredRecords = accountManufacturerRecords.filter((record) => {
-            const accountMatch = debouncedAccountFilter
-                ? record.AccountId__r?.Name?.toLowerCase().includes(debouncedAccountFilter.toLowerCase())
+            const accountMatch = debouncedFilters.accountFilter
+                ? record.AccountId__r?.Name?.toLowerCase().includes(debouncedFilters.accountFilter.toLowerCase())
                 : true;
-            const saleRepMatch = debouncedSaleRepFilter
-                ? record.Sales_Rep__r?.Name?.toLowerCase().includes(debouncedSaleRepFilter.toLowerCase())
+            const saleRepMatch = debouncedFilters.saleRepFilter
+                ? record.Sales_Rep__r?.Name?.toLowerCase().includes(debouncedFilters.saleRepFilter.toLowerCase())
                 : true;
-            return accountMatch && saleRepMatch;
+            const manufacturerMatch = debouncedFilters.manufacturerFilter
+                ? record.ManufacturerName__c?.toLowerCase().includes(debouncedFilters.manufacturerFilter.toLowerCase())
+                : true;
+            return accountMatch && saleRepMatch && manufacturerMatch;
         });
 
         setFilteredRecords(newFilteredRecords);
-    }, [debouncedAccountFilter, debouncedSaleRepFilter, accountManufacturerRecords]);
-    useEffect(() => {
-        console.log(filteredRecords , "filtered records ");
-    }, [filteredRecords]);
+    }, [debouncedFilters, accountManufacturerRecords]);
+
+    const handleFilterChange = (filterType, value) => {
+        setFilters(prev => ({ ...prev, [filterType]: value }));
+    };
+
+    const handleClearFilters = async () => {
+        // Reset filters
+        setFilters({
+            accountFilter: '',
+            saleRepFilter: '',
+            manufacturerFilter: '',
+        });
+        setLoading(true); // Show loader
+    
+        // Refetch data
+        await fetchAccountDetails();
+    };
+
+    const handleSearch = () => {
+        // Trigger any additional search logic if needed
+    };
+
+    const handleExportToExcel = () => {
+        // Prepare data for export
+        const exportData = filteredRecords.map(record => ({
+            'Account Name': record.AccountId__r?.Name || '',
+            'First Name': record.contact?.FirstName || 'N/A',
+            'Last Name': record.contact?.LastName || 'N/A',
+            'Sales Rep': record.Sales_Rep__r?.Name || '',
+            'Manufacturer': record.ManufacturerName__c || '',
+            'Email': record.contact?.Email || 'N/A',
+            'Phone': record.contact?.Phone || 'N/A',
+            'Account Number': record.Account_Number__c || 'N/A',
+            'Margin': record.Margin__c || 'N/A',
+            'Payment Type': record.Payment_Type__c || 'N/A',
+            'Store Street': record.AccountId__r?.Store_Street__c || 'N/A',
+            'Store City': record.AccountId__r?.Store_City__c || 'N/A',
+            'Store State': record.AccountId__r?.Store_State__c || 'N/A',
+            'Store Zip': record.AccountId__r?.Store_Zip__c || 'N/A',
+            'Store Country': record.AccountId__r?.Store_Country__c || 'N/A',
+            'Shipping Street': record.AccountId__r?.ShippingStreet || 'N/A',
+            'Shipping City': record.AccountId__r?.ShippingCity || 'N/A',
+            'Shipping State': record.AccountId__r?.ShippingState || '',
+            'Shipping Zip': record.AccountId__r?.ShippingPostalCode || 'N/A',
+            'Shipping Country': record.AccountId__r?.ShippingCountry || 'N/A',
+            'Billing Street': record.AccountId__r?.BillingStreet || 'N/A',
+            'Billing City': record.AccountId__r?.BillingCity || 'N/A',
+            'Billing State': record.AccountId__r?.BillingState || 'N/A',
+            'Billing Zip': record.AccountId__r?.BillingPostalCode || 'N/A',
+            'Billing Country': record.AccountId__r?.BillingCountry || 'N/A',
+        }));
+
+        // Create a new workbook and add the data
+        const ws = XLSX.utils.json_to_sheet(exportData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Contacts');
+
+        // Export the workbook
+        XLSX.writeFile(wb, 'ContactDetailedReport.xlsx');
+    };
+
     return (
-        <>
-            <AppLayout
-                filterNodes={
-                    <div className="d-flex justify-content-center gap-10" style={{ width: "99%" }}>
-                        <FilterItem
-                            minWidth="120px"
-                            label="Account Name"
-                            value={accountFilter}
-                            options={accounts}
-                            onChange={(value) => setAccountFilter(value)}
-                            onFocus={() => setSaleRepFilter('')} // Close other filters when focusing
-                        />
-                       
-                    </div>
-                }
-            >
+        <AppLayout
+            filterNodes={
+                <>
+                    <FilterItem
+                        minWidth="200px"
+                        label="Account Name"
+                        value={filters.accountFilter}
+                        name='Account Name'
+                        options={accounts}
+                        onChange={(value) => handleFilterChange('accountFilter', value)}
+                        onFocus={() => setFilters(prev => ({ ...prev, saleRepFilter: '', manufacturerFilter: '' }))} 
+                    />
+                    
+                    <FilterItem
+                        minWidth="200px"
+                        label="Sales Rep"                       
+                        value={filters.saleRepFilter}
+                        name = 'Sales Rep'
+                        options={salesReps}
+                        onChange={(value) => handleFilterChange('saleRepFilter', value)}
+                        onFocus={() => setFilters(prev => ({ ...prev, accountFilter: '', manufacturerFilter: '' }))}
+                    />
+                    <FilterItem
+                        minWidth="200px"
+                        label="Manufacturer"
+                        name = "Manufacturer"
+                        value={filters.manufacturerFilter}
+                        options={manufacturers}
+                        onChange={(value) => handleFilterChange('manufacturerFilter', value)}
+                        onFocus={() => setFilters(prev => ({ ...prev, accountFilter: '', saleRepFilter: '' }))}
+                    />
+
+                    <div>
+                    <button className="border px-2 py-1 leading-tight d-grid" onClick={handleClearFilters}>
+              <CloseButton crossFill={'#fff'} height={20} width={20} />
+              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
+            </button>
+                   
+                </div>
+                    
+                     <button className="border px-2 py-1 leading-tight d-grid" onClick={handleExportToExcel}>
+            <MdOutlineDownload size={16} className="m-auto" />
+            <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>export</small>
+          </button>
+            
+                </>
+            }
+        >
+
+<div className={Styles.inorderflex}>
+        <div>
+          <h2>
+            Contact Detailed Report
+          </h2>
+        </div>
+        <div></div>
+      </div>
+           
+            {loading ? (
+                <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "70vh" }}>
+                    <Loading />
+                </div>
+            ) : (
                 <div className={`d-flex p-3 ${Styles.tableBoundary} mb-5`}>
                     <div style={{ maxHeight: "73vh", minHeight: "40vh", overflow: "auto", width: "100%" }}>
                         <table id="salesReportTable" className="table table-responsive" style={{ minHeight: "300px" }}>
-                            <thead>
-                                <tr>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "170px" }}>Account Name</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "150px" }}>First Name</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "200px" }}>Last Name</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "200px" }}>Sale Rep</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "200px" }}>Manufacturer</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "200px" }}>Email</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "200px" }}>Phone</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Account Number</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Margin</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Payment Type</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Store Street</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Store City</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Store State</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Store Zip</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Store Country</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping Street</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping City</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping State</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping Zip</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping Country</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Billing Street</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Billing City</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Billing Zip</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Billing Country</th>
-                                </tr>
-                            </thead>
+                        <thead >
+    <tr>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Account Name</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>First Name</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Last Name</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Sales Rep</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Manufacturer</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Email</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Phone</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Account Number</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Margin</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Payment Type</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Store Street</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Store City</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Store State</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Store Zip</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Store Country</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Shipping Street</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Shipping City</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Shipping State</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Shipping Zip</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Shipping Country</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Billing Street</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Billing City</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Billing State/Province</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Billing Zip/Postal Code</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Billing Country</th>
+    </tr>
+</thead>
+
                             <tbody>
-                                {filteredRecords.length ? filteredRecords.map((record, index) => (
-                                    <tr key={record.Id || index}>
+                                {filteredRecords.map((record, index) => (
+                                    <tr key={index}>
+                                        <td>{record.AccountId__r?.Name}</td>
+                                        <td>{record.contact?.FirstName || 'N/A'}</td>
+                                        <td>{record.contact?.LastName || 'N/A'}</td>
+                                        <td>{record.Sales_Rep__r?.Name}</td>
+                                        <td>{record.ManufacturerName__c}</td>
+                                        <td>{record.contact?.Email || 'N/A'}</td>
+                                        <td>{record.contact?.Phone || 'N/A'}</td>
+                                        <td>{record.Account_Number__c}</td>
+                                        <td>{record.Margin__c}</td>
+                                        <td>{record.Payment_Type__c}</td>
+                                        <td>{record.AccountId__r?.Store_Street__c}</td>
+                                        <td>{record.AccountId__r?.Store_City__c}</td>
+                                        <td>{record.AccountId__r?.Store_State__c}</td>
+                                        <td>{record.AccountId__r?.Store_Zip__c}</td>
+                                        <td>{record.AccountId__r?.Store_Country__c}</td>
                                         <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.Name || ''}
+                                            {record.AccountId__r?.ShippingStreet || 'N/A'}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.contact?.FirstName || ''}
+                                            {record.AccountId__r?.ShippingCity || 'N/A'}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.contact?.LastName || ''}
+                                            {record.AccountId__r?.ShippingState || 'N/A'}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.Sales_Rep__r?.Name || ''}
+                                            {record.AccountId__r?.ShippingPostalCode || 'N/A'}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                        {record.ManufacturerName__c || ''}
+                                            {record.AccountId__r?.ShippingCountry || 'N/A'}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.contact?.Email || ''}
+                                            {record.AccountId__r?.BillingStreet || 'N/A'}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.contact?.Phone || ''}
+                                            {record.AccountId__r?.BillingCity || 'N/A'}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.Account_Number__c || ''}
+                                            {record.AccountId__r?.BillingState || 'N/A'}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.Margin__c || ''}
+                                            {record.AccountId__r?.BillingPostalCode || 'N/A'}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.Payment_Type__c || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.Store_Street__c || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.Store_City__c || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.Store_State__c || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.Store_Zip__c || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.Store_Country__c || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.ShippingStreet || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.ShippingCity || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.ShippingState || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.ShippingPostalCode || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.ShippingCountry || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.BillingStreet || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.BillingCity || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.BillingPostalCode || ''}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.BillingCountry || ''}
+                                            {record.AccountId__r?.BillingCountry || 'N/A'}
                                         </td>
                                     </tr>
-                                )) : (
-                                    <tr>
-                                        <td colSpan="24" className={`${Styles.td} text-center`}>
-                                            No data available
-                                        </td>
-                                    </tr>
-                                )}
+                                ))}
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </AppLayout>
-        </>
+            )}
+        </AppLayout>
     );
 }
 

@@ -108,7 +108,9 @@ const Header = () => {
                path === "/newness-report" ? "Newness Report" : null ||
                path === "/comparison-report" ? "Comparison Report" : null ||
                path === "/comparison" ? "Yearly Comparison Report" : null ||
-               path === "/Target-Report" ? "Target Report" : "Reports"}
+               path === "/Target-Report" ? "Target Report" : null ||
+               path === "/account-contact-detailed-Report" ? "Account Contact Detailed Report" : "Reports"
+               }
               <ul className="dropdown-menu">
                 {memoizedPermissions?.modules?.reports?.salesReport?.view ? (
                   <li>
