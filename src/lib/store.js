@@ -1003,6 +1003,31 @@ export async function createNewsletter(body) {
   }
 };
 
+
+export async function fetchNewletterPreview(body) {
+  // if (!body) {
+  //   throw new Error('Access token is missing');
+  // }
+
+  try {
+    let headersList = {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+    };
+    let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/hLsoGJGjWAkTjaF", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: headersList,
+    });
+    let data = JSON.parse(await response.text());
+
+    return { status: true, data: data.data };
+  } catch (err) {
+    console.error('Error fetching newsletter data:', err);
+    return { status: false, message: err.message };
+  }
+};
+
 export async function publicProductDetails({ token, id }) {
   let headersList = {
     Accept: "*/*",
