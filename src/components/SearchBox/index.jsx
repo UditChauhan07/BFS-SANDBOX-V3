@@ -7,7 +7,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
     const [searchTerm, setSearchTerm] = useState('');
     const [showSelected, setShowSelected] = useState(false);
     const [brand, setBrand] = useState();
-    const [showAll, stShowAll] = useState(false)
+    const [showAll, stShowAll] = useState(false);
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
 

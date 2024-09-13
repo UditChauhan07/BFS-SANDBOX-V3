@@ -6,7 +6,6 @@ import html2pdf from "html2pdf.js";
 import { MdOutlineDownload } from "react-icons/md";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
-import { jsPDF } from "jspdf";
 import { CloseButton } from "../lib/svg";
 import { GetAuthData, getMarketingCalendar, getMarketingCalendarPDF, getMarketingCalendarPDFV2, getMarketingCalendarPDFV3, originAPi } from "../lib/store";
 import Loading from "../components/Loading";

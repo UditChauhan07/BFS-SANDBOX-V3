@@ -1,16 +1,16 @@
 import React, { forwardRef, useEffect, useState, useCallback } from 'react';
 import './MultiStepForm.css'; // Import the CSS file
 import MultiSelectSearch from '../../SearchBox';
-import { createNewsletter, fetchNewsletterData, fetchNextMonthNewsletterBrand, GetAuthData, months, originAPi, ShareDrive } from '../../../lib/store';
+import { createNewsletter, fetchNewletterPreview, fetchNewsletterData, fetchNextMonthNewsletterBrand, GetAuthData, months, originAPi, ShareDrive } from '../../../lib/store';
 import Styles from './index.module.css';
 import Loading from '../../Loading';
 import ModalPage from '../../Modal UI';
-import { BiExit, BiSave } from 'react-icons/bi';
+import { BiExit, BiLeftArrow, BiSave } from 'react-icons/bi';
 import ToggleSwitch from '../../ToggleButton';
 import { FaEye } from 'react-icons/fa';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { CalenderIcon } from '../../../lib/svg';
+import { BackArrow, CalenderIcon } from '../../../lib/svg';
 
 const contactLocalKey = "lCpFhWZtGKKejSX"
 
@@ -24,6 +24,8 @@ const MultiStepForm = () => {
     const [isSubmit, setIsSubmit] = useState(false)
     const [isSchedule, setIsSchedule] = useState(false)
     const [isUserSelected, setIsUserSelected] = useState(false);
+    const [isPreview, setIsPreview] = useState();
+    const [isPreviewHtml, setIsPreviewHtml] = useState();
     const [loading, setLoading] = useState(true);
     const [errorContact, setErrorContact] = useState([])
     const [showErrorList, setShowErrorList] = useState(false)
@@ -81,7 +83,7 @@ const MultiStepForm = () => {
 
     const handleAccordionClick = (step) => {
 
-        if (currentStep === 3 && (!formData.brand.length)) {
+        if (step === 3 && (!formData.brand.length)) {
             setCallbackError(true)
             setCallbackErrorMsg('Please select a brand')
             return;
@@ -150,6 +152,39 @@ const MultiStepForm = () => {
         // }
         generateOrderNow();
     };
+
+    useEffect(()=>{
+        if(formData.newsletter&&formData.template&&formData.brand.length&&formData.forMonth){
+            generateNewsletterPreview();
+        }else{
+            setIsPreview()
+            setIsPreviewHtml()
+        }
+    },[formData.newsletter,formData.template,formData.brand,formData.forMonth])
+
+    const generateNewsletterPreview = () => {
+        let body = {
+            newsletter: formData.newsletter,
+            subject: formData.subject,
+            template: formData.template,
+            brandIds: JSON.stringify(formData.brand),
+            date: formData.date ? getDate(formData.date) : null,
+            forMonth: formData.forMonth
+        }
+        fetchNewletterPreview(body).then((result) => {      
+            console.log({result});
+                  
+            if (result.status) {
+                if(result.data){
+                    setIsPreview(result.data)
+                    setIsPreviewHtml(result.data)
+                }
+            }
+        }).catch((err) => {
+            console.log({ err });
+
+        })
+    }
     const generateOrderNow = () => {
         setShowErrorList(false);
         if (currentStep === 4 && !formData.subscriber.length) {
@@ -175,7 +210,7 @@ const MultiStepForm = () => {
             date: formData.date ? getDate(formData.date) : null,
             contactIds: JSON.stringify(contactIds),
             userIds: JSON.stringify(userIds),
-            forMonth:formData.forMonth
+            forMonth: formData.forMonth
         }
 
         createNewsletter(body).then((result) => {
@@ -197,10 +232,8 @@ const MultiStepForm = () => {
                 setCallbackError(true)
                 setCallbackErrorMsg(result.message)
             }
-
         }).catch((err) => {
             console.log({ err });
-
         })
     }
 
@@ -340,6 +373,23 @@ const MultiStepForm = () => {
                         </div>}
                         onClose={() => { setCallbackError(false); setCallbackErrorMsg(); }}
                     /> : null}
+                    {isPreview ? <ModalPage
+                        open={isPreview ?? false}
+                        styles={{ width: '80%' }}
+                        content={<div className="d-flex flex-column gap-3">
+                            <h2 className='text-start' style={{ position: 'sticky', top: '-20px', background: '#fff', zIndex: '111', paddingTop: '20px' }}>
+                                Newsletter Preview
+                                <hr />
+                            </h2>
+                            <div className={Styles.modalContent} dangerouslySetInnerHTML={{ __html: isPreview }} />
+                            {/* <div className="d-flex justify-content-around">
+                                <button className={`${Styles.btn} d-flex align-items-center`} onClick={() => { setCallbackError(false); setCallbackErrorMsg(); }}>
+                                    <BiExit /> &nbsp;Ok
+                                </button>
+                            </div> */}
+                        </div>}
+                        onClose={() => { setIsPreview() }}
+                    /> : null}
                     {showErrorList ? <ModalPage
                         open={showErrorList ?? false}
                         styles={{ width: '80vw' }}
@@ -474,22 +524,8 @@ const MultiStepForm = () => {
                                                         }}
                                                         disabled={!isSchedule}
                                                         customInput={<DatePickerLabel />}
-                                                    // showMonthDropdown // Allows users to change the month easily
-                                                    // showYearDropdown  // Allows users to change the year easily
-                                                    // dropdownMode="select" // Avoid closing on month/year change
                                                     />
                                                 </div>
-                                                {/* <input
-                                                    type="date"
-                                                    name="date"
-                                                    id="date"
-                                                    value={formData.date}
-                                                    onChange={handleChange}
-                                                    required={isSchedule}
-                                                    disabled={!isSchedule}
-                                                    onLoad={getDate}
-                                                /> */}
-                                                {/* <DatePicker selected={new Date()} onChange={() => handleChange({ target: { value: null, name: "date" } })} dateFormat="MMM/dd/yyyy" customInput={<ExampleCustomInput />} /> */}
                                             </label>
                                         </div>
                                     </div>
@@ -725,22 +761,30 @@ const MultiStepForm = () => {
                             >
                                 Previous
                             </button> : null}&nbsp;
-
-                            {currentStep == 4 ? <button type="submit" onClick={() => {
-                                if (currentStep === 4 && (!formData.brand.length)) {
-                                    setCallbackError(true)
-                                    setCallbackErrorMsg('Please select a brand')
-                                    return;
-                                }
-                            }} className="submit-btn">
-                                Submit
-                            </button> : <button
-                                type="button"
-                                className="next-btn"
-                                onClick={() => handleAccordionClick(currentStep + 1)}
-                            >
-                                Next
-                            </button>}
+                            <div>
+                                {isPreviewHtml ? <button
+                                    type="button"
+                                    className="next-btn"
+                                    onClick={() => setIsPreview(isPreviewHtml)}
+                                >
+                                    Preview
+                                </button> : null}&nbsp;
+                                {currentStep == 4 ? <button type="submit" onClick={() => {
+                                    if (currentStep === 4 && (!formData.brand.length)) {
+                                        setCallbackError(true)
+                                        setCallbackErrorMsg('Please select a brand')
+                                        return;
+                                    }
+                                }} className="submit-btn">
+                                    Submit
+                                </button> : <button
+                                    type="button"
+                                    className="next-btn"
+                                    onClick={() => handleAccordionClick(currentStep + 1)}
+                                >
+                                    Next
+                                </button>}
+                            </div>
                         </div>
                     </form></>}
         </div>
