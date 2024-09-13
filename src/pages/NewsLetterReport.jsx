@@ -5,6 +5,8 @@ import EmailTable from "../components/EmailBlasts/EmailTable";
 const NewsLetterReport = () => {
     const location = useLocation();
     const { year, month, day,newsletter } = location.state || {};
+    console.log({year, month, day,newsletter});
+    
 
     const [monthList, setMonthList] = useState([]);
     const [dayList, setDayList] = useState([])

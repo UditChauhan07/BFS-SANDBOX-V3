@@ -138,8 +138,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
             setBrand();
         }
     }
-    const brandNames = brandSelected
-        ?.map((brand, index) => brand.Name)
+    const brandNames = (brandSelected?.map((brand, index) => brand.Name)||[])
         ?.reduce((acc, curr, index) => {
             if (index === brandSelected.length - 1) {
                 return `${acc} and ${curr}`;

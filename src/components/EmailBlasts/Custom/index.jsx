@@ -173,7 +173,7 @@ const MultiStepForm = () => {
             generateNewsletterPreview();
         }
     }, [currentStep])
-    
+
 
     const generateNewsletterPreview = () => {
         let body = {
@@ -189,7 +189,7 @@ const MultiStepForm = () => {
 
             if (result.status) {
                 if (result.data) {
-                        setIsPreviewHtml({ isLoaded: true, preview: result.data })
+                    setIsPreviewHtml({ isLoaded: true, preview: result.data })
                 }
             }
         }).catch((err) => {
@@ -234,20 +234,22 @@ const MultiStepForm = () => {
 
         createNewsletter(body).then((result) => {
             if (result.status) {
-                window.location.href = "/newsletter"
                 setTimeout(() => {
-                    setIsSubmit(false);
+                    window.location.href = "/newsletter"
+                    setTimeout(() => {
+                        setIsSubmit(false);
+                    }, 1000);
+                    setCurrentStep(1);
+                    setFormData({
+                        subscriber: [],
+                        template: '',
+                        brand: [],
+                        date: '',
+                        subject: '',
+                        newsletter: '',
+                        forMonth: 1
+                    });
                 }, 2000);
-                setCurrentStep(1);
-                setFormData({
-                    subscriber: [],
-                    template: '',
-                    brand: [],
-                    date: '',
-                    subject: '',
-                    newsletter: '',
-                    forMonth: 1
-                });
             } else {
                 setIsSubmit(false)
                 setCallbackError(true)
