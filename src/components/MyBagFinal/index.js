@@ -10,16 +10,19 @@ import ModalPage from "../Modal UI";
 import StylesModal from "../Modal UI/Styles.module.css";
 import LoaderV2 from "../loader/v2";
 import ProductDetails from "../../pages/productDetails";
+import Loading from "../Loading";
 
 function MyBagFinal() {
   let Img1 = "/assets/images/dummy.png";
   const navigate = useNavigate();
   const [orderDesc, setOrderDesc] = useState(null);
-  const [PONumber, setPONumber] = useState(POGenerator());
+  const [PONumber, setPONumber] = useState(null);
+
   const [buttonActive, setButtonActive] = useState(false);
   const { addOrder, orderQuantity, orders, setOrderProductPrice } = useBag();
-  const [bagValue, setBagValue] = useState(fetchBeg());
+  const [bagValue, setBagValue] = useState(fetchBeg({}));
   const [isOrderPlaced, setIsOrderPlaced] = useState(0);
+  console.log(isOrderPlaced)
   const [isPOEditable, setIsPOEditable] = useState(false);
   const [PONumberFilled, setPONumberFilled] = useState(true);
   const [clearConfim, setClearConfim] = useState(false)
@@ -29,16 +32,35 @@ function MyBagFinal() {
   const [salesRepData, setSalesRepData] = useState({ Name: null, Id: null })
   const [limitInput, setLimitInput] = useState("");
   const [confirm, setConfirm] = useState(false);
+ const [isPOLoaded, setIsPOLoaded] = useState(false); 
+
   const handleNameChange = (event) => {
     const limit = 10;
     setLimitInput(event.target.value.slice(0, limit));
   };
+
+  useEffect(() => {
+  const FetchPoNumber = async () => {
+    setIsPOLoaded(false); try {
+      const res = await POGenerator();
+      if (res) {
+        setPONumber(res); 
+      }
+    } catch (error) {
+      console.error("Error fetching PO number:", error);
+    } finally {
+      setIsPOLoaded(true); 
+    }
+  };
+
+  FetchPoNumber();
+}, []);
   // .............
   useEffect(() => {
-    if (bagValue?.Account?.id && bagValue?.Manufacturer?.id && Object.values(bagValue?.orderList)?.length > 0) {
+    if (bagValue?.Account?.id && bagValue?.Manufacturer?.id && bagValue.orderList?.length > 0) {
       setButtonActive(true);
     }
-  }, []);
+  }, [bagValue]);
   let total = 0;
   const [productImage, setProductImage] = useState({ isLoaded: false, images: {} });
   useEffect(() => {
@@ -106,8 +128,10 @@ function MyBagFinal() {
   }
 
   const orderPlaceHandler = () => {
+    console.log("asdddasd")
     setIsOrderPlaced(1);
-    let fetchBag = fetchBeg();
+    let fetchBag = fetchBeg({});
+    console.log(fetchBag, "fetchBag")
     GetAuthData()
       .then((user) => {
         let SalesRepId = localStorage.getItem(salesRepIdKey) ?? user.Sales_Rep__c;
@@ -146,6 +170,7 @@ function MyBagFinal() {
           };
           OrderPlaced({ order: begToOrder })
             .then((response) => {
+
               if (response) {
                 if (response.length) {
                   setIsOrderPlaced(0);
@@ -211,7 +236,7 @@ function MyBagFinal() {
           open={confirm || false}
           content={
             <div className="d-flex flex-column gap-3">
-              <h2 style={{textDecoration:'underline'}}>
+              <h2 style={{ textDecoration: 'underline' }}>
                 Confirm
               </h2>
               <p>
@@ -303,16 +328,28 @@ function MyBagFinal() {
                 <h5>
                   PO Number{" "}
                   {!isPOEditable ? (
-                    <b> {buttonActive ? PONumber : "---"}</b>
+                    <b>
+                      {!isPOLoaded ? (  
+                        <Loading height={"20px"} /> 
+                      ) : (
+                        buttonActive ? PONumber : "---"
+                      )}
+                    </b>
                   ) : (
-                    <input type="text" defaultValue={PONumber} onKeyUp={(e) => setPONumber(e.target.value)} placeholder=" Enter PO Number" style={{ borderBottom: "1px solid black" }}
+                    <input
+                      type="text"
+                      defaultValue={PONumber}
+                      onKeyUp={(e) => setPONumber(e.target.value)}
+                      placeholder="Enter PO Number"
+                      style={{ borderBottom: "1px solid black" }}
                       id="limit_input"
                       name="limit_input"
                       value={limitInput}
-                      onChange={handleNameChange} />
-
+                      onChange={handleNameChange}
+                    />
                   )}
                 </h5>
+
                 {!isPOEditable && (
                   <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none" onClick={() => setIsPOEditable(true)} style={{ cursor: "pointer" }}>
                     <path
@@ -466,8 +503,8 @@ function MyBagFinal() {
                     <div className={Styles.ShipBut}>
                       <button
                         onClick={() => {
-                          if (Object.keys(orders).length) {
-                            if (PONumber.length) {
+                          if (Object.keys(orders)?.length) {
+                            if (PONumber) {
                               setConfirm(true)
                             } else {
                               setPONumberFilled(false);
@@ -480,8 +517,8 @@ function MyBagFinal() {
                       </button>
                       <p className={`${Styles.ClearBag}`} style={{ textAlign: 'center', cursor: 'pointer' }}
                         onClick={() => {
-                          if (Object.keys(orders).length) {
-                            if (clearConfim.length) {
+                          if (Object.keys(orders)?.length) {
+                            if (clearConfim?.length) {
                               orderPlaceHandler()
                             } else {
                               setClearConfim(true)

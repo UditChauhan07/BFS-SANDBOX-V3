@@ -11,6 +11,7 @@ import Layout from "../components/Layout/Layout";
 import AppLayout from "../components/AppLayout";
 
 const MyBag = () => {
+  
   return (
     <AppLayout>
       <MyBagFinal />

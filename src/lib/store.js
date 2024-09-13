@@ -1,7 +1,7 @@
 // export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 // export const originAPi = "https://dev.beautyfashionsales.com"
-// export const originAPi = "http://localhost:2619"
-export const originAPi = "https://bfs.uditchauhan.com"
+export const originAPi = "http://localhost:2611"
+// export const originAPi = "https://bfs.uditchauhan.com"
 
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
@@ -67,81 +67,6 @@ export function PublicCheck() {
   }
 }
 
-export function POGenerator() {
-  let count = parseInt(localStorage.getItem(POCount)) || 1;
-  if (count == "NaN") {
-    localStorage.setItem(POCount, 1);
-    count = 1;
-  }
-  let date = new Date();
-  let currentMonth = padNumber(date.getMonth() + 1, true);
-  let currentDate = padNumber(date.getDate(), true);
-  let beg = fetchBeg();
-  let AcCode = getStrCode(beg?.Account?.name);
-  let MaCode = getStrCode(beg?.Manufacturer?.name);
-
-  let orderCount = padNumber(count, true);
-  if (beg?.orderList?.[0]?.productType === "pre-order") return `PRE-${AcCode + MaCode}${currentDate + currentMonth}${orderCount}`;
-  else return `${AcCode + MaCode}${currentDate + currentMonth}${orderCount}`;
-}
-
-export function getStrCode(str) {
-  if (!str) return null;
-  let codeLength = str.split(" ");
-  if (codeLength.length >= 2) {
-    return `${codeLength[0].charAt(0).toUpperCase() + codeLength[1].charAt(0).toUpperCase()}`;
-  } else {
-    return `${codeLength[0].charAt(0).toUpperCase() + codeLength[0].charAt(codeLength[0].length - 1).toUpperCase()}`;
-  }
-}
-function padNumber(n, isTwoDigit) {
-  if (isTwoDigit) {
-    if (n < 10) {
-      return "0" + n;
-    } else {
-      return n;
-    }
-  } else {
-    if (n < 10) {
-      return "000" + n;
-    } else if (n < 100) {
-      return "00" + n;
-    } else if (n < 1000) {
-      return "0" + n;
-    } else {
-      return n;
-    }
-  }
-}
-
-export function formatNumber(num) {
-  if (num >= 0 && num < 1000000) {
-    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
-  } else if (num >= 1000000) {
-    return (num / 1000000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "M";
-  } else if (num < 0) {
-    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
-  } else {
-    return num;
-  }
-}
-export function supportDriveBeg() {
-  let supportList = localStorage.getItem(support);
-  return JSON.parse(supportList);
-}
-export async function supportShare(data) {
-  localStorage.setItem(support, JSON.stringify(data));
-  return true;
-}
-export function supportClear() {
-  localStorage.removeItem(support);
-  if (localStorage.getItem(support)) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
 export function fetchBeg() {
   let orderStr = localStorage.getItem(orderKey);
   let orderDetails = {
@@ -171,8 +96,90 @@ export function fetchBeg() {
   }
   return orderDetails;
 }
+export async function POGenerator() {
+  try {
+    let orderDetails = fetchBeg();
+    let count = parseInt(localStorage.getItem(POCount)) || 1;
+
+    if (isNaN(count)) {
+      localStorage.setItem(POCount, 1);
+      count = 1;
+    }
+
+    let date = new Date();
+    let currentMonth = padNumber(date.getMonth() + 1, true);
+    let currentDate = padNumber(date.getDate(), true);
+
+    let AcCode = getStrCode(orderDetails.Account?.name);
+    let MaCode = getStrCode(orderDetails.Manufacturer?.name);
+
+    const response = await fetch( 'http://localhost:2611/PoNumber/generatepo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        accountName: orderDetails.Account?.name,
+        manufacturerName: orderDetails.Manufacturer?.name,
+        orderDate: date.toISOString(),
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const poData = await response.json();
+    console.log(poData);
+
+    if (poData.success) {
+      let generatedPONumber = poData.poNumber;
+      localStorage.setItem(POCount, count + 1);
+      return await generatedPONumber;
+    } else {
+      console.error('Failed to generate PO number:', poData.message);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error generating PO number:', error.message);
+    return null;
+  }
+}
+export function getStrCode(str) {
+  if (!str) return null;
+  let codeLength = str.split(" ");
+  if (codeLength.length >= 2) {
+    return `${codeLength[0].charAt(0).toUpperCase() + codeLength[1].charAt(0).toUpperCase()}`;
+  } else {
+    return `${codeLength[0].charAt(0).toUpperCase() + codeLength[0].charAt(codeLength[0].length - 1).toUpperCase()}`;
+  }
+}
+
+function padNumber(n, isTwoDigit) {
+  if (isTwoDigit) {
+    return n < 10 ? "0" + n : n;
+  } else {
+    if (n < 10) return "000" + n;
+    if (n < 100) return "00" + n;
+    if (n < 1000) return "0" + n;
+    return n;
+  }
+}
+
+export function formatNumber(num) {
+  if (num >= 0 && num < 1000000) {
+    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
+  } else if (num >= 1000000) {
+    return (num / 1000000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "M";
+  } else if (num < 0) {
+    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
+  } else {
+    return num;
+  }
+}
 
 export async function OrderPlaced({ order }) {
+  console.log()
   let orderinit = {
     info: order,
   };
@@ -205,7 +212,22 @@ export async function OrderPlaced({ order }) {
     }
   }
 }
-
+export function supportDriveBeg() {
+  let supportList = localStorage.getItem(support);
+  return JSON.parse(supportList);
+}
+export async function supportShare(data) {
+  localStorage.setItem(support, JSON.stringify(data));
+  return true;
+}
+export function supportClear() {
+  localStorage.removeItem(support);
+  if (localStorage.getItem(support)) {
+    return false;
+  } else {
+    return true;
+  }
+}
 export async function DestoryAuth() {
   localStorage.clear();
   window.location.href = window.location.origin;
