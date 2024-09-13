@@ -572,8 +572,8 @@ const MultiStepForm = () => {
 
                                             <b className='d-flex gap-2'>Newsletter ready brands: <p style={{ fontWeight: 'normal' }}>Theese Brands are ready to be include in newsletter for&nbsp;{months[new Date().getMonth() + 1]}{formData.forMonth == 2 ? ' and ' : formData.forMonth == 3 ? ', ' : null}{formData.forMonth >= 2 ? months[new Date().getMonth() + 2] : null}{formData.forMonth == 3 ? ' and ' : null}{formData.forMonth >= 3 ? months[new Date().getMonth() + 3] : null}</p></b>
                                             <div className='d-flex gap-2'>
-                                                <p className='cursor-pointer' onClick={() => { setFormData({ ...formData, brand: showBrandList.map(element => (element.Id)) }); }}>Select all</p>|
-                                                <p className='cursor-pointer' onClick={() => { setFormData({ ...formData, brand: [] }); }}>reset</p>
+                                                <p className='cursor-pointer text-[#509fde] hover:underline' onClick={() => { setFormData({ ...formData, brand: showBrandList.map(element => (element.Id)) }); }}>Select all</p>|
+                                                <p className='cursor-pointer text-[#509fde] hover:underline' onClick={() => { setFormData({ ...formData, brand: [] }); }}>reset</p>
                                             </div>
                                         </div>
                                         <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>

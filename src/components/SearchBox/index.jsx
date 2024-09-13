@@ -12,24 +12,31 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
     const [isLoadings, setIsLoading] = useState(loading ? true : false);
     // Handle selecting or deselecting an item
     const handleSelect = (item) => {
-
         const isSelected = selectedValues.some(selected => selected.Id === item.Id);
-
+    
+        // Check if selected values exceed the limit of 250
+        if (!isSelected && selectedValues.length >= 250) {
+            alert("You cannot select more than 250 items.");
+            return; // Prevent further selection
+        }
+    
         if (item?.AccountId && manufacturers.length && !isSelected) {
             const isBrandMatched = item.BrandIds.some(brandId =>
                 manufacturers.some(brand => brand.Id === brandId)
             );
-
+    
             if (!isBrandMatched) {
                 setWarning?.(item.Id);
             }
         }
+    
         const newSelectedValues = isSelected
             ? selectedValues.filter(selected => selected.Id !== item.Id) // Deselect item
             : [...selectedValues, item]; // Select item
-
+    
         onChange?.(newSelectedValues); // Notify parent component of selection change
     };
+    
 
     // Filter options based on search term
     const [filteredOptions, setFilteredOptions] = useState();
@@ -46,7 +53,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
         });
         if (!showAll) {
             // Extract the brand IDs from the brands list
-            let validBrandIds = new Set(manufacturers.map(brand => brand.Id));
+            let validBrandIds = new Set(manufacturers?.map(brand => brand.Id));
 
 
             // Filter results to include only those with at least one matching brand ID
@@ -70,16 +77,26 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
 
 
     const AutoSelectChangeHandler = () => {
-        // Create a new array that contains only the options that are not already selected
+        // Calculate how many more items can be selected without exceeding the limit
+        const remainingSelections = 250 - selectedValues.length;
+    
+        // Filter out options that are already selected
         const newOptions = filteredOptions.filter(
             option => !selectedValues.some(selected => selected.Id === option.Id)
         );
-
+    
+        // Check if adding new options would exceed the 250-item limit
+        if (newOptions.length > remainingSelections) {
+            alert(`You can only select up to 250 items. You have ${remainingSelections} remaining.`);
+            return; // Prevent adding more than the limit
+        }
+    
         // If there are any new options to add, call onChange with the updated list
         if (newOptions.length > 0) {
             onChange?.([...selectedValues, ...newOptions]);
         }
     };
+    
     const resetSelectChangeHandler = () => {
         onChange?.([]);
     }
@@ -123,7 +140,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                         )) : `${selectedValues.filter(e => !e.AccountId).length ? `${selectedValues.filter(e => !e.AccountId).length} Users selected` : ''} ${selectedValues.filter(e => !e.AccountId).length && selectedValues.filter(e => e.AccountId).length ? ' and ' : ''} ${selectedValues.filter(e => e.AccountId).length ? `${selectedValues.filter(e => e.AccountId).length} contact selected` : ''}` : "No Users selected"}</span></b>
                     </div>
                     <div className='d-flex flex-column align-items-center justify-content-end'>
-                        <span className='text-end w-[100%]'><span onClick={AutoSelectChangeHandler} className='cursor-pointer'>Select All</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span className='cursor-pointer' onClick={resetSelectChangeHandler}>Reset</span></span>
+                        <span className='text-end w-[100%]'><span onClick={AutoSelectChangeHandler} className='cursor-pointer text-[#509fde] hover:underline'>Select All</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span className='cursor-pointer text-[#509fde] hover:underline' onClick={resetSelectChangeHandler}>Reset</span></span>
                     </div>
                 </ul>
                 <div className='d-flex justify-content-between align-items-center'>
@@ -141,7 +158,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                             <option style={{ appearance: 'none' }} value={brand.Id}>{brand.Name}</option>
                         ))}
                     </select> : null}
-                    <div className='w-[20%] d-flex justify-content-center align-items-center text-[13px]'><span>Subscribers for<br /> <span title={brandNames} className='cursor-pointer text-[#509fde] text-underline'>Selected brand</span></span>&nbsp;&nbsp;<ToggleSwitch selected={showAll} onToggle={(value) => { stShowAll(value) }} />&nbsp;&nbsp;All</div>
+                    <div className='w-[20%] d-flex justify-content-center align-items-center text-[13px]'><span>Subscribers for<br /> <span title={brandNames} className='cursor-pointer text-[#509fde]'>Selected brand</span></span>&nbsp;&nbsp;<ToggleSwitch selected={showAll} onToggle={(value) => { stShowAll(value) }} />&nbsp;&nbsp;All</div>
 
                 </div>
             </header>
@@ -157,7 +174,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
 
                                 <div className="user-avatar"><UserIcon width={25} height={25} /></div>
                                 <div className="user-info">
-                                    <span className="user-name d-flex align-items-center">{(!manufacturers.some(brand => option.BrandIds?.includes(brand.Id)) && selectedValues.some(selected => selected.Id === option.Id)) ? <div className='redBlock mr-1'></div> : null}{option.Name}</span>
+                                    <span className="user-name d-flex align-items-center">{(!manufacturers.some(brand => option.BrandIds?.includes(brand.Id)) && selectedValues.some(selected => selected.Id === option.Id)) ? <div className='redBlock mr-1' title="the subscriber doesn't have the selected brand"></div> : null}{option.Name}</span>
                                     <span className="user-email maxSizeDiv">{option.Email}</span>
                                     {option?.Title ? <span className="user-etc maxSizeDiv"><b className="text-['Arial']">Title:&nbsp;</b>{option?.Title}</span> : null}
                                     {option?.Phone ? <span className="user-etc"><b>Phone:&nbsp;</b>{option?.Phone}</span> : null}
