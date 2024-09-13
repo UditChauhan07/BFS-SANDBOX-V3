@@ -159,7 +159,7 @@ export const permissionsArray = [
                         view : true , 
                         admins : true
                     },  targetReport : {
-                        view : false , 
+                        view : true , 
                         admins : true
                     }
 

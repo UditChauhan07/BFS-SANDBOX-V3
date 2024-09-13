@@ -9,9 +9,29 @@ function ContactDetailedReport() {
     const [accountManufacturerRecords, setAccountManufacturerRecords] = useState([]);
     const [filteredRecords, setFilteredRecords] = useState([]);
     const [accountFilter, setAccountFilter] = useState('');
-    const [saleRepFilter , setSaleRepFilter] = useState('');
+    const [saleRepFilter, setSaleRepFilter] = useState('');
     const [accounts, setAccounts] = useState([]);
     const [salesReps, setSalesReps] = useState([]);
+
+    // Debounce filter changes
+    const [debouncedAccountFilter, setDebouncedAccountFilter] = useState(accountFilter);
+    const [debouncedSaleRepFilter, setDebouncedSaleRepFilter] = useState(saleRepFilter);
+
+    // UseEffect for debouncing account filter
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            setDebouncedAccountFilter(accountFilter);
+        }, 300);
+        return () => clearTimeout(timeoutId);
+    }, [accountFilter]);
+
+    // UseEffect for debouncing sales rep filter
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            setDebouncedSaleRepFilter(saleRepFilter);
+        }, 300);
+        return () => clearTimeout(timeoutId);
+    }, [saleRepFilter]);
 
     useEffect(() => {
         const fetchAccountDetails = async () => {
@@ -33,25 +53,37 @@ function ContactDetailedReport() {
                 console.log("API Response:", res.data);
 
                 if (res.data && res.data.accountManufacturerRecords) {
-                    setAccountManufacturerRecords(res.data.accountManufacturerRecords);
-                    setFilteredRecords(res.data.accountManufacturerRecords);
+                    const records = res.data.accountManufacturerRecords;
+
+                    // Flatten the contact records with the main account manufacturer records
+                    const expandedRecords = records.flatMap((record) => {
+                        const contacts = record.contacts || [];
+                        return contacts.length
+                            ? contacts.map((contact) => ({
+                                ...record,
+                                contact // Embed each contact into the record
+                            }))
+                            : [{ ...record, contact: null }]; // Handle case where there are no contacts
+                    });
+
+                    setAccountManufacturerRecords(expandedRecords);
+                    setFilteredRecords(expandedRecords);
 
                     // Extract accounts and sales reps for filter dropdowns
-                    const accountList = res.data.accountManufacturerRecords.map(record => ({
-                        label: record.AccountId__r?.Name ,
-                        value: record.AccountId__r?.Name
+                    const accountList = expandedRecords.map((record) => ({
+                        label: record.AccountId__r?.Name,
+                        value: record.AccountId__r?.Name,
                     }));
 
-                    const saleRepList = res.data.accountManufacturerRecords.map(record => ({
+                    const saleRepList = expandedRecords.map((record) => ({
                         label: record.Sales_Rep__r?.Name,
-                        value: record.Sales_Rep__r?.Name
+                        value: record.Sales_Rep__r?.Name,
                     }));
 
                     // Remove duplicates using Map
                     setAccounts([...new Map(accountList.map(account => [account.value, account])).values()]);
                     setSalesReps([...new Map(saleRepList.map(rep => [rep.value, rep])).values()]);
                 }
-
             } catch (error) {
                 console.error("Error fetching account details:", error);
             }
@@ -60,16 +92,23 @@ function ContactDetailedReport() {
         fetchAccountDetails();
     }, []);
 
+    // Filter records by account name and sales rep
     useEffect(() => {
-        const newFilteredRecords = accountManufacturerRecords.filter(record => {
-            const accountMatch = accountFilter ? record.AccountId__r?.Name.toLowerCase().includes(accountFilter.toLowerCase()) : true;
-            const saleRepMatch = saleRepFilter ? record.Sales_Rep__r?.Name.toLowerCase().includes(saleRepFilter.toLowerCase()) : true;
+        const newFilteredRecords = accountManufacturerRecords.filter((record) => {
+            const accountMatch = debouncedAccountFilter
+                ? record.AccountId__r?.Name?.toLowerCase().includes(debouncedAccountFilter.toLowerCase())
+                : true;
+            const saleRepMatch = debouncedSaleRepFilter
+                ? record.Sales_Rep__r?.Name?.toLowerCase().includes(debouncedSaleRepFilter.toLowerCase())
+                : true;
             return accountMatch && saleRepMatch;
         });
 
         setFilteredRecords(newFilteredRecords);
-    }, [accountFilter, saleRepFilter, accountManufacturerRecords]);
-
+    }, [debouncedAccountFilter, debouncedSaleRepFilter, accountManufacturerRecords]);
+    useEffect(() => {
+        console.log(filteredRecords , "filtered records ");
+    }, [filteredRecords]);
     return (
         <>
             <AppLayout
@@ -81,19 +120,14 @@ function ContactDetailedReport() {
                             value={accountFilter}
                             options={accounts}
                             onChange={(value) => setAccountFilter(value)}
+                            onFocus={() => setSaleRepFilter('')} // Close other filters when focusing
                         />
-                        <FilterItem
-                            width="220px"
-                            label="Sales Rep"
-                            value={saleRepFilter}
-                            options={salesReps}
-                            onChange={(value) => setSaleRepFilter(value)}
-                        />
+                       
                     </div>
                 }
             >
                 <div className={`d-flex p-3 ${Styles.tableBoundary} mb-5`}>
-                    <div className="" style={{ maxHeight: "73vh", minHeight: "40vh", overflow: "auto", width: "100%" }}>
+                    <div style={{ maxHeight: "73vh", minHeight: "40vh", overflow: "auto", width: "100%" }}>
                         <table id="salesReportTable" className="table table-responsive" style={{ minHeight: "300px" }}>
                             <thead>
                                 <tr>
@@ -101,6 +135,7 @@ function ContactDetailedReport() {
                                     <th className={`${Styles.th}`} style={{ minWidth: "150px" }}>First Name</th>
                                     <th className={`${Styles.th}`} style={{ minWidth: "200px" }}>Last Name</th>
                                     <th className={`${Styles.th}`} style={{ minWidth: "200px" }}>Sale Rep</th>
+                                    <th className={`${Styles.th}`} style={{ minWidth: "200px" }}>Manufacturer</th>
                                     <th className={`${Styles.th}`} style={{ minWidth: "200px" }}>Email</th>
                                     <th className={`${Styles.th}`} style={{ minWidth: "200px" }}>Phone</th>
                                     <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Account Number</th>
@@ -113,12 +148,12 @@ function ContactDetailedReport() {
                                     <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Store Country</th>
                                     <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping Street</th>
                                     <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping City</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping State/Province</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping Zip/Postal Code</th>
+                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping State</th>
+                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping Zip</th>
                                     <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Shipping Country</th>
                                     <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Billing Street</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Billing City/State Province</th>
-                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Billing Zip/Postal Code</th>
+                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Billing City</th>
+                                    <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Billing Zip</th>
                                     <th className={`${Styles.th}`} style={{ minWidth: "125px" }}>Billing Country</th>
                                 </tr>
                             </thead>
@@ -129,19 +164,22 @@ function ContactDetailedReport() {
                                             {record.AccountId__r?.Name || ''}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.contacts?.[0]?.FirstName || ''}
+                                            {record.contact?.FirstName || ''}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.contacts?.[0]?.LastName || ''}
+                                            {record.contact?.LastName || ''}
                                         </td>
                                         <td className={`${Styles.td}`}>
                                             {record.Sales_Rep__r?.Name || ''}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.contacts?.[0]?.Email || ''}
+                                        {record.ManufacturerName__c || ''}
                                         </td>
                                         <td className={`${Styles.td}`}>
-                                            {record.contacts?.[0]?.Phone || ''}
+                                            {record.contact?.Email || ''}
+                                        </td>
+                                        <td className={`${Styles.td}`}>
+                                            {record.contact?.Phone || ''}
                                         </td>
                                         <td className={`${Styles.td}`}>
                                             {record.Account_Number__c || ''}
