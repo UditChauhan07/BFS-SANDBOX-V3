@@ -48,7 +48,8 @@ const PublicProduct = () => {
                         <div className="d-flex justify-content-around ">
                             <button style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'Montserrat-600', fontSize: '14px', fontStyle: 'normal', fontWeight: '600', height: '30px', letterSpacing: '1.4px', lineHeight: 'normal', width: '150px' }} onClick={() => {
                                 setAlert(false);
-                                navigate("/");
+                                // navigate("/");
+                                window.location.href = "/"
                             }}>
                                 Go to Home
                             </button>
@@ -57,6 +58,7 @@ const PublicProduct = () => {
                 }
                 onClose={() => {
                     setAlert(false);
+                    window.location.href = "/"
                     navigate("/");
                 }}
             /> :
