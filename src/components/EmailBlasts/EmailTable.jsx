@@ -93,6 +93,8 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, new
             if (admins.includes(user.Sales_Rep__c)) {
                 setUser(user)
                 getEmailBlast({ key: user.access_token, Id: user.Sales_Rep__c, month, day, year, newsletter }).then((list) => {
+                    console.log({list});
+                    
 
                     let contactList = sortArrayHandler(JSON.parse(list || "[]") || [], g => g?.updatedAt, 'desc')
                     setContactList({ isLoaded: true, data: contactList })

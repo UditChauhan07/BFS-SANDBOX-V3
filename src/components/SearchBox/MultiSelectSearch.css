@@ -18,20 +18,21 @@ header {
   flex-direction: column;
 }
 
-.multi-select-container input[type="text"],.multi-select-container select {
+.multi-select-container input[type="text"],
+.multi-select-container select {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 16px;
   background-color: #fff;
 }
-.multi-select-container .redBlock{
+.multi-select-container .redBlock {
   width: 10px;
   height: 10px;
   background-color: red;
   border-radius: 15px;
 }
-.multi-select-container .btn{
+.multi-select-container .btn {
   padding: 0.5rem 2rem;
   border: 1px solid #000;
   background: #000;
@@ -100,7 +101,11 @@ header {
   text-align: start;
   margin-right: 10px;
 }
-.user-brands{
+.maxSizeDiv {
+  max-width: 200px;
+  word-break: break-all;
+}
+.user-brands {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -136,7 +141,7 @@ header {
   font-size: 14px;
   color: #666;
 }
-.brandSearch{
+.brandSearch {
   padding: 5px;
   font-size: 15px;
 }
