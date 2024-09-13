@@ -184,10 +184,10 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                                 <div className="user-avatar"><UserIcon width={25} height={25} /></div>
                                 <div className="user-info">
                                     <span className="user-name d-flex align-items-center">{(!manufacturers.some(brand => option.BrandIds?.includes(brand.Id)) && selectedValues.some(selected => selected.Id === option.Id)) ? <div className='redBlock mr-1'></div> : null}{option.Name}</span>
-                                    <span className="user-email">{option.Email}</span>
-                                    {option?.Title ? <span className="user-etc"><b className="text-['Arial']">Title:&nbsp;</b>{option?.Title}</span> : null}
+                                    <span className="user-email maxSizeDiv">{option.Email}</span>
+                                    {option?.Title ? <span className="user-etc maxSizeDiv"><b className="text-['Arial']">Title:&nbsp;</b>{option?.Title}</span> : null}
                                     {option?.Phone ? <span className="user-etc"><b>Phone:&nbsp;</b>{option?.Phone}</span> : null}
-                                    {option?.Account?.Name ? <span className="user-etc"><b>Store:&nbsp;</b>{option?.Account?.Name}</span> : null}
+                                    {option?.Account?.Name ? <span className="user-etc maxSizeDiv"><b>Store:&nbsp;</b>{option?.Account?.Name}</span> : null}
                                 </div>
                                 {(option.BrandIds?.length) ?
                                     <div className='user-brands'>
