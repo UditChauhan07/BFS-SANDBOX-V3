@@ -110,12 +110,29 @@ function FilterPage({ data, formattedData, setCategoryFilters, categoryFilters, 
             <Accordion.Item className={styles.AcciIten} eventKey="0">
               <Accordion.Header className={styles.HeaderAccor}>Category</Accordion.Header>
               <Accordion.Body className={` overflow-auto ${styles.bodyAccor}`} style={{height:"44vh"}}>
-                {productTypeFilter==="Pre-order"?<>
+                {/* {productTypeFilter==="Pre-order"?<>
                 <div className={`${styles.title} ${styles.borderRad} text-uppercase`}> No Category</div>
-               </>:<>
+               </>:<> */}
                 
                 {Object.keys(formattedData)
                   ?.filter((category) => category !== "PREORDER")
+                  // ?.filter((category) => {
+                  //   if (productTypeFilter === 'Pre-order') {
+                  //     // Return only categories that include 'PREORDER'
+                  //     return category.includes('PREORDER');
+                  //   } else if (productTypeFilter === 'TESTER') {
+                  //     // Return only categories that include 'TESTER'
+                  //     return category.includes('TESTER');
+                  //   } else if (productTypeFilter === 'EVENT') {
+                  //     // Return only categories that include 'EVENT'
+                  //     return category.includes('EVENT');
+                  //   } else if (productTypeFilter === 'Wholesale') {
+                  //     // Remove categories that include 'PREORDER', 'TESTER', or 'EVENT'
+                  //     if(!category.includes('PREORDER') && !category.includes('TESTER') && !category.includes('EVENT')){
+                  //       return true;
+                  //     }
+                  //   }
+                  // })
                   ?.map((key,index) => (
                     <div className={styles.accordion} key={index}>
                       <div className={styles.Content}>
@@ -145,7 +162,7 @@ function FilterPage({ data, formattedData, setCategoryFilters, categoryFilters, 
                       </div>
                     </div>
                   ))}
-                </>}
+                {/* </>} */}
                 
               </Accordion.Body>
             </Accordion.Item>

@@ -60,11 +60,15 @@ function Product() {
 
     return groupedData;
   };
+  useEffect(() => {
+    if (productTypeFilter === "Pre-order"||productTypeFilter === "TESTER"||productTypeFilter === "EVENT") {
+      setCategoryFilters([])
+    }
+  }, [productTypeFilter])
 
   const formattedData = useMemo(() => groupProductDataByCategory(productList.data), [productList.data]);
   const formattedFilterData = useMemo(() => {
     let finalFilteredProducts = { ...formattedData };
-
     if (categoryFilters?.length) {
       let newData = {};
       Object.keys(finalFilteredProducts)?.forEach((key) => {
@@ -82,7 +86,17 @@ function Product() {
           if (key === "PREORDER") {
             newData[key] = finalFilteredProducts[key];
           }
-        } else {
+        }
+        //  else if (productTypeFilter === "TESTER") {
+        //   if (key.match("TESTER")) {
+        //     newData[key] = finalFilteredProducts[key];
+        //   }
+        // } else if (productTypeFilter === "EVENT") {
+        //   if (key.match("EVENT")) {
+        //     newData[key] = finalFilteredProducts[key];
+        //   }
+        // } 
+        else {
           if (key !== "PREORDER") {
             newData[key] = finalFilteredProducts[key];
           }
@@ -140,6 +154,8 @@ function Product() {
 
     return finalFilteredProducts;
   }, [formattedData, categoryFilters, productTypeFilter, sortBy, searchBy]);
+
+
   const [productImage, setProductImage] = useState({ isLoaded: true, images: {} });
   useEffect(() => {
     let data = ShareDrive();
@@ -167,7 +183,7 @@ function Product() {
         AccountId__c: localStorage.getItem("AccountId__c"),
       }
       getProductList({ rawData }).then((productRes) => {
-        console.log({productRes});
+        console.log({ productRes });
         let productData = productRes.data.records || []
         productData.map((element) => {
           if (element.AttachedContentDocuments) {
@@ -434,6 +450,14 @@ function Product() {
                         label: "PREORDER",
                         value: "Pre-order",
                       },
+                      // {
+                      //   label: "TESTER",
+                      //   value: "TESTER",
+                      // },
+                      // {
+                      //   label: "EVENT",
+                      //   value: "EVENT",
+                      // },
                     ]}
                     onChange={(value) => {
                       setProductTypeFilter(value);
@@ -478,7 +502,7 @@ function Product() {
                       </h4>
 
                       <p>
-                        <span>Account</span>: <Link style={{color:'#000',textDecoration:'underline'}} to={"/store/"+localStorage.getItem("AccountId__c")}>{localStorage.getItem("Account")}</Link>
+                        <span>Account</span>: <Link style={{ color: '#000', textDecoration: 'underline' }} to={"/store/" + localStorage.getItem("AccountId__c")}>{localStorage.getItem("Account")}</Link>
                       </p>
                     </div>
 
