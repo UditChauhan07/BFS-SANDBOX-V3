@@ -1,6 +1,6 @@
 // export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 // export const originAPi = "https://dev.beautyfashionsales.com"
-// export const originAPi = "http://localhost:2611"
+// export const originAPi = "http://localhost:2619"
 export const originAPi = "https://bfs.uditchauhan.com"
 
 let url = `${originAPi}/beauty/`;
@@ -113,7 +113,7 @@ export async function POGenerator() {
     let AcCode = getStrCode(orderDetails.Account?.name);
     let MaCode = getStrCode(orderDetails.Manufacturer?.name);
 
-    const response = await fetch( 'http://localhost:2611/PoNumber/generatepo', {
+    const response = await fetch('http://localhost:2619/PoNumber/generatepo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
