@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import { GetAuthData, admins, formatNumber, getTierReportHandler } from "../../lib/store"
+import { GetAuthData, admins, formatNumber, getTierReportHandler, salesRepIdKey } from "../../lib/store"
 import Loading from "../../components/Loading";
 import AppLayout from "../../components/AppLayout";
 import Styles from "./index.module.css";
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { BiDollar } from "react-icons/bi";
 import MapGenerator from "../../components/Map";
 import classNames from "classnames";
+import { getPermissions } from "../../lib/permission";
 const center = {
     lat: 38,
     lng: -97
@@ -20,12 +21,16 @@ const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sh
 const fileExtension = ".xlsx";
 
 const Tier = () => {
+    const [userData, setUserData] = useState({});
+    const [hasPermission, setHasPermission] = useState(null); 
+    const [selectedSalesRepId, setSelectedSalesRepId] = useState();
     const navigate = useNavigate();
     let date = new Date();
     let dYear = date.getFullYear();
     const [ext, setExt] = useState(false);
     const [year, setYear] = useState(dYear)
     const [tier, setTier] = useState({ isLoad: false, data: [], getSalesHolder: {}, currentYearRevenue: 0, previousYearRevenue: 0 });
+    const [permissions, setPermissions] = useState(null);
     useEffect(() => {
         GetDataHandler()
     }, [])
@@ -104,7 +109,7 @@ const Tier = () => {
                     console.log({ resErr });
                 })
             } else {
-                navigate('/dashboard')
+                
             }
         })
     }
@@ -143,12 +148,51 @@ const Tier = () => {
         return `${Number(amount).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
     }
 
+
+useEffect(()=>{
+    const fetchData = async()=>{
+        try {
+            const user = await GetAuthData()
+            if(!salesRepIdKey) 
+                setSelectedSalesRepId(user.Sales_Rep__c)
+            const userPermissions = await getPermissions()
+            setHasPermission(userPermissions?.modules?.TopNav.childModules?.accountTier)
+        if(userPermissions?.modules?.TopNav.childModules?.accountTier=== false) navigate('/dashboard')
+
+
+        } catch (error) {
+           console.log("Permission Error " , error) 
+        }
+    }
+    fetchData()
+} , [salesRepIdKey , navigate])
+
+
+useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
     return (
         <AppLayout
-            filterNodes={<button className="border px-2 d-grid py-1 leading-tight d-grid" onClick={excelExportHandler}>
+            filterNodes={
+                <>
+            
+                <button className="border px-2 d-grid py-1 leading-tight d-grid" onClick={excelExportHandler}>
                 <MdOutlineDownload size={16} className="m-auto" />
                 <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>export</small>
-            </button>}
+            </button>
+               
+                </>}
         >
             <section>
                 <div className={Styles.inorderflex}>

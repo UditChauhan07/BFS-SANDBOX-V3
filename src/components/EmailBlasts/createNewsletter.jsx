@@ -1,11 +1,48 @@
 import { useNavigate } from "react-router-dom";
+import React , {useState , useEffect} from 'react'
 import AppLayout from "../AppLayout"
 import MultiStepForm from "./Custom"
 import { BiLeftArrow } from "react-icons/bi";
 import { BackArrow } from "../../lib/svg";
-
+import { GetAuthData } from "../../lib/store";
+import { getPermissions } from "../../lib/permission";
 const CreateNewsletter = () => {
-    const navigate = useNavigate();
+    const [selectedSalesRepId, setSelectedSalesRepId] = useState();
+  const [userData, setUserData] = useState({});
+  const [hasPermission, setHasPermission] = useState(null);
+  const navigate = useNavigate()
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await GetAuthData();
+        setUserData(user);
+
+        if (!selectedSalesRepId) {
+          setSelectedSalesRepId(user.Sales_Rep__c);
+        }
+
+        const userPermissions = await getPermissions();
+        setHasPermission(userPermissions?.modules?.emailBlast.create);
+
+        // If no permission, redirect to dashboard
+        if (userPermissions?.modules?.emailBlast.create === false) {
+          navigate("/dashboard");
+        }
+        
+      } catch (error) {
+        console.log({ error });
+      }
+    };
+    
+    fetchData();
+  }, [navigate, selectedSalesRepId]);
+
+  // Check permission and handle redirection
+  useEffect(() => {
+    if (hasPermission === false) {
+      navigate("/dashboard");  // Redirect if no permission
+    }
+  }, [hasPermission, navigate]);
     return (<AppLayout>
         <div className="emailContainer">
             <div style={{

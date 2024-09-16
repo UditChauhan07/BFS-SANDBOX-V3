@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useMemo } from "react";
 import MyRetailers from "../components/My Retailers/MyRetailers";
 import { FilterItem } from "../components/FilterItem";
 import { useManufacturer } from "../api/useManufacturer";
@@ -7,21 +7,22 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import AppLayout from "../components/AppLayout";
 import { DestoryAuth, GetAuthData, admins, getRetailerList, getSalesRepList } from "../lib/store";
 import { CloseButton } from "../lib/svg";
-
+import { getPermissions } from "../lib/permission";
 const MyRetailersPage = () => {
   const { data: manufacturers } = useManufacturer();
-  if(manufacturers?.status==300){
-    DestoryAuth();
-  }
   const [searchParams] = useSearchParams();
   const manufacturerId = searchParams.get("manufacturerId");
-  const [retailerList,setRetailerList] =useState({data:[], isLoading:true})
+  const [retailerList, setRetailerList] = useState({ data: [], isLoading: true });
   const [manufacturerFilter, setManufacturerFilter] = useState(manufacturerId);
   const [sortBy, setSortBy] = useState();
-  const [userData,setUserData] = useState({});
+  const [userData, setUserData] = useState({});
   const [searchBy, setSearchBy] = useState("");
-  const [salesRepList,setSalesRepList] = useState([])
-  const [selectedSalesRepId,setSelectedSalesRepId] = useState();
+  const [salesRepList, setSalesRepList] = useState([]);
+  const [selectedSalesRepId, setSelectedSalesRepId] = useState();
+  const [hasPermission, setHasPermission] = useState(null); // State to store permission status
+  const [permissions, setPermissions] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!manufacturerId) {
       setManufacturerFilter(null);
@@ -30,44 +31,76 @@ const MyRetailersPage = () => {
     }
   }, [manufacturerId]);
 
-  const navigate = useNavigate();
   useEffect(() => {
-    GetAuthData().then((user)=>{
-      if (!user) {
-        navigate("/");
-      }
-      getRetailerListHandler({key:user.x_access_token,userId:user.Sales_Rep__c})
-      setUserData(user);
-      setSelectedSalesRepId(user.Sales_Rep__c)
-      if(admins.includes(user.Sales_Rep__c)){
-        getSalesRepList({key:user.x_access_token}).then((repRes)=>{
-          setSalesRepList(repRes.data)
-        }).catch((repErr)=>{
-          console.log({repErr});
-        })
-      }
-    }).catch((err)=>{
-      console.log({err});
-    })
-  }, []);
-  const getRetailerListHandler = ({key,userId})=>{
-    setRetailerList({data:[], isLoading:true})
-    getRetailerList({key,userId}).then((retailerRes)=>{
-      setRetailerList({data:retailerRes?.data.length?retailerRes?.data:[], isLoading:false})
-    }).catch(e=>console.error(e))
-  }
+    const fetchData = async () => {
+      try {
+        const user = await GetAuthData();
+        setUserData(user);
+        if (!selectedSalesRepId) setSelectedSalesRepId(user.Sales_Rep__c);
 
-  const salesRepHandler= (value)=>{
-    setSelectedSalesRepId(value)
-    getRetailerListHandler({key:userData.x_access_token,userId:value})
-  }
+        // Fetch permissions
+        const userPermissions = await getPermissions();
+        setHasPermission(userPermissions?.modules?.myRetailers?.view);
+
+        // Fetch retailer list
+        getRetailerListHandler({ key: user.x_access_token, userId: selectedSalesRepId ?? user.Sales_Rep__c });
+
+        // // Fetch sales reps if admin
+        if (admins.includes(user.Sales_Rep__c)) {
+          getSalesRepList({ key: user.x_access_token })
+            .then((repRes) => setSalesRepList(repRes.data))
+            .catch((repErr) => console.log({ repErr }));
+        }
+      } catch (err) {
+        console.log({ err });
+        DestoryAuth();
+      }
+    };
+
+    fetchData();
+  }, [selectedSalesRepId]);
+
+  useEffect(() => {
+    if (hasPermission === false) {
+      navigate("/dashboard"); // Redirect to dashboard if no permission
+    }
+  }, [hasPermission, navigate]);
+
+  const getRetailerListHandler = ({ key, userId }) => {
+    setRetailerList({ data: [], isLoading: true });
+    getRetailerList({ key, userId })
+      .then((retailerRes) => setRetailerList({ data: retailerRes?.data.length ? retailerRes?.data : [], isLoading: false }))
+      .catch(e => console.error(e));
+  };
+
+  const salesRepHandler = (value) => {
+    setSelectedSalesRepId(value);
+    getRetailerListHandler({ key: userData.x_access_token, userId: value });
+  };
+  useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+
+  // Memoize permissions to avoid unnecessary re-calculations
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
 
   return (
     <AppLayout
       filterNodes={
         <>
-        {(admins.includes(userData?.Sales_Rep__c),salesRepList?.length>0)&&
-        <FilterItem
+        {memoizedPermissions?.modules?.filter?.view  ? 
+         <>
+          <FilterItem
         minWidth="220px"
         label="salesRep"
         name="salesRep"
@@ -78,7 +111,8 @@ const MyRetailersPage = () => {
         }))}
         onChange={(value) => salesRepHandler(value)}
       />
-        }
+       </>  : null}
+        
           <FilterItem
             label="Sort by"
             value={sortBy}
@@ -127,6 +161,8 @@ const MyRetailersPage = () => {
             <CloseButton crossFill={'#fff'} height={20} width={20} />
             <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
           </button>
+        
+
         </>
       }
     >

@@ -6,6 +6,9 @@ import TopProductCard from "../components/TopProductCard";
 import { FilterItem } from "../components/FilterItem";
 import { useManufacturer } from "../api/useManufacturer";
 import { CloseButton } from "../lib/svg";
+import { getPermissions } from "../lib/permission";
+import { GetAuthData } from "../lib/store";
+import { useNavigate } from "react-router-dom";
 let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
 const TopProducts = () => {
@@ -19,6 +22,11 @@ const TopProducts = () => {
   const [searchText, setSearchText] = useState();
   const [productImages, setProductImages] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
+  const [selectedSalesRepId, setSelectedSalesRepId] = useState();
+  const [userData, setUserData] = useState({});
+  const [hasPermission, setHasPermission] = useState(null);
+  const [permissions, setPermissions] = useState(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     btnHandler({manufacturerId:null,month:monthIndex + 1});
@@ -110,46 +118,95 @@ const TopProducts = () => {
       setSelectedMonth(month);
       SearchData({ selectedMonth:month, manufacturerFilter:manufacturerId })
   }
+
+
+    // Fetch user data and permissions
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const user = await GetAuthData();
+          setUserData(user);
+  
+          if (!selectedSalesRepId) {
+            setSelectedSalesRepId(user.Sales_Rep__c);
+          }
+  
+          const userPermissions = await getPermissions();
+          setHasPermission(userPermissions?.modules?.topProducts?.view);
+  
+          // If no permission, redirect to dashboard
+          if (userPermissions?.modules?.topProducts?.view === false) {
+            navigate("/dashboard");
+          }
+          
+        } catch (error) {
+          console.log({ error });
+        }
+      };
+      
+      fetchData();
+    }, [navigate, selectedSalesRepId]);
+  
+    // Check permission and handle redirection
+    useEffect(() => {
+      if (hasPermission === false) {
+        navigate("/dashboard");  // Redirect if no permission
+      }
+    }, [hasPermission, navigate]);
+
+    useEffect(() => {
+      async function fetchPermissions() {
+        try {
+          const user = await GetAuthData(); // Fetch user data
+          const userPermissions = await getPermissions(); // Fetch permissions
+          setPermissions(userPermissions); // Set permissions in state
+        } catch (err) {
+          console.error("Error fetching permissions", err);
+        }
+      }
+  
+      fetchPermissions(); // Fetch permissions on mount
+    }, []);
+  
+    // Memoize permissions to avoid unnecessary re-calculations
+    const memoizedPermissions = useMemo(() => permissions, [permissions]);
+
   return (
     <AppLayout filterNodes={<>
+  
+    <>
       <FilterItem
-        minWidth="220px"
-        label="All Brands"
-        name="Manufacturer1"
-        value={manufacturerFilter}
-        options={manufacturers?.data?.map((manufacturer) => ({
-          label: manufacturer.Name,
-          value: manufacturer.Id,
-        }))}
-        onChange={(value) => btnHandler({manufacturerId:value,month:selectedMonth})}
-      />
-      <FilterItem
-        label="Month"
-        minWidth="220px"
-        name="Month"
-        value={selectedMonth}
-        options={monthList}
-        onChange={(value) => btnHandler({manufacturerId:manufacturerFilter,month:value})}
-      />
-      {/* <FilterSearch
-        onChange={(e) => setSearchText(e.target.value)}
-        value={searchText}
-        placeholder="Search By Product"
-        minWidth="167px"
-      /> */}
-      {/* <button
-        className="border px-2.5 py-1 leading-tight"
-        onClick={() => { btnHandler() }}
-      >
-        Search
-      </button> */}
-      <button
+      minWidth="220px"
+      label="All Brands"
+      name="Manufacturer1"
+      value={manufacturerFilter}
+      options={manufacturers?.data?.map((manufacturer) => ({
+        label: manufacturer.Name,
+        value: manufacturer.Id,
+      }))}
+      onChange={(value) => btnHandler({manufacturerId:value,month:selectedMonth})}
+    />
+       
+    <FilterItem
+    label="Month"
+    minWidth="220px"
+    name="Month"
+    value={selectedMonth}
+    options={monthList}
+    onChange={(value) => btnHandler({manufacturerId:manufacturerFilter,month:value})}
+  />
+    
+    <button
         className="border px-2 py-1 leading-tight d-grid"
         onClick={() => { btnHandler({manufacturerId:null,month:monthIndex + 1}); }}
       >
         <CloseButton crossFill={'#fff'} height={20} width={20} />
         <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
       </button>
+  </>
+   
+ 
+  
     </>
     }>
       {!topProductList.isLoaded ? <Loading height={"70vh"}/> : (topProductList.data.length == 0 && topProductList.message) ?

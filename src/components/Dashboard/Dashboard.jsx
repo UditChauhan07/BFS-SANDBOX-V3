@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useMemo} from "react";
 import Styles from "./Dashboard.module.css";
 import Chart from "react-apexcharts";
 import img1 from "./Images/Active-1.png";
@@ -16,6 +16,7 @@ import AppLayout from "../AppLayout";
 import { FilterItem } from "../FilterItem";
 import { UserIcon } from "../../lib/svg";
 import { BiRefresh } from "react-icons/bi";
+import { getPermissions } from "../../lib/permission";
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const monthList = [
   {
@@ -69,6 +70,7 @@ const monthList = [
 ];
 
 function Dashboard({ dashboardData }) {
+  
   const bgColors = {
     "Kevyn Aucoin Cosmetics": "KevynAucoinCosmeticsBg",
     "Bumble and Bumble": "BumbleandBumbleBg",
@@ -162,6 +164,7 @@ function Dashboard({ dashboardData }) {
   const [needle_data, setNeedle_data] = useState([]);
   const [selectYear, setYear] = useState();
   const [selectMonth, setMonth] = useState();
+  const [permissions, setPermissions] = useState(null);
 
   //dashboard varibale used
   const [box, setBox] = useState({ RETAILERS: 0, GROWTH: 0, ORDERS: 0, REVENUE: 0, TARGET: 0 })
@@ -513,6 +516,20 @@ function Dashboard({ dashboardData }) {
     const yp = y0 + length * sin;
     return [<circle cx={x0} cy={y0} r={r} fill={color} stroke="none" />, <path d={`M${xba} ${yba}L${xbb} ${ybb} L${xp} ${yp} L${xba} ${yba}`} stroke="#none" fill={color} />];
   };
+  useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
   function IsTableLoading() {
     return (
       <>
@@ -582,6 +599,7 @@ function Dashboard({ dashboardData }) {
     <AppLayout
       filterNodes={
         <>
+      
           <FilterItem
             minWidth="220px"
             label="Month-Year"
@@ -595,6 +613,8 @@ function Dashboard({ dashboardData }) {
             }}
             name={"dashboard-manu"}
           />
+      
+     
         </>
       }
     >

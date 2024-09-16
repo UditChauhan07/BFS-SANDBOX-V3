@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useMemo } from "react";
 import AppLayout from "../components/AppLayout";
 import LaunchCalendar from "../components/LaunchCalendar/LaunchCalendar";
 import { FilterItem } from "../components/FilterItem";
@@ -10,6 +10,9 @@ import { CloseButton } from "../lib/svg";
 import { GetAuthData, getMarketingCalendar, getMarketingCalendarPDF, getMarketingCalendarPDFV2, getMarketingCalendarPDFV3, originAPi } from "../lib/store";
 import Loading from "../components/Loading";
 import { useManufacturer } from "../api/useManufacturer";
+import { getPermissions } from "../lib/permission";
+import { useNavigate } from "react-router-dom";
+
 const fileExtension = ".xlsx";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -21,6 +24,11 @@ const MarketingCalendar = () => {
   const [isPDFLoaded, setPDFIsloaed] = useState(false);
   const [pdfLoadingText, setPdfLoadingText] = useState(".");
   const [productList, setProductList] = useState([]);
+  const [selectedSalesRepId, setSelectedSalesRepId] = useState();
+  const [userData, setUserData] = useState({});
+  const [hasPermission, setHasPermission] = useState(null);
+  const [permissions, setPermissions] = useState(null);
+  const navigate = useNavigate()
   let brands = [
     { value: null, label: "All" },
     { value: "AERIN", label: "AERIN" },
@@ -247,10 +255,63 @@ const MarketingCalendar = () => {
     }
     FileSaver.saveAs(data, `${filename} ${new Date()}` + fileExtension);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await GetAuthData();
+        setUserData(user);
+
+        if (!selectedSalesRepId) {
+          setSelectedSalesRepId(user.Sales_Rep__c);
+        }
+
+        const userPermissions = await getPermissions();
+        setHasPermission(userPermissions?.modules?.marketingCalender.view);
+
+        // If no permission, redirect to dashboard
+        if (userPermissions?.modules?.marketingCalender.view === false) {
+          navigate("/dashboard");
+        }
+        
+      } catch (error) {
+        console.log({ error });
+      }
+    };
+    
+    fetchData();
+  }, [navigate, selectedSalesRepId]);
+
+  // Check permission and handle redirection
+  useEffect(() => {
+    if (hasPermission === false) {
+      navigate("/dashboard");  // Redirect if no permission
+    }
+  }, [hasPermission, navigate]);
+
+
+  useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+
+  // Memoize permissions to avoid unnecessary re-calculations
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
   return (
     <AppLayout
       filterNodes={
         <>
+  
+        
           <FilterItem
             minWidth="220px"
             label="All Brands"
@@ -314,6 +375,8 @@ const MarketingCalendar = () => {
               </li>
             </ul>
           </div>
+       
+       
         </>
       }
     >

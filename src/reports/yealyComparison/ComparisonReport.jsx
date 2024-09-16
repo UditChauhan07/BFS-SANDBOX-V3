@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useMemo } from "react";
 import AppLayout from "../../components/AppLayout";
 import Loading from "../../components/Loading";
 import Styles from "./index.module.css";
@@ -12,7 +12,9 @@ import YearlyComparisonReportTable from "../../components/comparison report tabl
 import { getYearlyComparison, sortArrayHandler } from "../../lib/store";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
-
+import { GetAuthData } from "../../lib/store";
+import { getPermissions } from "../../lib/permission";
+import { useNavigate } from "react-router-dom";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
 const date = new Date();
@@ -29,7 +31,11 @@ const YearlyComparisonReport = () => {
   const [filter, setFilter] = useState(initialValues);
   const [apiData, setApiData] = useState();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [selectedSalesRepId, setSelectedSalesRepId] = useState();
+  const [userData, setUserData] = useState({});
+  const [hasPermission, setHasPermission] = useState(null);  
+  const [permissions, setPermissions] = useState(null);
+const navigate = useNavigate()
   useEffect(() => {
     // Update API data when filter or status changes
     sendApiCall();
@@ -255,11 +261,62 @@ const YearlyComparisonReport = () => {
   };
 
 
+  // Fetch user data and permissions
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await GetAuthData();
+        setUserData(user);
+
+        if (!selectedSalesRepId) {
+          setSelectedSalesRepId(user.Sales_Rep__c);
+        }
+
+        const userPermissions = await getPermissions();
+        setHasPermission(userPermissions?.modules?.reports?.yearlyComparisonReport?.view);
+
+        // If no permission, redirect to dashboard
+        if (userPermissions?.modules?.reports?.yearlyComparisonReport?.view === false) {
+          navigate("/dashboard");
+        }
+        
+      } catch (error) {
+        console.log({ error });
+      }
+    };
+    
+    fetchData();
+  }, [navigate, selectedSalesRepId]);
+
+  // Check permission and handle redirection
+  useEffect(() => {
+    if (hasPermission === false) {
+      navigate("/dashboard");  // Redirect if no permission
+    }
+  }, [hasPermission, navigate]);
+
+  useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+
+  // Memoize permissions to avoid unnecessary re-calculations
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
 
   return (
     <AppLayout
       filterNodes={
         <>
+       
           <FilterItem
             minWidth="220px"
             label="All Manufacturers"
@@ -303,6 +360,8 @@ const YearlyComparisonReport = () => {
             <MdOutlineDownload size={16} className="m-auto" />
             <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>export</small>
           </button>
+
+        
         </>
       }
     >

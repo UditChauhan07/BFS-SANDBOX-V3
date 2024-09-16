@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useMemo } from "react";
 import { useNavigate } from "react-router";
 import AppLayout from "../../components/AppLayout";
 import Loading from "../../components/Loading";
@@ -13,7 +13,8 @@ import { MdOutlineDownload } from "react-icons/md";
 import ModalPage from "../../components/Modal UI";
 import styles from "../../components/Modal UI/Styles.module.css";
 import { CloseButton, SearchIcon } from "../../lib/svg";
-
+import { GetAuthData } from "../../lib/store";
+import { getPermissions } from "../../lib/permission";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
 const NewnessReport = () => {
@@ -39,6 +40,10 @@ const NewnessReport = () => {
   const [newnessData, setNewnessData] = useState({});
   const [loading, setLoading] = useState(false);
   const [status, setstatus] = useState(1)
+  const [selectedSalesRepId, setSelectedSalesRepId] = useState();
+  const [userData, setUserData] = useState({});
+  const [hasPermission, setHasPermission] = useState(null);
+  const [permissions, setPermissions] = useState(null);
   // if (manufacturers?.status !== 200) {
   //   // DestoryAuth();
   // }
@@ -208,10 +213,63 @@ const NewnessReport = () => {
     setNewnessData(temp);
     setLoading(false);
   };
+
+    // Fetch user data and permissions
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const user = await GetAuthData();
+          setUserData(user);
+  
+          if (!selectedSalesRepId) {
+            setSelectedSalesRepId(user.Sales_Rep__c);
+          }
+  
+          const userPermissions = await getPermissions();
+          setHasPermission(userPermissions?.modules?.reports?.newnessReport?.view );
+  
+          // If no permission, redirect to dashboard
+          if (userPermissions?.modules?.reports?.newnessReport?.view === false) {
+            navigate("/dashboard");
+          }
+          
+        } catch (error) {
+          console.log({ error });
+        }
+      };
+      
+      fetchData();
+    }, [navigate, selectedSalesRepId]);
+  
+    // Check permission and handle redirection
+    useEffect(() => {
+      if (hasPermission === false) {
+        navigate("/dashboard");  // Redirect if no permission
+      }
+    }, [hasPermission, navigate]);
+
+    useEffect(() => {
+      async function fetchPermissions() {
+        try {
+          const user = await GetAuthData(); // Fetch user data
+          const userPermissions = await getPermissions(); // Fetch permissions
+          setPermissions(userPermissions); // Set permissions in state
+        } catch (err) {
+          console.error("Error fetching permissions", err);
+        }
+      }
+  
+      fetchPermissions(); // Fetch permissions on mount
+    }, []);
+  
+    // Memoize permissions to avoid unnecessary re-calculations
+    const memoizedPermissions = useMemo(() => permissions, [permissions]);
   return (
     <AppLayout
       filterNodes={
         <>
+
+      
           <FilterItem
             minWidth="200px"
             label="All Manufacturers"
@@ -303,6 +361,8 @@ const NewnessReport = () => {
             <MdOutlineDownload size={16} className="m-auto" />
             <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>export</small>
           </button>
+        
+         
         </>
       }
     >
