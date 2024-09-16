@@ -113,7 +113,7 @@ export async function POGenerator() {
     let AcCode = getStrCode(orderDetails.Account?.name);
     let MaCode = getStrCode(orderDetails.Manufacturer?.name);
 
-    const response = await fetch( 'http://localhost:2619/PoNumber/generatepo', {
+    const response = await fetch('http://localhost:2619/PoNumber/generatepo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
