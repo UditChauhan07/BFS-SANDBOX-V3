@@ -16,6 +16,8 @@ function ContactDetailedReport() {
         accountFilter: '',
         saleRepFilter: '',
         manufacturerFilter: '',
+        accountStatusFilter: 'All',
+
     });
     const [accounts, setAccounts] = useState([]);
     const [salesReps, setSalesReps] = useState([]);
@@ -145,8 +147,8 @@ function ContactDetailedReport() {
             'Account Name': record.AccountId__r?.Name || '',
             'First Name': record.contact?.FirstName || 'N/A',
             'Last Name': record.contact?.LastName || 'N/A',
-            'Sales Rep': record.Sales_Rep__r?.Name || '',
-            'Manufacturer': record.ManufacturerName__c || '',
+            'Sales Rep': record.Sales_Rep__r?.Name || 'N/A',
+            'Manufacturer': record.ManufacturerName__c || 'N/A',
             'Email': record.contact?.Email || 'N/A',
             'Phone': record.contact?.Phone || 'N/A',
             'Account Number': record.Account_Number__c || 'N/A',
@@ -159,7 +161,7 @@ function ContactDetailedReport() {
             'Store Country': record.AccountId__r?.Store_Country__c || 'N/A',
             'Shipping Street': record.AccountId__r?.ShippingStreet || 'N/A',
             'Shipping City': record.AccountId__r?.ShippingCity || 'N/A',
-            'Shipping State': record.AccountId__r?.ShippingState || '',
+            'Shipping State': record.AccountId__r?.ShippingState || 'n/A',
             'Shipping Zip': record.AccountId__r?.ShippingPostalCode || 'N/A',
             'Shipping Country': record.AccountId__r?.ShippingCountry || 'N/A',
             'Billing Street': record.AccountId__r?.BillingStreet || 'N/A',
@@ -177,6 +179,31 @@ function ContactDetailedReport() {
         // Export the workbook
         XLSX.writeFile(wb, 'ContactDetailedReport.xlsx');
     };
+    useEffect(() => {
+        const newFilteredRecords = accountManufacturerRecords.filter((record) => {
+            const accountMatch = debouncedFilters.accountFilter
+                ? record.AccountId__r?.Name?.toLowerCase().includes(debouncedFilters.accountFilter.toLowerCase())
+                : true;
+            const saleRepMatch = debouncedFilters.saleRepFilter
+                ? record.Sales_Rep__r?.Name?.toLowerCase().includes(debouncedFilters.saleRepFilter.toLowerCase())
+                : true;
+            const manufacturerMatch = debouncedFilters.manufacturerFilter
+                ? record.ManufacturerName__c?.toLowerCase().includes(debouncedFilters.manufacturerFilter.toLowerCase())
+                : true;
+    
+            // Filter by account status
+            const accountStatusMatch = debouncedFilters.accountStatusFilter === 'All'  // If "All" is selected, no filter
+                ? true
+                : record.AccountId__r?.Active_Closed__c === debouncedFilters.accountStatusFilter;
+    
+            return accountMatch && saleRepMatch && manufacturerMatch && accountStatusMatch;
+        });
+    
+        setFilteredRecords(newFilteredRecords);
+    }, [debouncedFilters, accountManufacturerRecords]);
+    
+    
+    
 
     return (
         <AppLayout
@@ -210,6 +237,20 @@ function ContactDetailedReport() {
                         onChange={(value) => handleFilterChange('manufacturerFilter', value)}
                         onFocus={() => setFilters(prev => ({ ...prev, accountFilter: '', saleRepFilter: '' }))}
                     />
+
+<FilterItem
+    minWidth="200px"
+    label="Account Status"
+    name="Account Status"
+    value={filters.accountStatusFilter}  // This defaults to 'All'
+    options={[
+        { label: 'All Accounts', value: 'All' }, 
+        { label: 'Active Accounts', value: 'Active Account' }, 
+        { label: 'Closed Accounts', value: 'Closed Account' }
+    ]}
+    onChange={(value) => handleFilterChange('accountStatusFilter', value)}
+/>
+
 
                     <div>
                     <button className="border px-2 py-1 leading-tight d-grid" onClick={handleClearFilters}>
@@ -281,7 +322,7 @@ function ContactDetailedReport() {
                                         <td>{record.AccountId__r?.Name}</td>
                                         <td>{record.contact?.FirstName || 'N/A'}</td>
                                         <td>{record.contact?.LastName || 'N/A'}</td>
-                                        <td>{record.Sales_Rep__r?.Name}</td>
+                                        <td>{record.Sales_Rep__r?.Name || 'N/A'}  </td>
                                         <td>{record.ManufacturerName__c}</td>
                                         <td>{record.contact?.Email || 'N/A'}</td>
                                         <td>{record.contact?.Phone || 'N/A'}</td>

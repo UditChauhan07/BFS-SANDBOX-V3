@@ -169,7 +169,7 @@ export const permissionsArray = [
                     hasAccess: true,
                     childModules: {
                         order_Status: true,
-                        customer_service: true ,
+                        customer_service: false ,
                         how_To_Guide: true,
                         emailBlast: true,
                         accountTier: true,
