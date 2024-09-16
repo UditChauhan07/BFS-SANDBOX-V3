@@ -72,6 +72,9 @@ export const permissionsArray = [
                     },  targetReport : {
                         view : true , 
                         admins : true
+                    },  contactDetailedReport : {
+                        view : true , 
+                        admins : true
                     }
 
                } ,
@@ -162,6 +165,11 @@ export const permissionsArray = [
                         view : true , 
                         admins : true
                     }
+                    ,  contactDetailedReport : {
+                        view : true , 
+                        admins : true
+                    }
+
 
                } ,
 
@@ -183,7 +191,7 @@ export const permissionsArray = [
     },
     {
         userType: 'custom 1',
-        allows : ["0053b00000C75e8AAB" , "0053b00000DgGqOAAV"  ] ,
+        allows : ["0053b00000C75e8AAB" , "0053b00000DgGqOAAV"  , "0053b00000CwOnLAAV"] ,
         permissions: {
             modules: {
               orderCreate :  {
@@ -248,6 +256,9 @@ export const permissionsArray = [
                         view : false , 
                         admins : true
                     },  targetReport : {
+                        view : false , 
+                        admins : true
+                    },  contactDetailedReport : {
                         view : false , 
                         admins : true
                     }

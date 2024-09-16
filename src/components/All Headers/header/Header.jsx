@@ -181,7 +181,7 @@ const Header = () => {
                 ) : <li className="dropdown-item text-start" onClick={()=>handleRestrictedAccess('Target Report')} 
                 style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
                 > Target Report</li>}
-
+{memoizedPermissions?.modules?.reports?.contactDetailedReport?.view  ? (
 <li>
                   <Link
                     to="/account-contact-detailed-Report"
@@ -193,6 +193,9 @@ const Header = () => {
                     Account Contact Detailed Report
                   </Link>
                 </li>
+) :  <li className="dropdown-item text-start" onClick={()=>handleRestrictedAccess('Account Contact Detailed Report')} 
+style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
+> Account Contact Detailed Report</li>}
               </ul>
             </div>
           </Link>

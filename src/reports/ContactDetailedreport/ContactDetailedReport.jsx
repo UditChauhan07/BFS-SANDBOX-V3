@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useMemo } from 'react';
 import axios from 'axios';
 import AppLayout from '../../components/AppLayout';
 import Styles from "./index.module.css";
@@ -9,6 +9,7 @@ import styles from "../../components/newness report table/table.module.css";
 import * as XLSX from 'xlsx';
 import { CloseButton } from "../../lib/svg";
 import { MdOutlineDownload } from "react-icons/md";
+import { getPermissions } from "../../lib/permission";
 function ContactDetailedReport() {
     const [accountManufacturerRecords, setAccountManufacturerRecords] = useState([]);
     const [filteredRecords, setFilteredRecords] = useState([]);
@@ -23,7 +24,8 @@ function ContactDetailedReport() {
     const [salesReps, setSalesReps] = useState([]);
     const [manufacturers, setManufacturers] = useState([]);
     const [loading, setLoading] = useState(true); // Loading state
-
+    const [hasPermission, setHasPermission] = useState(null); // State to store permission status
+    const [permissions, setPermissions] = useState(null);
     // Debounce filter changes
     const [debouncedFilters, setDebouncedFilters] = useState(filters);
 
@@ -202,13 +204,40 @@ function ContactDetailedReport() {
         setFilteredRecords(newFilteredRecords);
     }, [debouncedFilters, accountManufacturerRecords]);
     
+    useEffect(() => {
+        async function fetchPermissions() {
+          try {
+            const user = await GetAuthData(); // Fetch user data
+            const userPermissions = await getPermissions(); // Fetch permissions
+            setPermissions(userPermissions); // Set permissions in state
+          } catch (err) {
+            console.error("Error fetching permissions", err);
+          }
+        }
     
+        fetchPermissions(); // Fetch permissions on mount
+      }, []);
+    
+      // Memoize permissions to avoid unnecessary re-calculations
+      const memoizedPermissions = useMemo(() => permissions, [permissions]);
     
 
     return (
         <AppLayout
             filterNodes={
                 <>
+                {memoizedPermissions?.modules?.filter?.view  ? <> 
+                
+                    <FilterItem
+                        minWidth="200px"
+                        label="Sales Rep"                       
+                        value={filters.saleRepFilter}
+                        name = 'Sales Rep'
+                        options={salesReps}
+                        onChange={(value) => handleFilterChange('saleRepFilter', value)}
+                        onFocus={() => setFilters(prev => ({ ...prev, accountFilter: '', manufacturerFilter: '' }))}
+                    />
+                </> : null }
                     <FilterItem
                         minWidth="200px"
                         label="Account Name"
@@ -219,15 +248,7 @@ function ContactDetailedReport() {
                         onFocus={() => setFilters(prev => ({ ...prev, saleRepFilter: '', manufacturerFilter: '' }))} 
                     />
                     
-                    <FilterItem
-                        minWidth="200px"
-                        label="Sales Rep"                       
-                        value={filters.saleRepFilter}
-                        name = 'Sales Rep'
-                        options={salesReps}
-                        onChange={(value) => handleFilterChange('saleRepFilter', value)}
-                        onFocus={() => setFilters(prev => ({ ...prev, accountFilter: '', manufacturerFilter: '' }))}
-                    />
+                   
                     <FilterItem
                         minWidth="200px"
                         label="Manufacturer"
