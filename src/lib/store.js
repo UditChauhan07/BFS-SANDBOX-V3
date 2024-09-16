@@ -1,8 +1,7 @@
 // export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 // export const originAPi = "https://dev.beautyfashionsales.com"
 // export const originAPi = "http://localhost:2619"
-export const originAPi = "https://bfs.uditchauhan.com"
-
+export const originAPi = "https://bfs.uditchauhan.com";
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
 const orderKey = "orders";
@@ -68,7 +67,7 @@ export function PublicCheck() {
 }
 
 export function fetchBeg() {
-  let orderStr = localStorage.getItem(orderKey);
+  let orderStr = localStorage.getItem("orders"); // Use the key defined earlier
   let orderDetails = {
     orderList: [],
     Account: {
@@ -82,6 +81,7 @@ export function fetchBeg() {
       id: null,
     },
   };
+  
   if (orderStr) {
     let orderList = Object.values(JSON.parse(orderStr));
     if (orderList.length > 0) {
@@ -94,26 +94,35 @@ export function fetchBeg() {
       orderDetails.orderList = orderList;
     }
   }
+  
   return orderDetails;
 }
+
+// Function to generate PO number
 export async function POGenerator() {
   try {
+    // Fetching order details
     let orderDetails = fetchBeg();
-    let count = parseInt(localStorage.getItem(POCount)) || 1;
+
+    // Getting count of PO from localStorage
+    let count = parseInt(localStorage.getItem("woX5MkCSIOlHXkT")) || 1;
 
     if (isNaN(count)) {
-      localStorage.setItem(POCount, 1);
+      localStorage.setItem("woX5MkCSIOlHXkT", 1);
       count = 1;
     }
 
+    // Getting current date
     let date = new Date();
     let currentMonth = padNumber(date.getMonth() + 1, true);
     let currentDate = padNumber(date.getDate(), true);
 
+    // Generate account and manufacturer codes
     let AcCode = getStrCode(orderDetails.Account?.name);
     let MaCode = getStrCode(orderDetails.Manufacturer?.name);
 
-    const response = await fetch('http://localhost:2619/PoNumber/generatepo', {
+    // Making API request to generate PO number
+    const response = await fetch( "https://bfs.uditchauhan.com/PoNumber/generatepo", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -124,17 +133,22 @@ export async function POGenerator() {
         orderDate: date.toISOString(),
       }),
     });
-
+    console.log(response)
+    // Check if response is not ok
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
+    // Parsing the response
     const poData = await response.json();
     console.log(poData);
 
     if (poData.success) {
       let generatedPONumber = poData.poNumber;
-      localStorage.setItem(POCount, count + 1);
+
+      // Update count in localStorage
+      localStorage.setItem("woX5MkCSIOlHXkT", count + 1);
+      
       return await generatedPONumber;
     } else {
       console.error('Failed to generate PO number:', poData.message);
@@ -145,9 +159,12 @@ export async function POGenerator() {
     return null;
   }
 }
+
+// Helper function to generate codes
 export function getStrCode(str) {
   if (!str) return null;
   let codeLength = str.split(" ");
+  
   if (codeLength.length >= 2) {
     return `${codeLength[0].charAt(0).toUpperCase() + codeLength[1].charAt(0).toUpperCase()}`;
   } else {
@@ -155,6 +172,7 @@ export function getStrCode(str) {
   }
 }
 
+// Helper function to pad numbers
 function padNumber(n, isTwoDigit) {
   if (isTwoDigit) {
     return n < 10 ? "0" + n : n;
