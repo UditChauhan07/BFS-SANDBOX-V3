@@ -6,7 +6,6 @@ import html2pdf from "html2pdf.js";
 import { MdOutlineDownload } from "react-icons/md";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
-import { jsPDF } from "jspdf";
 import { CloseButton } from "../lib/svg";
 import { GetAuthData, getMarketingCalendar, getMarketingCalendarPDF, getMarketingCalendarPDFV2, getMarketingCalendarPDFV3, originAPi } from "../lib/store";
 import Loading from "../components/Loading";
@@ -381,7 +380,7 @@ const MarketingCalendar = () => {
         </>
       }
     >
-      {isPDFLoaded ? <div><img src="https://i.giphy.com/7jtU9sxHNLZuv8HZCa.webp" style={{margin:'auto'}} width="480" height="480" /><p className="text-center mt-2">{`Generating PDF`}</p></div> :
+      {isPDFLoaded ? <div><img src="https://i.giphy.com/7jtU9sxHNLZuv8HZCa.webp" style={{margin:'auto',mixBlendMode:'luminosity'}} width="480" height="480" /><p className="text-center mt-2">{`Generating PDF`}</p></div> :
         isLoaded ? <LaunchCalendar brand={brand} month={month} productList={productList} /> : <Loading height={'50vh'}/>}
 
     </AppLayout>

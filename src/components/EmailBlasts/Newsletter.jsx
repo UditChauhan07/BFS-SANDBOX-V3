@@ -26,6 +26,21 @@ const Newsletter = () => {
         GetAuthData().then((user) => {
             setToken(user.access_token)
             getEmailBlastReport({ key: user.access_token, Id: user.Sales_Rep__c }).then((report) => {
+                report.sort((a, b) => {
+                    // First compare by Year
+                    if (a.Year !== b.Year) {
+                      return b.Year - a.Year;
+                    }
+                    
+                    // If Year is the same, compare by Month (using MonthValue)
+                    if (a.MonthValue !== b.MonthValue) {
+                      return b.MonthValue - a.MonthValue;
+                    }
+                    
+                    // If both Year and Month are the same, compare by Day
+                    return b.Day - a.Day;
+                  });
+                
                 setEmailReport({ isLoad: true, data: report })
             }).catch((reportErr) => {
                 console.log({ reportErr });

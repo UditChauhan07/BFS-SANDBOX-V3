@@ -5,8 +5,9 @@ import ModalPage from "../../components/Modal UI";
 import SelectBrandModel from "../../components/My Retailers/SelectBrandModel/SelectBrandModel";
 import { useManufacturer } from "../../api/useManufacturer";
 import Loading from "../../components/Loading";
-import { generateBrandAuditTemplate, GetAuthData, getBrandAuditPaginate, originAPi } from "../../lib/store";
+import { generateBrandAuditTemplate, getAuditReportView, GetAuthData, getBrandAuditPaginate, originAPi } from "../../lib/store";
 import { CloseButton } from "../../lib/svg";
+import AuditReportTable from "../../components/AuditReportTable";
 import { getPermissions } from "../../lib/permission";
 import { useNavigate } from "react-router-dom";
 // Styling
@@ -68,12 +69,33 @@ const AuditReport = () => {
     const [brandSelect, setbrandSelected] = useState();
     const [brandStep, setBrandStep] = useState(0);
     const [brandPages, setBrandPages] = useState({ isLoaded: false, value: 0 });
+    const [auditReport, setAuditReport] = useState({ isLoaded: false, data: [] })
+    const [token, setToken] = useState();
     const [totalAccount,setTotalAccount]=useState();
     const [currentFileName, setCurrentFileName] = useState('');
     const [selectedSalesRepId, setSelectedSalesRepId] = useState();
     const [userData, setUserData] = useState({});
     const [hasPermission, setHasPermission] = useState(null);
     const navigate = useNavigate()
+  
+    useEffect(() => {
+        GetAuthData().then((user) => {
+            setToken(user.x_access_token);
+            getAuditReportView({ key: user.x_access_token }).then((reportRes) => {
+                console.log({ reportRes });
+                setAuditReport({ isLoaded: true, data: reportRes })
+
+            }).catch((reportErr) => {
+                console.log({ reportErr });
+
+            })
+        }).catch((userErr) => {
+            console.log({ userErr });
+
+        })
+    }, [])
+
+
     const onCloseModal = () => {
         setBrandStep(0);
         setTotalAccount()
@@ -226,7 +248,7 @@ const AuditReport = () => {
         return (
             <div style={styles.comparisonContainer}>
                 {brandPages.isLoaded ?
-                    chunks.length?<ChunkedReportDownload chunks={chunks} />:"Not Part Avalaible" :
+                    chunks.length ? <ChunkedReportDownload chunks={chunks} /> : "Not Part Available" :
                     <Loading height={'200px'} />}
             </div>
         );
@@ -246,7 +268,7 @@ const AuditReport = () => {
                                     <CloseButton />
                                 </button>
                             </div>
-                            {brandPages.isLoaded?<small className="d-block w-[100%] text-right mb-2">Total Accounts: <b>{totalAccount}</b></small>:null}
+                            {brandPages.isLoaded ? <small className="d-block w-[100%] text-right mb-2">Total Accounts: <b>{totalAccount}</b></small> : null}
                             <ReportDownloadComparison /></section></div>
                     : brandStep == 0 ?
                         <SelectBrandModel brands={manufacturers?.data} onChange={BrandPaginateHanlder} onClose={onCloseModal} />
@@ -270,9 +292,11 @@ const AuditReport = () => {
                 </h2>
             </div> */}
             <div className="d-grid place-content-center min-h-[40vh]">
-                {isPdfGenerated ? <><img src="https://i.giphy.com/7jtU9sxHNLZuv8HZCa.webp" width="480" height="480" /><p className="text-center mt-2">{`Creating PDF Audit Report for ${brandSelect?.Name}`}</p></> : <div className="col-12">
-                    <p className="m-0 fs-2 font-[Montserrat-400] text-[14px] tracking-[2.20px]">Coming Soon...</p>
-                </div>}
+                {isPdfGenerated ? <><img src="https://i.giphy.com/7jtU9sxHNLZuv8HZCa.webp" width="480" height="480" /><p className="text-center mt-2">{`Creating PDF Audit Report for ${brandSelect?.Name}`}</p></> :
+                        auditReport.isLoaded ?
+                            <div style={{width:'90vw',margin:'2rem auto'}}><AuditReportTable  auditReport={auditReport.data||[]}/></div>
+                            : <div className="col-12"><Loading /></div>
+                }
 
             </div></>}
     </AppLayout>)

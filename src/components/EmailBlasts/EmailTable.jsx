@@ -93,8 +93,13 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, new
             if (admins.includes(user.Sales_Rep__c)) {
                 setUser(user)
                 getEmailBlast({ key: user.access_token, Id: user.Sales_Rep__c, month, day, year, newsletter }).then((list) => {
+                    console.log({list});
+                    
 
-                    let contactList = sortArrayHandler(JSON.parse(list || "[]") || [], g => g?.updatedAt, 'desc')
+                    let contactList = JSON.parse(list || "[]")
+                    // let contactList = sortArrayHandler(JSON.parse(list || "[]") || [], g => g?.updatedAt, 'desc')
+                    console.log({contactList});
+                    
                     setContactList({ isLoaded: true, data: contactList })
 
                 }).catch((conErr) => {
@@ -185,7 +190,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, new
                     "Brands Name": element.Brands,
                     "Subscriber Name": element.ContactName,
                     "Subscriber Email": element.ContactEmail,
-                    "Publish On": DateConvert(element.Date),
+                    "Publish On": DateConvert(element.Date,true),
                     "Status": element.mailStatus == 1 ? "Send" : element.mailSend == 2 ? "Failed" : "Not Sent",
                 }
                 exportData.push(temp)
@@ -200,7 +205,7 @@ const EmailTable = ({ month, day, year, setFilter, setMonthList, setDayList, new
         const data = new Blob([excelBuffer], { type: fileType });
         FileSaver.saveAs(data, `Subscribers List for ${months[month - 1]} ${day}, ${year}'s NewLetter ${new Date().toDateString()}` + fileExtension);
     }
-    console.log({ mailList });
+    console.log({ mailList,data });
 
     return (
         <div>

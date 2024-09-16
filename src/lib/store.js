@@ -13,7 +13,8 @@ const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
 export const salesRepIdKey = "BzQIEAjzCEHmlXc";
-export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3", "0051O00000CvAVTQA3"   ]; 
+export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3", "0051O00000CvAVTQA3", "0053b00000CwOnLAAV"]; //, "0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
+
 
 export const months = [
   "January",
@@ -115,11 +116,11 @@ function padNumber(n, isTwoDigit) {
 
 export function formatNumber(num) {
   if (num >= 0 && num < 1000000) {
-    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
+    return (num / 1000).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
   } else if (num >= 1000000) {
-    return (num / 1000000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "M";
+    return (num / 1000000).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "M";
   } else if (num < 0) {
-    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
+    return (num / 1000).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
   } else {
     return num;
   }
@@ -783,6 +784,24 @@ export async function getSalesRepList({ key }) {
     return data;
   }
 }
+export async function getAuditReportView({ key }) {
+  let headersList = {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(originAPi + "/audit/8rM04B63RFDXH9Z1", {
+    method: "POST",
+    body: JSON.stringify({ key }),
+    headers: headersList,
+  });
+  let data = JSON.parse(await response.text());
+  if (data.status == 300) {
+    DestoryAuth();
+  } else {
+    return data.data;
+  }
+}
 export async function generateAuditTemplate({ key, Ids, brandId = null }) {
   let headersList = {
     Accept: "*/*",
@@ -878,7 +897,7 @@ export async function getEmailBlastReport({ key, Id }) {
     return data.data;
   }
 }
-export async function getEmailBlast({ key, Id, day = null, month = null, year = null,newsletter=null }) {
+export async function getEmailBlast({ key, Id, day = null, month = null, year = null, newsletter = null }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -886,7 +905,7 @@ export async function getEmailBlast({ key, Id, day = null, month = null, year = 
 
   let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/T0pxZkWoI3zKNd5", {
     method: "POST",
-    body: JSON.stringify({ key, Id, day, month, year,newsletter }),
+    body: JSON.stringify({ key, Id, day, month, year, newsletter }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -925,6 +944,36 @@ export async function fetchNewsletterData({ token }) {
     throw err;
   }
 };
+export async function fetchNextMonthNewsletterBrand({ key, date = null,forMonth=1 }) {
+  if (!key) {
+    throw new Error('Access token is missing');
+  }
+
+  try {
+    let headersList = {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+    };
+    let response = await fetch(originAPi + "/newsletter/Cfe5pdfgpUBjnw9", {
+      method: "POST",
+      body: JSON.stringify({
+        key, date,forMonth
+      }),
+      headers: headersList,
+    });
+    let data = JSON.parse(await response.text());
+
+    
+    if (data.status == 300) {
+      DestoryAuth();
+    } else {
+      return data.data;
+    }
+  } catch (err) {
+    console.error('Error fetching newsletter data:', err.message);
+    throw err;
+  }
+};
 
 export async function createNewsletter(body) {
   // if (!body) {
@@ -949,6 +998,31 @@ export async function createNewsletter(body) {
       // DestoryAuth();
       return { status: false, message: data.message };
     }
+  } catch (err) {
+    console.error('Error fetching newsletter data:', err);
+    return { status: false, message: err.message };
+  }
+};
+
+
+export async function fetchNewletterPreview(body) {
+  // if (!body) {
+  //   throw new Error('Access token is missing');
+  // }
+
+  try {
+    let headersList = {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+    };
+    let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/hLsoGJGjWAkTjaF", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: headersList,
+    });
+    let data = JSON.parse(await response.text());
+
+    return { status: true, data: data.data };
   } catch (err) {
     console.error('Error fetching newsletter data:', err);
     return { status: false, message: err.message };
@@ -1420,9 +1494,9 @@ export const brandDetails =
     desc: '<p class="seti">Everyone has a story. Ours is original and authentic and sets us apart from every other beauty brand. We`re proud of our story, and this is how we tell it: We live for lipstick. We get excited about primers. (No, seriously, we do.) But mostly, we love sharing our makeup secrets with you. Why? Because creativity and collaboration are at the core of our DNA. We are the only brand born out of a legendary photo studio — Smashbox Studios in Los Angeles — where major photographers, celebrities and makeup artists converge to create iconic images every day. Studio-tested, shockingly high-performance. Longwearing and skincaring. Artistry made easy. Hardworking makeup that keeps up with you.</p>'
   },
   a0ORb000000BQ0nMAG: {
-    img: { src: "https://beautyfashionsales.vercel.app/static/media/VictoriaBeckhamBeauty.d9fff66659d48dffd704.png" },
-    tagLine: "PURE EXCELLENCE IN EVERY WAY. THAT'S THE VICTORIA STANDARD.",
-    desc: '<p class="seti">Through the perfume of memory, Victoria Beckham distills the notes of eras and atmospheres into fragrances founded in personal yet universal associations. Drawing on stages of her life and their parallels to a pop culture shared by all, each scent captures her own recollections of distinct times, places, and experiences and mirrors them in our collective and individual reminiscences.</p>'
+    img: { src: "/assets/images/31.jpg" },
+    tagLine: "Good. Better. Best. Beckham. That's the Victoria Standard.",
+    desc: "<p class='seti'>Although Victoria Beckham had experienced the world's best beauty products (often in the hands of the world's best stylists, under the direction of the world's best photographers) she still found herself looking around - and into her makeup bag - and thinking 'This could be better'. Because, despite the array of quality, style, craft and heritage on offer, everything that excelled in one area seemed to sacrifice in another. And so Victoria Beckham Beauty was created to make the products that would finally meet these uncompromising standards: Proven performance and an elevated experience delivered with intentional integrity, transparency and inclusivity. A keenly curated range that only includes items that genuinely add to the best already out there; Shades selected for classical looks and contemporary styles; The feeling of luxury from first sight to last swipe, sweep or dab; The enduring quality required by demanding lifestyles; Fashion-led, female founded, cruelty-free, conscious and clean.</p><p class='seti'>Pure excellence in every way, at all times. Ambitious? Absolutely. Unreasonable? Not one bit.</p>"
   },
   a0O3b00000p7zqKEAQ: {
     img: { src: "https://beautyfashionsales.vercel.app/static/media/bobbi-brown-main.d67c6c3e9732a993f1c2.png" },
@@ -1479,10 +1553,10 @@ export const brandDetails =
     tagLine: null,
     desc: null
   },
-  a0ORb000001KCNpMAO:{
-    img: {src: "/assets/images/SUPERGOOP_BRAND_CAMP.jpg"},
-    tagLine: null,
-    desc: "<p>Short blurb next to the logo: Every. Single. Day.™</p><p>SPF is the #1 thing you can do for your skin, so we put it first in all we do. Founded in 2005 by mom and former elementary school teacher Holly Thaggard, Supergoop! is made with a mission: To change the way the world thinks about sunscreen and end the epidemic of skin cancer. As the Experts in SPF™, we’ve been raising the bar for effective, feel-good sunscreen for nearly 20 years. Discover our 40+ dermatologist-tested formulas for all skin types, tones and routines, and find the SPF you want to wear. Every. Single. Day.™</p>"
+  a0ORb000001KCNpMAO: {
+    img: { src: "/assets/images/30.jpg" },
+    tagLine: "Short blurb next to the logo: Every. Single. Day.™",
+    desc: "<p>SPF is the #1 thing you can do for your skin, so we put it first in all we do. Founded in 2005 by mom and former elementary school teacher Holly Thaggard, Supergoop! is made with a mission: To change the way the world thinks about sunscreen and end the epidemic of skin cancer. As the Experts in SPF™, we’ve been raising the bar for effective, feel-good sunscreen for nearly 20 years. Discover our 40+ dermatologist-tested formulas for all skin types, tones and routines, and find the SPF you want to wear. Every. Single. Day.™</p>"
   }
 }
 // .....................

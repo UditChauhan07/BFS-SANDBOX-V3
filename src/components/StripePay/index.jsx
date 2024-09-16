@@ -12,7 +12,7 @@ const StripePay = ({ PK_KEY, SK_KEY, amount = 100 }) => {
     useEffect(() => {
         if (PK_KEY && SK_KEY) {
             // Fetch the client secret from your backend
-            fetch(originAPi + '/stripe/payment-intent', {
+            fetch(originAPi + '/stripe/wdfefrfrgrf4t', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,8 +39,8 @@ const StripePay = ({ PK_KEY, SK_KEY, amount = 100 }) => {
     };
 
     return clientSecret ? (
-        <Elements stripe={stripePromise} options={options}>
-            <CheckoutForm />
+        <Elements stripe={stripePromise}>
+            <CheckoutForm clientSecret={SK_KEY}/>
         </Elements>
     ) : (
         <Loading height={'50vh'} />

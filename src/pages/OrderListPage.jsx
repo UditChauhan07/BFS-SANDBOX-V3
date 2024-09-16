@@ -226,7 +226,7 @@ const OrderListPage = () => {
       }
     >
       {!loaded ? (
-        <Loading />
+        <Loading height={'50vh'}/>
       ) : (
         <div>
           <section>

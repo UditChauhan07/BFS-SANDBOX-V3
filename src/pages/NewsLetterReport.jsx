@@ -5,6 +5,8 @@ import EmailTable from "../components/EmailBlasts/EmailTable";
 const NewsLetterReport = () => {
     const location = useLocation();
     const { year, month, day,newsletter } = location.state || {};
+    console.log({year, month, day,newsletter});
+    
 
     const [monthList, setMonthList] = useState([]);
     const [dayList, setDayList] = useState([])
@@ -16,7 +18,6 @@ const NewsLetterReport = () => {
     const [filterHelper, setFilterHelper] = useState({ day: null, month: null, year: null,newsletter:null })
 
     useEffect(() => {
-        console.log({year, month, day,newsletter});
         if (!year || !month || !day||!newsletter) {
             
             alert("no found.")

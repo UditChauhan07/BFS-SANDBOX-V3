@@ -26,6 +26,8 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
   const [restrict, setRestrict] = useState();
 
   const OrderId = JSON.parse(localStorage.getItem("OpportunityId"));
+  console.log({OrderId});
+  
   const Key = JSON.parse(localStorage.getItem("Api Data"));
   if (!Key) {
     DestoryAuth();
@@ -186,7 +188,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
         });
     }
   };
-  if (!isLoading) return <Loading />;
+  if (!isLoading) return <Loading height={'50vh'}/>;
   const openInNewTab = (url) => {
     window.open(url, "_blank", "noreferrer");
   };
