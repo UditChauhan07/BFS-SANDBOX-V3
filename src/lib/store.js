@@ -1,7 +1,7 @@
 // export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 // export const originAPi = "https://dev.beautyfashionsales.com"
-// export const originAPi = "http://localhost:2619"
-export const originAPi = "https://bfs.uditchauhan.com";
+export const originAPi = "http://localhost:2619"
+// export const originAPi = "https://bfs.uditchauhan.com";
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
 const orderKey = "orders";
@@ -67,7 +67,7 @@ export function PublicCheck() {
 }
 
 export function fetchBeg() {
-  let orderStr = localStorage.getItem("orders"); // Use the key defined earlier
+  let orderStr = localStorage.getItem("orders"); 
   let orderDetails = {
     orderList: [],
     Account: {
@@ -122,7 +122,7 @@ export async function POGenerator() {
     let MaCode = getStrCode(orderDetails.Manufacturer?.name);
 
     // Making API request to generate PO number
-    const response = await fetch( "https://bfs.uditchauhan.com/PoNumber/generatepo", {
+    const response = await fetch( "http://localhost:2619/PoNumber/generatepo", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
