@@ -32,7 +32,7 @@ function MyBagFinal() {
   const [salesRepData, setSalesRepData] = useState({ Name: null, Id: null })
   const [limitInput, setLimitInput] = useState("");
   const [confirm, setConfirm] = useState(false);
- const [isPOLoaded, setIsPOLoaded] = useState(false); 
+  const [isLoading, setIsLoading] = useState(true); // Show loader while data is loading 
 
   const handleNameChange = (event) => {
     const limit = 10;
@@ -41,15 +41,17 @@ function MyBagFinal() {
 
   useEffect(() => {
   const FetchPoNumber = async () => {
-    setIsPOLoaded(false); try {
+ try {
       const res = await POGenerator();
       if (res) {
         setPONumber(res); 
       }
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching PO number:", error);
+      setIsLoading(false); // Hide loader even if data loading fails
     } finally {
-      setIsPOLoaded(true); 
+      
     }
   };
 
@@ -231,6 +233,9 @@ function MyBagFinal() {
   if (isOrderPlaced === 1) return <OrderLoader />;
   return (
     <div className="mt-4">
+       {isLoading ? (
+        <Loading /> // Display full-page loader while data is loading
+      ) : (
       <section>
         <ModalPage
           open={confirm || false}
@@ -302,6 +307,7 @@ function MyBagFinal() {
           />
         ) : null}
         <div className="">
+       
           <div>
             <div className={Styles.MyBagFinalTop}>
               <div className={Styles.MyBagFinalRight}>
@@ -328,28 +334,16 @@ function MyBagFinal() {
                 <h5>
                   PO Number{" "}
                   {!isPOEditable ? (
-                    <b>
-                      {!isPOLoaded ? (  
-                        <Loading height={"20px"} /> 
-                      ) : (
-                        buttonActive ? PONumber : "---"
-                      )}
-                    </b>
+                    <b> {buttonActive ? PONumber : "---"}</b>
                   ) : (
-                    <input
-                      type="text"
-                      defaultValue={PONumber}
-                      onKeyUp={(e) => setPONumber(e.target.value)}
-                      placeholder="Enter PO Number"
-                      style={{ borderBottom: "1px solid black" }}
+                    <input type="text" defaultValue={PONumber} onKeyUp={(e) => setPONumber(e.target.value)} placeholder=" Enter PO Number" style={{ borderBottom: "1px solid black" }}
                       id="limit_input"
                       name="limit_input"
                       value={limitInput}
-                      onChange={handleNameChange}
-                    />
+                      onChange={handleNameChange} />
+
                   )}
                 </h5>
-
                 {!isPOEditable && (
                   <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none" onClick={() => setIsPOEditable(true)} style={{ cursor: "pointer" }}>
                     <path
@@ -536,6 +530,7 @@ function MyBagFinal() {
           </div>
         </div>
       </section>
+    )}
       <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} AccountId={bagValue?.Account.id} ManufacturerId={bagValue?.Manufacturer?.id} />
     </div>
   );
