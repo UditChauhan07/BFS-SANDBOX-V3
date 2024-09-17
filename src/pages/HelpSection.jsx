@@ -79,10 +79,12 @@ const HelpSection = () => {
         }
 
         const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.TopNav?.childModules?.how_To_Guide);
+        setHasPermission(userPermissions?.modules?.customerSupport?.childModules
+          ?.how_To_Guide?.view);
 
         // If no permission, redirect to dashboard
-        if (userPermissions?.modules?.TopNav?.childModules?.how_To_Guide === false) {
+        if (userPermissions?.modules?.customerSupport?.childModules
+          ?.how_To_Guide?.view === false) {
           navigate("/dashboard");
         }
         

@@ -169,7 +169,8 @@ const OrderStatusIssues = () => {
       
             // Fetch permissions
             const userPermissions = await getPermissions();
-            setHasPermission(userPermissions?.modules?.TopNav?.childModules?.order_Status);
+            setHasPermission(userPermissions?.modules?.customerSupport?.childModules
+                ?.order_Status?.view);
       
             // Fetch orders
             getOrderlIsthandler({

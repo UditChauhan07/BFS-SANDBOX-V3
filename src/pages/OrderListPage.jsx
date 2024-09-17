@@ -36,7 +36,7 @@ const OrderListPage = () => {
               if (!selectedSalesRepId) setSelectedSalesRepId(user.Sales_Rep__c);
 
               const userPermissions = await getPermissions();
-              setHasPermission(userPermissions?.modules?.TopNav?.childModules?.myOrders);
+              setHasPermission(userPermissions?.modules?.order?.view);
 
               if (hasPermission) {
                   getOrderlIsthandler({

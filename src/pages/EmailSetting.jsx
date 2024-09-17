@@ -18,8 +18,8 @@ useEffect(()=>{
                 setSelectedSalesRepId(user.Sales_Rep__c)
 
             const userPermissions = await getPermissions()
-            setHasPermission(userPermissions?.modules?.TopNav?.childModules?.emailBlast)
-            if(userPermissions?.modules?.TopNav?.childModules?.emailBlast === false) {navigate('/dashboard')}
+            setHasPermission(userPermissions?.modules?.emailBlast?.view)
+            if(userPermissions?.modules?.emailBlast?.view === false) {navigate('/dashboard')}
         } catch (error) {
             console.log("Permission Error" , error)
         }

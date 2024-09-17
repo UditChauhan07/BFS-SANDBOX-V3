@@ -80,7 +80,8 @@ const CustomerService = () => {
         console.log('Fetched Permissions:', permissions);
   
         // Check for customer_service permission
-        const customerServicePermission = permissions?.modules?.TopNav?.childModules?.customer_service;
+        const customerServicePermission = permissions?.modules?.customerSupport?.childModules
+        ?.customer_service?.view ;
         console.log('Customer Service Permission:', customerServicePermission);
         setHasPermission(customerServicePermission);
   

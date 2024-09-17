@@ -179,10 +179,10 @@ const AuditReport = () => {
         }
 
         const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.TopNav?.childModules?.auditReport);
+        setHasPermission(userPermissions?.modules?.reports?.auditReport);
 
         // If no permission, redirect to dashboard
-        if (userPermissions?.modules?.TopNav?.childModules?.auditReport === false) {
+        if (userPermissions?.modules?.reports?.auditReport === false) {
           navigate("/dashboard");
         }
         

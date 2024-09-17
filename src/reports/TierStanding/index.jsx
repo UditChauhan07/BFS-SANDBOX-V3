@@ -156,8 +156,8 @@ useEffect(()=>{
             if(!salesRepIdKey) 
                 setSelectedSalesRepId(user.Sales_Rep__c)
             const userPermissions = await getPermissions()
-            setHasPermission(userPermissions?.modules?.TopNav.childModules?.accountTier)
-        if(userPermissions?.modules?.TopNav.childModules?.accountTier=== false) navigate('/dashboard')
+            setHasPermission(userPermissions?.modules?.reports?.accountTier?.view)
+        if(userPermissions?.modules?.reports?.accountTier?.view=== false) navigate('/dashboard')
 
 
         } catch (error) {

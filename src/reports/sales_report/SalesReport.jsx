@@ -219,6 +219,29 @@ const SalesReport = () => {
   };
   const navigate = useNavigate();
 
+// permision set 
+useEffect(() => {
+  async function fetchPermissions() {
+    try {
+      const user = await GetAuthData(); // Fetch user data
+      const userPermissions = await getPermissions(); // Fetch permissions
+      setPermissions(userPermissions); // Set permissions in state
+    } catch (err) {
+      console.error("Error fetching permissions", err);
+    }
+  }
+
+  fetchPermissions(); // Fetch permissions on mount
+}, []);
+
+// Memoize permissions to avoid unnecessary re-calculations
+const memoizedPermissions = useMemo(() => permissions, [permissions]);
+
+
+
+
+
+  // 
   const getSalesData = async (yearFor, dateFilter) => {
     setIsLoading(true);
     setYearForTableSort(yearFor);
@@ -254,6 +277,7 @@ const SalesReport = () => {
     setOwnerPermission(result.data.ownerPermission);
     setIsLoading(false);
   };
+  console.log("owner Permissions " ,ownerPermission )
   // console.log("salesReportData", salesReportData);
   useEffect(() => {
     const userData = localStorage.getItem("Name");
@@ -319,22 +343,8 @@ const SalesReport = () => {
       navigate("/dashboard");  // Redirect if no permission
     }
   }, [hasPermission, navigate]);
-  useEffect(() => {
-    async function fetchPermissions() {
-      try {
-        const user = await GetAuthData(); // Fetch user data
-        const userPermissions = await getPermissions(); // Fetch permissions
-        setPermissions(userPermissions); // Set permissions in state
-      } catch (err) {
-        console.error("Error fetching permissions", err);
-      }
-    }
 
-    fetchPermissions(); // Fetch permissions on mount
-  }, []);
-
-  // Memoize permissions to avoid unnecessary re-calculations
-  const memoizedPermissions = useMemo(() => permissions, [permissions]);
+  
   return (
     <AppLayout
       filterNodes={

@@ -1,3 +1,4 @@
+import { getPermissions } from "./permission";
 export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 // export const originAPi = "https://dev.beautyfashionsales.com"
 // export const originAPi = "http://localhost:2611"
@@ -12,7 +13,7 @@ const accountKey = "manufacturer";
 const POCount = "woX5MkCSIOlHXkT";
 const support = "AP0HBuNwbNnuhKR";
 const shareKey = "R7Mmw2nG41y6MqI";
-export const salesRepIdKey = "BzQIEAjzCEHmlXc";
+export const salesRepIdKey = "BzQIEAjzCEHmlXc"; 
 export const admins = ["00530000005AdvsAAC", "0053b00000DgEVEAA3", "0051O00000CvAVTQA3", "0053b00000CwOnLAAV"]; //, "0053b00000CwOnLAAV" ,"0053b00000DgEVEAA3"
 
 
@@ -263,6 +264,7 @@ export async function getOrderCustomerSupport({ user, searchId }) {
   };
 
   let bodyContent = new FormData();
+  
   bodyContent.append("key", user.key);
   bodyContent.append("Sales_Rep__c", user.Sales_Rep__c);
   if (searchId) bodyContent.append("searchId", searchId);
@@ -345,8 +347,9 @@ export async function getRollOver({ user }) {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   };
+  const userPermissions = await getPermissions();
   let SalesRepId = user.Sales_Rep__c;
-  if (admins.includes(user.Sales_Rep__c)) {
+  if (userPermissions?.modules?.godLevel) {
     SalesRepId = null;
   }
   let response = await fetch(url + "target/SxaVXT0aX9wGVoM", {
@@ -359,7 +362,7 @@ export async function getRollOver({ user }) {
     DestoryAuth();
   } else {
     let rawRes = { ownerPermission: false, list: data.data };
-    if (admins.includes(user.Sales_Rep__c)) {
+    if (userPermissions?.modules?.godLevel) {
       rawRes.ownerPermission = true;
     }
     return rawRes;
