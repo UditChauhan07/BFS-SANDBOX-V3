@@ -115,7 +115,7 @@ const LogoHeader = () => {
 
           {/* My Bag */}
           <p className={`m-0  ${styles.language}`}>
-            {memoizedPermissions?.modules?.orderCreate?.view ? (
+            {memoizedPermissions?.modules?.order?.view ? (
               <Link to="/my-bag" className="linkStyle">
                 My Bag
               </Link>

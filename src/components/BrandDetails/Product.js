@@ -561,7 +561,7 @@ function Product() {
                         </div>
                         <div className={`${styles.TotalSide} `}>
                           <h4>Total Number of Products : {orderQuantity}</h4>
-                          {memoizedPermissions?.modules?.orderCreate?.create ? 
+                          {memoizedPermissions?.modules?.order?.create ? 
                           <button
                           onClick={() => {
                             generateOrderHandler();

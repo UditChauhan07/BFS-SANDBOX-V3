@@ -138,7 +138,7 @@ useEffect(() => {
     <AppLayout
       filterNodes={
         <>
-        {memoizedPermissions?.modules?.filter?.view ? <>
+        {memoizedPermissions?.modules?.godLevel ? <>
           <FilterItem
             minWidth="220px"
             label="All Brands"

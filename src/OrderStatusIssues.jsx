@@ -203,7 +203,7 @@ const OrderStatusIssues = () => {
     return (<CustomerSupportLayout
         filterNodes={
             <>
-               {memoizedPermissions?.modules?.filter?.view  ? <>
+               {memoizedPermissions?.modules?.godLevel  ? <>
                 <FilterItem
                         minWidth="220px"
                         label="salesRep"

@@ -22,10 +22,10 @@ const MyBag = () => {
             }
     
             const userPermissions = await getPermissions();
-            setHasPermission(userPermissions?.modules?.orderCreate?.view);
+            setHasPermission(userPermissions?.modules?.order?.view);
     
             // If no permission, redirect to dashboard
-            if (userPermissions?.modules?.orderCreate?.view === false) {
+            if (userPermissions?.modules?.order?.view === false) {
               navigate("/dashboard");
             }
             
