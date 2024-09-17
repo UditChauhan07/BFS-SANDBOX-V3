@@ -323,10 +323,10 @@ const MultiStepForm = () => {
 
 
     useEffect(() => {
-console.log({manufacturers});
+        console.log({ manufacturers });
 
 
-    }, [formData.subscriber,manufacturers])
+    }, [formData.subscriber, manufacturers])
 
 
     const handleSelectionChange = (newSelectedValues) => {
@@ -673,7 +673,7 @@ console.log({manufacturers});
                                                 </div>
                                             </div></>
                                         : (
-                                            <Loading height={'40vh'}/>
+                                            <Loading height={'40vh'} />
                                         )}
                                 </div>
                             )}

@@ -25,7 +25,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
     
         if (item?.AccountId && manufacturers.length && !isSelected) {
             const isBrandMatched = item.BrandIds.some(brandId =>
-                manufacturers.some(brand => brand.Id === brandId)
+                brandSelected.some(brand => brand.Id === brandId)
             );
     
             if (!isBrandMatched) {
