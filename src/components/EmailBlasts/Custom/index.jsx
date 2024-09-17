@@ -69,20 +69,24 @@ const MultiStepForm = () => {
     // }, [formData, isUserSelected])
 
     useEffect(() => {
-        GetAuthData().then((user) => {
-            setManufacturers({ isLoaded: false, data: [] })
-            fetchNextMonthNewsletterBrand({ key: user.x_access_token, date: formData.date ? getDate(formData.date) : null, forMonth: formData.forMonth }).then((brandRes) => {
-                setFormData({ ...formData, brand: [] });
-                setshowBrandList(brandRes?.brandList)
-                setManufacturers({ isLoaded: true, data: brandRes?.brandList || [], nonReady: brandRes?.brandnonList || [] })
-            }).catch((brandErr) => {
-                console.log({ brandErr });
-            })
+        if (currentStep == 2) {
+            GetAuthData().then((user) => {
+                fetchNextMonthNewsletterBrand({ key: user.x_access_token, date: formData.date ? getDate(formData.date) : null, forMonth: formData.forMonth }).then((brandRes) => {
+                    setFormData({ ...formData, brand: [] });
+                    // setTimeout(() => {
+                    setshowBrandList(brandRes?.brandList)
+                    setManufacturers({ isLoaded: true, data: brandRes?.brandList || [], nonReady: brandRes?.brandnonList || [] })
+                    // }, 1000);
+                }).catch((brandErr) => {
+                    console.log({ brandErr });
+                })
 
-        }).catch((userErr) => {
-            console.log(userErr)
-        })
-    }, [formData.date, formData.forMonth])
+            }).catch((userErr) => {
+                console.log(userErr)
+            })
+        }
+    }, [formData.forMonth, currentStep])
+
 
     const handleAccordionClick = (step) => {
 
@@ -143,6 +147,10 @@ const MultiStepForm = () => {
                 return { ...prevFormData, brand: updatedBrandSelection };
             });
         } else {
+            if (name == "forMonth") {
+                setManufacturers({ isLoaded: false, data: [] })
+                setshowBrandList([])
+            }
             setFormData({ ...formData, [name]: value });
         }
     };
@@ -315,9 +323,10 @@ const MultiStepForm = () => {
 
 
     useEffect(() => {
+console.log({manufacturers});
 
 
-    }, [formData.subscriber])
+    }, [formData.subscriber,manufacturers])
 
 
     const handleSelectionChange = (newSelectedValues) => {
@@ -367,10 +376,12 @@ const MultiStepForm = () => {
                             </h2>
                             <p className="modalContent">
                                 {Subscribers.contacts.filter(selected => selected.Id === warning).length ? Subscribers.contacts.filter(selected => selected.Id === warning)[0].Name : "User"}
-                                doesn't subscribe for <br />
-                                {manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).map((brand, index) => (<>{brand.Name}{index < (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 2) ? ', ' : index != (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 1) ? ' and ' : null}</>))}
-                                <br />
-                                Are you sure, you want to send the newsletter.
+                                &nbsp;doesn't subscribe for following brands:<br />
+                                Are you sure, you want to send the newsletter.<br />
+                                <ol style={{ listStyle: 'disc', textAlign: 'start', marginTop: '1rem' }}>
+                                    {/* {index < (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 2) ? ', ' : index != (manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).length - 1) ? ' and ' : null} */}
+                                    {manufacturers.data.filter(brand => formData.brand.includes(brand.Id)).map((brand, index) => (<li>{brand.Name}</li>))}
+                                </ol>
                             </p>
                             <div className="d-flex justify-content-around">
                                 <button className={`${Styles.btn} d-flex align-items-center`} onClick={removeWaringSubscriber}>
@@ -575,39 +586,79 @@ const MultiStepForm = () => {
                             </div>
                             {currentStep === 2 && (
                                 <div className="accordion-body">
-                                    <div className="text-start">
-                                        <div className='d-flex justify-content-between'>
+                                    {manufacturers.isLoaded ?
+                                        <>
+                                            <div className="text-start">
+                                                <div className='d-flex justify-content-between'>
 
-                                            <b className='d-flex gap-2'>Newsletter ready brands: <p style={{ fontWeight: 'normal' }}>These Brands are ready to be included in newsletter for&nbsp;{months[new Date().getMonth() + 1]}{formData.forMonth == 2 ? ' and ' : formData.forMonth == 3 ? ', ' : null}{formData.forMonth >= 2 ? months[new Date().getMonth() + 2] : null}{formData.forMonth == 3 ? ' and ' : null}{formData.forMonth >= 3 ? months[new Date().getMonth() + 3] : null}</p></b>
-                                            <div className='d-flex gap-2'>
-                                                <p className='cursor-pointer text-[#509fde] hover:underline' onClick={() => { setFormData({ ...formData, brand: showBrandList.map(element => (element.Id)) }); }}>Select all</p>|
-                                                <p className='cursor-pointer text-[#509fde] hover:underline' onClick={() => { setFormData({ ...formData, brand: [] }); }}>reset</p>
+                                                    <b className='d-flex gap-2'>Newsletter ready brands: <p style={{ fontWeight: 'normal' }}>These Brands are ready to be included in newsletter for&nbsp;{months[new Date().getMonth() + 1]}{formData.forMonth == 2 ? ' and ' : formData.forMonth == 3 ? ', ' : null}{formData.forMonth >= 2 ? months[new Date().getMonth() + 2] : null}{formData.forMonth == 3 ? ' and ' : null}{formData.forMonth >= 3 ? months[new Date().getMonth() + 3] : null}</p></b>
+                                                    <div className='d-flex gap-2'>
+                                                        <p className='cursor-pointer text-[#509fde] hover:underline' onClick={() => { setFormData({ ...formData, brand: showBrandList.map(element => (element.Id)) }); }}>Select all</p>|
+                                                        <p className='cursor-pointer text-[#509fde] hover:underline' onClick={() => { setFormData({ ...formData, brand: [] }); }}>Reset</p>
+                                                    </div>
+                                                </div>
+                                                <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
+                                                    {showBrandList?.length ? (showBrandList.map((brand) => (
+                                                        <div
+                                                            key={brand.Id}
+                                                            className={`${Styles.templateHolder} ${formData.brand.includes(brand.Id) ? Styles.selected : ''}`}
+                                                            onClick={() => handleChange({ target: { value: brand.Id, name: "brand" } })}
+                                                        >
+                                                            <input
+                                                                type="radio"
+                                                                name="brand"
+                                                                checked={formData.brand.includes(brand.Id)}
+                                                                value={brand.Id}
+                                                                required
+                                                                className={Styles.hiddenRadio}
+                                                            />
+                                                            <ImageWithFallback
+                                                                src={`${originAPi}/brandImage/${brand.Id}.png`}
+                                                                title={`Click to select ${brand.Name}`}
+                                                                style={{ maxHeight: '100px', mixBlendMode: 'luminosity' }}
+                                                                alt={`Brand ${brand.Id}`}
+                                                            />
+                                                            <p className={Styles.labelHolder}>{brand.Name}</p>
+                                                            {/* <div
+                                                            className={Styles.previewIcon}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation(); // Prevent triggering the brand selection
+                                                                window.open(`${originAPi}brandImage/${brand.Id}.png`, '_blank');
+                                                            }}
+                                                        >
+                                                            <FaEye />
+                                                        </div> */}
+                                                        </div>
+                                                    ))
+                                                    ) : "No brand available. Selected subscribers's brands does not have any product in marketing calendar"}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
-                                            {!manufacturers.isLoading ?
-                                                showBrandList?.length ? (showBrandList.map((brand) => (
-                                                    <div
-                                                        key={brand.Id}
-                                                        className={`${Styles.templateHolder} ${formData.brand.includes(brand.Id) ? Styles.selected : ''}`}
-                                                        onClick={() => handleChange({ target: { value: brand.Id, name: "brand" } })}
-                                                    >
-                                                        <input
-                                                            type="radio"
-                                                            name="brand"
-                                                            checked={formData.brand.includes(brand.Id)}
-                                                            value={brand.Id}
-                                                            required
-                                                            className={Styles.hiddenRadio}
-                                                        />
-                                                        <ImageWithFallback
-                                                            src={`${originAPi}/brandImage/${brand.Id}.png`}
-                                                            title={`Click to select ${brand.Name}`}
-                                                            style={{ maxHeight: '100px', mixBlendMode: 'luminosity' }}
-                                                            alt={`Brand ${brand.Id}`}
-                                                        />
-                                                        <p className={Styles.labelHolder}>{brand.Name}</p>
-                                                        {/* <div
+                                            <div className="text-start mt-2 mb-2">
+                                                <b className='d-flex gap-2'>Other Brand: <p style={{ fontWeight: 'normal' }}>These brands not ready for newsletter as per now.</p></b>
+                                                <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
+                                                    {
+                                                        manufacturers?.nonReady?.length ? (manufacturers?.nonReady.map((brand) => (
+                                                            <div
+                                                                key={brand.Id}
+                                                                className={`${Styles.templateHolder} ${formData.brand.includes(brand.Id) ? Styles.selected : ''}`}
+                                                                onClick={() => { setCallbackError(true); setCallbackErrorMsg("You can't send newsletter for this brand") }}
+                                                            >
+                                                                <input
+                                                                    type="radio"
+                                                                    name="brand"
+                                                                    checked={formData.brand.includes(brand.Id)}
+                                                                    value={brand.Id}
+                                                                    required
+                                                                    className={Styles.hiddenRadio}
+                                                                />
+                                                                <ImageWithFallback
+                                                                    src={`${originAPi}/brandImage/${brand.Id}.png`}
+                                                                    title={`Click to select ${brand.Name}`}
+                                                                    style={{ maxHeight: '100px', mixBlendMode: 'luminosity' }}
+                                                                    alt={`Brand ${brand.Id}`}
+                                                                />
+                                                                <p className={Styles.labelHolder}>{brand.Name}</p>
+                                                                {/* <div
                                                             className={Styles.previewIcon}
                                                             onClick={(e) => {
                                                                 e.stopPropagation(); // Prevent triggering the brand selection
@@ -616,54 +667,14 @@ const MultiStepForm = () => {
                                                         >
                                                             <FaEye />
                                                         </div> */}
-                                                    </div>
-                                                ))
-                                                ) : "No brand available. Selected subscribers's brands does not have any product in marketing calendar" : (
-                                                    <Loading />
-                                                )}
-                                        </div>
-                                    </div>
-                                    <div className="text-start mt-2 mb-2">
-                                        <b className='d-flex gap-2'>Other Brand: <p style={{ fontWeight: 'normal' }}>These brands not ready for newsletter as per now.</p></b>
-                                        <div className={`${Styles.dFlex} ${Styles.gap10} mt-4`}>
-                                            {!manufacturers.isLoading ?
-                                                manufacturers?.nonReady?.length ? (manufacturers?.nonReady.map((brand) => (
-                                                    <div
-                                                        key={brand.Id}
-                                                        className={`${Styles.templateHolder} ${formData.brand.includes(brand.Id) ? Styles.selected : ''}`}
-                                                        onClick={() => { setCallbackError(true); setCallbackErrorMsg("you can't send newsletter for this brand") }}
-                                                    >
-                                                        <input
-                                                            type="radio"
-                                                            name="brand"
-                                                            checked={formData.brand.includes(brand.Id)}
-                                                            value={brand.Id}
-                                                            required
-                                                            className={Styles.hiddenRadio}
-                                                        />
-                                                        <ImageWithFallback
-                                                            src={`${originAPi}/brandImage/${brand.Id}.png`}
-                                                            title={`Click to select ${brand.Name}`}
-                                                            style={{ maxHeight: '100px', mixBlendMode: 'luminosity' }}
-                                                            alt={`Brand ${brand.Id}`}
-                                                        />
-                                                        <p className={Styles.labelHolder}>{brand.Name}</p>
-                                                        {/* <div
-                                                            className={Styles.previewIcon}
-                                                            onClick={(e) => {
-                                                                e.stopPropagation(); // Prevent triggering the brand selection
-                                                                window.open(`${originAPi}brandImage/${brand.Id}.png`, '_blank');
-                                                            }}
-                                                        >
-                                                            <FaEye />
-                                                        </div> */}
-                                                    </div>
-                                                ))
-                                                ) : "No brand available. Selected subscribers's brands does not have any product in marketing calendar" : (
-                                                    <Loading />
-                                                )}
-                                        </div>
-                                    </div>
+                                                            </div>
+                                                        ))
+                                                        ) : "No brand available. Selected subscribers's brands does not have any product in marketing calendar"}
+                                                </div>
+                                            </div></>
+                                        : (
+                                            <Loading height={'40vh'}/>
+                                        )}
                                 </div>
                             )}
                         </div>
