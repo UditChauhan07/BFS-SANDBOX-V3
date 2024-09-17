@@ -144,25 +144,32 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
             setBrand();
         }
     }
-    const brandNames = (brandSelected?.map((brand, index) => brand.Name)||[])
-        ?.reduce((acc, curr, index) => {
+    const brandNames = (brandSelected?.map((brand) => brand.Name) || [])
+    ?.reduce((acc, curr, index) => {
+        if (index === brandSelected?.length - 1) {
+            return `${acc} and ${curr}`;
+        }
+        return `${acc}, ${curr}`;
+    }, ''); // Providing an empty string as the initial value
+
+    const BrandNameGenerator = (Brandids) => {
+        // Filter manufacturers based on Brandids and extract names
+        const selectedBrands = manufacturersList
+            ?.filter(brand => Brandids.includes(brand.Id))
+            ?.map(brand => brand.Name) || [];
+    
+        // Ensure brandSelected is correctly referenced or set to selectedBrands
+        const brandSelected = selectedBrands || [];
+    
+        // Use reduce to format the brand names
+        return brandSelected.reduce((acc, curr, index) => {
             if (index === brandSelected.length - 1) {
                 return `${acc} and ${curr}`;
             }
             return `${acc}, ${curr}`;
-        });
-
-    const BrandNameGenerator = (Brandids) => {
-        return manufacturersList
-            ?.filter(brand => Brandids.includes(brand.Id))
-            ?.map((brand, index) => brand.Name)
-            ?.reduce((acc, curr, index) => {
-                if (index === brandSelected.length - 1) {
-                    return `${acc} and ${curr}`;
-                }
-                return `${acc}, ${curr}`;
-            });
-    }
+        }, ''); // Provide an empty string as an initial value to avoid reduce errors
+    };
+    
     return (
         <div className="multi-select-container">
             <header>

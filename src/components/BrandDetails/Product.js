@@ -87,7 +87,7 @@ function Product() {
             newData[key] = finalFilteredProducts[key];
           }
         }
-        //  else if (productTypeFilter === "TESTER") {
+        // else if (productTypeFilter === "TESTER") {
         //   if (key.match("TESTER")) {
         //     newData[key] = finalFilteredProducts[key];
         //   }
