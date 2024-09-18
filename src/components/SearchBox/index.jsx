@@ -25,7 +25,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
     
         if (item?.AccountId && manufacturers.length && !isSelected) {
             const isBrandMatched = item.BrandIds.some(brandId =>
-                manufacturers.some(brand => brand.Id === brandId)
+                brandSelected.some(brand => brand.Id === brandId)
             );
     
             if (!isBrandMatched) {
@@ -145,13 +145,16 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
             setBrand();
         }
     }
+
     const brandNames = (brandSelected?.map((brand) => brand.Name) || [])
-    ?.reduce((acc, curr, index) => {
-        if (index === brandSelected?.length - 1) {
-            return `${acc} and ${curr}`;
+    ?.reduce((acc, curr, index, arr) => {
+        if (index === 0) {
+            return curr; // For the first brand, just return the name without a comma
+        } else if (index === arr.length - 1) {
+            return `${acc} and ${curr}`; // For the last brand, add "and" before the name
         }
-        return `${acc}, ${curr}`;
-    }, ''); // Providing an empty string as the initial value
+        return `${acc}, ${curr}`; // For the middle brands, add commas
+    }, '');
 
     const BrandNameGenerator = (Brandids) => {
         // Filter manufacturers based on Brandids and extract names
@@ -216,7 +219,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
                             >
                                 <div className="user-avatar"><UserIcon width={25} height={25} /></div>
                                 <div className="user-info">
-                                    <span className="user-name d-flex align-items-center">{(!manufacturers.some(brand => option.BrandIds?.includes(brand.Id)) && selectedValues.some(selected => selected.Id === option.Id)&&option.AccountId) ? <div className='redBlock mr-1' title="the subscriber doesn't have the selected brand"></div> : null}{option.Name}</span>
+                                    <span className="user-name d-flex align-items-center">{(!brandSelected.some(brand => option.BrandIds?.includes(brand.Id)) && selectedValues.some(selected => selected.Id === option.Id)&&option.AccountId) ? <div className='redBlock mr-1' title="the subscriber doesn't have the selected brand"></div> : null}{option.Name}</span>
                                     <span className="user-email maxSizeDiv">{option.Email}</span>
                                     {option?.Title ? <span className="user-etc maxSizeDiv"><b className="text-['Arial']">Title:&nbsp;</b>{option?.Title}</span> : null}
                                     {option?.Phone ? <span className="user-etc"><b>Phone:&nbsp;</b>{option?.Phone}</span> : null}
