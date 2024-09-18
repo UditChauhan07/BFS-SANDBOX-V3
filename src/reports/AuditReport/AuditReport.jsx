@@ -78,7 +78,9 @@ const AuditReport = () => {
     const [userData, setUserData] = useState({});
     const [hasPermission, setHasPermission] = useState(null);
     const navigate = useNavigate()
-  
+    const [auditReport, setAuditReport] = useState({ isLoaded: false, data: [] })
+    const [token, setToken] = useState();
+
     useEffect(() => {
         GetAuthData().then((user) => {
             setToken(user.x_access_token);
@@ -95,7 +97,6 @@ const AuditReport = () => {
 
         })
     }, [])
-
 
     const onCloseModal = () => {
         setBrandStep(0);
