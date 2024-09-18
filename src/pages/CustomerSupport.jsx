@@ -9,6 +9,7 @@ import AppLayout from "../components/AppLayout";
 import { CloseButton } from "../lib/svg";
 import { getPermissions } from "../lib/permission";
 import { useNavigate } from "react-router-dom";
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied";
 let PageSize = 10;
 const CustomerSupport = () => {
   const [supportList, setSupportList] = useState([]);
@@ -134,6 +135,7 @@ const CustomerSupport = () => {
   useEffect(() => {
     if (hasPermission === false) {
       navigate("/dashboard"); // Redirect to dashboard if no permission
+      PermissionDenied()
     }
   }, [hasPermission, navigate]);
 

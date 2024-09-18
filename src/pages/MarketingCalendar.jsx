@@ -12,6 +12,7 @@ import Loading from "../components/Loading";
 import { useManufacturer } from "../api/useManufacturer";
 import { getPermissions } from "../lib/permission";
 import { useNavigate } from "react-router-dom";
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied";
 
 const fileExtension = ".xlsx";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -271,6 +272,7 @@ const MarketingCalendar = () => {
 
         // If no permission, redirect to dashboard
         if (userPermissions?.modules?.marketingCalender.view === false) {
+          PermissionDenied()
           navigate("/dashboard");
         }
         
@@ -286,6 +288,7 @@ const MarketingCalendar = () => {
   useEffect(() => {
     if (hasPermission === false) {
       navigate("/dashboard");  // Redirect if no permission
+      PermissionDenied()
     }
   }, [hasPermission, navigate]);
 

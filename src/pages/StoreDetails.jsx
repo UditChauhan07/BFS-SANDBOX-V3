@@ -5,12 +5,17 @@ import { GetAuthData, getStoreDetails } from "../lib/store";
 import { useNavigate } from "react-router-dom";
 import StoreDetailCard from "../components/StoreDetail";
 import LoaderV3 from "../components/loader/v3";
-
+import { getPermissions } from "../lib/permission";
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied";
 const StoreDetails = ()=>{
     const navigate = useNavigate();
     const {id} = useParams();
     const [account,setAccount]=useState({isLoaded:false,data:{}});
     const [brandList,setBrandList] = useState([])
+    const [userData, setUserData] = useState({});
+    const [hasPermission, setHasPermission] = useState(null);
+    const [permissions, setPermissions] = useState(null);
+    const [selectedSalesRepId, setSelectedSalesRepId] = useState();
     useEffect(()=>{
         if(id){
             GetAuthData().then((user)=>{
@@ -34,6 +39,42 @@ const StoreDetails = ()=>{
             navigate("/");
         }
     },[id])
+        // Fetch user data and permissions
+        useEffect(() => {
+            const fetchData = async () => {
+              try {
+                const user = await GetAuthData();
+                setUserData(user);
+        
+                if (!selectedSalesRepId) {
+                  setSelectedSalesRepId(user.Sales_Rep__c);
+                }
+        
+                const userPermissions = await getPermissions();
+                setHasPermission(userPermissions?.modules?.store?.view);
+        
+                // If no permission, redirect to dashboard
+                if (userPermissions?.modules?.store?.view === false) {
+                    PermissionDenied()
+                  navigate("/dashboard");
+                }
+                
+              } catch (error) {
+                console.log({ error });
+              }
+            };
+            
+            fetchData();
+          }, [navigate, selectedSalesRepId]);
+        
+          // Check permission and handle redirection
+          useEffect(() => {
+            if (hasPermission === false) {
+                PermissionDenied()
+              navigate("/dashboard"); 
+
+            }
+          }, [hasPermission, navigate]);
     const {isLoaded,data} = account;
     return(<AppLayout>
         {isLoaded?<StoreDetailCard account={data} brandList={brandList}/>:<LoaderV3 text={"Please wait..."}/>}

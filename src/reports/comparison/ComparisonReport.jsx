@@ -16,6 +16,7 @@ import { sortArrayHandler } from "../../lib/store";
 import { GetAuthData } from "../../lib/store";
 import { getPermissions } from "../../lib/permission";
 import { useNavigate } from "react-router-dom";
+import PermissionDenied from "../../components/PermissionDeniedPopUp/PermissionDenied";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
 const date = new Date();
@@ -129,6 +130,7 @@ const ComparisonReport = () => {
         // If no permission, redirect to dashboard
         if (userPermissions?.modules?.reports?.comparisonReport?.view === false) {
           navigate("/dashboard");
+          PermissionDenied()
         }
         
       } catch (error) {
@@ -143,6 +145,7 @@ const ComparisonReport = () => {
   useEffect(() => {
     if (hasPermission === false) {
       navigate("/dashboard");  // Redirect if no permission
+      PermissionDenied()
     }
   }, [hasPermission, navigate]);
 

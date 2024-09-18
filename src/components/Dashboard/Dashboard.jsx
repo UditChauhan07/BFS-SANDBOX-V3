@@ -17,6 +17,7 @@ import { FilterItem } from "../FilterItem";
 import { UserIcon } from "../../lib/svg";
 import { BiRefresh } from "react-icons/bi";
 import { getPermissions } from "../../lib/permission";
+import { salesRepIdKey } from "../../lib/store";
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const monthList = [
   {
@@ -82,6 +83,7 @@ function Dashboard({ dashboardData }) {
     "RMS Beauty": "RMSBeautyBg",
     "ESTEE LAUDER": "esteeLauderBg",
   };
+  
   const [dataa, setDataa] = useState({
     series: [
       {
@@ -173,7 +175,7 @@ function Dashboard({ dashboardData }) {
   const [accountPerformance, setAccountPerformance] = useState({ isLoaded: false, data: [] });
   const [leadsbybrand, setleadsbtbrand] = useState({ isLoaded: false, data: [] });
   const [salesByBrandData, setSalesByBrandData] = useState({
-
+ 
     series: [],
     options: {
       chart: {
@@ -221,6 +223,17 @@ function Dashboard({ dashboardData }) {
       labels: [],
     },
   });
+  const [selectedSalesRepId, setSelectedSalesRepId] = useState(null);
+  // const [brandData, setBrandData] = useState([]);
+  const handleBrandClick = (ele) => {
+    setModalOpen(true);
+    setBrandData(ele.ManufacturerList);
+    localStorage.setItem("manufacturer", ele.Name);
+    localStorage.setItem("ManufacturerId__c", ele.Id);
+    localStorage.setItem("Account", ele.Name);
+    localStorage.setItem("AccountId__c", ele.AccountId);
+    localStorage.setItem(salesRepIdKey, selectedSalesRepId);
+  };
   const [manufacturerSalesYear, setManufacturerSalesYaer] = useState([]);
   const [salesRepAdmin,setSalesRepAdmin]=useState();
 
@@ -529,7 +542,9 @@ function Dashboard({ dashboardData }) {
 
     fetchPermissions(); // Fetch permissions on mount
   }, []);
+  
   const memoizedPermissions = useMemo(() => permissions, [permissions]);
+  
   function IsTableLoading() {
     return (
       <>
@@ -622,7 +637,19 @@ function Dashboard({ dashboardData }) {
         <div className="row mt-4 justify-between">
           <div className="col-lg-6 my-2">
             <div className={Styles.DashboardWidth}>
-              {salesRepAdmin?<p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Month to date(MTD): Sales By Rep <span>{Monthlydataa.isLoaded ?<BiRefresh className="cursor-pointer" size={25} onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>:<p className={Styles.Tabletext}>Month to date(MTD): Sales By Rep</p>}
+              {salesRepAdmin?<p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Month to date(MTD): Sales By Rep 
+              {permissions?.modules?.godLevel ?  
+              <span>{Monthlydataa.isLoaded ?
+              
+              
+              <BiRefresh className="cursor-pointer" size={25} onClick={targeetRollReferesh} title="Click here for Refresh"/>
+              
+              :null}</span>
+              : null
+}
+              
+              
+              </p>:<p className={Styles.Tabletext}>Month to date(MTD): Sales By Rep</p>}
               <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className="">
                   <div className={Styles.table_scroll}>
@@ -696,7 +723,11 @@ function Dashboard({ dashboardData }) {
           {/* Yearly SALESBYREP */}
           <div className="col-lg-6 my-2">
             <div className={Styles.DashboardWidth}>
-            {salesRepAdmin?<p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Year to date(YTD): Sales By Rep<span>{Yearlydataa.isLoaded ?<BiRefresh size={25} className="cursor-pointer" onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>:<p className={Styles.Tabletext}>Year to date(YTD): Sales By Rep</p>}
+            {salesRepAdmin?<p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Year to date(YTD): Sales By Rep
+              {permissions?.modules?.godLevel ?
+              <span>{Yearlydataa.isLoaded ?<BiRefresh size={25} className="cursor-pointer" onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span>
+              : null}
+              </p>:<p className={Styles.Tabletext}>Year to date(YTD): Sales By Rep</p>}
               <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className="">
                   <div className={Styles.table_scroll}>
@@ -771,7 +802,11 @@ function Dashboard({ dashboardData }) {
           {/* monthly data goal by brand*/}
           <div className="col-lg-6 col-sm-12 my-2">
             <div className={Styles.DashboardWidth}>
-            {salesRepAdmin?<p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Month to date(MTD): Goal by Brand<span>{brandData.isLoaded ?<BiRefresh size={25} className="cursor-pointer" onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span></p>:<p className={Styles.Tabletext}>Month to date(MTD): Goal by Brand</p>}
+            {salesRepAdmin?<p className={`${Styles.Tabletext} d-flex justify-content-between align-items-center`}>Month to date(MTD): Goal by Brand
+              {permissions?.modules?.godLevel ? 
+              <span>{brandData.isLoaded ?<BiRefresh size={25} className="cursor-pointer" onClick={targeetRollReferesh} title="Click here for Refresh"/>:null}</span>
+              : null}
+              </p>:<p className={Styles.Tabletext}>Month to date(MTD): Goal by Brand</p>}
               <div className={`${Styles.goaltable} cardShadowHover`}>
                 <div className={Styles.table_scroll}>
                   <table className="table table-borderless ">
@@ -895,94 +930,104 @@ function Dashboard({ dashboardData }) {
         </div>
 
         <div className="my-5">
-          {((accountPerformance.data?.length > 0 && accountPerformance?.isLoaded) || !accountPerformance?.isLoaded) && <div className={`row mt-1 justify-between ${Styles.topPerform2}`}>
-            <div className={`col-lg-6 col-sm-12 ${Styles.top_perform1}`}>
-              <p className={Styles.Tabletext}>Top Performing Retailers</p>
-              <div className="row">
-                {/* TOP PERFORMANCE */}
-                {!accountPerformance?.isLoaded ? (
-                  <ContentLoader />
-                ) : (
-                  <>
-                    {accountPerformance.data?.map((ele, index) => {
-                      if (index < 4) {
-                        return (
-                          <div className="col-lg-6 col-md-6 col-sm-12 onHoverCursor cardHover">
-                            <div
-                              className={Styles.top_perform}
-                              id={index}
-                            >
-                              <Link to={'/store/' + ele.AccountId}>
-                                <div className={Styles.top_accnew}>
-                                  <p className={Styles.top_accounttext}>{ele.Name}</p>
-                                </div>
-                              </Link>
-
-                              <div className={` ${Styles.scrollbar}`}>
-                                {ele.ManufacturerList.map((itemm) => {
-                                  const bgcolor = bgColors[itemm.Name];
-                                  return <span className={`${Styles.account} ${Styles[bgcolor]}`} onClick={() => {
-                                    setModalOpen(true);
-                                    setBrandData(ele.ManufacturerList);
-                                    localStorage.setItem("Account", ele.Name);
-                                    localStorage.setItem("AccountId__c", ele.AccountId);
-                                  }}>{itemm.Name}</span>;
-                                })}
+      {((accountPerformance.data?.length > 0 && accountPerformance?.isLoaded) || !accountPerformance?.isLoaded) && (
+        <div className="row mt-1 justify-between">
+          {/* Top Performing Retailers */}
+          <div className={`col-lg-6 col-sm-12 ${Styles.top_perform1}`}>
+            <p className={Styles.Tabletext}>Top Performing Retailers</p>
+            <div className="row">
+              {!accountPerformance?.isLoaded ? (
+                <ContentLoader />
+              ) : (
+                <>
+                  {accountPerformance.data?.map((ele, index) => {
+                    if (index < 4) {
+                      return (
+                        <div key={index} className="col-lg-6 col-md-6 col-sm-12 onHoverCursor cardHover">
+                          <div className={Styles.top_perform}>
+                            <Link to={'/store/' + ele.AccountId}>
+                              <div className={Styles.top_accnew}>
+                                <p className={Styles.top_accounttext}>{ele.Name}</p>
                               </div>
+                            </Link>
+
+                            <div className={`${Styles.scrollbar}`}>
+                              {ele.ManufacturerList.map((itemm, idx) => {
+                                const bgcolor = bgColors[itemm.Name];
+                                return (
+                                  <span
+                                    key={idx}
+                                    className={`${Styles.account} ${Styles[bgcolor]}`}
+                                    onClick={() => handleBrandClick(ele)}
+                                  >
+                                    {itemm.Name}
+                                  </span>
+                                );
+                              })}
                             </div>
                           </div>
-                        );
-                      }
-                    })}
-                  </>
-                )}
-              </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                </>
+              )}
             </div>
-            <ModalPage open={modalOpen} onClose={() => setModalOpen(false)} content={<SelectBrandModel brands={brandData} onClose={() => setModalOpen(false)} />} />
-            <div className="col-lg-6 col-sm-12" style={{ width: "48%" }}>
-              <p className={Styles.Tabletext1}>Low Performing Retailers</p>
-              <div className="row">
-                {/* LOW PERFORMANCE */}
-                {!accountPerformance?.isLoaded ? (
-                  <ContentLoader />
-                ) : (
-                  <>
-                    {lowPerformanceArray?.map((ele, index) => {
-                      if (index < 4) {
-                        return (
-                          <div className="col-lg-6 col-md-6 col-sm-12 onHoverCursor cardHover">
-                            <div
-                              className={Styles.top_perform2}
-                            >
-                              <Link to={'/store/' + ele.AccountId}>
+          </div>
 
-                                <div className={Styles.top_account}>
-                                  <p className={Styles.top_accounttext}>{ele.Name}</p>
-                                </div>
-                              </Link>
-
-                              <div className={` ${Styles.scrollbar}`}>
-                                {ele.ManufacturerList.map((item) => {
-                                  const bgcolor = bgColors[item.Name];
-                                  return <span className={`${Styles.account22} ${Styles[bgcolor]}`}                     onClick={() => {
-                                    setModalOpen(true);
-                                    setBrandData(ele.ManufacturerList);
-                                    localStorage.setItem("Account", ele.Name);
-                                    localStorage.setItem("AccountId__c", ele.AccountId);
-                                  }}>{item.Name}</span>;
-                                })}
+          {/* Low Performing Retailers */}
+          <div className="col-lg-6 col-sm-12" style={{ width: "48%" }}>
+            <p className={Styles.Tabletext1}>Low Performing Retailers</p>
+            <div className="row">
+              {!accountPerformance?.isLoaded ? (
+                <ContentLoader />
+              ) : (
+                <>
+                  {lowPerformanceArray?.map((ele, index) => {
+                    if (index < 4) {
+                      return (
+                        <div key={index} className="col-lg-6 col-md-6 col-sm-12 onHoverCursor cardHover">
+                          <div className={Styles.top_perform2}>
+                            <Link to={'/store/' + ele.AccountId}>
+                              <div className={Styles.top_account}>
+                                <p className={Styles.top_accounttext}>{ele.Name}</p>
                               </div>
+                            </Link>
+
+                            <div className={`${Styles.scrollbar}`}>
+                              {ele.ManufacturerList.map((item, idx) => {
+                                const bgcolor = bgColors[item.Name];
+                                return (
+                                  <span
+                                    key={idx}
+                                    className={`${Styles.account22} ${Styles[bgcolor]}`}
+                                    onClick={() => handleBrandClick(ele)}
+                                  >
+                                    {item.Name}
+                                  </span>
+                                );
+                              })}
                             </div>
                           </div>
-                        );
-                      }
-                    })}
-                  </>
-                )}
-              </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                </>
+              )}
             </div>
-          </div>}
+          </div>
         </div>
+      )}
+
+      <ModalPage
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        content={<SelectBrandModel brands={brandData} onClose={() => setModalOpen(false)} />}
+      />
+    </div>
 
         <div className="row my-3">
           <div className="col-lg-7">

@@ -111,92 +111,98 @@ const Header = () => {
                path === "/Target-Report" ? "Target Report" : null ||
                path === "/account-contact-detailed-Report" ? "Account Contact Detailed Report" : "Reports"
                }
-              <ul className="dropdown-menu">
-                {memoizedPermissions?.modules?.reports?.salesReport?.view ? (
-                  <li>
-                    <Link
-                      to="/sales-report"
-                      className="dropdown-item text-start"
-                      onClick={() => navigate("/sales-report")}
-                    >
-                      Sales Report
-                    </Link>
-                  </li>
-                ) : <li className="dropdown-item text-start" onClick={()=>handleRestrictedAccess('Sales Report')} 
-                style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
-                > Sales Report</li>}
+<ul className="dropdown-menu">
+  {/* Sales Report */}
+  {memoizedPermissions?.modules?.reports?.salesReport?.view ? (
+    <li>
+      <Link
+        to="/sales-report"
+        className="dropdown-item text-start focus:!bg-black active:!bg-black focus:!text-white active:!text-white hover:bg-[#eeeeef] hover:rounded-lg"
+        onClick={() => navigate("/sales-report")}
+      >
+        Sales Report
+      </Link>
+    </li>
+  ) : (
+  null
+  )}
 
-                {memoizedPermissions?.modules?.reports?.newnessReport?.view  ? (
-                  <li>
-                    <Link
-                      to="/newness-report"
-                      className="dropdown-item text-start"
-                      onClick={() => navigate("/newness-report")}
-                    >
-                      Newness Report
-                    </Link>
-                  </li>
-                ) : <li className="dropdown-item text-start" onClick={()=>handleRestrictedAccess('Newness Report')} 
-                style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
-                > Newness Report</li>}
+  {/* Newness Report */}
+  {memoizedPermissions?.modules?.reports?.newnessReport?.view ? (
+    <li>
+      <Link
+        to="/newness-report"
+        className="dropdown-item text-start focus:!bg-black active:!bg-black focus:!text-white active:!text-white hover:bg-[#eeeeef] hover:rounded-lg"
+        onClick={() => navigate("/newness-report")}
+      >
+        Newness Report
+      </Link>
+    </li>
+  ) : (
+   null
+  )}
 
-                {memoizedPermissions?.modules?.reports?.comparisonReport?.view ? (
-                  <li>
-                    <Link
-                      to="/comparison-report"
-                      className="dropdown-item text-start"
-                      onClick={() => navigate("/comparison-report")}
-                    >
-                      Comparison Report
-                    </Link>
-                  </li>
-                ) :<li className="dropdown-item text-start" onClick={()=>handleRestrictedAccess('Comparison Report')} 
-                style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
-                > Comparison Report</li> }
+  {/* Comparison Report */}
+  {memoizedPermissions?.modules?.reports?.comparisonReport?.view ? (
+    <li>
+      <Link
+        to="/comparison-report"
+        className="dropdown-item text-start focus:!bg-black active:!bg-black focus:!text-white active:!text-white hover:bg-[#eeeeef] hover:rounded-lg"
+        onClick={() => navigate("/comparison-report")}
+      >
+        Comparison Report
+      </Link>
+    </li>
+  ) : (
+   null
+  )}
 
-                {memoizedPermissions?.modules?.reports?.yearlyComparisonReport?.view ? (
-                  <li>
-                    <Link
-                      to="/comparison"
-                      className="dropdown-item text-start"
-                      onClick={() => navigate("/comparison")}
-                    >
-                      Yearly Comparison Report
-                    </Link>
-                  </li>
-                ) : <li className="dropdown-item text-start" onClick={()=>handleRestrictedAccess('Yearly Comparison Report')} 
-                style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
-                > Yearly Comparison Report</li>}
+  {/* Yearly Comparison Report */}
+  {memoizedPermissions?.modules?.reports?.yearlyComparisonReport?.view ? (
+    <li>
+      <Link
+        to="/comparison"
+        className="dropdown-item text-start focus:!bg-black active:!bg-black focus:!text-white active:!text-white hover:bg-[#eeeeef] hover:rounded-lg"
+        onClick={() => navigate("/comparison")}
+      >
+        Yearly Comparison Report
+      </Link>
+    </li>
+  ) : (
+    null
+  )}
 
-                {memoizedPermissions?.modules?.reports?.targetReport?.view  ? (
-                  <li>
-                    <Link
-                      to="/Target-Report"
-                      className="dropdown-item text-start"
-                      onClick={() => navigate("/Target-Report")}
-                    >
-                      Target Report
-                    </Link>
-                  </li>
-                ) : <li className="dropdown-item text-start" onClick={()=>handleRestrictedAccess('Target Report')} 
-                style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
-                > Target Report</li>}
-{memoizedPermissions?.modules?.reports?.contactDetailedReport?.view  ? (
-<li>
-                  <Link
-                    to="/account-contact-detailed-Report"
-                    className="dropdown-item  text-start"
-                    onClick={() => {
-                      navigate("/account-contact-detailed-Report");
-                    }}
-                  >
-                    Account Contact Detailed Report
-                  </Link>
-                </li>
-) :  <li className="dropdown-item text-start" onClick={()=>handleRestrictedAccess('Account Contact Detailed Report')} 
-style={{ cursor: 'not-allowed', color: 'grey' , fontSize : '12px' }}
-> Account Contact Detailed Report</li>}
-              </ul>
+  {/* Target Report */}
+  {memoizedPermissions?.modules?.reports?.targetReport?.view ? (
+    <li>
+      <Link
+        to="/Target-Report"
+        className="dropdown-item text-start focus:!bg-black active:!bg-black focus:!text-white active:!text-white hover:bg-[#eeeeef] hover:rounded-lg"
+        onClick={() => navigate("/Target-Report")}
+      >
+        Target Report
+      </Link>
+    </li>
+  ) : (
+    null
+  )}
+
+  {/* Account Contact Detailed Report */}
+  {memoizedPermissions?.modules?.reports?.contactDetailedReport?.view ? (
+    <li>
+      <Link
+        to="/account-contact-detailed-Report"
+        className="dropdown-item text-start focus:!bg-black active:!bg-black focus:!text-white active:!text-white hover:bg-[#eeeeef] hover:rounded-lg"
+        onClick={() => navigate("/account-contact-detailed-Report")}
+      >
+        Account Contact Detailed Report
+      </Link>
+    </li>
+  ) : (
+    null
+  )}
+</ul>
+
             </div>
           </Link>
         </p>

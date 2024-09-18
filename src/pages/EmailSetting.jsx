@@ -4,6 +4,7 @@ import { GetAuthData, salesRepIdKey } from "../lib/store";
 import { getPermissions } from "../lib/permission";
 import { useEffect , useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied";
 const EmailSetting = () => {
     const [userData, setUserData] = useState({});
     const [hasPermission, setHasPermission] = useState(null); 
@@ -27,7 +28,9 @@ useEffect(()=>{
     fetchData()
 }, [salesRepIdKey , navigate])
 useEffect(()=>{
-if(hasPermission === false){ navigate('/dashboard')
+if(hasPermission === false){ 
+    PermissionDenied()
+    navigate('/dashboard')
 }}, [hasPermission , navigate])
     return (<AppLayout
     >

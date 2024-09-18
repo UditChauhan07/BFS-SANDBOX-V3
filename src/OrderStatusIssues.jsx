@@ -10,6 +10,7 @@ import { FilterItem } from "./components/FilterItem";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPermissions } from "./lib/permission";
+import PermissionDenied from "./components/PermissionDeniedPopUp/PermissionDenied";
 
 let PageSize = 5;
 const OrderStatusIssues = () => {
@@ -197,7 +198,8 @@ const OrderStatusIssues = () => {
       }, [filterValue.month]);
       useEffect(() => {
         if (hasPermission === false) {
-          navigate("/dashboard"); // Redirect to dashboard if no permission
+          navigate("/dashboard");
+          PermissionDenied() // Redirect to dashboard if no permission
         }
       }, [hasPermission, navigate]);
             

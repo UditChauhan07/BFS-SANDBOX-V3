@@ -8,6 +8,7 @@ import AppLayout from "../components/AppLayout";
 import { DestoryAuth, GetAuthData, admins, getRetailerList, getSalesRepList } from "../lib/store";
 import { CloseButton } from "../lib/svg";
 import { getPermissions } from "../lib/permission";
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied";
 const MyRetailersPage = () => {
   const { data: manufacturers } = useManufacturer();
   const [searchParams] = useSearchParams();
@@ -62,7 +63,9 @@ const MyRetailersPage = () => {
 
   useEffect(() => {
     if (hasPermission === false) {
+      PermissionDenied()
       navigate("/dashboard"); // Redirect to dashboard if no permission
+      PermissionDenied()
     }
   }, [hasPermission, navigate]);
 

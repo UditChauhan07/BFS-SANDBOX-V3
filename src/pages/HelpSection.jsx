@@ -12,6 +12,7 @@ import VideoPlayer from "../components/VideoPlayer";
 import { GetAuthData } from "../lib/store";
 import { getPermissions } from "../lib/permission";
 import { useNavigate } from "react-router-dom";  // Import the navigate hook
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied";
 
 const HelpSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,6 +87,7 @@ const HelpSection = () => {
         if (userPermissions?.modules?.customerSupport?.childModules
           ?.how_To_Guide?.view === false) {
           navigate("/dashboard");
+          PermissionDenied()
         }
         
       } catch (error) {

@@ -9,6 +9,7 @@ import OrderListContent from "../components/OrderList/OrderListContent";
 import { FilterItem } from "../components/FilterItem";
 import { useNavigate } from "react-router-dom";
 import { getPermissions } from "../lib/permission";
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied";
 let PageSize = 10;
 
 const OrderListPage = () => {
@@ -63,6 +64,8 @@ const OrderListPage = () => {
   useEffect(() => {
       if (hasPermission === false) {
           navigate("/dashboard"); // Redirect to dashboard if no permission
+          PermissionDenied()
+
       }
   }, [hasPermission, navigate]);
 

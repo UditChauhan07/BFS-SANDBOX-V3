@@ -5,6 +5,8 @@ import CustomerSupportLayout from "../components/customerSupportLayout"
 import { GetAuthData, admins, getAllAccount, getSalesRepList } from "../lib/store";
 import { FilterItem } from "../components/FilterItem";
 import { getPermissions } from "../lib/permission";
+import { Navigate, useNavigate } from "react-router-dom";
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied";
 const BMAIssues = () => {
     const [sumitForm, setSubmitForm] = useState(false)
     const [accountList, setAccountList] = useState([]);
@@ -13,6 +15,7 @@ const BMAIssues = () => {
     const [selectedSalesRepId, setSelectedSalesRepId] = useState();
     const [loaded, setLoaded] = useState(false);
     const [permissions, setPermissions] = useState(null);
+    const navigate = useNavigate()
     useEffect(() => {
         GetAuthData().then((user) => {
             setUserData(user)
@@ -46,6 +49,10 @@ const BMAIssues = () => {
             const user = await GetAuthData(); // Fetch user data
             const userPermissions = await getPermissions(); // Fetch permissions
             setPermissions(userPermissions); // Set permissions in state
+            if(userPermissions.modules?.customerSupport?.childModules?.brandManagementApproval?.view === false){
+                PermissionDenied()
+                navigate('/dashboard')
+            }
           } catch (err) {
             console.error("Error fetching permissions", err);
           }

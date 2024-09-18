@@ -10,6 +10,7 @@ import Loading from "../components/Loading.jsx";
 import { FilterItem } from "../components/FilterItem.jsx";
 import AppLayout from "../components/AppLayout.jsx";
 import { getPermissions } from "../lib/permission";
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied.jsx";
 const CustomerService = () => {
   const { state } = useLocation();
   let Reason = null;
@@ -89,6 +90,7 @@ const CustomerService = () => {
         if (!customerServicePermission) {
           console.log('Redirecting to Dashboard...');
           navigate("/dashboard");
+          PermissionDenied()
           return; // Ensure no further code execution
         }
   

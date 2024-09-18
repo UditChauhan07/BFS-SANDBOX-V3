@@ -10,6 +10,7 @@ import { CloseButton } from "../../lib/svg";
 import AuditReportTable from "../../components/AuditReportTable";
 import { getPermissions } from "../../lib/permission";
 import { useNavigate } from "react-router-dom";
+import PermissionDenied from "../../components/PermissionDeniedPopUp/PermissionDenied";
 // Styling
 const styles = {
     optionContainer: {
@@ -198,6 +199,7 @@ const AuditReport = () => {
   useEffect(() => {
     if (hasPermission === false) {
       navigate("/dashboard");  // Redirect if no permission
+      PermissionDenied()
     }
   }, [hasPermission, navigate]);
 

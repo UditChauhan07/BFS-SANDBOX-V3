@@ -1,14 +1,21 @@
+
 import { GetAuthData } from "./store";
 
 export const permissionsArray = [
   {
     userType: "superadmin",
-    allows: ["00530000005AdvsAAC", "0051O00000CvAVTQA3"],
+    allows: ["00530000005AdvsAAC", "0051O00000CvAVTQA3" , "0053b00000DgEVEAA3"],
     permissions: {
       modules: {
         godLevel: true,
+        store : {
+          view : true 
+        } ,
+        products : {
+            view : true  
+        },
         order: {
-          view: false,
+          view: true,
           create: true,
         },
         emailBlast: {
@@ -55,6 +62,9 @@ export const permissionsArray = [
             how_To_Guide: {
               view: true,
             },
+            brandManagementApproval : {
+              view : true 
+            }
           },
         },
         reports: {
@@ -81,7 +91,7 @@ export const permissionsArray = [
             view: true,
           },
           auditReport: {
-            view: false,
+            view: true,
           },
         },
       },
@@ -93,6 +103,15 @@ export const permissionsArray = [
     permissions: {
       modules: {
         godLevel: false,
+        store : {
+          view : true 
+        } ,
+        products : {
+            view : true  
+        },
+
+       
+        
         order: {
           view: true,
           create: true,
@@ -140,7 +159,11 @@ export const permissionsArray = [
             },
             how_To_Guide: {
               view: true,
-            },
+            }
+            ,
+            brandManagementApproval : {
+              view : true 
+            }
           },
         },
         reports: {
@@ -175,10 +198,16 @@ export const permissionsArray = [
   },
   {
     userType: "custom 1",
-    allows: ["0053b00000C75e8AAB", "0053b00000DgGqOAAV"],
+    allows: ["0053b00000C75e8AAB", "0053b00000DgGqOAAV" ],
     permissions: {
       modules: {
-        godLevel: false,
+        godLevel: true,
+        store : {
+          view : false 
+        } ,
+        products : {
+            view : false  
+        },
         order: {
           view: false,
           create: false,
@@ -225,8 +254,12 @@ export const permissionsArray = [
               view: false,
             },
             how_To_Guide: {
-              view: false,
+              view: true,
             },
+            
+            brandManagementApproval : {
+              view : false 
+            }
           },
         },
         reports: {
@@ -259,92 +292,103 @@ export const permissionsArray = [
       },
     },
   },    
-  {
-    userType: "custom 2",
-    allows: ["0053b00000DgEVEAA3"],
-    permissions: {
-      modules: {
-        godLevel: true,
-        order: {
-          view: true,
-          create: true,
-        },
-        emailBlast: {
-          view: true,
-          create: true,
-        },
-        myRetailers: {
-          view: true,
-          create: true,
-        },
-        newArrivals: {
-          view: true,
-          create: true,
-        },
-        brands: {
-          view: true,
-          create: true,
-        },
-        dashboard: {
-          view: true,
-        },
-        topProducts: {
-          view: true,
-          create: true,
-        },
-        marketingCalender: {
-          view: true,
-          create: true,
-        },
-        educationCenter: {
-          view: true,
-          create: true,
-        },
-        customerSupport: {
-          view: true,
-          create: true,
-          childModules: {
-            order_Status: {
-              view: true,
-            },
-            customer_service: {
-              view: true,
-            },
-            how_To_Guide: {
-              view: true,
-            },
-          },
-        },
-        reports: {
-          hasAccess: true,
-          salesReport: {
-            view: true,
-          },
-          newnessReport: {
-            view: true,
-          },
-          comparisonReport: {
-            view: true,
-          },
-          yearlyComparisonReport: {
-            view: true,
-          },
-          targetReport: {
-            view: true,
-          },
-          contactDetailedReport: {
-            view: true,
-          },
-          accountTier: {
-            view: true,
-          },
-          auditReport: {
-            view: false,
-          },
-        },
-      },
-    },
-  },
+  // {
+  //   userType: "custom 2",
+  //   allows: ["0053b00000DgEVEAA3"],
+  //   permissions: {
+  //     modules: {
+  //       godLevel: true,
+  //       store : {
+  //         view : true ,
+  //         download : false
+          
+  //       } ,
+  //       products : {
+  //           view : true  
+  //       },
+  //       order: {
+  //         view: true ,
+  //         create: true,
+  //       },
+  //       emailBlast: {
+  //         view: false,
+  //         create: true,
+  //       },
+  //       myRetailers: {
+  //         view: true,
+  //         create: true,
+  //       },
+  //       newArrivals: {
+  //         view: true,
+  //         create: true,
+  //       },
+  //       brands: {
+  //         view: true,
+  //         create: true,
+  //       },
+  //       dashboard: {
+  //         view: true,
+  //       },
+  //       topProducts: {
+  //         view: true,
+  //         create: true,
+  //       },
+  //       marketingCalender: {
+  //         view: true,
+  //         create: true,
+  //       },
+  //       educationCenter: {
+  //         view: true,
+  //         create: true,
+  //       },
+  //       customerSupport: {
+  //         view: true,
+  //         create: true,
+  //         childModules: {
+  //           order_Status: {
+  //             view: true  ,
+  //           },
+  //           customer_service: {
+  //             view: true  ,
+  //           },
+  //           how_To_Guide: {
+  //             view: true,
+  //           },
+  //           brandManagementApproval : {
+  //             view : true 
+  //           }
+  //         },
+  //       },
+  //       reports: {
+  //         hasAccess: true,
+  //         salesReport: {
+  //           view: false,
+  //         },
+  //         newnessReport: {
+  //           view: true,
+  //         },
+  //         comparisonReport: {
+  //           view: true,
+  //         },
+  //         yearlyComparisonReport: {
+  //           view: true,
+  //         },
+  //         targetReport: {
+  //           view: true,
+  //         },
+  //         contactDetailedReport: {
+  //           view: true,
+  //         },
+  //         accountTier: {
+  //           view: true ,
+  //         },
+  //         auditReport: {
+  //           view: true,
+  //         },
+  //       },
+  //     },
+  //   },
+  // },
 ];
 let temp = {
   userType: "custom 1",
@@ -352,6 +396,12 @@ let temp = {
   permissions: {
     modules: {
       godLevel: true,
+      store : {
+        view : true 
+      } ,
+      products : {
+          view : true  
+      },
       order: {
         view: false,
         create: true,
@@ -400,6 +450,9 @@ let temp = {
           how_To_Guide: {
             view: true,
           },
+          brandManagementApproval : {
+            view : true 
+          }
         },
       },
       reports: {

@@ -12,6 +12,7 @@ import { BiDollar } from "react-icons/bi";
 import MapGenerator from "../../components/Map";
 import classNames from "classnames";
 import { getPermissions } from "../../lib/permission";
+import PermissionDenied from "../../components/PermissionDeniedPopUp/PermissionDenied";
 const center = {
     lat: 38,
     lng: -97
@@ -157,9 +158,9 @@ useEffect(()=>{
                 setSelectedSalesRepId(user.Sales_Rep__c)
             const userPermissions = await getPermissions()
             setHasPermission(userPermissions?.modules?.reports?.accountTier?.view)
-        if(userPermissions?.modules?.reports?.accountTier?.view=== false) navigate('/dashboard')
+        if(userPermissions?.modules?.reports?.accountTier?.view=== false){ navigate('/dashboard');  PermissionDenied()
 
-
+        }
         } catch (error) {
            console.log("Permission Error " , error) 
         }

@@ -15,6 +15,7 @@ import styles from "../../components/Modal UI/Styles.module.css";
 import { CloseButton, SearchIcon } from "../../lib/svg";
 import { GetAuthData } from "../../lib/store";
 import { getPermissions } from "../../lib/permission";
+import PermissionDenied from "../../components/PermissionDeniedPopUp/PermissionDenied";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
 
@@ -326,6 +327,7 @@ const memoizedPermissions = useMemo(() => permissions, [permissions]);
 
         // If no permission, redirect to dashboard
         if (userPermissions?.modules?.reports?.salesReport?.view  === false) {
+          PermissionDenied()
           navigate("/dashboard");
         }
         
@@ -340,6 +342,7 @@ const memoizedPermissions = useMemo(() => permissions, [permissions]);
   // Check permission and handle redirection
   useEffect(() => {
     if (hasPermission === false) {
+      PermissionDenied()
       navigate("/dashboard");  // Redirect if no permission
     }
   }, [hasPermission, navigate]);

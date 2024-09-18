@@ -15,6 +15,7 @@ import styles from "../../components/Modal UI/Styles.module.css";
 import { CloseButton, SearchIcon } from "../../lib/svg";
 import { GetAuthData } from "../../lib/store";
 import { getPermissions } from "../../lib/permission";
+import PermissionDenied from "../../components/PermissionDeniedPopUp/PermissionDenied";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
 const NewnessReport = () => {
@@ -231,6 +232,7 @@ const NewnessReport = () => {
           // If no permission, redirect to dashboard
           if (userPermissions?.modules?.reports?.newnessReport?.view === false) {
             navigate("/dashboard");
+            PermissionDenied()
           }
           
         } catch (error) {
@@ -245,6 +247,7 @@ const NewnessReport = () => {
     useEffect(() => {
       if (hasPermission === false) {
         navigate("/dashboard");  // Redirect if no permission
+        PermissionDenied()
       }
     }, [hasPermission, navigate]);
 

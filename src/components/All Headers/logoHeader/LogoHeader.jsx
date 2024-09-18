@@ -4,7 +4,7 @@ import { GetAuthData } from "../../../lib/store";
 import { getPermissions } from "../../../lib/permission";
 import PermissionDenied from "../../PermissionDeniedPopUp/PermissionDenied";
 import styles from "../topNav/index.module.css";
-
+import { SearchIcon } from "../../../lib/svg";
 const LogoHeader = () => {
   const navigate = useNavigate();
   const [permissions, setPermissions] = useState(null);
@@ -97,6 +97,12 @@ const LogoHeader = () => {
         {/* Dashboard & My Bag */}
         <div className={`${styles.lapSetting} d-none-print`}>
           {/* Dashboard */}
+          <p className={`m-0 w-[100px]  ${styles.language} flex`}>
+              <a href="#search" data-rr-ui-event-key="#search" className=" pr-0 nav-link active"><div className="search-container"><input className="search expandright" id="searchright" type="search" name="" placeholder="Search..." /><label className="button searchbutton" for="searchright"><span className="searchCode">Search...</span> <span className="mglass">
+                <SearchIcon />
+              </span> </label></div></a>
+              {/* <img src={"/assets/images/searchIcon.svg"} alt="img" /> */}
+            </p>
           <p className={`m-0  ${styles.language}`}>
             {memoizedPermissions?.modules?.dashboard?.view ? (
               <Link to="/dashboard" className="linkStyle">
@@ -114,6 +120,7 @@ const LogoHeader = () => {
           </p>
 
           {/* My Bag */}
+        
           <p className={`m-0  ${styles.language}`}>
             {memoizedPermissions?.modules?.order?.view ? (
               <Link to="/my-bag" className="linkStyle">

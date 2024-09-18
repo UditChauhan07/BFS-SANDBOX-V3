@@ -1,17 +1,34 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import Styles from "./style.module.css";
 import { CloseButton } from "../../../lib/svg";
 
-
 const SelectBrandModel = ({ brands, onClose = null, onChange = null }) => {
+  const [selectedBrand, setSelectedBrand] = useState(null); // State to store selected brand
+  const navigate = useNavigate(); // Initialize navigate function
 
+  const handleBrandChange = (brand) => {
+    setSelectedBrand(brand); // Set selected brand when a brand is chosen
+    if (onChange) { onChange(brand) }
+  };
+
+  const handleSubmit = () => {
+    if (selectedBrand) {
+      navigate(`/product`); // Navigate to product page if a brand is selected
+    } else {
+      // Optionally, handle the case where no brand is selected
+      alert('Please select a brand before submitting.');
+    }
+  };
 
   return (
     <>
       <div className="px-[68px] pb-[67px] pt-[40px] max-w-[900px]">
         <section>
           <div className="d-flex align-items-center justify-content-between gap-5 mb-4">
-          <h1 className="font-[Montserrat-500] text-[22px] tracking-[2.20px] text-center">Choose the Manufacturer</h1>
+            <h1 className="font-[Montserrat-500] text-[22px] tracking-[2.20px] text-center">
+              Choose the Manufacturer
+            </h1>
             <button type="button" onClick={onClose}>
               <CloseButton />
             </button>
@@ -24,33 +41,25 @@ const SelectBrandModel = ({ brands, onClose = null, onChange = null }) => {
                   <input
                     type="radio"
                     name="brand_names"
-                    onChange={() => {
-                      if (onChange) { onChange(brand) }
-                    }}
+                    onChange={() => handleBrandChange(brand)}
                     id={brand.ManufacturerName__c || brand.Name}
+                    checked={selectedBrand === brand} // Mark the selected brand as checked
                   />
-                  <label htmlFor={brand.ManufacturerName__c || brand.Name}>{brand.ManufacturerName__c || brand.Name}</label>
+                  <label htmlFor={brand.ManufacturerName__c || brand.Name}>
+                    {brand.ManufacturerName__c || brand.Name}
+                  </label>
                 </div>
               ))}
             </div>
 
-            {/* <div className={Styles.BrandButton}> */}
-            {/* <button className={Styles.Button1} onClick={onClose}>
+            <div className={Styles.BrandButton}>
+              <button className={Styles.Button1} onClick={onClose}>
                 CANCEL
-              </button> */}
-            {/* <button
-                className={Styles.Button2}
-                onClick={() => {
-                  if (selectedBrandManufacturer) {
-                    navigate(`/product`);
-                  } else {
-                    setModalOpen(true);
-                  }
-                }}
-              >
+              </button>
+              <button className={Styles.Button2} onClick={handleSubmit}>
                 SUBMIT
-              </button> */}
-            {/* </div> */}
+              </button>
+            </div>
           </div>
         </section>
       </div>
