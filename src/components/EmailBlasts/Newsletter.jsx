@@ -6,7 +6,8 @@ import Loading from "../Loading";
 import ModalPage from "../Modal UI";
 import Pagination from "../Pagination/Pagination";
 import { useNavigate } from "react-router-dom";
-
+import { getPermissions } from "../../lib/permission";
+import PermissionDenied from "../PermissionDeniedPopUp/PermissionDenied";
 const Newsletter = () => {
     const navigate = useNavigate();
     const [emailReports, setEmailReport] = useState({ isLoad: false, data: [] })
@@ -14,7 +15,7 @@ const Newsletter = () => {
     const [token, setToken] = useState();
     const [searchValue, setSearchValue] = useState();
     const [currentPage, setCurrentPage] = useState(1);
-
+    const [permissions, setPermissions] = useState(null);
 
     useEffect(() => {
         getReportHandler();
@@ -71,6 +72,29 @@ const Newsletter = () => {
                 })
         )
     }, [data, searchValue]);
+
+    useEffect(() => {
+        async function fetchPermissions() {
+          try {
+            const user = await GetAuthData(); // Fetch user data
+            const userPermissions = await getPermissions(); // Fetch permissions
+            setPermissions(userPermissions); // Set permissions in state
+          } catch (err) {
+            console.error("Error fetching permissions", err);
+          }
+        }
+    
+        fetchPermissions(); // Fetch permissions on mount
+      }, []);
+    
+      // Memoize permissions to avoid unnecessary re-calculations
+      const memoizedPermissions = useMemo(() => permissions, [permissions]);
+    
+      // Handle restricted access
+      const handleRestrictedAccess = () => {
+        PermissionDenied(); 
+      };
+      
     return (
         <>
             <ModalPage
@@ -85,9 +109,15 @@ const Newsletter = () => {
                         <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} onClick={() => { navigate('/newsletter/setting') }}>
                             <BiBoltCircle />&nbsp;Settings
                         </div>&nbsp;
-                        <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} onClick={() => { navigate("/newsletter/create") }}>
-                            <BiPlus />&nbsp;Create Newsletter
-                        </div>
+                        {memoizedPermissions?.modules?.emailBlast?.create ? 
+                     <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} onClick={() => { navigate("/newsletter/create") }}>
+                     <BiPlus />&nbsp;Create Newsletter
+                 </div> : 
+                  <div className={`${Styles.settingButton}  d-flex  justify-content-center align-items-center`} onClick= {handleRestrictedAccess}>
+                  <BiPlus />&nbsp;Create Newsletter
+              </div>    
+                    }
+                       
                     </div>
                 </div>
                 <div className="d-flex justify-content-end align-items-center" style={{ margin: '15px 0 27px 0' }}>

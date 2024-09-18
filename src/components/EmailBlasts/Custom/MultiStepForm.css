@@ -76,13 +76,15 @@
 }
 
 .create-newsletter .accordion-header.active {
-  background-color: #ccc;
+  background: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(0, 0, 0) 100%);
   color: #fff;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   border-bottom: 0;
 }
-
+.create-newsletter .accordion-header.active h3{
+  color: #000;
+}
 .create-newsletter .accordion-header h3 {
   font-size: 18px;
   margin: 0;

@@ -8,7 +8,9 @@ import Loading from "../../components/Loading";
 import { generateBrandAuditTemplate, getAuditReportView, GetAuthData, getBrandAuditPaginate, originAPi } from "../../lib/store";
 import { CloseButton } from "../../lib/svg";
 import AuditReportTable from "../../components/AuditReportTable";
-
+import { getPermissions } from "../../lib/permission";
+import { useNavigate } from "react-router-dom";
+import PermissionDenied from "../../components/PermissionDeniedPopUp/PermissionDenied";
 // Styling
 const styles = {
     optionContainer: {
@@ -68,7 +70,14 @@ const AuditReport = () => {
     const [brandSelect, setbrandSelected] = useState();
     const [brandStep, setBrandStep] = useState(0);
     const [brandPages, setBrandPages] = useState({ isLoaded: false, value: 0 });
-    const [totalAccount, setTotalAccount] = useState();
+    const [auditReport, setAuditReport] = useState({ isLoaded: false, data: [] })
+    const [token, setToken] = useState();
+    const [totalAccount,setTotalAccount]=useState();
+    const [currentFileName, setCurrentFileName] = useState('');
+    const [selectedSalesRepId, setSelectedSalesRepId] = useState();
+    const [userData, setUserData] = useState({});
+    const [hasPermission, setHasPermission] = useState(null);
+    const navigate = useNavigate()
     const [auditReport, setAuditReport] = useState({ isLoaded: false, data: [] })
     const [token, setToken] = useState();
 
@@ -159,6 +168,41 @@ const AuditReport = () => {
                 setLoadingChunk(null);
             }
         };
+
+  // Fetch user data and permissions
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await GetAuthData();
+        setUserData(user);
+
+        if (!selectedSalesRepId) {
+          setSelectedSalesRepId(user.Sales_Rep__c);
+        }
+
+        const userPermissions = await getPermissions();
+        setHasPermission(userPermissions?.modules?.reports?.auditReport);
+
+        // If no permission, redirect to dashboard
+        if (userPermissions?.modules?.reports?.auditReport === false) {
+          navigate("/dashboard");
+        }
+        
+      } catch (error) {
+        console.log({ error });
+      }
+    };
+    
+    fetchData();
+  }, [navigate, selectedSalesRepId]);
+
+  // Check permission and handle redirection
+  useEffect(() => {
+    if (hasPermission === false) {
+      navigate("/dashboard");  // Redirect if no permission
+      PermissionDenied()
+    }
+  }, [hasPermission, navigate]);
 
         return (
             <div style={styles.optionContainer}>

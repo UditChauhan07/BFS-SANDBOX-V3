@@ -7,7 +7,9 @@ import Loading from "../components/Loading";
 import Pagination from "../components/Pagination/Pagination";
 import AppLayout from "../components/AppLayout";
 import { CloseButton } from "../lib/svg";
-
+import { getPermissions } from "../lib/permission";
+import { useNavigate } from "react-router-dom";
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied";
 let PageSize = 10;
 const CustomerSupport = () => {
   const [supportList, setSupportList] = useState([]);
@@ -21,8 +23,11 @@ const CustomerSupport = () => {
   const [userData, setUserData] = useState({});
   const [salesRepList, setSalesRepList] = useState([])
   const [selectedSalesRepId, setSelectedSalesRepId] = useState();
+  const [hasPermission, setHasPermission] = useState(null);
+  const [permissions, setPermissions] = useState(null);
   let statusList = ["New", "Follow up Needed By Brand Customer Service", "Follow up needed by Rep", "Follow up Needed By Brand Accounting", "Follow up needed by Order Processor", "RTV Approved", "Closed"];
   const [status, setStatus] = useState(["New"]);
+  const navigate = useNavigate()
   useEffect(() => {
     GetAuthData()
       .then((user) => {
@@ -96,12 +101,66 @@ const CustomerSupport = () => {
     }
     return newValues;
   }, [supportList, retailerFilter, manufacturerFilter, searchBy,status]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const user = await GetAuthData();
+        setUserData(user);
+        if (!selectedSalesRepId) setSelectedSalesRepId(user.Sales_Rep__c);
+  
+        // Fetch permissions
+        const userPermissions = await getPermissions();
+        setHasPermission(userPermissions?.modules?.customerSupport?.view);
+  
+    
+  
+        // Fetch sales reps if admin
+        if (admins.includes(user.Sales_Rep__c)) {
+          getSalesRepList({ key: user.x_access_token })
+            .then((repRes) => {
+              setSalesRepList(repRes.data);
+            })
+            .catch((repErr) => {
+              console.log({ repErr });
+            });
+        }
+      } catch (err) {
+        console.log({ err });
+      }
+    }
+  
+    fetchData();
+  }, [selectedSalesRepId , navigate]);
+  useEffect(() => {
+    if (hasPermission === false) {
+      navigate("/dashboard"); // Redirect to dashboard if no permission
+      PermissionDenied()
+    }
+  }, [hasPermission, navigate]);
+
+  useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+
+  // Memoize permissions to avoid unnecessary re-calculations
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
   return (
     <AppLayout
       filterNodes={
         <>
-          {(admins.includes(userData?.Sales_Rep__c), salesRepList?.length > 0) &&
-            <FilterItem
+        {memoizedPermissions?.modules?.godLevel   ?  <> 
+          <FilterItem
               minWidth="220px"
               label="salesRep"
               name="salesRep"
@@ -112,7 +171,7 @@ const CustomerSupport = () => {
               }))}
               onChange={(value) => supportBasedOnSalesRep(value)}
             />
-          }
+           </> : null}
           {retailerList?.length > 0 &&
             <FilterItem
               minWidth="220px"
@@ -125,6 +184,7 @@ const CustomerSupport = () => {
               }))}
               onChange={(value) => setRetailerFilter(value)}
             />}
+              
           {brandList?.length > 0 &&
             <FilterItem
               minWidth="220px"
@@ -174,6 +234,9 @@ const CustomerSupport = () => {
             <CloseButton crossFill={'#fff'} height={20} width={20} />
             <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
           </button>
+     
+        
+           
         </>
       }
     >
@@ -202,5 +265,5 @@ const CustomerSupport = () => {
     </AppLayout>
   );
 };
+export default CustomerSupport 
 
-export default CustomerSupport;

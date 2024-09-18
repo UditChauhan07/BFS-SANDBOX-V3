@@ -8,7 +8,7 @@ const useLogin = () => {
       const response = await axios.post(originAPi+"/beauty/v3/gqJW69", { email, password });
       localStorage.setItem("response", JSON.stringify(response));
       if (response.status == 300) {
-        DestoryAuth();
+        // DestoryAuth();
       } else {
       return response.data;
       }

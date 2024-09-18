@@ -18,8 +18,11 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import SpreadsheetUploader from "./OrderForm";
 import { CSVLink } from "react-csv";
+import { getPermissions } from "../../lib/permission";
+import PermissionDenied from "../PermissionDeniedPopUp/PermissionDenied";
 const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 const fileExtension = ".xlsx";
+
 const groupBy = function (xs, key) {
   return xs?.reduce(function (rv, x) {
     (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -41,6 +44,7 @@ function Product() {
   const [testerInBag, setTesterInBag] = useState(false);
   const [orderFormModal, setOrderFromModal] = useState(false);
   const [productList, setProductlist] = useState({ isLoading: false, data: [], discount: {} });
+  const [permissions, setPermissions] = useState(null);
   const brandName = productList?.data?.[0]?.ManufacturerName__c;
 
   const groupProductDataByCategory = (productData) => {
@@ -296,6 +300,35 @@ function Product() {
     const data = new Blob([excelBuffer], { type: fileType });
     FileSaver.saveAs(data, `Order Form ${new Date()}` + fileExtension);
   };
+
+  useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+        if(userPermissions?.modules?.products?.view === false){
+          PermissionDenied()
+          navigate('/dashboard')
+        }
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+
+  // Memoize permissions to avoid unnecessary re-calculations
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
+
+  // Handle restricted access
+  const handleRestrictedAccess = () => {
+    PermissionDenied(); 
+  };
+
+
+
   return (
     <>
       {redirect ? (
@@ -532,13 +565,24 @@ function Product() {
                         </div>
                         <div className={`${styles.TotalSide} `}>
                           <h4>Total Number of Products : {orderQuantity}</h4>
+                          {memoizedPermissions?.modules?.order?.create ? 
                           <button
-                            onClick={() => {
-                              generateOrderHandler();
-                            }}
-                          >
-                            Generate Order
-                          </button>
+                          onClick={() => {
+                            generateOrderHandler();
+                          }}
+                        >
+                          Generate Order
+                        </button> :
+                        <button
+                        onClick={() => {
+                          handleRestrictedAccess();
+                        }}
+                      >
+                        Generate Order
+                      </button>
+
+                        }
+                        
                         </div>
                       </div>
                     </div>
