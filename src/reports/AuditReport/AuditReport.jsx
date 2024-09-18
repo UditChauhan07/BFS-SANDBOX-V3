@@ -71,8 +71,6 @@ const AuditReport = () => {
     const [brandSelect, setbrandSelected] = useState();
     const [brandStep, setBrandStep] = useState(0);
     const [brandPages, setBrandPages] = useState({ isLoaded: false, value: 0 });
-    // const [auditReport, setAuditReport] = useState({ isLoaded: false, data: [] })
-    // const [token, setToken] = useState();
     const [totalAccount,setTotalAccount]=useState();
     const [currentFileName, setCurrentFileName] = useState('');
     const [selectedSalesRepId, setSelectedSalesRepId] = useState();

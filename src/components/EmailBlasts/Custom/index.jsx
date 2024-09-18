@@ -68,24 +68,19 @@ const MultiStepForm = () => {
     //     }
     // }, [formData, isUserSelected])
 
-    useEffect(() => {
-        if (currentStep == 2) {
-            GetAuthData().then((user) => {
-                fetchNextMonthNewsletterBrand({ key: user.x_access_token, date: formData.date ? getDate(formData.date) : null, forMonth: formData.forMonth }).then((brandRes) => {
-                    setFormData({ ...formData, brand: [] });
-                    // setTimeout(() => {
-                    setshowBrandList(brandRes?.brandList)
-                    setManufacturers({ isLoaded: true, data: brandRes?.brandList || [], nonReady: brandRes?.brandnonList || [] })
-                    // }, 1000);
-                }).catch((brandErr) => {
-                    console.log({ brandErr });
-                })
-
-            }).catch((userErr) => {
-                console.log(userErr)
+    const GetBrandDataHandler = ()=>{
+        GetAuthData().then((user) => {
+            fetchNextMonthNewsletterBrand({ key: user.x_access_token, date: formData.date ? getDate(formData.date) : null, forMonth: formData.forMonth }).then((brandRes) => {
+                setshowBrandList(brandRes?.brandList)
+                setManufacturers({ isLoaded: true, data: brandRes?.brandList || [], nonReady: brandRes?.brandnonList || [] })
+            }).catch((brandErr) => {
+                console.log({ brandErr });
             })
-        }
-    }, [formData.forMonth, currentStep])
+
+        }).catch((userErr) => {
+            console.log(userErr)
+        })
+    }
 
     const handleAccordionClick = (step) => {
 
@@ -117,6 +112,9 @@ const MultiStepForm = () => {
         if (step == 5) {
             setIsPreview(isPreviewHtml.preview)
         }
+        if(step == 2){
+            GetBrandDataHandler();
+        }
         setCurrentStep(step);
     };
     useEffect(() => {
@@ -147,10 +145,12 @@ const MultiStepForm = () => {
             });
         } else {
             if (name == "forMonth") {
+                console.log({name});
+                
                 setManufacturers({ isLoaded: false, data: [] })
                 setshowBrandList([])
             }
-            setFormData({ ...formData, [name]: value });
+            setFormData({ ...formData, [name]: value, brand: [] });
         }
     };
 
@@ -322,10 +322,10 @@ const MultiStepForm = () => {
 
 
     useEffect(() => {
-console.log({manufacturers});
+        console.log({ manufacturers });
 
 
-    }, [formData.subscriber,manufacturers])
+    }, [formData.subscriber, manufacturers])
 
 
 
@@ -362,7 +362,8 @@ console.log({manufacturers});
             <CalenderIcon fill='#000' />
         </button>
     ));
-    console.log({ isPreviewHtml });
+    console.log({formData});
+    
 
     return (
         <div className="form-container create-newsletter">
@@ -673,7 +674,7 @@ console.log({manufacturers});
                                                 </div>
                                             </div></>
                                         : (
-                                            <Loading height={'40vh'}/>
+                                            <Loading height={'40vh'} />
                                         )}
                                 </div>
                             )}
