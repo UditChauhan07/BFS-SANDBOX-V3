@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState , useMemo } from "react";
 import BMAIHandler from "../components/IssuesHandler/BMAIHandler.jsx";
 import { GetAuthData, admins, getAllAccount, getOrderCustomerSupport, getOrderList, getSalesRepList, postSupportAny, uploadFileSupport } from "../lib/store.js";
 import OrderCardHandler from "../components/IssuesHandler/OrderCardHandler.jsx";
@@ -9,7 +9,8 @@ import AccountInfo from "../components/IssuesHandler/AccountInfo.jsx";
 import Loading from "../components/Loading.jsx";
 import { FilterItem } from "../components/FilterItem.jsx";
 import AppLayout from "../components/AppLayout.jsx";
-
+import { getPermissions } from "../lib/permission";
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied.jsx";
 const CustomerService = () => {
   const { state } = useLocation();
   let Reason = null;
@@ -42,7 +43,12 @@ const CustomerService = () => {
   const [userData, setUserData] = useState({});
   const [salesRepList, setSalesRepList] = useState([])
   const [selectedSalesRepId, setSelectedSalesRepId] = useState();
-  const [loaded, setLoaded] = useState(false)
+
+
+  const [loaded, setLoaded] = useState(false);
+  const [hasPermission, setHasPermission] = useState(null); 
+  const [permissions, setPermissions] = useState(null);
+
   const resetHandler = () => {
     setOrderId(null)
     setOrderConfirmed(false)
@@ -63,6 +69,49 @@ const CustomerService = () => {
     { name: "Product Damage", icon: '/assets/damage.svg', desc: "Got damaged product in order?" },
     { name: "Update Account Info", icon: '/assets/account.svg', desc: "Change shipping or billing details" }
   ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Get the authenticated user data
+        const user = await GetAuthData();
+        setUserData(user);
+  
+        // Fetch permissions for the user
+        const permissions = await getPermissions();
+        console.log('Fetched Permissions:', permissions);
+  
+        // Check for customer_service permission
+        const customerServicePermission = permissions?.modules?.customerSupport?.childModules
+        ?.customer_service?.view ;
+        console.log('Customer Service Permission:', customerServicePermission);
+        setHasPermission(customerServicePermission);
+  
+        // Redirect based on permission
+        if (!customerServicePermission) {
+          console.log('Redirecting to Dashboard...');
+          navigate("/dashboard");
+          PermissionDenied()
+          return; // Ensure no further code execution
+        }
+  
+        // Continue with data fetching if permission is granted
+        await orderListBasedOnRepHandler(user.x_access_token, Reason ? SalesRepId : user.Sales_Rep__c, Reason ? false : true, OrderId);
+  
+        if (admins.includes(user.Sales_Rep__c)) {
+          try {
+            const repRes = await getSalesRepList({ key: user.x_access_token });
+            setSalesRepList(repRes.data);
+          } catch (repErr) {
+            console.log('SalesRepList Error:', repErr);
+          }
+        }
+      } catch (err) {
+        console.log('Fetch Data Error:', err);
+      }
+    };
+  
+    fetchData();
+  }, [Reason, SalesRepId, OrderId, navigate]);
   useEffect(() => {
     if (Reason) {
       setReason(Reason)
@@ -201,10 +250,28 @@ const CustomerService = () => {
         console.log(error);
       });
   }
+
+  useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
+
   if (sumitForm) return <AppLayout><Loading height={'50vh'} /></AppLayout>;
   return (<CustomerSupportLayout
-    filterNodes={(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
-      <FilterItem
+    filterNodes={
+      <>
+      {memoizedPermissions?.modules?.godLevel  ? <>
+        <FilterItem
         minWidth="220px"
         label="salesRep"
         name="salesRep"
@@ -215,6 +282,9 @@ const CustomerService = () => {
         }))}
         onChange={(value) => orderListBasedOnRepHandler(userData.x_access_token, value)}
       />
+       </> : null}
+      
+      </>
     }
   >
     {!loaded ? <Loading height={'50vh'} /> :

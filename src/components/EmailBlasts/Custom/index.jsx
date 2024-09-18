@@ -87,7 +87,6 @@ const MultiStepForm = () => {
         }
     }, [formData.forMonth, currentStep])
 
-
     const handleAccordionClick = (step) => {
 
         if (step === 3 && (!formData.brand.length)) {
@@ -327,6 +326,7 @@ console.log({manufacturers});
 
 
     }, [formData.subscriber,manufacturers])
+
 
 
     const handleSelectionChange = (newSelectedValues) => {
@@ -692,6 +692,7 @@ console.log({manufacturers});
                             {currentStep === 3 && (
                                 <div className="accordion-body">
                                     <div className="text-start">
+
                                         <b>Select Template:</b>
                                         <div className={`${Styles.dFlex} mt-4`}>
                                             <div

@@ -1,6 +1,6 @@
 import Styles from "./index.module.css";
 import { DateConvert, GetAuthData, formatNumber, generateAuditTemplate, originAPi, salesRepIdKey } from "../../lib/store";
-import { useState } from "react";
+import { useState , useEffect , useMemo} from "react";
 import Loading from "../Loading";
 import OwlCarousel from "react-owl-carousel";
 import { Link } from "react-router-dom";
@@ -10,9 +10,32 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import MapGenerator from "../Map";
 import Chart from "react-apexcharts";
 import { useNavigate } from "react-router-dom";
-
+import { getPermissions } from "../../lib/permission";
+import PermissionDenied from "../PermissionDeniedPopUp/PermissionDenied";
 const StoreDetailCard = ({ account, brandList }) => {
     const navigate = useNavigate();
+
+    const [permissions, setPermissions] = useState(null);
+
+    useEffect(() => {
+      async function fetchPermissions() {
+        try {
+          const user = await GetAuthData(); // Fetch user data
+          const userPermissions = await getPermissions(); // Fetch permissions
+          setPermissions(userPermissions); // Set permissions in state
+        } catch (err) {
+          console.error("Error fetching permissions", err);
+        }
+      }
+  
+      fetchPermissions(); // Fetch permissions on mount
+    }, []);
+  
+    // Memoize permissions to avoid unnecessary re-calculations
+    const memoizedPermissions = useMemo(() => permissions, [permissions]);
+    const handleRestrictedAccess = () => {
+        PermissionDenied()
+      };
     const totalCategories = account.Brands.map((value) => {
         return value?.ManufacturerName__c || "NA";
     })
@@ -205,7 +228,15 @@ const StoreDetailCard = ({ account, brandList }) => {
                                 <div className={`${Styles.brandContainer} d-flex justify-between`}>
                                     <OwlCarousel {...options} style={{ position: 'absolute', top: '45px', left: '5%', width: '90%' }}>
                                         {account.Brands.map((element, index) => (
+                                            <>
+                                            {memoizedPermissions?.modules?.store?.download ?
+                                            
                                             <p className={Styles.webLinkHolder} onClick={() => AuditHandler(element.ManufacturerId__c, account.Name, element.ManufacturerName__c)} style={{ textAlign: 'center', color: '#3296ED', textDecoration: 'underline', cursor: 'pointer' }} key={index}>{element.ManufacturerName__c}</p>
+                                            : 
+                                            <p className={Styles.webLinkHolder} onClick={() => handleRestrictedAccess()} style={{ textAlign: 'center', color: '#3296ED', textDecoration: 'underline', cursor: 'pointer' }} key={index}>{element.ManufacturerName__c}</p>
+                                            }
+                                            
+                                            </>
                                         ))}
                                     </OwlCarousel>
                                 </div>

@@ -1,62 +1,144 @@
-import React from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { GetAuthData } from "../../../lib/store";
+import { getPermissions } from "../../../lib/permission";
+import PermissionDenied from "../../PermissionDeniedPopUp/PermissionDenied";
 import styles from "../topNav/index.module.css";
-import { Link } from "react-router-dom";
-import { useBag } from "../../../context/BagContext";
 import { SearchIcon } from "../../../lib/svg";
-
 const LogoHeader = () => {
-  const { orderQuantity } = useBag();
+  const navigate = useNavigate();
+  const [permissions, setPermissions] = useState(null);
+
+  useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+
+  // Memoize permissions to avoid unnecessary re-calculations
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
+
+  // Handle restricted access
+  const handleRestrictedAccess = () => {
+    PermissionDenied(); 
+  };
 
   return (
-    <>
-      <div className={styles.laptopModeSticky}>
-        <div className={` ${styles.laptopMode}`}>
-          <div className={`${styles.lapSetting} d-none-print`}>
-            <p className={`m-0  ${styles.language}`}>
-              <Link to="/my-retailers" className={`linkStyle`}>
+    <div className={styles.laptopModeSticky}>
+      <div className={`${styles.laptopMode}`}>
+        {/* My Retailers */}
+        <div className={`${styles.lapSetting} d-none-print`}>
+          <p className={`m-0  ${styles.language}`}>
+            {memoizedPermissions?.modules?.myRetailers?.view ? (
+              <Link to="/my-retailers" className="linkStyle">
                 My Retailers
               </Link>
-            </p>
-            <p className={`m-0   ${styles.language}`}>
-              <Link to="/new-arrivals" className={`linkStyle`}>
+            ) : (
+              <span
+                onClick={handleRestrictedAccess}
+                className="linkStyle"
+                style={{ cursor: "not-allowed", color: "grey" }}
+              >
+                My Retailers
+              </span>
+            )}
+          </p>
+
+          {/* New Arrivals */}
+          <p className={`m-0   ${styles.language}`}>
+            {memoizedPermissions?.modules?.newArrivals?.view  ? (
+              <Link to="/new-arrivals" className="linkStyle">
                 New Arrivals
               </Link>
-            </p>
-            <p className={`m-0   ${styles.language}`}>
-              <Link to="/brand" className={`linkStyle`}>
+            ) : (
+              <span
+                onClick={handleRestrictedAccess}
+                className="linkStyle"
+                style={{ cursor: "not-allowed", color: "grey" }}
+              >
+                New Arrivals
+              </span>
+            )}
+          </p>
+
+          {/* Brands */}
+          <p className={`m-0   ${styles.language}`}>
+            {memoizedPermissions?.modules?.brands?.view  ? (
+              <Link to="/brand" className="linkStyle">
                 Brands
               </Link>
-            </p>
-          </div>
-          {/* image div */}
-          <div className={styles.lapSetting}>
-            <Link to="/dashboard" className={`linkStyle`}>
-              <img src={"/assets/images/BFSG_logo.svg"} alt="img" />
-            </Link>
-          </div>
-          {/* my bag */}
-          <div className={`${styles.lapSetting} d-none-print`}>
-            <p className={`m-0 w-[100px]  ${styles.language} flex`}>
+            ) : (
+              <span
+                onClick={handleRestrictedAccess}
+                className="linkStyle"
+                style={{ cursor: "not-allowed", color: "grey" }}
+              >
+                Brands
+              </span>
+            )}
+          </p>
+        </div>
+
+        {/* Logo */}
+        <div className={styles.lapSetting}>
+          <Link to="/dashboard" className={`linkStyle`}>
+            <img src={"/assets/images/BFSG_logo.svg"} alt="logo" />
+          </Link>
+        </div>
+
+        {/* Dashboard & My Bag */}
+        <div className={`${styles.lapSetting} d-none-print`}>
+          {/* Dashboard */}
+          <p className={`m-0 w-[100px]  ${styles.language} flex`}>
               <a href="#search" data-rr-ui-event-key="#search" className=" pr-0 nav-link active"><div className="search-container"><input className="search expandright" id="searchright" type="search" name="" placeholder="Search..." /><label className="button searchbutton" for="searchright"><span className="searchCode">Search...</span> <span className="mglass">
                 <SearchIcon />
               </span> </label></div></a>
               {/* <img src={"/assets/images/searchIcon.svg"} alt="img" /> */}
             </p>
-
-            <p className={`m-0  ${styles.language}`}>
-              <Link to="/dashboard" className={`linkStyle`}>
+          <p className={`m-0  ${styles.language}`}>
+            {memoizedPermissions?.modules?.dashboard?.view ? (
+              <Link to="/dashboard" className="linkStyle">
                 Dashboard
               </Link>
-            </p>
-            <p className={`m-0  ${styles.language}`}>
+            ) : (
+              <span
+                onClick={handleRestrictedAccess}
+                className="linkStyle"
+                style={{ cursor: "not-allowed", color: "grey" }}
+              >
+                Dashboard
+              </span>
+            )}
+          </p>
 
-              {orderQuantity ? <Link to="/my-bag" className={`linkStyle`}> My Bag ({orderQuantity})
-              </Link> : "My Bag(0)"}
-            </p>
-          </div>
+          {/* My Bag */}
+        
+          <p className={`m-0  ${styles.language}`}>
+            {memoizedPermissions?.modules?.order?.view ? (
+              <Link to="/my-bag" className="linkStyle">
+                My Bag
+              </Link>
+            ) : (
+              <span
+                onClick={handleRestrictedAccess}
+                className="linkStyle"
+                style={{ cursor: "not-allowed", color: "grey" }}
+              >
+                My Bag
+              </span>
+            )}
+          </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -80,6 +80,7 @@ const MultiSelectSearch = ({ options, selectedValues, onChange, loading = null, 
             // Return true if brandMatch is true and any of the other conditions match
             return brandMatch && (nameMatch || titleMatch || accountNameMatch);
         });
+
         if (!showAll) {
             // Extract the brand IDs from the brands list
             let validBrandIds = new Set(manufacturers?.map(brand => brand.Id));

@@ -7,7 +7,9 @@ import Loading from "../components/Loading";
 import Pagination from "../components/Pagination/Pagination";
 import OrderListContent from "../components/OrderList/OrderListContent";
 import { FilterItem } from "../components/FilterItem";
-
+import { useNavigate } from "react-router-dom";
+import { getPermissions } from "../lib/permission";
+import PermissionDenied from "../components/PermissionDeniedPopUp/PermissionDenied";
 let PageSize = 10;
 
 const OrderListPage = () => {
@@ -24,6 +26,48 @@ const OrderListPage = () => {
     manufacturer: null,
     search: "",
   });
+    const [hasPermission, setHasPermission] = useState(null);
+  const [permissions, setPermissions] = useState(null);
+  const navigate = useNavigate();
+  useEffect(() => {
+      async function fetchData() {
+          try {
+              const user = await GetAuthData();
+              setUserData(user);
+              if (!selectedSalesRepId) setSelectedSalesRepId(user.Sales_Rep__c);
+
+              const userPermissions = await getPermissions();
+              setHasPermission(userPermissions?.modules?.order?.view);
+
+              if (hasPermission) {
+                  getOrderlIsthandler({
+                      key: user.x_access_token,
+                      Sales_Rep__c: selectedSalesRepId ?? user.Sales_Rep__c,
+                  });
+
+                  if (admins.includes(user.Sales_Rep__c)) {
+                      getSalesRepList({ key: user.x_access_token })
+                          .then((repRes) => setSalesRepList(repRes.data))
+                          .catch((repErr) => console.log({ repErr }));
+                  }
+              } else {
+                  
+              }
+          } catch (err) {
+              console.log({ err });
+          }
+      }
+
+      fetchData();
+  }, [filterValue.month, hasPermission, selectedSalesRepId, navigate]);
+
+  useEffect(() => {
+      if (hasPermission === false) {
+          navigate("/dashboard"); // Redirect to dashboard if no permission
+          PermissionDenied()
+
+      }
+  }, [hasPermission, navigate]);
 
   const handleFilterChange = (filterType, value) => {
     onFilterChange((prev) => {
@@ -135,11 +179,26 @@ const OrderListPage = () => {
     setOrders([])
     getOrderlIsthandler({ key: userData.x_access_token, Sales_Rep__c: value })
   }
+
+    useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
   return (
     <AppLayout
       filterNodes={
         <>
-          {(admins.includes(userData.Sales_Rep__c), salesRepList.length > 0) &&
+ {memoizedPermissions?.modules?.godLevel ? <>
             <FilterItem
               minWidth="220px"
               label="salesRep"
@@ -151,7 +210,8 @@ const OrderListPage = () => {
               }))}
               onChange={(value) => orderListBasedOnRepHandler(value)}
             />
-          }
+            </> : null }
+          
           <Filters
             onChange={handleFilterChange}
             value={filterValue}

@@ -87,7 +87,16 @@ text-decoration: none;
   z-index: 4;
 }
 
+.restricted {
+  cursor: not-allowed;
+  color: grey;
+}
 
+.dropdown-item.disabled {
+  cursor: not-allowed;
+  color: grey;
+  pointer-events: none; /* Prevent click events on disabled items */
+}
 
 
 

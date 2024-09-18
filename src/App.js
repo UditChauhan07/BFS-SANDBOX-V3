@@ -49,6 +49,7 @@ import OrderComplete from "./pages/OrderComplete";
 import CreateNewsletter from "./components/EmailBlasts/createNewsletter";
 import NewsLetterReport from "./pages/NewsLetterReport";
 import NewsletterSetting from "./pages/NewsletterSetting";
+import ContactDetailedReport from "./reports/ContactDetailedreport/ContactDetailedReport";
 function App() {
   // const Redirect = ({ href }) => {
   //   window.location.href = href;
@@ -108,6 +109,7 @@ function App() {
             <Route path="/Brand/:id" element={<BrandDetails/>}/>
             <Route path="/TierStanding" element={<Tier/>}/>
             <Route path="/AuditReport" element={<AuditReport/>}/>
+            <Route path="/account-contact-detailed-Report" element={<ContactDetailedReport/>}/>
             <Route path="*" element={<PageNotFound />}></Route>
             
             {/* 1234 */}
