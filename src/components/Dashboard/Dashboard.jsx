@@ -18,6 +18,7 @@ import { UserIcon } from "../../lib/svg";
 import { BiRefresh } from "react-icons/bi";
 import { getPermissions } from "../../lib/permission";
 import { salesRepIdKey } from "../../lib/store";
+import { useSearchParams } from "react-router-dom";
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const monthList = [
   {
@@ -239,6 +240,20 @@ function Dashboard({ dashboardData }) {
 
   // API INTEGRATION
 
+
+
+
+
+
+
+  // search params work 
+  const [searchParams] = useSearchParams();
+ 
+  const saleRepId = searchParams.get('saleRep')
+  
+
+  // 
+
   useEffect(() => {
     if (localStorage.getItem("Name")) {
       // getDataHandler();
@@ -267,7 +282,7 @@ function Dashboard({ dashboardData }) {
         if(admins.includes(user.Sales_Rep__c)){
           setSalesRepAdmin(true)
         }
-        getDashboardata({ user })
+        getDashboardata({ user , saleRepId })
           .then((dashboard) => {
             let oldSalesAmount = dashboard?.oldSalesAmount || 0;
             let currentSalesAmount = dashboard.monthlySalesRepData?.[user.Sales_Rep__c]?.sale || 0

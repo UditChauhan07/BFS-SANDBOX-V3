@@ -11,6 +11,7 @@ import AuditReportTable from "../../components/AuditReportTable";
 import { getPermissions } from "../../lib/permission";
 import { useNavigate } from "react-router-dom";
 import PermissionDenied from "../../components/PermissionDeniedPopUp/PermissionDenied";
+import { useMemo } from "react";
 // Styling
 const styles = {
     optionContainer: {
@@ -70,15 +71,15 @@ const AuditReport = () => {
     const [brandSelect, setbrandSelected] = useState();
     const [brandStep, setBrandStep] = useState(0);
     const [brandPages, setBrandPages] = useState({ isLoaded: false, value: 0 });
-    const [auditReport, setAuditReport] = useState({ isLoaded: false, data: [] })
-    const [token, setToken] = useState();
     const [totalAccount,setTotalAccount]=useState();
     const [currentFileName, setCurrentFileName] = useState('');
     const [selectedSalesRepId, setSelectedSalesRepId] = useState();
     const [userData, setUserData] = useState({});
     const [hasPermission, setHasPermission] = useState(null);
     const navigate = useNavigate()
-
+    const [auditReport, setAuditReport] = useState({ isLoaded: false, data: [] })
+    const [token, setToken] = useState();
+    const [permissions, setPermissions] = useState(null);
     useEffect(() => {
         GetAuthData().then((user) => {
             setToken(user.x_access_token);
@@ -167,41 +168,30 @@ const AuditReport = () => {
             }
         };
 
-  // Fetch user data and permissions
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const user = await GetAuthData();
-        setUserData(user);
-
-        if (!selectedSalesRepId) {
-          setSelectedSalesRepId(user.Sales_Rep__c);
-        }
-
-        const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.reports?.auditReport);
-
-        // If no permission, redirect to dashboard
-        if (userPermissions?.modules?.reports?.auditReport === false) {
-          navigate("/dashboard");
-        }
+        useEffect(() => {
+            async function fetchPermissions() {
+              try {
+                const user = await GetAuthData(); // Fetch user data
+                const userPermissions = await getPermissions(); // Fetch permissions
+                setPermissions(userPermissions); // Set permissions in state
+                if(userPermissions?.modules?.reports?.auditReport === false){
+                    navigate('/dashboard')
+                }
+              } catch (err) {
+                console.error("Error fetching permissions", err);
+              }
+            }
         
-      } catch (error) {
-        console.log({ error });
-      }
-    };
-    
-    fetchData();
-  }, [navigate, selectedSalesRepId]);
-
-  // Check permission and handle redirection
-  useEffect(() => {
-    if (hasPermission === false) {
-      navigate("/dashboard");  // Redirect if no permission
-      PermissionDenied()
-    }
-  }, [hasPermission, navigate]);
-
+            fetchPermissions(); // Fetch permissions on mount
+          }, []);
+        
+          // Memoize permissions to avoid unnecessary re-calculations
+          const memoizedPermissions = useMemo(() => permissions, [permissions]);
+          useEffect(() => {
+            if (hasPermission === false) {
+              navigate("/dashboard");  // Redirect if no permission
+            }
+          }, [hasPermission, navigate]);
         return (
             <div style={styles.optionContainer}>
                 <div style={styles.chunkList}>

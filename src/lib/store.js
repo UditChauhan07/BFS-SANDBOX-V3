@@ -435,7 +435,7 @@ export async function getOrderDetailsInvoice({ rawData }) {
   }
 }
 
-export async function getDashboardata({ user }) {
+export async function getDashboardata({ user , saleRepId }) {
   let headersList = {};
   if (user.headers) {
     headersList = user.headers || {};
@@ -446,9 +446,11 @@ export async function getDashboardata({ user }) {
       "Access-Control-Allow-Origin": "*",
     };
   }
+  const finalSaleRepId = saleRepId || user.Sales_Rep__c;
 
-  headersList = { ...headersList, key: user.x_access_token, SalesRepId: user.Sales_Rep__c }
 
+  headersList = { ...headersList, key: user.x_access_token, SalesRepId: finalSaleRepId }
+  console.log(saleRepId)
   let response = await fetch(originAPi + "/95zWpMEFtbAr8lqn/FlEpv2cw4VbxgDF", {
     // let response = await fetch(url + "v3/3kMMguJj62cyyf0", {
     method: "POST",
