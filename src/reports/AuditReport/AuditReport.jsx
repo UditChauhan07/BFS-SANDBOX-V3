@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import PermissionDenied from "../../components/PermissionDeniedPopUp/PermissionDenied";
 import { FilterItem } from "../../components/FilterItem";
 import FilterSearch from "../../components/FilterSearch";
-import { useMemo } from "react";
 // Styling
 const styles = {
     optionContainer: {
