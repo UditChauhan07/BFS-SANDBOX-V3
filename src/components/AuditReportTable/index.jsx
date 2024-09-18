@@ -18,7 +18,7 @@ const AuditReportTable = ({auditReport}) => {
                 <th className={`${styles.month} ${styles.stickyMonth}`}>Sales</th>
                 <th className={`${styles.month} ${styles.stickyMonth}`}>Retail Number</th>
                 <th className={`${styles.month} ${styles.stickyMonth}`}>Retail Type</th>
-                <th className={`${styles.month} ${styles.stickyMonth}`}>SDate Open</th>
+                <th className={`${styles.month} ${styles.stickyMonth}`}>Date Open</th>
                 <th className={`${styles.month} ${styles.stickyMonth}`}>Top Brands</th>
                 <th className={`${styles.month} ${styles.stickyMonth}`}>Tier</th>
                 <th className={`${styles.month} ${styles.stickyMonth}`}>Up to date on Launches</th>
@@ -33,9 +33,10 @@ const AuditReportTable = ({auditReport}) => {
             {auditReport.map((item, index) => {
                 if (item.Brands.length) {
                     return (
-                        item.Brands.map((element) => {
+                        item.Brands.map((element,i) => {
+                            
                             return (
-                                <tr key={index}>
+                                <tr key={index+i}>
                                     <td className={`${styles.td} ${styles.stickyFirstColumn}`}>{item.Name}<br /><small>{item?.Owner?.Name}</small></td>
                                     <td className={`${styles.td} ${styles.stickySecondColumn}`}>{item?.ShippingAddress?.street ?? 'NO'}</td>
                                     <td className={`${styles.td} ${styles.stickyThirdColumn1}`}>{item?.ShippingAddress?.city ?? 'NO'}</td>
@@ -44,11 +45,11 @@ const AuditReportTable = ({auditReport}) => {
                                     <td className={styles.td}>{element.retailNumber[new Date().getFullYear()] ? formatAmount(element.retailNumber[new Date().getFullYear()]):'NO'}</td>
                                     <td className={styles.td}>{item.Type_of_Business__c ?? 'No'}</td>
                                     <td className={styles.td}>{DateConvert(element.Date_Opened__c)}</td>
-                                    <td className={styles.td}>{element.Top_Brands__c ?? 'NO'}</td>
-                                    <td className={styles.td}>{element.Tier__c ?? 'NO'}</td>
-                                    <td className={styles.td}>{element.Up_to_date_on_New_Launches__c ?? 'NO'}</td>
-                                    <td className={styles.td}>{element.Sales_Promotions__c ?? 'NO'}</td>
-                                    <td className={styles.td}>{element.Store_hosted_Events_date__c ?? 'NO'}</td>
+                                    <td className={styles.td}>{element.Top_Brands__c ? element.Top_Brands__c : 'NO'}</td>
+                                    <td className={styles.td}>{element.Tier__c ? element.Tier__c : 'NO'}</td>
+                                    <td className={styles.td}>{element.Up_to_date_on_New_Launches__c ? 'Yes' : 'NO'}</td>
+                                    <td className={styles.td}>{element.Sales_Promotions__c ? element.Sales_Promotions__c : 'NO'}</td>
+                                    <td className={styles.td}>{element.Store_hosted_Events_date__c ? DateConvert(element.Store_hosted_Events_date__c) : 'NO'}</td>
                                     <td className={styles.td} dangerouslySetInnerHTML={{ __html: element.Sales_Floor_Image__c ? 'Yes' : 'NO' }} />
                                     <td className={styles.td} dangerouslySetInnerHTML={{ __html: element.Merchandising_Image__c ? 'Yes' : 'NO' }} />
                                     <td className={styles.td}>{element.Assortment_Product ? 'Yes' : 'NO'}</td>

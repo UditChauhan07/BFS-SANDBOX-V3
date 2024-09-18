@@ -1,6 +1,6 @@
 import { MdOutlineDownload } from "react-icons/md"
 import AppLayout from "../../components/AppLayout"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import ModalPage from "../../components/Modal UI";
 import SelectBrandModel from "../../components/My Retailers/SelectBrandModel/SelectBrandModel";
 import { useManufacturer } from "../../api/useManufacturer";
@@ -11,6 +11,8 @@ import AuditReportTable from "../../components/AuditReportTable";
 import { getPermissions } from "../../lib/permission";
 import { useNavigate } from "react-router-dom";
 import PermissionDenied from "../../components/PermissionDeniedPopUp/PermissionDenied";
+import { FilterItem } from "../../components/FilterItem";
+import FilterSearch from "../../components/FilterSearch";
 // Styling
 const styles = {
     optionContainer: {
@@ -72,12 +74,14 @@ const AuditReport = () => {
     const [brandPages, setBrandPages] = useState({ isLoaded: false, value: 0 });
     const [auditReport, setAuditReport] = useState({ isLoaded: false, data: [] })
     const [token, setToken] = useState();
-    const [totalAccount,setTotalAccount]=useState();
+    const [totalAccount, setTotalAccount] = useState();
     const [currentFileName, setCurrentFileName] = useState('');
     const [selectedSalesRepId, setSelectedSalesRepId] = useState();
     const [userData, setUserData] = useState({});
     const [hasPermission, setHasPermission] = useState(null);
     const navigate = useNavigate()
+    const [manufacturerFilter, setManufacturerFilter] = useState();
+    const [searchBy, setSearchBy] = useState("");
 
     useEffect(() => {
         GetAuthData().then((user) => {
@@ -167,40 +171,40 @@ const AuditReport = () => {
             }
         };
 
-  // Fetch user data and permissions
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const user = await GetAuthData();
-        setUserData(user);
+        //   // Fetch user data and permissions
+        //   useEffect(() => {
+        //     const fetchData = async () => {
+        //       try {
+        //         const user = await GetAuthData();
+        //         setUserData(user);
 
-        if (!selectedSalesRepId) {
-          setSelectedSalesRepId(user.Sales_Rep__c);
-        }
+        //         if (!selectedSalesRepId) {
+        //           setSelectedSalesRepId(user.Sales_Rep__c);
+        //         }
 
-        const userPermissions = await getPermissions();
-        setHasPermission(userPermissions?.modules?.reports?.auditReport);
+        //         const userPermissions = await getPermissions();
+        //         setHasPermission(userPermissions?.modules?.reports?.auditReport);
 
-        // If no permission, redirect to dashboard
-        if (userPermissions?.modules?.reports?.auditReport === false) {
-          navigate("/dashboard");
-        }
-        
-      } catch (error) {
-        console.log({ error });
-      }
-    };
-    
-    fetchData();
-  }, [navigate, selectedSalesRepId]);
+        //         // If no permission, redirect to dashboard
+        //         if (userPermissions?.modules?.reports?.auditReport === false) {
+        //           navigate("/dashboard");
+        //         }
 
-  // Check permission and handle redirection
-  useEffect(() => {
-    if (hasPermission === false) {
-      navigate("/dashboard");  // Redirect if no permission
-      PermissionDenied()
-    }
-  }, [hasPermission, navigate]);
+        //       } catch (error) {
+        //         console.log({ error });
+        //       }
+        //     };
+
+        //     fetchData();
+        //   }, [navigate, selectedSalesRepId]);
+
+        //   // Check permission and handle redirection
+        //   useEffect(() => {
+        //     if (hasPermission === false) {
+        //       navigate("/dashboard");  // Redirect if no permission
+        //       PermissionDenied()
+        //     }
+        //   }, [hasPermission, navigate]);
 
         return (
             <div style={styles.optionContainer}>
@@ -213,7 +217,7 @@ const AuditReport = () => {
 
                         return (
                             <button
-                                key={index}
+                                key={"NTS"+index}
                                 style={styles.chunkButton}
                                 onClick={() => onChangeHandler(partNumber)}
                                 disabled={isDownloading || isBusy}
@@ -279,12 +283,60 @@ const AuditReport = () => {
         )
     }
 
-    return (<AppLayout
-        filterNodes={<button className="border px-2 py-1 leading-tight d-flex" onClick={() => setIsShowBrandModal(true)}>
+    const filteredData = useMemo(() => {
+        // Return all data if no filter values
+        if (!searchBy && !manufacturerFilter) {
+            return auditReport.data;
+        }
+    
+        return auditReport.data?.filter((report) => {
+            // Search by Name or Owner.Name if searchBy is provided
+            const matchesSearch = searchBy
+                ? report.Name?.toLowerCase().includes(searchBy.toLowerCase()) ||
+                  report.Owner?.Name?.toLowerCase().includes(searchBy.toLowerCase())
+                : true; // Return true if searchBy is not provided
+    
+            // Search by manufacturerFilter only in a specific sub-child (e.g., `brand.manufacturerId`)
+            const matchesManufacturer = manufacturerFilter
+                ? report.Brands?.some((brand) => brand.ManufacturerId__c === manufacturerFilter)
+                : true; // Return true if manufacturerFilter is not provided
+    
+            // Return true if both filters match
+            return matchesSearch && matchesManufacturer;
+        });
+    }, [auditReport, manufacturerFilter, searchBy]);
+    
 
-            <MdOutlineDownload size={16} className="m-auto" />
-            <small style={{ fontSize: '9px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Brand <br />Report</small>
-        </button>}>
+    return (<AppLayout
+        filterNodes={
+            <div className="d-flex justify-content-between m-auto" style={{ width: '99%' }}>
+                <button className="border px-2 py-1 leading-tight d-flex" onClick={() => setIsShowBrandModal(true)}>
+
+                    <MdOutlineDownload size={16} className="m-auto" />
+                    <small style={{ fontSize: '9px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Brand <br />Report</small>
+                </button>
+                <div>
+                    <div className="d-flex gap-4">
+                        <FilterItem
+                            minWidth="220px"
+                            label="All Brands"
+                            name="AllManufacturers1"
+                            value={manufacturerFilter}
+                            options={manufacturers?.data?.map((manufacturer) => ({
+                                label: manufacturer.Name,
+                                value: manufacturer.Id,
+                            })) || []}
+                            onChange={(value) => setManufacturerFilter(value)}
+                        />
+                        <FilterSearch onChange={(e) => setSearchBy(e.target.value)} value={searchBy} placeholder={"Search by account"} minWidth={"167px"} />
+                        <button className="border px-2 py-1 leading-tight d-grid" onClick={()=>{setSearchBy();setManufacturerFilter();}}>
+              <CloseButton crossFill={'#fff'} height={20} width={20} />
+              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
+            </button>
+                    </div>
+                </div>
+            </div>
+        }>
         <ModalPage content={<AuditForm brandStep={brandStep} />} onClose={onCloseModal} open={isShowBrandModal} />
         {isLoading ? <Loading height={'40vh'} /> : <>
             {/* <div>
@@ -294,9 +346,9 @@ const AuditReport = () => {
             </div> */}
             <div className="d-grid place-content-center min-h-[40vh]">
                 {isPdfGenerated ? <><img src="https://i.giphy.com/7jtU9sxHNLZuv8HZCa.webp" width="480" height="480" /><p className="text-center mt-2">{`Creating PDF Audit Report for ${brandSelect?.Name}`}</p></> :
-                        auditReport.isLoaded ?
-                            <div style={{width:'90vw',margin:'2rem auto'}}><AuditReportTable  auditReport={auditReport.data||[]}/></div>
-                            : <div className="col-12"><Loading /></div>
+                    auditReport.isLoaded ?
+                        <div style={{ width: '90vw', margin: '2rem auto' }}><AuditReportTable auditReport={filteredData || []} /></div>
+                        : <div className="col-12"><Loading /></div>
                 }
 
             </div></>}
