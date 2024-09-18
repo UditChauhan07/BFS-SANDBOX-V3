@@ -172,12 +172,12 @@ const TopNav = () => {
   style={{ zIndex: 1021 }}
 >
   Admin
-  <ul className="dropdown-menu">
+  <ul className="dropdown-menu ">
     {/* email blast  */}
     {memoizedPermissions?.modules?.emailBlast?.view ? (
       <li
         onClick={() => navigate("/newsletter")}
-        className={`dropdown-item rounded ${styles.nameText} p-1 d-flex align-items-center focus:!bg-black active:!bg-black focus:!text-white active:!text-white hover:bg-[#eeeeef] hover:rounded-lg`}
+        className={`dropdown-item rounded ${styles.nameText} p-1  d-flex align-items-center focus:!bg-black active:!bg-black focus:!text-white active:!text-white hover:bg-[#eeeeef] hover:rounded-lg`}
         style={{ lineHeight: "15px" }}
       >
         <BiMailSend />
@@ -191,7 +191,7 @@ const TopNav = () => {
     {memoizedPermissions?.modules?.reports?.accountTier?.view ? (
       <li
         onClick={() => navigate("/TierStanding")}
-        className={`dropdown-item rounded ${styles.nameText} p-1 d-flex align-items-center focus:!bg-black active:!bg-black focus:!text-white active:!text-white hover:bg-[#eeeeef] hover:rounded-lg`}
+        className={`dropdown-item rounded ${styles.nameText} p-1  d-flex align-items-center focus:!bg-black active:!bg-black focus:!text-white active:!text-white hover:bg-[#eeeeef] hover:rounded-lg`}
         style={{ lineHeight: "15px" }}
       >
         <BiStar />
