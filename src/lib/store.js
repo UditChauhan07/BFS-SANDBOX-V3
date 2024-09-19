@@ -3,7 +3,7 @@
 // export const originAPi = "http://localhost:2619"
 
 export const originAPi = "https://bfs.uditchauhan.com";
-// 
+
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
 const orderKey = "orders";
