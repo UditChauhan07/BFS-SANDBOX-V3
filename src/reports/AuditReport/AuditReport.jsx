@@ -72,7 +72,7 @@ const AuditReport = () => {
     const [brandSelect, setbrandSelected] = useState();
     const [brandStep, setBrandStep] = useState(0);
     const [brandPages, setBrandPages] = useState({ isLoaded: false, value: 0 });
-    const [totalAccount,setTotalAccount]=useState();
+    const [totalAccount, setTotalAccount] = useState();
     const [currentFileName, setCurrentFileName] = useState('');
     const [selectedSalesRepId, setSelectedSalesRepId] = useState();
     const [userData, setUserData] = useState({});
@@ -173,28 +173,28 @@ const AuditReport = () => {
         };
         useEffect(() => {
             async function fetchPermissions() {
-              try {
-                const user = await GetAuthData(); // Fetch user data
-                const userPermissions = await getPermissions(); // Fetch permissions
-                setPermissions(userPermissions); // Set permissions in state
-                if(userPermissions?.modules?.reports?.auditReport === false){
-                    navigate('/dashboard')
+                try {
+                    const user = await GetAuthData(); // Fetch user data
+                    const userPermissions = await getPermissions(); // Fetch permissions
+                    setPermissions(userPermissions); // Set permissions in state
+                    if (userPermissions?.modules?.reports?.auditReport === false) {
+                        navigate('/dashboard')
+                    }
+                } catch (err) {
+                    console.error("Error fetching permissions", err);
                 }
-              } catch (err) {
-                console.error("Error fetching permissions", err);
-              }
             }
-        
+
             fetchPermissions(); // Fetch permissions on mount
-          }, []);
-        
-          // Memoize permissions to avoid unnecessary re-calculations
-          const memoizedPermissions = useMemo(() => permissions, [permissions]);
-          useEffect(() => {
+        }, []);
+
+        // Memoize permissions to avoid unnecessary re-calculations
+        const memoizedPermissions = useMemo(() => permissions, [permissions]);
+        useEffect(() => {
             if (hasPermission === false) {
-              navigate("/dashboard");  // Redirect if no permission
+                navigate("/dashboard");  // Redirect if no permission
             }
-          }, [hasPermission, navigate]);
+        }, [hasPermission, navigate]);
 
         return (
             <div style={styles.optionContainer}>
@@ -207,7 +207,7 @@ const AuditReport = () => {
 
                         return (
                             <button
-                                key={"NTS"+index}
+                                key={"NTS" + index}
                                 style={styles.chunkButton}
                                 onClick={() => onChangeHandler(partNumber)}
                                 disabled={isDownloading || isBusy}
@@ -279,23 +279,37 @@ const AuditReport = () => {
             return auditReport.data;
         }
     
-        return auditReport.data?.filter((report) => {
-            // Search by Name or Owner.Name if searchBy is provided
-            const matchesSearch = searchBy
-                ? report.Name?.toLowerCase().includes(searchBy.toLowerCase()) ||
-                  report.Owner?.Name?.toLowerCase().includes(searchBy.toLowerCase())
-                : true; // Return true if searchBy is not provided
+        return auditReport.data?.map((report) => {
+            let matchesSearch = true;
+            let filteredBrands = [];
     
-            // Search by manufacturerFilter only in a specific sub-child (e.g., `brand.manufacturerId`)
-            const matchesManufacturer = manufacturerFilter
-                ? report.Brands?.some((brand) => brand.ManufacturerId__c === manufacturerFilter)
-                : true; // Return true if manufacturerFilter is not provided
+            // Check if searchBy matches Name or Owner.Name
+            if (searchBy) {
+                matchesSearch =
+                    report?.Name?.toLowerCase().includes(searchBy.toLowerCase()) ||
+                    report?.Owner?.Name?.toLowerCase().includes(searchBy.toLowerCase());
+            }
     
-            // Return true if both filters match
-            return matchesSearch && matchesManufacturer;
-        });
+            // Filter Brands based on manufacturerFilter
+            if (manufacturerFilter) {
+                filteredBrands = report?.Brands?.filter(
+                    (brand) => brand.ManufacturerId__c === manufacturerFilter
+                );
+            }
+    
+            // If there are matching brands and search term matches, return only those brands
+            if (matchesSearch && filteredBrands.length > 0) {
+                return {
+                    ...report,
+                    Brands: filteredBrands,  // Return only the filtered brands
+                };
+            }
+    
+            return null; // Return null if no match
+        }).filter(report => report); // Remove any null reports
     }, [auditReport, manufacturerFilter, searchBy]);
-    
+        
+
 
     return (<AppLayout
         filterNodes={
@@ -319,10 +333,10 @@ const AuditReport = () => {
                             onChange={(value) => setManufacturerFilter(value)}
                         />
                         <FilterSearch onChange={(e) => setSearchBy(e.target.value)} value={searchBy} placeholder={"Search by account"} minWidth={"167px"} />
-                        <button className="border px-2 py-1 leading-tight d-grid" onClick={()=>{setSearchBy();setManufacturerFilter();}}>
-              <CloseButton crossFill={'#fff'} height={20} width={20} />
-              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
-            </button>
+                        <button className="border px-2 py-1 leading-tight d-grid" onClick={() => { setSearchBy(); setManufacturerFilter(); }}>
+                            <CloseButton crossFill={'#fff'} height={20} width={20} />
+                            <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>clear</small>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -338,7 +352,7 @@ const AuditReport = () => {
                 {isPdfGenerated ? <><img src="https://i.giphy.com/7jtU9sxHNLZuv8HZCa.webp" width="480" height="480" /><p className="text-center mt-2">{`Creating PDF Audit Report for ${brandSelect?.Name}`}</p></> :
                     auditReport.isLoaded ?
                         <div style={{ width: '90vw', margin: '2rem auto' }}><AuditReportTable auditReport={filteredData || []} /></div>
-                        : <div className="col-12"><Loading /></div>
+                        : <div className="col-12"><Loading height={'50vh'}/></div>
                 }
 
             </div></>}
