@@ -33,7 +33,8 @@ function MyBagFinal() {
   const [limitInput, setLimitInput] = useState("");
   const [confirm, setConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Show loader while data is loading 
-
+  const [showErrorPopup, setShowErrorPopup] = useState(false); // For error popup
+  const [errorMessage, setErrorMessage] = useState(""); // To display custom error messages
   const handleNameChange = (event) => {
     const limit = 10;
     setLimitInput(event.target.value.slice(0, limit));
@@ -57,6 +58,24 @@ function MyBagFinal() {
 
   FetchPoNumber();
 }, []);
+
+const orderGenerationHandler = () => {
+  // Check if PO number contains spaces
+  if (PONumber.includes(" ")) {
+    setConfirm(true);
+  }else {
+    setPONumberFilled(false);
+  }
+    // Proceed with order placement if validations pass
+  if (Object.keys(orders).length) {
+    if (PONumber.length) {
+      setConfirm(true);
+    } else {
+      setPONumberFilled(false);
+    }
+  }
+};
+
   // .............
   useEffect(() => {
     if (bagValue?.Account?.id && bagValue?.Manufacturer?.id && bagValue.orderList?.length > 0) {
@@ -469,60 +488,50 @@ function MyBagFinal() {
                       <textarea onKeyUp={(e) => setOrderDesc(e.target.value)} placeholder="NOTE" className="placeholder:font-[Arial-500] text-[14px] tracking-[1.12px] " />
                     </div>
                     {!PONumberFilled ? (
-                      <ModalPage
-                        open
-                        content={
-                          <>
-                            <div style={{ maxWidth: "309px" }}>
-                              <h1 className={`fs-5 ${StylesModal.ModalHeader}`}>Warning</h1>
-                              <p className={` ${StylesModal.ModalContent}`}>Enter PO Number</p>
-                              <div className="d-flex justify-content-center">
-                                <button
-                                  className={`${StylesModal.modalButton}`}
-                                  onClick={() => {
-                                    setPONumberFilled(true);
-                                  }}
-                                >
-                                  OK
-                                </button>
-                              </div>
-                            </div>
-                          </>
-                        }
-                        onClose={() => {
-                          setPONumberFilled(true);
-                        }}
-                      />
-                    ) : null}
-                    <div className={Styles.ShipBut}>
-                      <button
-                        onClick={() => {
-                          if (Object.keys(orders)?.length) {
-                            if (PONumber) {
-                              setConfirm(true)
-                            } else {
-                              setPONumberFilled(false);
-                            }
-                          }
-                        }}
-                        disabled={!buttonActive}
-                      >
-                        ${Number(total).toFixed(2)} PLACE ORDER
-                      </button>
-                      <p className={`${Styles.ClearBag}`} style={{ textAlign: 'center', cursor: 'pointer' }}
-                        onClick={() => {
-                          if (Object.keys(orders)?.length) {
-                            if (clearConfim?.length) {
-                              orderPlaceHandler()
-                            } else {
-                              setClearConfim(true)
-                            }
-                          }
-                        }}
-                        disabled={!buttonActive}
-                      >Clear Bag</p>
-                      {/* {Number(total) ? null : window.location.reload()} */}
-                    </div>
+            <ModalPage
+              open
+              content={
+                <div style={{ maxWidth: "309px" }}>
+                  <h1 className={`fs-5 ${StylesModal.ModalHeader}`}>Warning</h1>
+                  <p className={` ${StylesModal.ModalContent}`}>Enter PO Number</p>
+                  <div className="d-flex justify-content-center">
+                    <button
+                      className={StylesModal.modalButton}
+                      onClick={() => setPONumberFilled(true)}
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              }
+              onClose={() => setPONumberFilled(true)}
+            />
+                        ) : (
+            <div className={Styles.ShipBut}>
+              <button
+                onClick={orderGenerationHandler}
+                disabled={!buttonActive}
+              >
+                ${Number(total).toFixed(2)} PLACE ORDER
+              </button>
+              <p
+                className={Styles.ClearBag}
+                style={{ textAlign: "center", cursor: "pointer" }}
+                onClick={() => {
+                  if (Object.keys(orders).length) {
+                    if (clearConfim.length) {
+                      orderPlaceHandler();
+                    } else {
+                      setClearConfim(true);
+                    }
+                  }
+                }}
+                disabled={!buttonActive}
+              >
+                Clear Bag
+              </p>
+            </div>
+                          )}
                   </div>
                 </div>
               </div>
