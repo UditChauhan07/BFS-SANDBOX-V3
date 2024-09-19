@@ -60,18 +60,19 @@ function MyBagFinal() {
 }, []);
 
 const orderGenerationHandler = () => {
-  // Check if PO number contains spaces
-  if (PONumber.includes(" ")) {
-    setConfirm(true);
-  }else {
-    setPONumberFilled(false);
+  // Check if PO number contains spaces or if PO number is empty
+  if (PONumber.includes(" ") || !PONumber.length) {
+    setPONumberFilled(false); // This will trigger if either condition is met
+  } else {
+    setPONumberFilled(true); // Optional: Set true if conditions are not met
   }
-    // Proceed with order placement if validations pass
+
+  // Proceed with order placement if validations pass
   if (Object.keys(orders).length) {
     if (PONumber.length) {
-      setConfirm(true);
+      setConfirm(true); // Proceed with order placement if PO number is valid
     } else {
-      setPONumberFilled(false);
+      setPONumberFilled(false); // Triggered when no PO number is entered
     }
   }
 };
