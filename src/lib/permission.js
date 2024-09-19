@@ -113,7 +113,7 @@ export const permissionsArray = [
        
         
         order: {
-          view: false,
+          view: true,
           create: true,
         },
         emailBlast: {
