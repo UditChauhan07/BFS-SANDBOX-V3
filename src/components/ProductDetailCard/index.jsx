@@ -142,7 +142,7 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
               </div>
           ) : (
             accounts ? <>
-              {accounts == "load" ? <Loading /> : <>
+              {accounts !== "load" ? <Loading /> : <>
                 {isAddtoCart && product?.discount ? (
 
                   <button
