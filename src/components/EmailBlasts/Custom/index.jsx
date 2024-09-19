@@ -145,12 +145,12 @@ const MultiStepForm = () => {
             });
         } else {
             if (name == "forMonth") {
-                console.log({name});
-                
                 setManufacturers({ isLoaded: false, data: [] })
                 setshowBrandList([])
+                setFormData({ ...formData, [name]: value, brand: [] });
+            }else{
+                setFormData({ ...formData, [name]: value });
             }
-            setFormData({ ...formData, [name]: value, brand: [] });
         }
     };
 
