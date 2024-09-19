@@ -5,10 +5,11 @@ import { getPermissions } from "../../../lib/permission";
 import PermissionDenied from "../../PermissionDeniedPopUp/PermissionDenied";
 import styles from "../topNav/index.module.css";
 import { SearchIcon } from "../../../lib/svg";
+import { useBag } from "../../../context/BagContext";
 const LogoHeader = () => {
   const navigate = useNavigate();
   const [permissions, setPermissions] = useState(null);
-
+  const { orderQuantity } = useBag();
   useEffect(() => {
     async function fetchPermissions() {
       try {
@@ -121,21 +122,21 @@ const LogoHeader = () => {
 
           {/* My Bag */}
         
+        {memoizedPermissions?.modules?.order?.view ? <>
           <p className={`m-0  ${styles.language}`}>
-            {memoizedPermissions?.modules?.order?.view ? (
-              <Link to="/my-bag" className="linkStyle">
-                My Bag
-              </Link>
-            ) : (
-              <span
-                onClick={handleRestrictedAccess}
-                className="linkStyle"
-                style={{ cursor: "not-allowed", color: "grey" }}
-              >
-                My Bag
-              </span>
-            )}
-          </p>
+
+{orderQuantity ? <Link to="/my-bag" className={`linkStyle`}> My Bag ({orderQuantity})
+</Link> : "My Bag(0)"}
+</p>
+         </> : 
+         <p className={`m-0  ${styles.language}`}  >
+
+         {orderQuantity ? <span  className={`linkStyle`} style={{ cursor: "not-allowed", color: "grey" }} onClick={handleRestrictedAccess} > My Bag ({orderQuantity})  
+         </span> : "My Bag(0)"}
+         </p>
+         }
+          
+           
         </div>
       </div>
     </div>

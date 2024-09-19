@@ -197,8 +197,8 @@ export const permissionsArray = [
     },
   },
   {
-    userType: "custom 1",
-    allows: ["0053b00000C75e8AAB", "0053b00000DgGqOAAV" ],
+    userType: "Report Manager",
+    allows: ["0053b00000C75e8AAB", "0053b00000DgGqOAAV"  , ""],
     permissions: {
       modules: {
         godLevel: true,

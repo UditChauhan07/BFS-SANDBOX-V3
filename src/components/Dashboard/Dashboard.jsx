@@ -225,15 +225,30 @@ function Dashboard({ dashboardData }) {
     },
   });
   const [selectedSalesRepId, setSelectedSalesRepId] = useState(null);
-  // const [brandData, setBrandData] = useState([]);
-  const handleBrandClick = (ele) => {
+  // navigation of manufacturer to product page 
+  const handleBrandClick = (brand) => {
+    // Open the modal when user clicks on brand, no localStorage update here
     setModalOpen(true);
-    setBrandData(ele.ManufacturerList);
-    localStorage.setItem("manufacturer", ele.Name);
-    localStorage.setItem("ManufacturerId__c", ele.Id);
-    localStorage.setItem("Account", ele.Name);
-    localStorage.setItem("AccountId__c", ele.AccountId);
-    localStorage.setItem(salesRepIdKey, selectedSalesRepId);
+    setBrandData(brand.ManufacturerList);
+  
+    // Storing account-related info here if needed
+    localStorage.setItem("Account", brand.Name); // Storing account info (optional)
+    localStorage.setItem("AccountId__c", brand.AccountId); // Example, storing AccountId
+    // Do NOT set manufacturer here, we will set it on modal selection
+  };
+  
+  const handleManufacturerSelect = (selectedBrand) => {
+    // Update localStorage only when manufacturer is selected inside the modal
+    localStorage.setItem("manufacturer", selectedBrand.ManufacturerName__c || selectedBrand.Name);
+    localStorage.setItem("ManufacturerId__c", selectedBrand.ManufacturerId__c  || selectedBrand.Id);
+    localStorage.setItem(salesRepIdKey, selectedSalesRepId); 
+    localStorage.setItem("shippingMethod", JSON.stringify({
+      number: selectedBrand.Shipping_Account_Number__c,
+      method: selectedBrand.Shipping_Method__c,
+    }));
+  
+    
+    // navigate(`/product`);
   };
   const [manufacturerSalesYear, setManufacturerSalesYaer] = useState([]);
   const [salesRepAdmin,setSalesRepAdmin]=useState();
@@ -1040,7 +1055,9 @@ function Dashboard({ dashboardData }) {
       <ModalPage
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        content={<SelectBrandModel brands={brandData} onClose={() => setModalOpen(false)} />}
+        content={<SelectBrandModel brands={brandData} onClose={() => setModalOpen(false)}
+        onChange={handleManufacturerSelect}
+         />}
       />
     </div>
 
