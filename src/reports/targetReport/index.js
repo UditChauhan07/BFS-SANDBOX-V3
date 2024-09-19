@@ -500,7 +500,7 @@ const TargetReport = () => {
               />
             )}
 
-            <FilterSearch onChange={(e) => setSearchBy(e.target.value)} value={searchBy} placeholder={"Search by account"} minWidth={"167px"} />
+           
             <FilterItem
               minWidth="220px"
               label="All Manufacturers"

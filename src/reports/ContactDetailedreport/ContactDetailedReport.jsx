@@ -10,6 +10,7 @@ import * as XLSX from 'xlsx';
 import { CloseButton } from "../../lib/svg";
 import { MdOutlineDownload } from "react-icons/md";
 import { getPermissions } from "../../lib/permission";
+import FilterSearch from '../../components/FilterSearch';
 function ContactDetailedReport() {
     const [accountManufacturerRecords, setAccountManufacturerRecords] = useState([]);
     const [filteredRecords, setFilteredRecords] = useState([]);
@@ -132,6 +133,7 @@ function ContactDetailedReport() {
             accountFilter: '',
             saleRepFilter: '',
             manufacturerFilter: '',
+            accountStatusFilter: 'All',
         });
         setLoading(true); // Show loader
     
@@ -238,7 +240,7 @@ function ContactDetailedReport() {
                         onFocus={() => setFilters(prev => ({ ...prev, accountFilter: '', manufacturerFilter: '' }))}
                     />
                 </> : null }
-                    <FilterItem
+                    {/* <FilterItem
                         minWidth="200px"
                         label="Account Name"
                         value={filters.accountFilter}
@@ -246,7 +248,7 @@ function ContactDetailedReport() {
                         options={accounts}
                         onChange={(value) => handleFilterChange('accountFilter', value)}
                         onFocus={() => setFilters(prev => ({ ...prev, saleRepFilter: '', manufacturerFilter: '' }))} 
-                    />
+                    /> */}
                     
                    
                     <FilterItem
@@ -271,6 +273,14 @@ function ContactDetailedReport() {
     ]}
     onChange={(value) => handleFilterChange('accountStatusFilter', value)}
 />
+
+<FilterSearch
+  onChange={(e) => handleFilterChange('accountFilter', e.target.value)}
+  value={filters.accountFilter}
+  placeholder={"Search by account"}
+  minWidth={"167px"}
+/>
+
 
 
                     <div>
@@ -310,10 +320,11 @@ function ContactDetailedReport() {
                         <thead >
     <tr>
         <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Account Name</th>
+        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Manufacturer</th>
         <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>First Name</th>
         <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Last Name</th>
         <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Sales Rep</th>
-        <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Manufacturer</th>
+        
         <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Email</th>
         <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Phone</th>
         <th className={`${styles.th} ${styles.stickyFirstColumnHeading} `} style={{ minWidth: "200px" }}>Account Number</th>
@@ -337,57 +348,49 @@ function ContactDetailedReport() {
     </tr>
 </thead>
 
-                            <tbody>
-                                {filteredRecords.map((record, index) => (
-                                    <tr key={index}>
-                                        <td>{record.AccountId__r?.Name}</td>
-                                        <td>{record.contact?.FirstName || 'N/A'}</td>
-                                        <td>{record.contact?.LastName || 'N/A'}</td>
-                                        <td>{record.Sales_Rep__r?.Name || 'N/A'}  </td>
-                                        <td>{record.ManufacturerName__c}</td>
-                                        <td>{record.contact?.Email || 'N/A'}</td>
-                                        <td>{record.contact?.Phone || 'N/A'}</td>
-                                        <td>{record.Account_Number__c}</td>
-                                        <td>{record.Margin__c}</td>
-                                        <td>{record.Payment_Type__c}</td>
-                                        <td>{record.AccountId__r?.Store_Street__c}</td>
-                                        <td>{record.AccountId__r?.Store_City__c}</td>
-                                        <td>{record.AccountId__r?.Store_State__c}</td>
-                                        <td>{record.AccountId__r?.Store_Zip__c}</td>
-                                        <td>{record.AccountId__r?.Store_Country__c}</td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.ShippingStreet || 'N/A'}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.ShippingCity || 'N/A'}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.ShippingState || 'N/A'}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.ShippingPostalCode || 'N/A'}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.ShippingCountry || 'N/A'}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.BillingStreet || 'N/A'}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.BillingCity || 'N/A'}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.BillingState || 'N/A'}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.BillingPostalCode || 'N/A'}
-                                        </td>
-                                        <td className={`${Styles.td}`}>
-                                            {record.AccountId__r?.BillingCountry || 'N/A'}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
+<tbody>
+  {filteredRecords.length > 0 ? (
+    filteredRecords.map((record, index) => (
+      <tr key={index}>
+        <td className={`${Styles.td} ${Styles.stickyFirstColumn}`}>{record.AccountId__r?.Name}</td>
+        <td className={`${Styles.td} ${Styles.stickyFirstColumn}`}>{record.ManufacturerName__c}</td>
+        <td>{record.contact?.FirstName || 'N/A'}</td>
+        <td>{record.contact?.LastName || 'N/A'}</td>
+        <td>{record.Sales_Rep__r?.Name || 'N/A'}</td>
+        <td>{record.contact?.Email || 'N/A'}</td>
+        <td>{record.contact?.Phone || 'N/A'}</td>
+        <td>{record.Account_Number__c || 'N/A'}</td>
+        <td>{record.Margin__c || 'N/A'}</td>
+        <td>{record.Payment_Type__c || 'N/A'}</td>
+        <td>{record.AccountId__r?.Store_Street__c || 'N/A'}</td>
+        <td>{record.AccountId__r?.Store_City__c || 'N/A'}</td>
+        <td>{record.AccountId__r?.Store_State__c || 'N/A'}</td>
+        <td>{record.AccountId__r?.Store_Zip__c || 'N/A'}</td>
+        <td>{record.AccountId__r?.Store_Country__c}</td>
+        <td className={`${Styles.td}`}>{record.AccountId__r?.ShippingStreet || 'N/A'}</td>
+        <td className={`${Styles.td}`}>{record.AccountId__r?.ShippingCity || 'N/A'}</td>
+        <td className={`${Styles.td}`}>{record.AccountId__r?.ShippingState || 'N/A'}</td>
+        <td className={`${Styles.td}`}>{record.AccountId__r?.ShippingPostalCode || 'N/A'}</td>
+        <td className={`${Styles.td}`}>{record.AccountId__r?.ShippingCountry || 'N/A'}</td>
+        <td className={`${Styles.td}`}>{record.AccountId__r?.BillingStreet || 'N/A'}</td>
+        <td className={`${Styles.td}`}>{record.AccountId__r?.BillingCity || 'N/A'}</td>
+        <td className={`${Styles.td}`}>{record.AccountId__r?.BillingState || 'N/A'}</td>
+        <td className={`${Styles.td}`}>{record.AccountId__r?.BillingPostalCode || 'N/A'}</td>
+        <td className={`${Styles.td}`}>{record.AccountId__r?.BillingCountry || 'N/A'}</td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="24" >
+        {/* Adjust the colSpan value based on the number of columns in your table */}
+        <div className={`${styles.NodataText} w-full`}>
+          <p>No data found</p>
+        </div>
+      </td>
+    </tr>
+  )}
+</tbody>
+
                         </table>
                     </div>
                 </div>
