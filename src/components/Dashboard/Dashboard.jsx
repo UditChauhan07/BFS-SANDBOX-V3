@@ -227,18 +227,16 @@ function Dashboard({ dashboardData }) {
   const [selectedSalesRepId, setSelectedSalesRepId] = useState(null);
   // navigation of manufacturer to product page 
   const handleBrandClick = (brand) => {
-    // Open the modal when user clicks on brand, no localStorage update here
+    
     setModalOpen(true);
     setBrandData(brand.ManufacturerList);
-  
-    // Storing account-related info here if needed
-    localStorage.setItem("Account", brand.Name); // Storing account info (optional)
-    localStorage.setItem("AccountId__c", brand.AccountId); // Example, storing AccountId
-    // Do NOT set manufacturer here, we will set it on modal selection
+    localStorage.setItem("Account", brand.Name); 
+    localStorage.setItem("AccountId__c", brand.AccountId); 
+    
   };
   
   const handleManufacturerSelect = (selectedBrand) => {
-    // Update localStorage only when manufacturer is selected inside the modal
+   
     localStorage.setItem("manufacturer", selectedBrand.ManufacturerName__c || selectedBrand.Name);
     localStorage.setItem("ManufacturerId__c", selectedBrand.ManufacturerId__c  || selectedBrand.Id);
     localStorage.setItem(salesRepIdKey, selectedSalesRepId); 
@@ -254,19 +252,9 @@ function Dashboard({ dashboardData }) {
   const [salesRepAdmin,setSalesRepAdmin]=useState();
 
   // API INTEGRATION
-
-
-
-
-
-
-
   // search params work 
   const [searchParams] = useSearchParams();
- 
   const saleRepId = searchParams.get('saleRep')
-  
-
   // 
 
   useEffect(() => {
