@@ -4,7 +4,7 @@ import { GetAuthData } from "./store";
 export const permissionsArray = [
   {
     userType: "superadmin",
-    allows: ["00530000005AdvsAAC", "0051O00000CvAVTQA3" , "" ],
+    allows: ["00530000005AdvsAAC", "0051O00000CvAVTQA3" , "0053b00000DgEVEAA3" ],
     permissions: {
       modules: {
         godLevel: true,
@@ -102,7 +102,7 @@ export const permissionsArray = [
     allows: [""],
     permissions: {
       modules: {
-        godLevel: false,
+        godLevel: true,
         store : {
           view : true 
         } ,
@@ -198,7 +198,7 @@ export const permissionsArray = [
   },
   {
     userType: "Report Manager",
-    allows: ["0053b00000C75e8AAB", "0053b00000DgGqOAAV"  , "0053b00000DgEVEAA3"],
+    allows: ["0053b00000C75e8AAB", "0053b00000DgGqOAAV"  ],
     permissions: {
       modules: {
         godLevel: true,
