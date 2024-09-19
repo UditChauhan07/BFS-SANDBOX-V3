@@ -8,84 +8,84 @@ import ModalPage from "../Modal UI";
 import StylesModal from "../Modal UI/Styles.module.css";
 import Loading from "../Loading";
 import LoaderV2 from "../loader/v2";
+
 function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
   const [products, setProducts] = useState(productList);
   const [modalShow, setModalShow] = useState(false);
   const [productDetailId, setProductDetailId] = useState();
-  const [productBrandId,setProductBrandId] = useState();
-
+  const [productBrandId, setProductBrandId] = useState();
   const [isEmpty, setIsEmpty] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [loadEffect, setEffect] = useState(0)
-  // ...............
+  const [loadEffect, setEffect] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterData, setFilterData] = useState([]);
+  const [pagination, setPagination] = useState([]);
+  const PageSize = 10;
 
-  let PageSize = 10;
-  const [pagination, setpagination] = useState([]);
   const allOrdersEmpty = pagination.every(item => item.content.length <= 0);
+
   useEffect(() => {
-    if (!filterData || filterData.length === 1) {
-      console.error("Product list is empty or undefined.");
-      return;
+    if (filterData && filterData.length > 0) {
+      const startIndex = (currentPage - 1) * PageSize;
+      const endIndex = currentPage * PageSize;
+      const newValues = filterData.flatMap((month) => month?.content).slice(startIndex, endIndex);
+      setPagination([{ content: newValues }]);
+    } else {
+      setPagination([{ content: [] }]);
     }
-    const startIndex = (currentPage - 1) * PageSize;
-    const endIndex = currentPage * PageSize;
-    const newValues = filterData?.flatMap((month) => month?.content).slice(startIndex, endIndex);
-    setpagination([{ content: newValues }]);
-  }, [filterData, PageSize, currentPage]);
-  // ............
+  }, [filterData, currentPage, PageSize]);
+
   useEffect(() => {
     let temp = true;
-    products.map((month) => {
-      month.content.map((item) => {
-        if (!brand || brand == item.brand) {
+    products.forEach((month) => {
+      month.content.forEach((item) => {
+        if (!brand || brand === item.brand) {
           temp = false;
         }
       });
-      setIsEmpty(temp);
     });
-  }, [brand]);
+    setIsEmpty(temp);
+  }, [brand, products]);
 
   useEffect(() => {
-    if (loadEffect) setLoaded(true)
+    if (loadEffect) setLoaded(true);
+    let newFilterData;
+
     if (!month) {
-      setFilterData(products);
+      newFilterData = products;
     } else {
-      const newValues = products?.map((months) => {
-        const filterData = months.content?.filter((item) => {
+      newFilterData = products.map((months) => {
+        const filteredContent = months.content.filter((item) => {
           if (month) {
             if (brand && brand !== "All") {
-              if (brand == item.ManufacturerName__c) {
-                return item.date.toLowerCase().includes(month.toLowerCase());
-              }
-            } else {
-              return item.date.toLowerCase().includes(month.toLowerCase());
+              return brand === item.ManufacturerName__c && item.date.toLowerCase().includes(month.toLowerCase());
             }
-            // return match.includes(month.toUpperCase() )
+            return item.date.toLowerCase().includes(month.toLowerCase());
           }
+          return true;
         });
-        // Create a new object with filtered content
-        return { ...months, content: filterData };
-      });
-
-      setFilterData(newValues);
+        return { ...months, content: filteredContent };
+      }).filter(months => months.content.length > 0); // Remove months with no content
     }
-    setEffect(loadEffect + 1)
+
+    setFilterData(newFilterData);
+    setEffect(loadEffect + 1);
+    setCurrentPage(1); // Reset to the first page when filters change
     setTimeout(() => {
-      setLoaded(false)
+      setLoaded(false);
     }, 500);
-  }, [month, brand]);
+  }, [month, brand, products]);
 
   const [imageLoading, setImageLoading] = useState({});
   const handleImageLoad = (imageId) => {
     setImageLoading((prevLoading) => ({ ...prevLoading, [imageId]: false }));
   };
-  const resetHandler = ()=>{
+
+  const resetHandler = () => {
     setProductDetailId();
-    setProductBrandId()
-  }
-  
+    setProductBrandId();
+  };
+
   return (
     <>
       {modalShow ? (
@@ -99,9 +99,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                 <div className="d-flex justify-content-center">
                   <button
                     className={`${StylesModal.modalButton}`}
-                    onClick={() => {
-                      setModalShow(false);
-                    }}
+                    onClick={() => setModalShow(false)}
                   >
                     OK
                   </button>
@@ -109,9 +107,7 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
               </div>
             </>
           }
-          onClose={() => {
-            setModalShow(false);
-          }}
+          onClose={() => setModalShow(false)}
         />
       ) : null}
       <section>
@@ -124,17 +120,17 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                 </p>
               </div>
             </div>
-          ) :
+          ) : (
             <div className={Styles.dGrid}>
-              {pagination?.map((month, index) => {
+              {pagination.map((month, index) => {
                 if (month.content.length) {
                   return month.content.map((product) => {
-                    if (!brand || brand == product.ManufacturerName__c) {
+                    if (!brand || brand === product.ManufacturerName__c) {
                       let price = 'NA';
                       if (product.usdRetail__c) {
                         if (product.usdRetail__c.includes("$")) {
-                          let priceSplit = product.usdRetail__c.split('$')
-                          if (priceSplit.length == 2) {
+                          let priceSplit = product.usdRetail__c.split('$');
+                          if (priceSplit.length === 2) {
                             priceSplit = priceSplit[1].trim();
                             price = "$" + parseFloat(priceSplit).toFixed(2);
                           } else {
@@ -145,29 +141,27 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                         }
                       }
                       return (
-
-                        <div className={`${Styles.cardElement} cardHover`}>
+                        <div className={`${Styles.cardElement} cardHover`} key={product.Id}>
                           <div className={`last:mb-0 mb-4 ${Styles.HoverArrow}`}>
-                            <div className={` border-[#D0CFCF] flex flex-col gap-4   ${Styles.ImgHover1}`}>
+                            <div className={` border-[#D0CFCF] flex flex-col gap-4 ${Styles.ImgHover1}`}>
                               {imageLoading[product.id] ? (
                                 <LoaderV2 width={100} height={100} />
                               ) : (
                                 <img key={product.Id} className="zoomInEffect" src={product.ProductImage ?? "\\assets\\images\\dummy.png"} alt={product.Name} height={212} width={212} onClick={() => {
                                   setProductDetailId(product.Id);
-                                  setProductBrandId(product.ManufacturerId__c)
+                                  setProductBrandId(product.ManufacturerId__c);
                                 }} onLoad={() => handleImageLoad(product.Id)} />
                               )}
                             </div>
                           </div>
-                          <Link to={'/Brand/'+product.ManufacturerId__c} style={{color:'#000'}}>
-                          <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
+                          <Link to={'/Brand/' + product.ManufacturerId__c} style={{ color: '#000' }}>
+                            <p className={Styles.brandHolder}>{product?.ManufacturerName__c}</p>
                           </Link>
-
                           <p
                             className={`${Styles.titleHolder} linkEffect`}
                             onClick={() => {
                               setProductDetailId(product.Id);
-                              setProductBrandId(product.ManufacturerId__c)
+                              setProductBrandId(product.ManufacturerId__c);
                             }}
                           >
                             {product?.Name?.substring(0, 15)}...
@@ -187,25 +181,25 @@ function NewArrivalsPage({ productList, brand, month, isLoaded, to = null }) {
                             </div>
                           )}
                         </div>
-
                       );
                     }
                   });
                 }
               })}
             </div>
-          }
+          )}
         </div>
         <ProductDetails productId={productDetailId} setProductDetailId={resetHandler} ManufacturerId={productBrandId} isAddtoCart={false} />
       </section>
-      {!loaded &&
+      {!loaded && (
         <Pagination
           className="pagination-bar"
           currentPage={currentPage || 0}
-          totalCount={filterData?.flatMap((month) => month?.content)?.length || 0}
-          pageSize={PageSize || 0}
+          totalCount={filterData.flatMap((month) => month?.content)?.length || 0}
+          pageSize={PageSize}
           onPageChange={(page) => setCurrentPage(page)}
-        />}
+        />
+      )}
     </>
   );
 }
