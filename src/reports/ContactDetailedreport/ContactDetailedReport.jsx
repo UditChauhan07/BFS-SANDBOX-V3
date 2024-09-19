@@ -366,7 +366,7 @@ function ContactDetailedReport() {
         <td>{record.AccountId__r?.Store_City__c || 'N/A'}</td>
         <td>{record.AccountId__r?.Store_State__c || 'N/A'}</td>
         <td>{record.AccountId__r?.Store_Zip__c || 'N/A'}</td>
-        <td>{record.AccountId__r?.Store_Country__c}</td>
+        <td>{record.AccountId__r?.Store_Country__c || 'N/A'}  </td>
         <td className={`${Styles.td}`}>{record.AccountId__r?.ShippingStreet || 'N/A'}</td>
         <td className={`${Styles.td}`}>{record.AccountId__r?.ShippingCity || 'N/A'}</td>
         <td className={`${Styles.td}`}>{record.AccountId__r?.ShippingState || 'N/A'}</td>

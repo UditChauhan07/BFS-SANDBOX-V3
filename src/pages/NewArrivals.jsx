@@ -138,7 +138,7 @@ useEffect(() => {
     <AppLayout
       filterNodes={
         <>
-        {memoizedPermissions?.modules?.godLevel ? <>
+        
           <FilterItem
             minWidth="220px"
             label="All Brands"
@@ -163,7 +163,7 @@ useEffect(() => {
           <CloseButton crossFill={'#fff'} height={20} width={20} />
           <small style={{ fontSize: '6px',letterSpacing: '0.5px',textTransform:'uppercase'}}>clear</small>
           </button>
-         </> : null}
+        
        
         </>
       }
