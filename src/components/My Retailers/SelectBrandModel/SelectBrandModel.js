@@ -10,15 +10,7 @@ const SelectBrandModel = ({ brands, onClose = null, onChange = null }) => {
   const handleBrandChange = (brand) => {
     setSelectedBrand(brand); // Set selected brand when a brand is chosen
     if (onChange) { onChange(brand) }
-  };
-
-  const handleSubmit = () => {
-    if (selectedBrand) {
-      navigate(`/product`); // Navigate to product page if a brand is selected
-    } else {
-      // Optionally, handle the case where no brand is selected
-      alert('Please select a brand before submitting.');
-    }
+    // navigate(`/product`); 
   };
 
   return (
@@ -41,24 +33,18 @@ const SelectBrandModel = ({ brands, onClose = null, onChange = null }) => {
                   <input
                     type="radio"
                     name="brand_names"
-                    onChange={() => handleBrandChange(brand)}
+                    onChange={() => handleBrandChange(brand)} // Change brand and navigate
                     id={brand.ManufacturerName__c || brand.Name}
                     checked={selectedBrand === brand} // Mark the selected brand as checked
                   />
-                  <label htmlFor={brand.ManufacturerName__c || brand.Name}>
+                  <label
+                    htmlFor={brand.ManufacturerName__c || brand.Name}
+                    onClick={() => handleBrandChange(brand)} // Handle click on label to navigate
+                  >
                     {brand.ManufacturerName__c || brand.Name}
                   </label>
                 </div>
               ))}
-            </div>
-
-            <div className={Styles.BrandButton}>
-              <button className={Styles.Button1} onClick={onClose}>
-                CANCEL
-              </button>
-              <button className={Styles.Button2} onClick={handleSubmit}>
-                SUBMIT
-              </button>
             </div>
           </div>
         </section>

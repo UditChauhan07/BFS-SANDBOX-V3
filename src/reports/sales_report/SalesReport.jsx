@@ -354,7 +354,25 @@ const memoizedPermissions = useMemo(() => permissions, [permissions]);
         <>
         
           <div className="d-flex justify-content-between m-auto" style={{ width: '99%' }}>
-         
+          <div className="d-flex justify-content-start gap-4 col-4">
+          <FilterItem
+              label="year"
+              name="Year"
+              value={yearFor}
+              options={yearList}
+              onChange={(value) => setYearFor(value)}
+            />
+            <FilterItem
+              label="date"
+              name="date"
+              value={dateFilter}
+              options={[{ label: "Created Date", value: "Created-Date" }, { label: "Closed Date", value: "Closed-Date" }]}
+              onChange={(value) => setDateFilter(value)}
+            />
+            <button onClick={() => sendApiCall()} className="border px-2 py-1 leading-tight d-grid"> <SearchIcon fill="#fff" width={20} height={20} />
+              <small style={{ fontSize: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>search</small>
+            </button>
+            </div>
        
          <div className="d-flex justify-content-end col-1"><hr className={Styles.breakHolder} /></div>
          <div className="d-flex justify-content-end gap-4 col-7">
