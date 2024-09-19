@@ -30,7 +30,7 @@ const AuditReportTable = ({auditReport}) => {
             </tr>
         </thead>
         <tbody>
-            {auditReport.map((item, index) => {
+            {auditReport.length?auditReport.map((item, index) => {
                 if (item.Brands.length) {
                     return (
                         item.Brands.map((element,i) => {
@@ -58,7 +58,7 @@ const AuditReportTable = ({auditReport}) => {
                         })
                     )
                 }
-            })}
+            }):<div class="table_NodataText__l-5kN flex justify-center items-center py-4 w-full lg:min-h-[300px] xl:min-h-[380px]"><p>No data found</p></div>}
         </tbody>
     </table>
     </div></div>)
