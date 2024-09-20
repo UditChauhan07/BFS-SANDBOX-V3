@@ -766,6 +766,30 @@ const MultiStepForm = () => {
                                                     <FaEye />
                                                 </div>
                                             </div>
+                                            <div
+                                                className={`${Styles.templateHolder} ${formData.template == 4 ? Styles.selected : ''}`}
+                                                // onClick={() => handleChange({ target: { value: 4, name: "template" } })}
+                                                onClick={() => { setCallbackError(true); setCallbackErrorMsg('Comming soon...') }}
+                                            >
+                                                <input
+                                                    type="radio"
+                                                    name="template"
+                                                    checked={formData.template == 4}
+                                                    value={4}
+                                                    required
+                                                    className={Styles.hiddenRadio}
+                                                />
+                                                <img src="/assets/templates/4.png" alt="Template 4" />
+                                                <div
+                                                    className={Styles.previewIcon}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Prevent triggering the brand selection
+                                                        window.open(`/assets/templates/4.png`, '_blank');
+                                                    }}
+                                                >
+                                                    <FaEye />
+                                                </div>
+                                            </div>
                                         </div>
 
 

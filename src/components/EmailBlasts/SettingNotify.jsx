@@ -7,23 +7,28 @@ import Loading from "../Loading";
 import { useNavigate } from "react-router-dom";
 
 
-const SettingNotify = ({ setSetting}) => {
+const SettingNotify = ({ setSetting }) => {
     const navigate = useNavigate();
-    const [notifyFrom,setNotifyDate] = useState({isLoaded:false,data:{notifyDate:[],random:false}})
-    useEffect(()=>{
-        getEmailBlastFromData({key:"qsjwijufhudeyvdwud"}).then((form)=>{
-            setSize(form.notifyDate.length??0)
+    const [notifyFrom, setNotifyDate] = useState({ isLoaded: false, data: { notifyDate: [], random: false } })
+    useEffect(() => {
+        getEmailBlastFromData({ key: "qsjwijufhudeyvdwud" }).then((form) => {
+            
+            setSize(form.notifyDate.length ?? 0)
             // setIsTab(form.random?2:1)
-            setRandom(form.random?true:false)
-            setNotifyDate({isLoaded:true,data:{notifyDate:form.notifyDate,random:form.random?true:false}})
-        }).catch((fromErr)=>{
-            console.log({fromErr});
+            setRandom(form.random ? true : false)
+            if(form.notifyDate.length){
+                setForMonth(form.notifyDate[0].forMonth)
+            }
+            setNotifyDate({ isLoaded: true, data: { notifyDate: form.notifyDate, random: form.random ? true : false } })
+        }).catch((fromErr) => {
+            console.log({ fromErr });
         })
-    },[])
-    const {data,isLoaded} =notifyFrom;
-    const {notifyDate,random} = data;
+    }, [])
+    const { data, isLoaded } = notifyFrom;
+    const { notifyDate, random } = data;
     const [size, setSize] = useState();
     const [isTab, setIsTab] = useState(1);
+    const [forMonth, setForMonth] = useState(1);
     const [loader, setLoaded] = useState(false)
     let option = [{ lable: "Select Date for Notification", value: 0 }, { lable: 1, value: 1 }, { lable: 2, value: 2 }, { lable: 3, value: 3 }, { lable: 4, value: 4 }, { lable: 5, value: 5 }, { lable: 6, value: 6 }, { lable: 7, value: 7 }, { lable: 8, value: 8 }, { lable: 9, value: 9 }, { lable: 10, value: 10 }, { lable: 11, value: 11 }, { lable: 12, value: 12 }, { lable: 13, value: 13 }, { lable: 14, value: 14 }, { lable: 15, value: 15 }, { lable: 16, value: 16 }, { lable: 17, value: 17 }, { lable: 18, value: 18 }, { lable: 19, value: 19 }, { lable: 20, value: 20 }, { lable: 21, value: 21 }, { lable: 22, value: 22 }, { lable: 23, value: 23 }, { lable: 24, value: 24 }, { lable: 25, value: 25 }, { lable: 26, value: 26 }, { lable: 27, value: 27 }, { lable: 28, value: 28 }]
     const [formAlert, setFormAlert] = useState(false);
@@ -51,7 +56,7 @@ const SettingNotify = ({ setSetting}) => {
             freqElement.value = notifyDate.length
             filledValue();
         }
-    }, [isTab,notifyDate])
+    }, [isTab, notifyDate])
     const filledValue = () => {
         notifyDate.map((element, _i) => {
             let freqSelElement = document.getElementById("freq" + _i)
@@ -80,7 +85,7 @@ const SettingNotify = ({ setSetting}) => {
         if (values.length == size) {
             setLoaded(true)
             GetAuthData().then((user) => {
-                storeDatesHandler({ key: user.x_access_token, dates: values }).then((resposne) => {
+                storeDatesHandler({ key: user.x_access_token, dates: values,forMonth }).then((resposne) => {
                     if (resposne) {
                         navigate('/newsletter')
                     }
@@ -94,17 +99,17 @@ const SettingNotify = ({ setSetting}) => {
             setFormAlert(true)
         }
     }
-    const randomSubmitHandler = ()=>{
-        storeRandomHandler({key:'12dffsw33rffd',random:isRandom}).then((result)=>{
+    const randomSubmitHandler = () => {
+        storeRandomHandler({ key: '12dffsw33rffd', random: isRandom }).then((result) => {
             navigate('/newsletter')
-        }).catch((error)=>{
-            console.log({error});
+        }).catch((error) => {
+            console.log({ error });
         })
     }
     function ordinal_suffix_of(i) {
         return i + (i === 1 ? 'st' : i === 2 ? 'nd' : i === 3 ? 'rd' : 'th');
     }
-    if(!isLoaded) return <Loading height={'70vh'} />
+    if (!isLoaded) return <Loading height={'70vh'} />
     return (
         <div className={StyleSheet.container}>
             {loader ? <Loading height={'70vh'} /> :
@@ -153,17 +158,26 @@ const SettingNotify = ({ setSetting}) => {
                             <p className={isTab == 1 ?  StyleSheet.active :null } onClick={() => { setIsTab(1) }}>Manual</p>
                             <p className={isTab == 2 ?  StyleSheet.active :null  } onClick={() => { setIsTab(2) }}>Random</p>
                         </div> */}
+                        <div className="">
+                            <label for="freq" className={StyleSheet.labelHolder}>Include Months
+                                <select name="forMonth" className={StyleSheet.formControl} onChange={(e)=>{setForMonth(parseInt(e.target.value))}}>
+                                    <option value={1} selected={forMonth==1}>upto 1 month</option>
+                                    <option value={2} selected={forMonth==2}>upto 2 month</option>
+                                    <option value={3} selected={forMonth==3}>upto 3 month</option>
+                                </select>
+                            </label>
+                        </div>
                         {isTab == 1 ? <>
                             <div className="">
                                 <label for="freq" className={StyleSheet.labelHolder}>Enter the frequency for email
-                                    <input type="number" autoComplete="off" id="freq" placeholder="" onKeyUp={notifyDateHandler} className="form-control" />
+                                    <input type="number" autoComplete="off" id="freq" placeholder="" onKeyUp={notifyDateHandler} className={StyleSheet.formControl} />
                                 </label>
                             </div>
                             {size > 0 ? new Array(size).fill(1).map((item, i) => {
                                 return (
-                                    <div className="" key={i}>
+                                    <div className="" key={"DT"+i}>
                                         <label for={"freq-" + i} className={StyleSheet.labelHolder}>Set date for the {ordinal_suffix_of(i + 1)} email
-                                            <select className="form-control" id={"freq" + i} name={"freq" + i}>
+                                            <select className={StyleSheet.formControl} id={"freq" + i} name={"freq" + i}>
                                                 {option.map((Element) => (
                                                     <option value={Element.value}>{Element.lable}</option>
                                                 ))}
