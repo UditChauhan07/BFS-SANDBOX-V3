@@ -1121,7 +1121,7 @@ export async function resentEmailBlast({ key, ids }) {
     return data.data;
   }
 }
-export async function storeDatesHandler({ key, dates }) {
+export async function storeDatesHandler({ key, dates,forMonth=1 }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -1129,7 +1129,7 @@ export async function storeDatesHandler({ key, dates }) {
 
   let response = await fetch(originAPi + "/EAZ7KKgTyBDsI4M/08fC7mUSNzUduyt", {
     method: "POST",
-    body: JSON.stringify({ key, dates: JSON.stringify(dates) }),
+    body: JSON.stringify({ key, dates: JSON.stringify(dates),forMonth }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());

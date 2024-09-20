@@ -38,8 +38,8 @@ const AuditReportTable = ({auditReport}) => {
                             return (
                                 <tr key={index+i}>
                                     <td className={`${styles.td} ${styles.stickyFirstColumn}`}>{item.Name}<br /><small>{item?.Owner?.Name}</small></td>
-                                    <td className={`${styles.td} ${styles.stickySecondColumn}`}>{item?.ShippingAddress?.street ?? 'NO'}</td>
-                                    <td className={`${styles.td} ${styles.stickyThirdColumn1}`}>{item?.ShippingAddress?.city ?? 'NO'}</td>
+                                    <td className={`${styles.td} ${styles.stickySecondColumn}`}>{item?.BillingAddress?.street ?? 'NO'}</td>
+                                    <td className={`${styles.td} ${styles.stickyThirdColumn1}`}>{item?.BillingAddress?.city ?? 'NO'}</td>
                                     <td className={`${styles.td} ${styles.stickyThirdColumn2}`}>{element.ManufacturerName__c}</td>
                                     <td className={styles.td}>{element.salesNumber[new Date().getFullYear()] ? formatAmount(element.salesNumber[new Date().getFullYear()]):'NO'}</td>
                                     <td className={styles.td}>{element.retailNumber[new Date().getFullYear()] ? formatAmount(element.retailNumber[new Date().getFullYear()]):'NO'}</td>
