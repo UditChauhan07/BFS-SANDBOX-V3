@@ -17,6 +17,14 @@ const ProductDetails = ({ productId, setProductDetailId, isAddtoCart = true, Acc
     const [accountId, setAccountId] = useState({ label: null, value: AccountId });
     const [storeSel, setStoreSet] = useState(false)
     const [autoSelectCheck, setAutoSelectCheck] = useState(false)
+
+    const formattedPrice = useMemo(() => {
+        const prices = product?.data?.price; // Assume price is in product.data.price
+        if (Array.isArray(prices)) {
+          return prices.join(" or ");
+        }
+        return prices || "Price not available";
+      }, [product]);
     useEffect(() => {
         if (productId) {
             setIsModalOpen(true)

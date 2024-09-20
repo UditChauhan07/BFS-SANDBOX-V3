@@ -696,9 +696,12 @@ function Dashboard({ dashboardData }) {
                                 let targetDiff = e.TargetRollover
                                 return (
                                   <tr key={e}>
-                                    <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.SalesRepName }) }} style={{ cursor: 'pointer' }}>
+                                    {memoizedPermissions?.modules?.dashboard?.redirect ?  <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.SalesRepName }) }} style={{ cursor: 'pointer' }}>
                                       <UserIcon /> {e.SalesRepName}
-                                    </td>
+                                    </td> : <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`}  style={{ pointerEvents: 'none' }}>
+                                      <UserIcon /> {e.SalesRepName}
+                                    </td> }
+                                   
                                     <td className={Styles.tabletd}>${formatNumber(e?.StaticTarget || 0)} 
                                       {/* {targetDiff ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.StaticTarget)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.StaticTarget)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null} */}
                                       </td>
@@ -773,9 +776,16 @@ function Dashboard({ dashboardData }) {
                                 let targetDiff = e.TargetRollover
                                 return (
                                   <tr key={e}>
-                                    <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.SalesRepName }) }} style={{ cursor: 'pointer' }}>
-                                      <UserIcon /> {e.SalesRepName}
-                                    </td>
+                                    {memoizedPermissions?.modules?.dashboard?.redirect ? 
+                                     <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ salesRepId: e.SalesRepName }) }} style={{ cursor: 'pointer' }}>
+                                     <UserIcon /> {e.SalesRepName}
+                                   </td>
+                                    :
+                                    <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} style={{ pointerEvents: 'none' }}>
+                                    <UserIcon /> {e.SalesRepName}
+                                  </td>
+                                    }
+                                   
                                     <td className={Styles.tabletd}>${formatNumber(e?.StaticTarget || 0)} 
                                       {/* {targetDiff ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.StaticTarget)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.StaticTarget)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null} */}
                                       </td>
@@ -852,9 +862,16 @@ function Dashboard({ dashboardData }) {
                                 let targetDiff = e.TargetRollover
                                 return (
                                   <tr key={e}>
+                                    {memoizedPermissions?.modules?.dashboard?.redirect ?
                                     <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} onClick={() => { sendDataTargetHandler({ manufacturerId: e.ManufacturerId }) }} style={{ cursor: 'pointer' }}>
+                                    <UserIcon /> {e.brandName}
+                                  </td>
+                                    : 
+                                    <td className={`${Styles.tabletd} ps-3 d-flex justify-content-start align-items-center gap-2`} style={{ pointerEvent: 'none' }}>
                                       <UserIcon /> {e.brandName}
                                     </td>
+                                    }
+                                    
                                     <td className={Styles.tabletd}>${formatNumber(e?.StaticTarget || 0)} 
                                       {/* {targetDiff ? (targetDiff > 0 ? <><br /><p className={Styles.calHolder}><small style={{ color: 'red' }}>{formatNumber(targetDiff)}</small>+{formatNumber(e.StaticTarget)}</p></> : <><br /><p className={Styles.calHolder}>{formatNumber(e.StaticTarget)}-<small style={{ color: 'green' }}>{formatNumber(-targetDiff)}</small></p></>) : null} */}
                                       </td>
@@ -961,15 +978,26 @@ function Dashboard({ dashboardData }) {
                   {accountPerformance.data?.map((ele, index) => {
                     if (index < 4) {
                       return (
-                        <div key={index} className="col-lg-6 col-md-6 col-sm-12 onHoverCursor cardHover">
+                        <div key={index} className="col-lg-6 col-md-6 col-sm-12  ">
                           <div className={Styles.top_perform}>
+
+                            {memoizedPermissions?.modules?.dashboard?.redirect ? 
                             <Link to={'/store/' + ele.AccountId}>
+                            <div className={Styles.top_accnew}>
+                              <p className={Styles.top_accounttext}>{ele.Name}</p>
+                            </div>
+                          </Link>
+                            
+                            : 
+                            <span >
                               <div className={Styles.top_accnew}>
                                 <p className={Styles.top_accounttext}>{ele.Name}</p>
                               </div>
-                            </Link>
+                            </span>
+                            }
+                            
 
-                            <div className={`${Styles.scrollbar}`}>
+                            <div className={`${Styles.scrollbar}`}  style={{cursor : "pointer"}}>
                               {ele.ManufacturerList.map((itemm, idx) => {
                                 const bgcolor = bgColors[itemm.Name];
                                 return (
@@ -977,6 +1005,7 @@ function Dashboard({ dashboardData }) {
                                     key={idx}
                                     className={`${Styles.account} ${Styles[bgcolor]}`}
                                     onClick={() => handleBrandClick(ele)}
+                                   
                                   >
                                     {itemm.Name}
                                   </span>
@@ -1005,15 +1034,24 @@ function Dashboard({ dashboardData }) {
                   {lowPerformanceArray?.map((ele, index) => {
                     if (index < 4) {
                       return (
-                        <div key={index} className="col-lg-6 col-md-6 col-sm-12 onHoverCursor cardHover">
+                        <div key={index} className="col-lg-6 col-md-6 col-sm-12  cardHover">
                           <div className={Styles.top_perform2}>
+                            {memoizedPermissions?.modules?.dasboard?.redirect ?
                             <Link to={'/store/' + ele.AccountId}>
+                            <div className={Styles.top_account}>
+                              <p className={Styles.top_accounttext}>{ele.Name}</p>
+                            </div>
+                          </Link>
+                            : 
+                            <sapn >
                               <div className={Styles.top_account}>
                                 <p className={Styles.top_accounttext}>{ele.Name}</p>
                               </div>
-                            </Link>
+                            </sapn>
+                            }
+                            
 
-                            <div className={`${Styles.scrollbar}`}>
+                            <div className={`${Styles.scrollbar}`} style={{cursor : "pointer"}}>
                               {ele.ManufacturerList.map((item, idx) => {
                                 const bgcolor = bgColors[item.Name];
                                 return (

@@ -28,6 +28,7 @@ const OrderStatusIssues = () => {
         month: "",
         manufacturer: null,
         search: "",
+        
     });
 
     const handleFilterChange = (filterType, value) => {
@@ -231,6 +232,7 @@ const OrderStatusIssues = () => {
                         });
                         setSearchShipBy("");
                         setSelectedSalesRepId(userData.Sales_Rep__c);
+                        getOrderlIsthandler({ key: userData.x_access_token, Sales_Rep__c: userData.Sales_Rep__c })
                     }}
                 />
              

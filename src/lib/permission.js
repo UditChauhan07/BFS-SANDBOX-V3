@@ -36,6 +36,7 @@ export const permissionsArray = [
         },
         dashboard: {
           view: true,
+          redirect : true
         },
         topProducts: {
           view: true,
@@ -96,13 +97,13 @@ export const permissionsArray = [
         },
       },
     },
-  },
+  },  
   {
     userType: "saleRep",
     allows: [""],
     permissions: {
       modules: {
-        godLevel: true,
+        godLevel: false,
         store : {
           view : true 
         } ,
@@ -134,6 +135,7 @@ export const permissionsArray = [
         },
         dashboard: {
           view: true,
+          redirect : true 
         },
         topProducts: {
           view: true,
@@ -230,6 +232,7 @@ export const permissionsArray = [
         },
         dashboard: {
           view: true,
+          redirect : false
         },
         topProducts: {
           view: false,
