@@ -76,7 +76,7 @@ const orderGenerationHandler = () => {
 
  
   if (Object.keys(orders).length) {
-    setConfirm(true); 
+    setConfirm(true)
   }
 };
 
