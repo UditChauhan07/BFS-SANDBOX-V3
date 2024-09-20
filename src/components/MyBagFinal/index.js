@@ -1,5 +1,5 @@
 /* eslint-disable no-lone-blocks */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useMemo} from "react";
 import Styles from "./Styles.module.css";
 import QuantitySelector from "../BrandDetails/Accordion/QuantitySelector";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ import ProductDetails from "../../pages/productDetails";
 import StripePay from "../StripePay";
 import { BiDownArrow } from "react-icons/bi";
 import classNames from "classnames";
-
+import { getPermissions} from "../../lib/permission";
 function MyBagFinal() {
   let Img1 = "/assets/images/dummy.png";
   const navigate = useNavigate();
@@ -34,6 +34,7 @@ function MyBagFinal() {
   const [confirm, setConfirm] = useState(false);
   const [isPayable, setIsPayable] = useState(0);
   const [paymentDetails, setPaymentDetails] = useState({ PK_KEY: null, SK_KEY: null, Amount: 0 });
+  const [permissions, setPermissions] = useState(null);
   const handleNameChange = (event) => {
     const limit = 10;
     setLimitInput(event.target.value.slice(0, limit));
@@ -220,6 +221,23 @@ function MyBagFinal() {
     localStorage.removeItem("orders")
     window.location.reload();
   }
+  useEffect(() => {
+    async function fetchPermissions() {
+      try {
+        const user = await GetAuthData(); // Fetch user data
+        const userPermissions = await getPermissions(); // Fetch permissions
+        setPermissions(userPermissions); // Set permissions in state
+      } catch (err) {
+        console.error("Error fetching permissions", err);
+      }
+    }
+  
+    fetchPermissions(); // Fetch permissions on mount
+  }, []);
+  
+  // Memoize permissions to avoid unnecessary re-calculations
+  const memoizedPermissions = useMemo(() => permissions, [permissions]);
+
 
   const orderGenerationHandler = () => {
     // if (paymentDetails.PK_KEY && paymentDetails.SK_KEY) {
@@ -242,6 +260,12 @@ function MyBagFinal() {
     // }
   }
   if (isOrderPlaced === 1) return <OrderLoader />;
+
+
+// order for permission to saleRep 
+
+
+// 
   return (
     <div className="mt-4">
       <section>
@@ -483,12 +507,12 @@ function MyBagFinal() {
                             <p>No Shipping Address</p>
                           )}
                         </div>
-                        {(admins.includes(userData?.Sales_Rep__c) && salesRepData?.Id && buttonActive) && <>
+                        { memoizedPermissions?.modules?.godLevel ?  <>
                           <h2>Order For</h2>
                           <div className={Styles.ShipAdress}>
                             {userData?.Sales_Rep__c == salesRepData?.Id ? 'Me' : salesRepData?.Name}
                           </div>
-                        </>}
+                        </> : null}
                         <div className={Styles.ShipAdress2}>
                           {/* <label>NOTE</label> */}
                           <textarea onKeyUp={(e) => setOrderDesc(e.target.value)} placeholder="NOTE" className="placeholder:font-[Arial-500] text-[14px] tracking-[1.12px] " />
