@@ -32,9 +32,9 @@ function MyBagFinal() {
   const [salesRepData, setSalesRepData] = useState({ Name: null, Id: null })
   const [limitInput, setLimitInput] = useState("");
   const [confirm, setConfirm] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Show loader while data is loading 
-  const [showErrorPopup, setShowErrorPopup] = useState(false); // For error popup
-  const [errorMessage, setErrorMessage] = useState(""); // To display custom error messages
+  const [isLoading, setIsLoading] = useState(true); 
+  const [showErrorPopup, setShowErrorPopup] = useState(false); 
+  const [errorMessage, setErrorMessage] = useState(""); 
   const handleNameChange = (event) => {
     const limit = 10;
     setLimitInput(event.target.value.slice(0, limit));
@@ -50,7 +50,7 @@ function MyBagFinal() {
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching PO number:", error);
-      setIsLoading(false); // Hide loader even if data loading fails
+      setIsLoading(false); 
     } finally {
       
     }
@@ -60,20 +60,23 @@ function MyBagFinal() {
 }, []);
 
 const orderGenerationHandler = () => {
-  // Check if PO number contains spaces or if PO number is empty
-  if (PONumber.includes(" ") || !PONumber.length) {
-    setPONumberFilled(false); // This will trigger if either condition is met
-  } else {
-    setPONumberFilled(true); // Optional: Set true if conditions are not met
+  
+  if (PONumber.includes(" ")) {
+    setPONumberFilled(false); 
+    return; 
   }
 
-  // Proceed with order placement if validations pass
+ 
+  if (!PONumber.length) {
+    setPONumberFilled(false); 
+    return; 
+  } else {
+    setPONumberFilled(true); 
+  }
+
+ 
   if (Object.keys(orders).length) {
-    if (PONumber.length) {
-      setConfirm(true); // Proceed with order placement if PO number is valid
-    } else {
-      setPONumberFilled(false); // Triggered when no PO number is entered
-    }
+    setConfirm(true); 
   }
 };
 
