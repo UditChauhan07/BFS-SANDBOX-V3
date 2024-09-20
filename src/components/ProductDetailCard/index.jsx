@@ -24,6 +24,7 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
   }
   let listPrice = Number(product?.data?.usdRetail__c?.replace("$", "").replace(",", ""));
   let salesPrice = 0;
+  const formattedPrice = Array.isArray(salesPrice) ? salesPrice.join(" or ") : salesPrice;
   let discount = product?.discount?.margin;
   let inputPrice = Object.values(orders)?.find(
     (order) =>
@@ -72,14 +73,21 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
             {product?.data?.Name}
           </h2>
           {product?.discount ? (
-            <p className={Styles.priceHolder}>
-              ${parseFloat(salesPrice).toFixed(2)}&nbsp;<span className={Styles.crossed}>{product?.data?.usdRetail__c}</span>
-            </p>
-          ) : (
-            <p className={Styles.priceHolder}>
-              <b>{product?.data?.usdRetail__c}</b>
-            </p>
-          )}
+  <p className={Styles.priceHolder}>
+    {isNaN(salesPrice) || salesPrice === null || salesPrice === undefined ? (
+      <b>{product?.data?.usdRetail__c}</b>
+    ) : (
+      <>
+        ${parseFloat(salesPrice).toFixed(2)}&nbsp;<span className={Styles.crossed}>{product?.data?.usdRetail__c}</span>
+      </>
+    )}
+  </p>
+) : (
+  <p className={Styles.priceHolder}>
+    <b>{product?.data?.usdRetail__c}</b>
+  </p>
+)}
+
           {product?.data?.Description && (
             <p className={Styles.descHolder}>
               {product.data.Description.length > 750 ? (
@@ -142,7 +150,7 @@ const ProductDetailCard = ({ product, orders, onPriceChangeHander = null, onQuan
               </div>
           ) : (
             accounts ? <>
-              {accounts !== "load" ? <Loading /> : <>
+              {accounts == "load" ? <Loading /> : <>
                 {isAddtoCart && product?.discount ? (
 
                   <button
