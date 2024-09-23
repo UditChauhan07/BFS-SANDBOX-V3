@@ -21,8 +21,16 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
       if (
         Object.values(orders)[0]?.manufacturer?.name === localStorage.getItem("manufacturer") &&
         Object.values(orders)[0].account.name === localStorage.getItem("Account") &&
-        Object.values(orders)[0].productType === (product.Category__c === "PREORDER" ? "pre-order" : "wholesale")
-      ) {
+        Object.values(orders)[0].productType === 
+        (product.Category__c === "PREORDER" 
+          ? "pre-order" 
+          : product.Category__c === "TESTER" 
+            ? "tester" 
+            : product.Category__c === "EVENT" 
+              ? "event" 
+              : "wholesale")
+      ) 
+      {
         orderSetting(product, quantity);
         setReplaceCartModalOpen(false);
       } else {

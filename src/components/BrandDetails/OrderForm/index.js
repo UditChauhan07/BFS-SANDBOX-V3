@@ -22,6 +22,8 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
   let orderTypeList = [
     { value: "wholesale", label: "Whole Sales" },
     { value: "preorder", label: "Pre-Order" },
+    { value: "tester", label: "Tester" },
+    { value: "event", label: "Event" },
   ]
   const navigate = useNavigate();
   const CheckError = (data) => {
@@ -30,41 +32,50 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
     let errorCount = data.reduce((accumulator, item) => {
       let productDetails = getProductData(item["Product Code"] || item["ProductCode"] || null);
       if (item?.Quantity) {
-        let error = !item?.Quantity || !Number.isInteger(item?.Quantity) || item?.Quantity < (productDetails.Min_Order_QTY__c || 0) || !productDetails?.Name || (productDetails.Min_Order_QTY__c > 0 && item?.Quantity % productDetails.Min_Order_QTY__c !== 0);
+        let error = !item?.Quantity ||
+          !Number.isInteger(item?.Quantity) ||
+          item?.Quantity < (productDetails.Min_Order_QTY__c || 0) ||
+          !productDetails?.Name ||
+          (productDetails.Min_Order_QTY__c > 0 && item?.Quantity % productDetails.Min_Order_QTY__c !== 0);
 
-        // orderType == "preorder" ? (error == false) ? error = productDetails?.Category__c?.toLowerCase() != orderType.toLowerCase() : error = error : (error == false) ? error = productDetails?.Category__c?.toLowerCase() == "preorder" : error = error
-        if (orderType == "preorder") {
-          if (error == false) {
-            error = productDetails?.Category__c?.toLowerCase() != orderType.toLowerCase();
+         const validCategories = ["preorder", "wholesale", "tester", "event"];
+            if (validCategories.includes(orderType.toLowerCase())) {
+          if (!error) {
+            error = productDetails?.Category__c?.toLowerCase() !== orderType.toLowerCase();
           }
         } else {
-          if (error == false) {
-            error = productDetails?.Category__c?.toLowerCase() == "preorder";
+
+          if (!error) {
+            error = validCategories.includes(productDetails?.Category__c?.toLowerCase());
           }
         }
-
-        if (orderType == "wholesale" && productDetails?.Category__c?.toLowerCase() == "preorder") {
+        if (orderType.toLowerCase() === "wholesale" && productDetails?.Category__c?.toLowerCase() === "preorder") {
           error = true;
         }
-        checkLimit++;
+       checkLimit++;
         return accumulator + (error ? 1 : 0);
       } else {
         totalQty += 1;
       }
       return accumulator;
     }, 0);
+
+   
     if (checkLimit > 500) {
-      setLimitCheck(true)
-      setIsLimitPass(true)
+      setLimitCheck(true);
+      setIsLimitPass(true);
     } else {
-      setLimitCheck(false)
+      setLimitCheck(false);
     }
-    if (totalQty == data.length) {
+
+   
+    if (totalQty === data.length) {
       setErrorOnList(totalQty);
     } else {
       setErrorOnList(errorCount);
     }
   };
+
   const readFile = (file) => {
     const promise = new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -367,7 +378,7 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
                 <div className="mt-3">No Data Found.</div>
               </div>
             ) : null}
-            <div className="d-flex justify-content-center" style={{ position: 'sticky', bottom: '-120px',background:'#fff',padding:'1rem 0' }}>
+            <div className="d-flex justify-content-center" style={{ position: 'sticky', bottom: '-120px', background: '#fff', padding: '1rem 0' }}>
               <button className={btnClassName} onClick={() => { !isLimitPass ? submitForm() : setLimitCheck(true) }}>
                 Submit
               </button>

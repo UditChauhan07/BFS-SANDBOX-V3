@@ -6,7 +6,6 @@ import ModalPage from "../components/Modal UI";
 import ProductDetailCard from "../components/ProductDetailCard";
 import { CloseButton } from "../lib/svg";
 import Select from 'react-select';
-import { getPermissions } from "../lib/permission";
 
 const ProductDetails = ({ productId, setProductDetailId, isAddtoCart = true, AccountId = null, ManufacturerId = null, toRedirect = "/my-retailers" }) => {
     const { orders, setOrders, setOrderQuantity, addOrder, setOrderProductPrice } = useBag();
@@ -18,27 +17,6 @@ const ProductDetails = ({ productId, setProductDetailId, isAddtoCart = true, Acc
     const [accountId, setAccountId] = useState({ label: null, value: AccountId });
     const [storeSel, setStoreSet] = useState(false)
     const [autoSelectCheck, setAutoSelectCheck] = useState(false)
-    const [createOrder,setCreateOrder] = useState(false)
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userPermissions = await getPermissions()
-                setCreateOrder(userPermissions?.modules?.order?.create)
-            } catch (error) {
-                console.log("Permission Error", error)
-            }
-        }
-        fetchData()
-    }, [])
-
-    const formattedPrice = useMemo(() => {
-        const prices = product?.data?.price; // Assume price is in product.data.price
-        if (Array.isArray(prices)) {
-          return prices.join(" or ");
-        }
-        return prices || "Price not available";
-      }, [product]);
     useEffect(() => {
         if (productId) {
             setIsModalOpen(true)
@@ -119,13 +97,23 @@ const ProductDetails = ({ productId, setProductDetailId, isAddtoCart = true, Acc
         addOrder(element, quantity, product.discount);
     };
     const onQuantityChange = (element, quantity, salesPrice = null, discount = null) => {
+        console.log(onQuantityChange)
         element.salesPrice = salesPrice;
         if (Object.values(orders).length) {
             if (
                 Object.values(orders)[0]?.manufacturer?.id === ManufacturerId &&
                 Object.values(orders)[0].account.id === (AccountId || accountId.value) &&
-                Object.values(orders)[0].productType === (element.Category__c === "PREORDER" ? "pre-order" : "wholesale")
-            ) {
+                Object.values(orders)[0].productType === 
+                (product.Category__c === "PREORDER" 
+                  ? "pre-order" 
+                  : product.Category__c === "TESTER" 
+                    ? "tester" 
+                    : product.Category__c === "EVENT" 
+                      ? "event" 
+                      : "wholesale")
+              
+            ) 
+            {
                 orderSetting(element, quantity);
                 setReplaceCartModalOpen(false);
             } else {
@@ -238,7 +226,7 @@ const ProductDetails = ({ productId, setProductDetailId, isAddtoCart = true, Acc
                             />
                         ) : null}
                         {!product?.isLoaded ? <Loading /> :
-                            <ProductDetailCard product={product} orders={orders} onQuantityChange={onQuantityChange} onPriceChangeHander={onPriceChangeHander} isAddtoCart={accountId.value ? true : false} AccountId={AccountId} toRedirect={toRedirect} setStoreSet={setStoreSet} accountId={accountId} accounts={accountList.isLoaded ? accountList.data.length : 'load'} autoSelectCheck={autoSelectCheck} createOrder={createOrder}/>}
+                            <ProductDetailCard product={product} orders={orders} onQuantityChange={onQuantityChange} onPriceChangeHander={onPriceChangeHander} isAddtoCart={accountId.value ? true : false} AccountId={AccountId} toRedirect={toRedirect} setStoreSet={setStoreSet} accountId={accountId} accounts={accountList.isLoaded ? accountList.data.length : 'load'} autoSelectCheck={autoSelectCheck} />}
                         {/* */}
                     </div>
                 }
