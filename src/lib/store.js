@@ -117,8 +117,8 @@ let date = new Date();
   let AcCode = getStrCode(orderDetails.Account?.name);
     let MaCode = getStrCode(orderDetails.Manufacturer?.name);
 
-    
-    const response = await fetch( "http://localhost:2611/PoNumber/generatepo", {
+//     const response = await fetch( "http://localhost:2611/PoNumber/generatepo", {
+    const response = await fetch( "https://bfs.uditchauhan.com/PoNumber/generatepo", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
