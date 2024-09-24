@@ -3,6 +3,7 @@ import { getPermissions } from "./permission";
 export const originAPi = "https://bfs.uditchauhan.com"
 // export const originAPi = "http://localhost:2611"
 
+
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
 const orderKey = "orders";
