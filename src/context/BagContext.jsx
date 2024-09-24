@@ -76,7 +76,7 @@ const BagProvider = ({ children }) => {
       },
       productType : product.Category__c === "PREORDER" ? "pre-order" :
                     product.Category__c === "EVENT" ? "event" :
-                    product.Category__c === "TESTER" ? "tester" : "wholesale",
+                    product.Category__c === "TESTER" ? "tester" : product.Category__c === "SAMPLES" ? "samples" :"wholesale",
     };
   };
   // deletion of orders with quantity 0

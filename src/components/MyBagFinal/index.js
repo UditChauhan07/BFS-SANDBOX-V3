@@ -1,28 +1,28 @@
 /* eslint-disable no-lone-blocks */
-import React, { useEffect, useState , useMemo} from "react";
+import React, { useEffect, useState } from "react";
 import Styles from "./Styles.module.css";
 import QuantitySelector from "../BrandDetails/Accordion/QuantitySelector";
 import { useNavigate } from "react-router-dom";
-import { GetAuthData, OrderPlaced, POGenerator, ShareDrive, admins, fetchBeg, getBrandPaymentDetails, getProductImageAll, getSalesRepList, salesRepIdKey } from "../../lib/store";
+import { GetAuthData, OrderPlaced, POGenerator, ShareDrive, admins, fetchBeg, getProductImageAll, getSalesRepList, salesRepIdKey } from "../../lib/store";
 import { useBag } from "../../context/BagContext";
 import OrderLoader from "../loader";
 import ModalPage from "../Modal UI";
 import StylesModal from "../Modal UI/Styles.module.css";
 import LoaderV2 from "../loader/v2";
 import ProductDetails from "../../pages/productDetails";
-import StripePay from "../StripePay";
-import { BiDownArrow } from "react-icons/bi";
-import classNames from "classnames";
-import { getPermissions} from "../../lib/permission";
+import Loading from "../Loading";
+
 function MyBagFinal() {
   let Img1 = "/assets/images/dummy.png";
   const navigate = useNavigate();
   const [orderDesc, setOrderDesc] = useState(null);
-  const [PONumber, setPONumber] = useState(POGenerator());
+  const [PONumber, setPONumber] = useState(null);
+
   const [buttonActive, setButtonActive] = useState(false);
   const { addOrder, orderQuantity, orders, setOrderProductPrice } = useBag();
-  const [bagValue, setBagValue] = useState(fetchBeg());
+  const [bagValue, setBagValue] = useState(fetchBeg({}));
   const [isOrderPlaced, setIsOrderPlaced] = useState(0);
+  console.log(isOrderPlaced)
   const [isPOEditable, setIsPOEditable] = useState(false);
   const [PONumberFilled, setPONumberFilled] = useState(true);
   const [clearConfim, setClearConfim] = useState(false)
@@ -32,19 +32,60 @@ function MyBagFinal() {
   const [salesRepData, setSalesRepData] = useState({ Name: null, Id: null })
   const [limitInput, setLimitInput] = useState("");
   const [confirm, setConfirm] = useState(false);
-  const [isPayable, setIsPayable] = useState(0);
-  const [paymentDetails, setPaymentDetails] = useState({ PK_KEY: null, SK_KEY: null, Amount: 0 });
-  const [permissions, setPermissions] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); 
+  const [showErrorPopup, setShowErrorPopup] = useState(false); 
+  const [errorMessage, setErrorMessage] = useState(""); 
   const handleNameChange = (event) => {
     const limit = 10;
     setLimitInput(event.target.value.slice(0, limit));
   };
+
+  useEffect(() => {
+  const FetchPoNumber = async () => {
+ try {
+      const res = await POGenerator();
+      if (res) {
+        setPONumber(res); 
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching PO number:", error);
+      setIsLoading(false); 
+    } finally {
+      
+    }
+  };
+
+  FetchPoNumber();
+}, []);
+
+const orderGenerationHandler = () => {
+  
+  if (PONumber.includes(" ")) {
+    setPONumberFilled(false); 
+    return; 
+  }
+
+ 
+  if (!PONumber.length) {
+    setPONumberFilled(false); 
+    return; 
+  } else {
+    setPONumberFilled(true); 
+  }
+
+ 
+  if (Object.keys(orders).length) {
+    setConfirm(true)
+  }
+};
+
   // .............
   useEffect(() => {
-    if (bagValue?.Account?.id && bagValue?.Manufacturer?.id && Object.values(bagValue?.orderList)?.length > 0) {
+    if (bagValue?.Account?.id && bagValue?.Manufacturer?.id && bagValue.orderList?.length > 0) {
       setButtonActive(true);
     }
-  }, []);
+  }, [bagValue]);
   let total = 0;
   const [productImage, setProductImage] = useState({ isLoaded: false, images: {} });
   useEffect(() => {
@@ -57,18 +98,6 @@ function MyBagFinal() {
       getSalesRepList({ key: user.x_access_token }).then((repList) => {
         let repData = repList.data.filter(item => item.Id === localStorage.getItem(salesRepIdKey))
         setSalesRepData(repData?.[0] || {})
-        if (bagValue) {
-          if (bagValue.Manufacturer) {
-            if (bagValue.Manufacturer.id) {
-              getBrandPaymentDetails({ key: user.x_access_token, Id: bagValue.Manufacturer.id }).then((brandRes) => {
-                setPaymentDetails({ PK_KEY: brandRes.Stripe_Publishable_key_test__c, SK_KEY: brandRes.Stripe_Secret_key_test__c })
-              }).catch((brandErr) => {
-                console.log({ brandErr });
-
-              })
-            }
-          }
-        }
       }).catch((e) => console.log({ e }))
     }).catch((e) => console.log({ e }))
     if (bagValue) {
@@ -124,8 +153,10 @@ function MyBagFinal() {
   }
 
   const orderPlaceHandler = () => {
+    console.log("asdddasd")
     setIsOrderPlaced(1);
-    let fetchBag = fetchBeg();
+    let fetchBag = fetchBeg({});
+    console.log(fetchBag, "fetchBag")
     GetAuthData()
       .then((user) => {
         let SalesRepId = localStorage.getItem(salesRepIdKey) ?? user.Sales_Rep__c;
@@ -164,6 +195,7 @@ function MyBagFinal() {
           };
           OrderPlaced({ order: begToOrder })
             .then((response) => {
+
               if (response) {
                 if (response.length) {
                   setIsOrderPlaced(0);
@@ -221,53 +253,12 @@ function MyBagFinal() {
     localStorage.removeItem("orders")
     window.location.reload();
   }
-  useEffect(() => {
-    async function fetchPermissions() {
-      try {
-        const user = await GetAuthData(); // Fetch user data
-        const userPermissions = await getPermissions(); // Fetch permissions
-        setPermissions(userPermissions); // Set permissions in state
-      } catch (err) {
-        console.error("Error fetching permissions", err);
-      }
-    }
-  
-    fetchPermissions(); // Fetch permissions on mount
-  }, []);
-  
-  // Memoize permissions to avoid unnecessary re-calculations
-  const memoizedPermissions = useMemo(() => permissions, [permissions]);
-
-
-  const orderGenerationHandler = () => {
-    // if (paymentDetails.PK_KEY && paymentDetails.SK_KEY) {
-    //   setPaymentDetails(
-    //     (prev) =>
-    //     ({
-    //       ...prev,
-    //       Amount: total,
-    //     })
-    //   )
-    //   setIsPayable(1)
-    // } else {
-      if (Object.keys(orders).length) {
-        if (PONumber.length) {
-          setConfirm(true)
-        } else {
-          setPONumberFilled(false);
-        }
-      }
-    // }
-  }
   if (isOrderPlaced === 1) return <OrderLoader />;
-
-
-// order for permission to saleRep 
-
-
-// 
   return (
     <div className="mt-4">
+       {isLoading ? (
+        <Loading /> // Display full-page loader while data is loading
+      ) : (
       <section>
         <ModalPage
           open={confirm || false}
@@ -339,6 +330,7 @@ function MyBagFinal() {
           />
         ) : null}
         <div className="">
+       
           <div>
             <div className={Styles.MyBagFinalTop}>
               <div className={Styles.MyBagFinalRight}>
@@ -475,121 +467,83 @@ function MyBagFinal() {
 
                 <div className="col-lg-5 col-md-4 col-sm-12">
                   <div className={Styles.ShippControl}>
-                  {/* onClick={()=>setIsPayable(0)} className={classNames("d-flex justify-content-between", {
-                        "border-bottom": isPayable == 1,
-                      })} */}
-                    <h2 >Shipping Address  
-                      {/* <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="29"
-                      height="28"
-                      viewBox="0 0 29 28"
-                      fill="none"
-                      className={classNames("ml-4", {
-                        "rotate-180": isPayable == 0,
-                      })}
-                    >
-                      <path d="M7.71484 10.8534L14.8098 17.7119L21.9048 10.8534" stroke="#403A35" strokeWidth={"2"} />
-                    </svg> */}
-                    </h2>
+                    <h2>Shipping Address</h2>
 
-                    {isPayable == 0||true?
-                      <>
-                        <div className={Styles.ShipAdress}>
-                          {buttonActive ? (
-                            <p>
-                              {bagValue?.Account?.address?.street}, {bagValue?.Account?.address?.city} <br />
-                              {bagValue?.Account?.address?.state}, {bagValue?.Account?.address?.country} {bagValue?.Account?.address?.postalCode}
-                              <br />
-                              {bagValue?.Account?.address?.email} {bagValue?.Account?.address?.contact && `{ |  ${bagValue?.Account?.address?.contact}}`}
-                            </p>
-                          ) : (
-                            <p>No Shipping Address</p>
-                          )}
-                        </div>
-                        { memoizedPermissions?.modules?.godLevel ?  <>
-                          <h2>Order For</h2>
-                          <div className={Styles.ShipAdress}>
-                            {userData?.Sales_Rep__c == salesRepData?.Id ? 'Me' : salesRepData?.Name}
-                          </div>
-                        </> : null}
-                        <div className={Styles.ShipAdress2}>
-                          {/* <label>NOTE</label> */}
-                          <textarea onKeyUp={(e) => setOrderDesc(e.target.value)} placeholder="NOTE" className="placeholder:font-[Arial-500] text-[14px] tracking-[1.12px] " />
-                        </div>
-                        {!PONumberFilled ? (
-                          <ModalPage
-                            open
-                            content={
-                              <>
-                                <div style={{ maxWidth: "309px" }}>
-                                  <h1 className={`fs-5 ${StylesModal.ModalHeader}`}>Warning</h1>
-                                  <p className={` ${StylesModal.ModalContent}`}>Enter PO Number</p>
-                                  <div className="d-flex justify-content-center">
-                                    <button
-                                      className={`${StylesModal.modalButton}`}
-                                      onClick={() => {
-                                        setPONumberFilled(true);
-                                      }}
-                                    >
-                                      OK
-                                    </button>
-                                  </div>
-                                </div>
-                              </>
-                            }
-                            onClose={() => {
-                              setPONumberFilled(true);
-                            }}
-                          />
-                        ) : null}
-                        <div className={Styles.ShipBut}>
-                          <button
-                            onClick={orderGenerationHandler}
-                            disabled={!buttonActive}
-                          >
-                            ${Number(total).toFixed(2)} PLACE ORDER
-                          </button>
-                          <p className={`${Styles.ClearBag}`} style={{ textAlign: 'center', cursor: 'pointer' }}
-                            onClick={() => {
-                              if (Object.keys(orders).length) {
-                                if (clearConfim.length) {
-                                  orderPlaceHandler()
-                                } else {
-                                  setClearConfim(true)
-                                }
-                              }
-                            }}
-                            disabled={!buttonActive}
-                          >Clear Bag</p>
-                          {/* {Number(total) ? null : window.location.reload()} */}
-                        </div></> : null}
+                    <div className={Styles.ShipAdress}>
+                      {buttonActive ? (
+                        <p>
+                          {bagValue?.Account?.address?.street}, {bagValue?.Account?.address?.city} <br />
+                          {bagValue?.Account?.address?.state}, {bagValue?.Account?.address?.country} {bagValue?.Account?.address?.postalCode}
+                          <br />
+                          {bagValue?.Account?.address?.email} {bagValue?.Account?.address?.contact && `{ |  ${bagValue?.Account?.address?.contact}}`}
+                        </p>
+                      ) : (
+                        <p>No Shipping Address</p>
+                      )}
+                    </div>
+                    {(admins.includes(userData?.Sales_Rep__c) && salesRepData?.Id && buttonActive) && <>
+                      <h2>Order For</h2>
+                      <div className={Styles.ShipAdress}>
+                        {userData?.Sales_Rep__c == salesRepData?.Id ? 'Me' : salesRepData?.Name}
+                      </div>
+                    </>}
+                    <div className={Styles.ShipAdress2}>
+                      {/* <label>NOTE</label> */}
+                      <textarea onKeyUp={(e) => setOrderDesc(e.target.value)} placeholder="NOTE" className="placeholder:font-[Arial-500] text-[14px] tracking-[1.12px] " />
+                    </div>
+                    {!PONumberFilled ? (
+            <ModalPage
+              open
+              content={
+                <div style={{ maxWidth: "309px" }}>
+                  <h1 className={`fs-5 ${StylesModal.ModalHeader}`}>Warning</h1>
+                  <p className={` ${StylesModal.ModalContent}`}>Enter PO Number</p>
+                  <div className="d-flex justify-content-center">
+                    <button
+                      className={StylesModal.modalButton}
+                      onClick={() => setPONumberFilled(true)}
+                    >
+                      OK
+                    </button>
                   </div>
-                  {/* <div className={Styles.ShippControl}>
-                    <h2 className={classNames("d-flex justify-content-between", {
-                        "border-bottom": isPayable == 0,
-                      })} onClick={()=>setIsPayable(1)}>Card Details               <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="29"
-                      height="28"
-                      viewBox="0 0 29 28"
-                      fill="none"
-                      className={classNames("ml-4", {
-                        "rotate-180": isPayable == 1,
-                      })}
-                    >
-                      <path d="M7.71484 10.8534L14.8098 17.7119L21.9048 10.8534" stroke="#403A35" strokeWidth={"2"} />
-                    </svg></h2>
-
-                    {isPayable == 1 ?
-                      <StripePay PK_KEY={paymentDetails.PK_KEY} SK_KEY={paymentDetails.SK_KEY} amount={paymentDetails.Amount} /> : null}
-                  </div> */}
+                </div>
+              }
+              onClose={() => setPONumberFilled(true)}
+            />
+                        ) : (
+            <div className={Styles.ShipBut}>
+              <button
+                onClick={orderGenerationHandler}
+                disabled={!buttonActive}
+              >
+                ${Number(total).toFixed(2)} PLACE ORDER
+              </button>
+              <p
+                className={Styles.ClearBag}
+                style={{ textAlign: "center", cursor: "pointer" }}
+                onClick={() => {
+                  if (Object.keys(orders).length) {
+                    if (clearConfim.length) {
+                      orderPlaceHandler();
+                    } else {
+                      setClearConfim(true);
+                    }
+                  }
+                }}
+                disabled={!buttonActive}
+              >
+                Clear Bag
+              </p>
+            </div>
+                          )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
+    )}
       <ProductDetails productId={productDetailId} setProductDetailId={setProductDetailId} AccountId={bagValue?.Account.id} ManufacturerId={bagValue?.Manufacturer?.id} />
     </div>
   );
