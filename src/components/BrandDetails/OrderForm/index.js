@@ -22,9 +22,9 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
   let orderTypeList = [
     { value: "wholesale", label: "Whole Sales" },
     { value: "preorder", label: "Pre-Order" },
-    { value: "tester", label: "TESTER ORDER" },
-    { value: "event", label: "EVENT ORDER" },
-    { value: "samples", label: "SAMPLES ORDER" },
+    { value: "tester", label: "Tester" },
+    { value: "event", label: "Event" },
+ 
   ]
 
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
             error = validCategories.includes(productDetails?.Category__c?.toLowerCase());
           }
         }
-        if (orderType.toLowerCase() === "wholesale" && productDetails?.Category__c?.toLowerCase() === "preorder" && productDetails?.Category__c?.toLowerCase() === "event") {
+        if (orderType.toLowerCase() === "wholesale" && productDetails?.Category__c?.toLowerCase() === "preorder") {
           error = true;
         }
        checkLimit++;

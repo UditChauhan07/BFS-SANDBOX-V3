@@ -61,7 +61,7 @@ function Product() {
     return groupedData;
   };
   useEffect(() => {
-    if (productTypeFilter === "Pre-order"||productTypeFilter === "TESTER Order"||productTypeFilter === "Event Order"||productTypeFilter === "SAMPLES order") {
+    if (productTypeFilter === "Pre-order"||productTypeFilter === "TESTER"||productTypeFilter === "EVENT"||productTypeFilter === "SAMPLES") {
       setCategoryFilters([])
     }
   }, [productTypeFilter])
@@ -87,16 +87,16 @@ function Product() {
             newData[key] = finalFilteredProducts[key];
           }
         }
-        else if (productTypeFilter === "TESTER ORDER") {
+        else if (productTypeFilter === "TESTER") {
           if (key.match("TESTER")) {
             newData[key] = finalFilteredProducts[key];
           }
-        } else if (productTypeFilter === "Event Order") {
-          if (key.match("Event Order")) {
+        } else if (productTypeFilter === "EVENT") {
+          if (key.match("EVENT")) {
             newData[key] = finalFilteredProducts[key];
           }
         } 
-        else if (productTypeFilter === "SAMPLES ORDER") {
+        else if (productTypeFilter === "SAMPLES") {
           if (key.match("SAMPLES")) {
             newData[key] = finalFilteredProducts[key];
           }
@@ -457,16 +457,13 @@ function Product() {
                       },
                       {
                         label: "TESTER",
-                        value: "TESTER ORDER",
+                        value: "TESTER",
                       },
                       {
-                        label: "Event Order",
-                        value: "EVENT ORDER",
+                        label: "EVENT",
+                        value: "EVENT",
                       },
-                      {
-                        label: "SAMPLES",
-                        value: "SAMPLES ORDER",
-                      },
+                      
                     ]}
                     onChange={(value) => {
                       setProductTypeFilter(value);
