@@ -60,25 +60,19 @@ function MyBagFinal() {
 }, []);
 
 const orderGenerationHandler = () => {
-  
+
+  // Check if PONumber contains spaces
   if (PONumber.includes(" ")) {
-    setPONumberFilled(false); 
-    return; 
+    // Replace all spaces with underscores
+    const updatedPONumber = PONumber.replace(/ /g, "_");
+    setPONumber(updatedPONumber);
   }
-
- 
-  if (!PONumber.length) {
-    setPONumberFilled(false); 
-    return; 
-  } else {
-    setPONumberFilled(true); 
-  }
-
- 
+// Check if orders object has any orders
   if (Object.keys(orders).length) {
-    setConfirm(true)
+    setConfirm(true); // Proceed with order placement
   }
 };
+
 
   // .............
   useEffect(() => {
@@ -152,21 +146,103 @@ const orderGenerationHandler = () => {
     })
   }
 
+  // const orderPlaceHandler = () => {
+  //   console.log("asdddasd")
+  //   setIsOrderPlaced(1);
+  //   let fetchBag = fetchBeg({});
+  //   console.log(fetchBag, "fetchBag")
+  //   GetAuthData()
+  //     .then((user) => {
+  //       let SalesRepId = localStorage.getItem(salesRepIdKey) ?? user.Sales_Rep__c;
+  //       if (fetchBag) {
+  //         let list = [];
+  //         let orderType = "Wholesale Numbers";
+  //         let productLists = Object.values(fetchBag.orderList);
+  //         if (productLists.length) {
+  //           productLists.map((product) => {
+  //             if (product.product.Category__c == "PREORDER") orderType = "Pre Order";
+  //             let temp = {
+  //               ProductCode: product.product.ProductCode,
+  //               qty: product.quantity,
+  //               price: product.product?.salesPrice,
+  //               discount: product.product?.discount,
+  //             };
+  //             list.push(temp);
+  //           });
+  //         }
+  //         let begToOrder = {
+  //           AccountId: fetchBag?.Account?.id,
+  //           Name: fetchBag?.Account?.name,
+  //           ManufacturerId__c: fetchBag?.Manufacturer?.id,
+  //           PONumber: PONumber,
+  //           desc: orderDesc,
+  //           SalesRepId,
+  //           Type: orderType,
+  //           ShippingCity: fetchBag?.Account?.address?.city,
+  //           ShippingStreet: fetchBag?.Account?.address?.street,
+  //           ShippingState: fetchBag?.Account?.address?.state,
+  //           ShippingCountry: fetchBag?.Account?.address?.country,
+  //           ShippingZip: fetchBag?.Account?.address?.postalCode,
+  //           list,
+  //           key: user.x_access_token,
+  //           shippingMethod: fetchBag.Account.shippingMethod
+  //         };
+  //         OrderPlaced({ order: begToOrder })
+  //           .then((response) => {
+
+  //             if (response) {
+  //               if (response.length) {
+  //                 setIsOrderPlaced(0);
+  //                 setorderStatus({ status: true, message: response[0].message })
+  //                 // alert(response[0].message)
+  //               } else {
+  //                 fetchBag.orderList.map((ele) => addOrder(ele.product, 0, ele.discount));
+  //                 localStorage.removeItem("orders");
+  //                 navigate("/order-list");
+  //                 setIsOrderPlaced(2);
+  //               }
+  //             }
+  //           })
+  //           .catch((err) => {
+  //             console.error({ err });
+  //           });
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error({ error });
+  //     });
+  // };
+
   const orderPlaceHandler = () => {
-    console.log("asdddasd")
+    console.log("asdddasd");
     setIsOrderPlaced(1);
     let fetchBag = fetchBeg({});
-    console.log(fetchBag, "fetchBag")
+    console.log(fetchBag, "fetchBag");
+
     GetAuthData()
       .then((user) => {
         let SalesRepId = localStorage.getItem(salesRepIdKey) ?? user.Sales_Rep__c;
+
         if (fetchBag) {
           let list = [];
-          let orderType = "Wholesale Numbers";
+          let orderType = "Wholesale Numbers"; // Default order type
+
           let productLists = Object.values(fetchBag.orderList);
           if (productLists.length) {
-            productLists.map((product) => {
-              if (product.product.Category__c == "PREORDER") orderType = "Pre Order";
+            productLists.forEach((product) => {
+              // Directly set orderType based on the first matching category
+              if (product.product.Category__c == "PREORDER") {
+                orderType = "Pre Order";
+              } else if (product.product.Category__c == "Event Order ") {
+                orderType = "Event Order";
+              } 
+              else if (product.product.Category__c == "TESTER") {
+                orderType = "TESTER ORDER";
+              } 
+              else if (product.product.Category__c == "SAMPLES") {
+                orderType = "SAMPLES ORDER";
+              }
+
               let temp = {
                 ProductCode: product.product.ProductCode,
                 qty: product.quantity,
@@ -176,6 +252,7 @@ const orderGenerationHandler = () => {
               list.push(temp);
             });
           }
+
           let begToOrder = {
             AccountId: fetchBag?.Account?.id,
             Name: fetchBag?.Account?.name,
@@ -183,7 +260,7 @@ const orderGenerationHandler = () => {
             PONumber: PONumber,
             desc: orderDesc,
             SalesRepId,
-            Type: orderType,
+            Type: orderType, // The correct order type based on product categories
             ShippingCity: fetchBag?.Account?.address?.city,
             ShippingStreet: fetchBag?.Account?.address?.street,
             ShippingState: fetchBag?.Account?.address?.state,
@@ -193,14 +270,13 @@ const orderGenerationHandler = () => {
             key: user.x_access_token,
             shippingMethod: fetchBag.Account.shippingMethod
           };
+
           OrderPlaced({ order: begToOrder })
             .then((response) => {
-
               if (response) {
                 if (response.length) {
                   setIsOrderPlaced(0);
-                  setorderStatus({ status: true, message: response[0].message })
-                  // alert(response[0].message)
+                  setorderStatus({ status: true, message: response[0].message });
                 } else {
                   fetchBag.orderList.map((ele) => addOrder(ele.product, 0, ele.discount));
                   localStorage.removeItem("orders");
@@ -217,7 +293,8 @@ const orderGenerationHandler = () => {
       .catch((error) => {
         console.error({ error });
       });
-  };
+};
+
   const handleRemoveProductFromCart = (ele) => {
     addOrder(ele.product, 0, ele.discount);
   };

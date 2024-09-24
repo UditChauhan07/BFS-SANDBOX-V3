@@ -1,7 +1,8 @@
 import { getPermissions } from "./permission";
 // export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 export const originAPi = "https://bfs.uditchauhan.com"
-//export const originAPi = "http://localhost:2611"
+// export const originAPi = "http://localhost:2611"
+
 
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
@@ -117,7 +118,7 @@ let date = new Date();
   let AcCode = getStrCode(orderDetails.Account?.name);
     let MaCode = getStrCode(orderDetails.Manufacturer?.name);
 
-//     const response = await fetch( "http://localhost:2611/PoNumber/generatepo", {
+    //  const response = await fetch( "http://localhost:2611/PoNumber/generatepo"
     const response = await fetch( "https://bfs.uditchauhan.com/PoNumber/generatepo", {
       method: 'POST',
       headers: {

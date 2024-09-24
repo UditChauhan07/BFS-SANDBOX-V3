@@ -25,11 +25,11 @@ const Accordion = ({ data, formattedData,productImage=[] }) => {
         (product.Category__c === "PREORDER" 
           ? "pre-order" 
           : product.Category__c === "TESTER" 
-            ? "tester" 
-            : product.Category__c === "EVENT" 
-              ? "event" 
+            ? "TESTER ORDER" 
+            : product.Category__c === "Event Order" 
+              ? "Event Order" 
               :  product.Category__c === "SAMPLES" 
-              ? "samples" 
+              ? "SAMPLES ORDER" 
               : "wholesale")
       ) 
       {

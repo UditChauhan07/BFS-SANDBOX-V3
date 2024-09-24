@@ -61,7 +61,7 @@ function Product() {
     return groupedData;
   };
   useEffect(() => {
-    if (productTypeFilter === "Pre-order"||productTypeFilter === "TESTER"||productTypeFilter === "EVENT"||productTypeFilter === "SAMPLES") {
+    if (productTypeFilter === "Pre-order"||productTypeFilter === "TESTER Order"||productTypeFilter === "Event Order"||productTypeFilter === "SAMPLES order") {
       setCategoryFilters([])
     }
   }, [productTypeFilter])
@@ -87,16 +87,16 @@ function Product() {
             newData[key] = finalFilteredProducts[key];
           }
         }
-        else if (productTypeFilter === "TESTER") {
+        else if (productTypeFilter === "TESTER ORDER") {
           if (key.match("TESTER")) {
             newData[key] = finalFilteredProducts[key];
           }
-        } else if (productTypeFilter === "EVENT") {
-          if (key.match("EVENT")) {
+        } else if (productTypeFilter === "Event Order") {
+          if (key.match("Event Order")) {
             newData[key] = finalFilteredProducts[key];
           }
         } 
-        else if (productTypeFilter === "SAMPLES") {
+        else if (productTypeFilter === "SAMPLES ORDER") {
           if (key.match("SAMPLES")) {
             newData[key] = finalFilteredProducts[key];
           }
@@ -457,15 +457,15 @@ function Product() {
                       },
                       {
                         label: "TESTER",
-                        value: "TESTER",
+                        value: "TESTER ORDER",
                       },
                       {
-                        label: "EVENT",
-                        value: "EVENT",
+                        label: "Event Order",
+                        value: "EVENT ORDER",
                       },
                       {
                         label: "SAMPLES",
-                        value: "SAMPLES",
+                        value: "SAMPLES ORDER",
                       },
                     ]}
                     onChange={(value) => {
