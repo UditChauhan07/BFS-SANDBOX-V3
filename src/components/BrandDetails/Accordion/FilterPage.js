@@ -120,19 +120,19 @@ function FilterPage({ data, formattedData, setCategoryFilters, categoryFilters, 
                     if (productTypeFilter === 'Pre-order') {
                       // Return only categories that include 'PREORDER'
                       return category.includes('PREORDER');
-                    } else if (productTypeFilter === 'TESTER ORDER') {
+                    } else if (productTypeFilter === 'TESTER') {
                       // Return only categories that include 'TESTER'
-                      return category.includes('TESTER ');
-                    } else if (productTypeFilter === 'Event Order') {
+                      return category.includes('TESTER');
+                    } else if (productTypeFilter === 'EVENT') {
                       // Return only categories that include 'EVENT'
-                      return category.includes('Event Order');
+                      return category.includes('EVENT');
                     } 
-                    else if (productTypeFilter === 'SAMPLES ORDER') {
+                    else if (productTypeFilter === 'SAMPLES') {
                       // Return only categories that include 'EVENT'
                       return category.includes('SAMPLES');
                     }else if (productTypeFilter === 'Wholesale') {
                       // Remove categories that include 'PREORDER', 'TESTER', or 'EVENT'
-                      if(!category.includes('PREORDER') && !category.includes('TESTER') && !category.includes('EVENT')&& !category.includes('SAMPLES')){
+                      if(!category.includes('PREORDER') && !category.includes('TESTER') && !category.includes('EVENT')){
                         return true;
                       }
                     }
