@@ -61,7 +61,7 @@ function Product() {
     return groupedData;
   };
   useEffect(() => {
-    if (productTypeFilter === "Pre-order"||productTypeFilter === "TESTER"||productTypeFilter === "EVENT") {
+    if (productTypeFilter === "Pre-order"||productTypeFilter === "TESTER"||productTypeFilter === "EVENT"||productTypeFilter === "SAMPLES") {
       setCategoryFilters([])
     }
   }, [productTypeFilter])
@@ -96,8 +96,13 @@ function Product() {
             newData[key] = finalFilteredProducts[key];
           }
         } 
+        else if (productTypeFilter === "SAMPLES") {
+          if (key.match("SAMPLES")) {
+            newData[key] = finalFilteredProducts[key];
+          }
+        } 
         else {
-          if (key !== "PREORDER"&&!key.match("TESTER")&&!key.match("EVENT")) {
+          if (key !== "PREORDER"&&!key.match("TESTER")&&!key.match("EVENT")&&!key.match("SAMPLES")) {
             newData[key] = finalFilteredProducts[key];
           }
         }
@@ -457,6 +462,10 @@ function Product() {
                       {
                         label: "EVENT",
                         value: "EVENT",
+                      },
+                      {
+                        label: "SAMPLES",
+                        value: "SAMPLES",
                       },
                     ]}
                     onChange={(value) => {

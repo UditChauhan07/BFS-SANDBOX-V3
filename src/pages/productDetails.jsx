@@ -110,7 +110,9 @@ const ProductDetails = ({ productId, setProductDetailId, isAddtoCart = true, Acc
                     ? "tester" 
                     : product.Category__c === "EVENT" 
                       ? "event" 
-                      : "wholesale")
+                      :  product.Category__c === "SAMPLES" 
+                      ? "samples" 
+                      :"wholesale")
               
             ) 
             {

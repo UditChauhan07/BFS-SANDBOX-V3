@@ -1,7 +1,7 @@
 import { getPermissions } from "./permission";
 // export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
-export const originAPi = "https://bfs.uditchauhan.com"
-//export const originAPi = "http://localhost:2613"
+// export const originAPi = "https://bfs.uditchauhan.com"
+export const originAPi = "http://localhost:2611"
 
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;
@@ -67,64 +67,132 @@ export function PublicCheck() {
   }
 }
 
-export function POGenerator() {
-  let count = parseInt(localStorage.getItem(POCount)) || 1;
-  if (count == "NaN") {
-    localStorage.setItem(POCount, 1);
-    count = 1;
+export function fetchBeg() {
+  let orderStr = localStorage.getItem("orders"); 
+  let orderDetails = {
+    orderList: [],
+    Account: {
+      name: null,
+      id: null,
+      address: null,
+      shippingMethod: null,
+    },
+    Manufacturer: {
+      name: null,
+      id: null,
+    },
+  };
+  
+  if (orderStr) {
+    let orderList = Object.values(JSON.parse(orderStr));
+    if (orderList.length > 0) {
+      orderDetails.Account.id = orderList[0].account.id;
+      orderDetails.Account.name = orderList[0].account.name;
+      orderDetails.Account.shippingMethod = orderList[0].account.shippingMethod;
+      orderDetails.Account.address = JSON.parse(orderList[0].account.address);
+      orderDetails.Manufacturer.id = orderList[0].manufacturer.id;
+      orderDetails.Manufacturer.name = orderList[0].manufacturer.name;
+      orderDetails.orderList = orderList;
+    }
   }
-  let date = new Date();
-  let currentMonth = padNumber(date.getMonth() + 1, true);
-  let currentDate = padNumber(date.getDate(), true);
-  let beg = fetchBeg();
-  let AcCode = getStrCode(beg?.Account?.name);
-  let MaCode = getStrCode(beg?.Manufacturer?.name);
-
-  let orderCount = padNumber(count, true);
-  if (beg?.orderList?.[0]?.productType === "pre-order") return `PRE-${AcCode + MaCode}${currentDate + currentMonth}${orderCount}`;
-  else return `${AcCode + MaCode}${currentDate + currentMonth}${orderCount}`;
+  
+  return orderDetails;
 }
 
+
+export async function POGenerator() {
+  try {
+    
+    let orderDetails = fetchBeg();
+let count = parseInt(localStorage.getItem("woX5MkCSIOlHXkT")) || 1;
+if (isNaN(count)) {
+      localStorage.setItem("woX5MkCSIOlHXkT", 1);
+      count = 1;
+    }
+
+let date = new Date();
+    let currentMonth = padNumber(date.getMonth() + 1, true);
+    let currentDate = padNumber(date.getDate(), true);
+
+  let AcCode = getStrCode(orderDetails.Account?.name);
+    let MaCode = getStrCode(orderDetails.Manufacturer?.name);
+
+    
+    const response = await fetch( "http://localhost:2611/PoNumber/generatepo", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        accountName: orderDetails.Account?.name,
+        manufacturerName: orderDetails.Manufacturer?.name,
+        orderDate: date.toISOString(),
+      }),
+    });
+    console.log(response)
+ 
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+   
+    const poData = await response.json();
+    console.log(poData);
+
+    if (poData.success) {
+      let generatedPONumber = poData.poNumber;
+
+      localStorage.setItem("woX5MkCSIOlHXkT", count + 1);
+      
+      return await generatedPONumber;
+    } else {
+      console.error('Failed to generate PO number:', poData.message);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error generating PO number:', error.message);
+    return null;
+  }
+}
+
+// Helper function to generate codes
 export function getStrCode(str) {
   if (!str) return null;
   let codeLength = str.split(" ");
+  
   if (codeLength.length >= 2) {
     return `${codeLength[0].charAt(0).toUpperCase() + codeLength[1].charAt(0).toUpperCase()}`;
   } else {
     return `${codeLength[0].charAt(0).toUpperCase() + codeLength[0].charAt(codeLength[0].length - 1).toUpperCase()}`;
   }
 }
+
+// Helper function to pad numbers
 function padNumber(n, isTwoDigit) {
   if (isTwoDigit) {
-    if (n < 10) {
-      return "0" + n;
-    } else {
-      return n;
-    }
+    return n < 10 ? "0" + n : n;
   } else {
-    if (n < 10) {
-      return "000" + n;
-    } else if (n < 100) {
-      return "00" + n;
-    } else if (n < 1000) {
-      return "0" + n;
-    } else {
-      return n;
-    }
+    if (n < 10) return "000" + n;
+    if (n < 100) return "00" + n;
+    if (n < 1000) return "0" + n;
+    return n;
   }
 }
 
 export function formatNumber(num) {
   if (num >= 0 && num < 1000000) {
-    return (num / 1000).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
+    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
   } else if (num >= 1000000) {
-    return (num / 1000000).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "M";
+    return (num / 1000000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "M";
   } else if (num < 0) {
-    return (num / 1000).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
+    return (num / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + "K";
   } else {
     return num;
   }
 }
+
+
+
 export function supportDriveBeg() {
   let supportList = localStorage.getItem(support);
   return JSON.parse(supportList);
@@ -142,35 +210,7 @@ export function supportClear() {
   }
 }
 
-export function fetchBeg() {
-  let orderStr = localStorage.getItem(orderKey);
-  let orderDetails = {
-    orderList: [],
-    Account: {
-      name: null,
-      id: null,
-      address: null,
-      shippingMethod: null,
-    },
-    Manufacturer: {
-      name: null,
-      id: null,
-    },
-  };
-  if (orderStr) {
-    let orderList = Object.values(JSON.parse(orderStr));
-    if (orderList.length > 0) {
-      orderDetails.Account.id = orderList[0].account.id;
-      orderDetails.Account.name = orderList[0].account.name;
-      orderDetails.Account.shippingMethod = orderList[0].account.shippingMethod;
-      orderDetails.Account.address = JSON.parse(orderList[0].account.address);
-      orderDetails.Manufacturer.id = orderList[0].manufacturer.id;
-      orderDetails.Manufacturer.name = orderList[0].manufacturer.name;
-      orderDetails.orderList = orderList;
-    }
-  }
-  return orderDetails;
-}
+
 
 export async function OrderPlaced({ order }) {
   let orderinit = {

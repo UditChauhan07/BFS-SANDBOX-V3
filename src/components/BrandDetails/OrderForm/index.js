@@ -24,7 +24,9 @@ const SpreadsheetUploader = ({ rawData, showTable = false, setOrderFromModal, or
     { value: "preorder", label: "Pre-Order" },
     { value: "tester", label: "Tester" },
     { value: "event", label: "Event" },
+    { value: "samples", label: "SAMPLES" },
   ]
+
   const navigate = useNavigate();
   const CheckError = (data) => {
     let totalQty = 0;
