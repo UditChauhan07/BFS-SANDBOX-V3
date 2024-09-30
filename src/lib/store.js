@@ -128,6 +128,8 @@ let date = new Date();
         accountName: orderDetails.Account?.name,
         manufacturerName: orderDetails.Manufacturer?.name,
         orderDate: date.toISOString(),
+        accountId: orderDetails.Account?.id,  // Make sure this is passed
+        manufacturerId: orderDetails.Manufacturer?.id // Ensure this is passed
       }),
     });
     console.log(response)
