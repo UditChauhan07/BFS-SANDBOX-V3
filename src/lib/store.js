@@ -742,16 +742,14 @@ export async function topProduct({ month, manufacturerId, accountIds }) {
     return data;
   }
 }
-
-export async function getSessionStatus({ key, retailerId }) {
-
+export async function getSessionStatus({ key, salesRepId }) {
   let headersList = {
     Accept: "*/*",
     "Content-Type": "application/json",
   };
-  let response = await fetch(url + "v3/VQzxx7VoZqQrVKe", {
+  let response = await fetch(url + "v3/XbgheAKvG5EtkXs", {
     method: "POST",
-    body: JSON.stringify({ key, retailerId }),
+    body: JSON.stringify({ key, salesRepId }),
     headers: headersList,
   });
   let data = JSON.parse(await response.text());
@@ -1258,6 +1256,7 @@ export const productGuides = {
 
 };
 
+
 export function isDateEqualOrGreaterThanToday(dateString) {
   // Parse the input date string
   const inputDate = new Date(dateString);
@@ -1270,6 +1269,7 @@ export function isDateEqualOrGreaterThanToday(dateString) {
   // Compare the dates
   return today >= inputDate;
 }
+
 
 
 export function DateConvert(dateString, timeStamp = false) {

@@ -53,8 +53,10 @@
   margin: 0;
 }
 
+
 .LeftMainTopBox p span {
   font-weight: 700;
+  font-size: 14px;
 }
 
 .LeftMainTopBox p svg {
@@ -247,7 +249,8 @@
 }
 
 .HeightGiven {
-  height: 400px;
+  max-height: 400px;
+  height: auto;
   overflow: auto;
   padding: 15px 0;
   background-color: #ffff;
@@ -262,8 +265,11 @@
   padding: 0 36px 0 0;
   width: 98%;
 }
+.display{
+  display: block;
+}
 
-@media (max-width: 1024.98px) {
+@media (max-width: 1092.98px) {
   .ActivityDate p {
     line-height: 23px;
     width: 127px;
@@ -287,9 +293,66 @@
     width: 48px;
     height: 48px;
   }
+ 
+  .LeftMainTopBox p {
+    font-size: 14px;
+ 
+  }
+  .LeftMainTopBox p span {
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .FullQuearyDetailH2 span {
+    font-size: 18px;
+    letter-spacing: 2.2px;
+  }
+  .FullQuearyDetailH2 {
+    font-size: 14px;
+    
+  }
+  .FullQuearyDetailH4 {
+   font-size: 18px;
+    
+  }
+  .FullQuearyDetailH4 span {
+    font-weight: 700;
+    font-size:18px ;
+  }
 }
 
-@media (max-width: 767.98px) {
+@media (max-width:768px) and (min-width:500px){
+  .LeftMainTopBox {
+    padding: 0px 15px;
+  }
+  .FullQuearyDetailH2 span {
+    font-size: 16px;
+    letter-spacing: 2.2px;
+  }
+  .FullQuearyDetailH2{
+font-size: 12px;
+  }
+  .FullQuearyDetailH4{
+    font-size: 16px;
+  }
+  .FullQuearyDetailH4 span{
+    font-size: 16px;
+  }
+}
+@media(max-width:425px){
+  .FullQuearyDetailH2 span{
+    font-size: 17px;
+  }  
+  .FullQuearyDetailH4 {
+    padding-left: 28px;
+  }
+  .LeftMainDiv{
+    border-bottom: 1px dashed #000;
+    padding: 0 36px 0 0;
+    width: 98%;
+    margin-top: -4%;
+}
+}
+/* @media (max-width: 768px) {
   .ActivityDate p {
     line-height: 23px;
     width: 127px;
@@ -309,4 +372,4 @@
     padding: 0 0px 0 0;
     width: 100%;
   }
-}
+} */

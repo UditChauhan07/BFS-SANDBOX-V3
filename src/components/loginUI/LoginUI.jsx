@@ -76,7 +76,7 @@ const LoginUI = () => {
                   <a className={styles.tabNotActive} href={'https://portal.beautyfashionsales.com/'}>
                     Sales Rep Login
                   </a>
-                  <hr />
+                  <hr className={styles.hrline} />
                 </div>
                 <div className="col-6">
                   <button className={styles.tab}>

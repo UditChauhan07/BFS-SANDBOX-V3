@@ -71,10 +71,10 @@ function FullQuearyDetail({ data, setRest }) {
                     <div className='col-lg-9 col-md-9 col-sm-12'>
                         <div className={Detail.LeftMainDiv}>
                             <div className={Detail.LeftMainTopBox}>
-                                <p>
+                                <p >
                                     {/* formatAMPM(date)} */}
                                     <UserChecked />
-                                    <span>{data.Account.Name}</span>&nbsp; raised this on {DateConvert(data.Date_Opened__c)} </p>
+                                    <span>{data.Account.Name} &nbsp;</span> raised this on {DateConvert(data.Date_Opened__c)} </p>
 
                             </div>
                             <p style={{ marginTop: "1rem" }}>{data.Description?.split("User Desc:").length == 2 ? <>{data.Description.split("User Desc:")[1].split("Issue Desc:")[1]}<br /><b>User Description:</b> {data.Description.split("User Desc:")[1].split("Issue Desc:")[0]}</> : data.Description}</p>

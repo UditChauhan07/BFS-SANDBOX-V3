@@ -217,8 +217,9 @@ span.ProductQty {
 
 .launchBrand img {
   border-radius: unset;
-
-  display: flex;
+display: flex;
+max-width:200px;
+height:auto
 }
 .timeline-content {
   display: flex;
@@ -238,6 +239,9 @@ span.ProductQty {
 
 .PlusBtn {
   padding: 35px;
+}
+.maindiv{
+  display: flex !important;
 }
 .AddNewInner {
   background-color: #fff;
@@ -299,10 +303,59 @@ span.ProductQty {
 .EDate {
   gap: 2px !important;
 }
+.Unleashedfeature{
+  width: 25%;
+}
 
 /* Media Query  */
-
-@media (min-width: 769.98px) {
+ 
+@media (max-width: 1345px) and (min-width:1025px){
+.timeline-content {
+    width: 100%;
+    margin-left: 35px;
+  }
+  span.ProductQty {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    margin-left: 10px;
+    padding: 5px 8px 5px 8px;
+    border-radius: 7px;
+    text-transform: uppercase;
+    font-size: 10px;
+  }
+  .AddNewInner p {
+    font-size: 18px;
+    
+  }
+  .LaunchProductDetail h3 {
+    font-size: 15px;
+    }
+  
+} 
+/* @media (max-width: 1254px) and (min-width:1025) {
+  .timeline-content {
+      width: 100%;
+      margin-left: 35px;
+    }
+    span.ProductQty {
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      margin-left: 10px;
+      padding: 5px 8px 5px 8px;
+      border-radius: 7px;
+      text-transform: uppercase;
+      font-size: 0;
+    } 
+    .launchBrand img {
+      border-radius: unset;
+    display: flex;
+    max-width:150px;
+    height:auto
+    }
+  } */
+/* @media (min-width: 769.98px) {
   .DateCurrent01 {
     font-size: 16px;
   }
@@ -336,20 +389,9 @@ span.ProductQty {
     line-height: 20px;
     letter-spacing: 1.12px;
   }
-}
+} */
 
-@media (max-width: 600px) {
-  .ProductInfo .d-flex.mt-2 {
-    display: block !important;
-  }
-  .LaunchProductDetail {
-    margin: 15px;
-  }
-  .timeline-content {
-    width: 90%;
-    margin-left: 35px;
-  }
-}
+
 @media (max-width: 400px) {
   .ProductInfo {
     border-right: 0px dashed #000;
@@ -358,4 +400,157 @@ span.ProductQty {
     display: block;
     width: 86%;
   }
+}
+
+@media (max-width: 1150px) and (min-width:750px) {
+  .maindiv{
+    display:block !important;
+  }
+  .timeline-content {
+    width: 110%;
+    margin-left: 35px;
+  }
+  .launchBrand img {
+    border-radius: unset;
+    display: flex;
+    max-width: 135px;
+    height: auto;
+}
+
+.DateCurrent01 {
+  background-color: #e5e5e5;
+  color: #237ca2;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 3px 8px;
+  width: 121px;
+  border-radius: 6px;
+  text-align: center;
+  letter-spacing: 1.2px;
+  margin-left: 24PX;
+}
+.DateCurrent02 {
+  background-color: #f3e8e0;
+  color: #3c9a4e;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 3px 8px;
+  width: 155px;
+  border-radius: 6px;
+  text-align: center;
+  letter-spacing: 1.2px;
+}
+.DateCurrent03 {
+  background-color: #e0d3cc;
+  color: #9e4545;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 3px 8px;
+  width: 119px;
+  border-radius: 6px;
+  text-align: center;
+  letter-spacing: 1.2px;
+  margin-left: 20px;
+}
+.ShipDate span {
+  margin-right: -4px;
+  font-size: 15px;
+}
+.LaunchProductDetail h3 {
+font-size: 12px;
+}
+span.ProductQty {
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  margin-left: 1px;
+  padding: 5px 8px 5px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.Unleashedfeature{
+  width: 82%;
+  margin-left: 29px;
+}
+h1.TopHeading {
+font-size: 22px;
+margin-left: 23px;
+}
+}
+@media (max-width: 750px) and (min-width:400px) {
+  .maindiv{
+    display:block !important;
+  }
+  .timeline-content {
+    width: 110%;
+    margin-left: 35px;
+  }
+  .launchBrand img {
+    border-radius: unset;
+    display: flex;
+    max-width: 135px;
+    height: auto;
+}
+
+.DateCurrent01 {
+  background-color: #e5e5e5;
+  color: #237ca2;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 3px 8px;
+  width: 121px;
+  border-radius: 6px;
+  text-align: center;
+  letter-spacing: 1.2px;
+  margin-left: 24PX;
+}
+.DateCurrent02 {
+  background-color: #f3e8e0;
+  color: #3c9a4e;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 3px 8px;
+  width: 155px;
+  border-radius: 6px;
+  text-align: center;
+  letter-spacing: 1.2px;
+}
+.DateCurrent03 {
+  background-color: #e0d3cc;
+  color: #9e4545;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 3px 8px;
+  width: 119px;
+  border-radius: 6px;
+  text-align: center;
+  letter-spacing: 1.2px;
+  margin-left: 20px;
+}
+.ShipDate span {
+  margin-right: -4px;
+  font-size: 15px;
+}
+.LaunchProductDetail h3 {
+font-size: 12px;
+}
+span.ProductQty {
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  margin-left: 1px;
+  padding: 5px 8px 5px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.Unleashedfeature{
+  width: 82%;
+  margin-left: 29px;
+}
+h1.TopHeading {
+font-size: 22px;
+margin-left: 23px;
+}
 }

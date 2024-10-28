@@ -65,9 +65,16 @@
   outline: none;
 }
 
-/* @media(max-width:767.98px){
-  .FiltersInNewness{
-  display: none !important;
+@media(max-width:1256px) and (min-width:769px){
+  .breakHolder{
+ margin-right: 50px;
 }
-} */
+
+}
+@media(max-width:425px){
+  .inorderflex h2{
+    font-size: 17px;
+    
+    }
+}
 

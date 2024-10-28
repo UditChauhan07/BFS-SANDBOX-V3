@@ -457,11 +457,9 @@ cursor: pointer;
   .Status2 {
     margin-top: 20px;
   }
-
-  .StatusOrder {
+  /* .StatusOrder {
     display: block;
-  }
-
+  } */
   .Status1 {
     display: grid;
     gap: 20px;
@@ -481,10 +479,18 @@ cursor: pointer;
   .poNumber .PoOrderLast h3 {
     text-align: start;
   }
+  .Margitotal{
+    margin: 30px 0;
+    margin-top: 0px;
 }
+.totalProductPrice button{
+  font-size: 14px;
+  }
+}
+
 @media (max-width: 1024.98px) {
   .poNumber{
-    text-align: right;
+    /* text-align: right; */
     padding: 15px 20px;
   }
   .poNumber h3{
@@ -497,4 +503,16 @@ cursor: pointer;
     padding: 0 10px!important;
     flex-wrap: wrap;
   }
+  .Margitotal{
+    margin: 30px 0;
+    margin-top: 0px;
+}
+.totalProductPrice button{
+  font-size: 12px;
+  }
+ .Status1 h4 {
+   
+    padding: 22px 18px 22px;
+    margin: 0;
+}
 }

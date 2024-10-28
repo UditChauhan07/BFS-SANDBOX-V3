@@ -367,6 +367,7 @@
 
 .ShipBut {
   width: 100%;
+  display: flex;
 }
 
 .ShipBut button {
@@ -382,8 +383,10 @@
   text-transform: uppercase;
   background-color: #000;
   margin: 0 0 28px 0;
+  display: flex;
 }
-@media (max-width: 1300px) {
+/* @media (max-width: 1300px) {
+
   .ShipBut button,
   .btnHolder {
     font-size: 13px;
@@ -408,4 +411,132 @@
   .dFlex > div{
     width: 100%;
   }
+} */
+
+@media (max-width: 1246px) {
+  .MainInner {
+    padding: 17px 5px;
+  }
+  .scrollP {
+    padding: 10px 5px;
+  }
+
+  .Mainbox1M {
+    gap: 15px;
+  }
+  .ShipBut button,
+  .btnHolder {
+  font-size: 12px;
+    
+  }
 }
+
+@media (max-width: 898px) {
+
+
+  .MyBagFinalRight h4 {
+    display: block;
+  }
+
+  .MyBagFinalTop {
+    display: block;
+    justify-content: space-between;
+  }
+
+  .MyBagFinalleft {
+    margin: 23px 0 0 0;
+  }
+  .Mainbox {
+    display: block;
+  }
+  .Mainbox2M {
+    margin: 20px 0 0px 0;
+  }
+  .ShipBut button,
+  .btnHolder {
+  font-size: 13px;
+  display: block;
+    
+  }
+}
+
+@media (max-width: 1024px) {
+ .MainInner {
+    padding: 17px 5px;
+  }
+  .scrollP {
+    padding: 10px 5px;
+  }
+
+  .Mainbox1M {
+    gap: 8px;
+  }
+  .MyBagFinalRight h4 span {
+    font-size: 20px;
+   
+  }
+  .MyBagFinalRight h4 {
+   font-size: 15px;
+   
+  }
+  .MyBagFinalleft h5 b {
+   font-size: 18px;
+   
+  }
+  .ShippControl h2 {
+  font-size: 16px;
+  padding: 7px;
+  }
+  .MainBag h3 {
+  font-size: 16px;
+  padding-left: 7px;
+  }
+  .ShipBut button,
+  .btnHolder {
+  font-size: 10px;
+  display: block;
+    
+  }
+ 
+}
+ @media (max-width: 992px) {
+  .MainInner {
+     padding: 17px 5px;
+   }
+   .scrollP {
+     padding: 10px 5px;
+   }
+ 
+   .Mainbox1M {
+     gap: 8px;
+   }
+   .MyBagFinalRight h4 span {
+     font-size: 20px;
+    
+   }
+   .MyBagFinalRight h4 {
+    font-size: 15px;
+    
+   }
+   .MyBagFinalleft h5 b {
+    font-size: 20px;
+    
+   }
+   .ShippControl h2 {
+   font-size: 16px;
+   padding: 7px;
+   }
+   .MainBag h3 {
+   font-size: 16px;
+   padding-left: 7px;
+   }
+   .MyBagFinalleft h5{
+    font-size: 20px;
+   }
+   .ShipBut button,
+   .btnHolder {
+   font-size: 13px;
+   display: block;
+   }
+  
+ }

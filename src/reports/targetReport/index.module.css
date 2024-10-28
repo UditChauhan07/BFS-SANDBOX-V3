@@ -1,13 +1,12 @@
 .tableBoundary {
   border: 1px dashed #000;
-  /* overflow: auto; */
-/* } 
+}
 
 .th {
   background-color: #f8f8f8 !important;
   color: #000 !important;
   font-family: Arial-500;
-  font-size: 16px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 500;
   line-height: 23px; /* 177.778% */
@@ -22,14 +21,13 @@
   margin: auto 0;
 }
 
-.month {
-  background-color: #eeeeee !important;
-  color: #000 !important;
+/* .month {
+color: #000 !important;
   font-family: Arial-500;
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
-  line-height: 32px; /* 177.778% */
+  line-height: 32px; 
   letter-spacing: 1.12px;
   padding-left: 20px !important;
 }
@@ -37,7 +35,9 @@
   position: sticky;
   top: 0%;
   z-index: 2;
-}
+} */
+
+
 .td {
   color: #000;
   font-family: Montserrat-400;
@@ -179,6 +179,18 @@
   letter-spacing: 1.6px;
   padding-left: 20px !important;
 }
+.tableResponsive{
+  min-width: "600px" ;
+}
+@media (max-width: 1077px) {
+  /* Remove sticky position for smaller devices */
+    .tableResponsive {
+      min-width: 1200px !important;
+      width: 100% !important;
+      overflow: hidden !important;
+  }
+
+} 
 
 /* #salesReportTable tbody tr:nth-last-child(1) {
     position: sticky;

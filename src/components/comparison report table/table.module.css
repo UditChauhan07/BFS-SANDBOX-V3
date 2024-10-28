@@ -126,9 +126,25 @@
   padding-left: 20px !important;
 
 }
+.tableResponsive{
+  min-height: 600px;
+  }
+@media (max-width: 900px) {
+  /* Remove sticky position for smaller devices */
+    .tableResponsive {
+      min-width: 775px !important;
+      width: 100% !important;
+      overflow: hidden !important;
+  }
 
-/* #salesReportTable tbody tr:nth-last-child(1) {
-  position: sticky;
-  bottom: 0%;
-  z-index: 6;
-} */
+}
+
+@media (max-width: 426px){
+  .th {
+    font-size: 14px;
+   
+  }
+  .td{
+    font-size: 13px;
+  }
+}

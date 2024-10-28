@@ -105,7 +105,7 @@ function LaunchCalendar({ productList, selectBrand, brand, month }) {
     <div id="Calendar">
       <div className="container">
         <h1 className="TopHeading">Marketing Calendar</h1>
-        <div className="row">
+        <div className="maindiv row">
           <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 ">
             <ul className="timeline mt-4 mr-4" id="CalenerContainer">
               {!isEmpty ? (
@@ -161,7 +161,7 @@ function LaunchCalendar({ productList, selectBrand, brand, month }) {
                                     </div>
                                   </div>
                                   <div className="launchBrand" onClick={()=>navigate("/Brand/"+product.ManufacturerId__c)}>
-                                  <ImageWithFallback className="img-fluid" src={"\\assets\\images\\brandImage\\" + product.ManufacturerId__c + ".png"} alt={`${product.name} logo`} fallback={"\\assets\\images\\dummy.png"} style={{maxWidth:'200px',height:'auto'}} />
+                                  <ImageWithFallback className="img-fluid" src={"\\assets\\images\\brandImage\\" + product.ManufacturerId__c + ".png"} alt={`${product.name} logo`} fallback={"\\assets\\images\\dummy.png"}  />
                                   </div>
                                   
 
@@ -180,7 +180,7 @@ function LaunchCalendar({ productList, selectBrand, brand, month }) {
             </ul>
           </div>
 
-          <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 ">
+          <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 Unleashedfeature">
             <div className="GrayBg">
               <div className="PlusBtn">
                 <div className="AddNewInner">

@@ -536,7 +536,7 @@ const TargetRollOver = () => {
                     )}
                     <div className={`d-flex p-3 ${Styles.tableBoundary} mb-5 mt-3`}>
                         <div className="" style={{ maxHeight: "73vh", minHeight: "40vh", overflow: "auto", width: "100%" }}>
-                            <table id="salesReportTable" className="table table-responsive" style={{ minHeight: "600px" }}>
+                            <table id="salesReportTable" className={`${Styles.tableResponsive} table table-responsive`} >
                                 <thead>
                                     <tr>
                                         <th className={`${Styles.th} ${Styles.stickyFirstColumnHeading} `} style={{ minWidth: "170px" }}>
@@ -668,13 +668,13 @@ const TargetRollOver = () => {
                                             Dec Diff
                                         </th>
 
-                                        <th className={`${Styles.month} ${Styles.stickyThirdLastColumnHeading}`} style={{ minWidth: "150px" }}>
+                                        <th className={`${Styles.th} ${Styles.stickyThirdLastColumnHeading}`} style={{ minWidth: "150px" }}>
                                             Yearly Target
                                         </th>
-                                        <th className={`${Styles.month} ${Styles.stickySecondLastColumnHeading}`} style={{ minWidth: "200px" }}>
+                                        <th className={`${Styles.th} ${Styles.stickySecondLastColumnHeading}`} style={{ minWidth: "200px" }}>
                                             Yearly Purchase
                                         </th>
-                                        <th className={`${Styles.month} ${Styles.stickyLastColumnHeading}`} style={{ minWidth: "150px" }}>
+                                        <th className={`${Styles.th} ${Styles.stickyLastColumnHeading}`} style={{ minWidth: "150px" }}>
                                             Yearly Diff
                                         </th>
                                     </tr>
