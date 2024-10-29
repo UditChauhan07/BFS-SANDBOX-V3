@@ -356,9 +356,7 @@
 }
 
 @media (max-width: 898px) {
-
-
-  .MyBagFinalRight h4 {
+.MyBagFinalRight h4 {
     display: block;
   }
 
@@ -369,6 +367,7 @@
 
   .MyBagFinalleft {
     margin: 23px 0 0 0;
+  padding-left: 35px;
   }
   .Mainbox {
     display: block;
@@ -376,9 +375,12 @@
   .Mainbox2M {
     margin: 20px 0 0px 0;
   }
+  /* .MyBagFinalRight h4 span{
+    font-size: 22px;
+  } */
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1050px) {
  .MainInner {
     padding: 17px 5px;
   }
@@ -410,7 +412,7 @@
   padding-left: 7px;
   }
 }
- @media (max-width: 923px) {
+ @media (max-width: 923px) and (min-width:898) {
   .MainInner {
      padding: 17px 5px;
    }

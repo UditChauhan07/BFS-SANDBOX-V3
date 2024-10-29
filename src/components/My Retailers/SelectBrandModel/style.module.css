@@ -196,5 +196,8 @@
     height: 250px;
     overflow: auto;
   }
+  .manufacturer {
+    font-size: 10px;
+  }
 }
 

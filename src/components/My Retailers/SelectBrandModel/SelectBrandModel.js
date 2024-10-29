@@ -14,7 +14,7 @@ const SelectBrandModel = ({ brands, onClose }) => {
       <div className="px-[10px] pb-[10px] pt-[10px] max-w-[900px]">
         <section>
         <div className="d-flex align-items-center justify-content-between gap-5 mb-4">
-            <h1 className="font-[Montserrat-500] text-[22px] tracking-[2.20px] text-center">
+            <h1 className={`${Styles.manufacturer}font-[Montserrat-500] text-[22px] tracking-[2.20px] text-center`}>
               Choose the Manufacturer
             </h1>
             <button type="button" onClick={onClose}>

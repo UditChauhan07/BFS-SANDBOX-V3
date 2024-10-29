@@ -432,9 +432,7 @@
 }
 
 @media (max-width: 898px) {
-
-
-  .MyBagFinalRight h4 {
+.MyBagFinalRight h4 {
     display: block;
   }
 
@@ -445,6 +443,7 @@
 
   .MyBagFinalleft {
     margin: 23px 0 0 0;
+    padding-left: 37px;
   }
   .Mainbox {
     display: block;
@@ -452,12 +451,16 @@
   .Mainbox2M {
     margin: 20px 0 0px 0;
   }
-  .ShipBut button,
+  
   .btnHolder {
   font-size: 13px;
   display: block;
     
   }
+   .ShipBut Button{
+   font-size: 5px;
+      
+   } 
 }
 
 @media (max-width: 1024px) {
@@ -497,6 +500,7 @@
   display: block;
     
   }
+
  
 }
  @media (max-width: 992px) {
@@ -538,5 +542,10 @@
    font-size: 13px;
    display: block;
    }
-  
+  }
+
+ @media(max-width:425px){
+  .ShipBut button{
+    font-size: 10px;
+  }
  }

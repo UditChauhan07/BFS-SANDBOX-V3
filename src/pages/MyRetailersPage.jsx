@@ -7,9 +7,7 @@ import AppLayout from "../components/AppLayout";
 import { GetAuthData, getAllAccountBrand, getAllAccountLocation } from "../lib/store";
 
 const MyRetailersPage = ({manufacturerId}) => {
-
-
-  const [manufacturerFilter, setManufacturerFilter] = useState(manufacturerId);
+ const [manufacturerFilter, setManufacturerFilter] = useState(manufacturerId);
   const [sortBy, setSortBy] = useState();
   const [searchBy, setSearchBy] = useState("");
   const [storeList, setStoreList] = useState({ isLoading: true, data: [] });
