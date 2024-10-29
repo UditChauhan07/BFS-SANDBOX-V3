@@ -419,7 +419,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
                     </div>
                   </div>
                   <div className="row" data-html2canvas-ignore>
-                    <div className="col-6">
+                    <div className="col-lg-6 col-sm-12">
                       <div className={Styles.ShipBut} data-html2canvas-ignore>
                         {invoices?.length > 0 ? (
                           <button className="py-1 d-flex justify-content-center" onClick={() => downloadFiles(invoices)}>
@@ -430,7 +430,7 @@ function MyBagFinal({ setOrderDetail, generateXLSX, generatePdfServerSide }) {
                         </button>}
                       </div>
                     </div>
-                    <div className="col-6">
+                    <div className="col-lg-6 col-sm-12">
                       <div className={Styles.ShipBut} data-html2canvas-ignore>
                         {OrderData.Tracking__c ? (
                           <button className="py-1 d-flex justify-content-center" onClick={() => setShowTracking(!showTracking)}>

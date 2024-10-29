@@ -190,7 +190,7 @@
   }
 }
 
-@media (max-width: 650px) {
+@media (max-width:375px) {
   .ModalResponsive {
     grid-template-columns: repeat(1, auto);
     height: 250px;
