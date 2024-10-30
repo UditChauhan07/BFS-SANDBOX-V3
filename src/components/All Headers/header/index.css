@@ -1,15 +1,15 @@
-@media screen and (max-width: 1130px) {
+@media(max-width: 1130px) {
   #main {
     flex-wrap: wrap;
   }
-  .text{
+  .text a{
     font-size: 10px !important;
 
   }
 }
-@media screen and (max-width: 768px){
-  .text{
-    font-size: px !important;
+@media(max-width: 768px){
+  .text a{
+    font-size: 3px !important;
 
   }
 
