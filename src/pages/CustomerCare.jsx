@@ -6,7 +6,7 @@ import HelpSection from "../components/Footer/HelpSection";
 import Footer from "../components/Footer/Footer";
 import MobileHeader from "../components/All Headers/mobileHeader/MobileHeader";
 import AppLayout from "../components/AppLayout";
-
+// console.log(8888888ujf ejiu24ut094t09)
 const CustomerCare = () => {
   return (
    <AppLayout>
