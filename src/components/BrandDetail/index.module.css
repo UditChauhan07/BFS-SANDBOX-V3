@@ -157,3 +157,10 @@ p.seti {
     font-size: 24px;
   }
 }
+
+@media (max-width: 500.98px) {
+
+  .TotalSide {
+    display: grid;
+     }
+}

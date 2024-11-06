@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useMemo } from "react";
 import "./Style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -105,8 +106,8 @@ function LaunchCalendar({ productList, selectBrand, brand, month }) {
     <div id="Calendar">
       <div className="container">
         <h1 className="TopHeading">Marketing Calendar</h1>
-        <div className="maindiv row">
-          <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 ">
+        <div className="row">
+          <div className="col-xl-10 col-lg-10 col-md-12 col-sm-12 ">
             <ul className="timeline mt-4 mr-4" id="CalenerContainer">
               {!isEmpty ? (
                 filterData?.map((month, index) => {
@@ -140,8 +141,8 @@ function LaunchCalendar({ productList, selectBrand, brand, month }) {
                                         <div className="DateEod">{product.Launch_Date__c ? product.Launch_Date__c.split("-")[2] + '/' + monthNames[parseInt(product.Launch_Date__c.split("-")[1]) - 1].toUpperCase() + '/' + product.Launch_Date__c.split("-")[0] : 'NA'}</div>
                                       </div>
                                     </div>
-                                    <div className="d-flex mt-2">
-                                    <div className="m-auto ProductImg">
+                                    <div className="ProductMain mt-2">
+                                    <div className=" ProductImg">
                                         <img className="zoomInEffect" src={product?.ProductImage ?? "\\assets\\images\\dummy.png"} alt={product.Name} onClick={() => {
                                           setProductDetailId(product.Id);
                                         }} style={{ cursor: 'pointer' }} />
@@ -156,12 +157,12 @@ function LaunchCalendar({ productList, selectBrand, brand, month }) {
                                           </p>
                                           <p style={{ marginRight: '10px' }}>Price <span className="ProductQty">{listPrice}</span></p>
                                         </div>
-                                        <p>{product.Description}</p>
+                                        <p className="ScrollRight">{product.Description}</p>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="launchBrand" onClick={()=>navigate("/Brand/"+product.ManufacturerId__c)}>
-                                  <ImageWithFallback className="img-fluid" src={"\\assets\\images\\brandImage\\" + product.ManufacturerId__c + ".png"} alt={`${product.name} logo`} fallback={"\\assets\\images\\dummy.png"}  />
+                                  <ImageWithFallback className="img-fluid" src={"\\assets\\images\\brandImage\\" + product.ManufacturerId__c + ".png"} alt={`${product.name} logo`} fallback={"\\assets\\images\\dummy.png"} />
                                   </div>
                                   
 
@@ -180,7 +181,7 @@ function LaunchCalendar({ productList, selectBrand, brand, month }) {
             </ul>
           </div>
 
-          <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 Unleashedfeature">
+          <div className="col-xl-2 col-lg-2 col-md-12 col-sm-12 ">
             <div className="GrayBg">
               <div className="PlusBtn">
                 <div className="AddNewInner">

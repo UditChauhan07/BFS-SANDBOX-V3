@@ -58,11 +58,11 @@
   font-weight: 500!important;
 }
 
-.priceHolder{
+p.priceHolder{
   font-family: "Montserrat-400"!important;
-  font-size: 28px!important;
+  font-size: 28px;
   /* font-weight: 300!important; */
-  line-height: 32px!important;
+  line-height: 32px;
   letter-spacing: 1.12px!important;
   text-align: start!important;
 }
@@ -79,11 +79,44 @@
   letter-spacing: 2px!important;
   text-align: start!important;
 }
-.nameHolder{
+h2.nameHolder{
   font-family: "Montserrat-600"!important;
-  font-size: 28px!important;
+  font-size: 28px;
   /* font-weight: 300!important; */
-  line-height: 32px!important;
-  letter-spacing: 1.12px!important;
+  line-height: 32px;
+  letter-spacing: 1.12px;
   text-align: start!important;
+}
+
+.flexCon{
+  display: flex;
+}
+
+@media(max-width:767px){
+  .flexCon{
+    display: grid;
+  }
+
+  h2.nameHolder{
+    font-family: "Montserrat-600"!important;
+    font-size: 20px;
+    /* font-weight: 300!important; */
+    line-height: 25px;
+  } 
+
+  
+p.priceHolder{
+  font-family: "Montserrat-400"!important;
+  font-size: 20px;
+  line-height: 25px;
+
+}
+}
+
+@media(max-width:500px){
+ 
+  h2.nameHolder {
+    font-size: 16px;
+    line-height: 21px;
+}
 }

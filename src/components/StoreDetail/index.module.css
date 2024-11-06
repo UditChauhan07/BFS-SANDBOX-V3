@@ -1,3 +1,4 @@
+
 .accountHolder {
   background: #f8f8f8;
   width: 100%;
@@ -6,7 +7,7 @@
   padding: 3rem 2rem 2rem;
 }
 .accountHolder .accountTitleHolder {
-  width: 30%;
+  width: 50%;
 }
 
 .dFlex {
@@ -99,13 +100,32 @@
   color: #00a82d;
 }
 .accountHolder .infoHolder {
-  width: 25%;
+  /* width: 25%; */
   border-right: 1px solid #d9d9d9;
+  min-width: 263px;
+  border-right: 1px solid #d9d9d9;
+  max-width: 263px;
+  margin: 0 10px 0 0;
+  padding: 0 10px 0 0;
 }
 .accountHolder .BrandInfoHolder {
   width: 75%;
   padding: 10px 10px 10px 20px;
   position: relative;
+}
+
+
+
+.AccountFlel{
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  justify-content:space-between
+}
+
+.totalMain{
+  /* display: flex; */
 }
 .accountHolder .accountDetailerLabel {
   padding: 1rem;
@@ -189,6 +209,13 @@
 .detailsContainer .detailBox{
   display: flex;
 }
+
+.accountDet{
+  align-items: center;
+  display: flex;
+  width: 100%;
+  gap: 20px;
+}
 .detailsContainer .detailBox .labelHolder {
   font-family: Montserrat-400;
   font-size: 16px;
@@ -209,13 +236,28 @@
 }
 .detailsContainer .mapContainer{
   border-right: 1px solid #ccc;
+  margin: 0 0px 0 0;
+  padding: 0 10px 0 0;
 }
-.detailsContainer .mapHolder{
-  width: 97%;
-  height: 200px;
+.detailsContainer1 .mapHolder{
+  width: 100%;
+  padding: 10px;
+  /* height: 200px; */
   border-radius: 8px;
   border: 1px solid #EAEAEA;
+  min-width: 150px;
 }
+
+.subTitleFlex{
+  display: grid;
+  gap: 15px;
+}
+
+.subTiHolder{
+  width: 100%;
+}
+
+
 .detailsContainer .subTitleHolder{
   font-family: Montserrat;
 font-size: 16px;
@@ -225,10 +267,22 @@ letter-spacing: 0.1em;
 text-align: left;
 }
 
+
+.detailTitleHolderMain{
+  display: flex;
+  margin: 30px 0 0 0 ;
+}
+
+.detailsContainer1{
+  display: flex;
+  gap: 10px;
+}
+
+
 @media (max-width: 1530px) {
-  .detailsContainer .accountNumberHolder{
-    width: 20%;
-  }
+.detailsContainer .accountNumberHolder{
+  width: 20%;
+   }
 }
   @media (max-width: 1200px) {
   .accountHolder .infoHolder {
@@ -248,4 +302,69 @@ text-align: left;
   .detailsContainer .accountNumberHolder{
     width: 25%;
   }
+
+  .accountHolder .accountNameHolder {
+     font-size: 15px;
+     line-height: 18.82px;
+    }
+
+    .detailsContainer {
+      margin: 1rem;
+  }
+
+}
+
+@media(max-width:1000px){
+  .accountDet{
+    display: grid;
+    
+    width: 100%;
+  }
+}
+
+@media(max-width:767px){
+  .detailsContainer1 {
+    display: grid;
+    gap: 20px;
+}
+
+  .AccountFlel{
+    display: grid;
+    width: 100%;
+    justify-content:start
+  }
+
+  .totalMain {
+    /* display: flex; */
+    display: grid;
+    justify-content: flex-start;
+}
+
+.detailTitleHolderMain{
+  display: grid;
+  margin: 30px 0 0 0 ;
+  gap: 20px;
+}
+
+.detailsContainer .accountNumberHolder {
+  width: 100%;
+}
+
+.dGrid {
+  grid-template-columns: repeat(auto-fill, 100%);
+  margin-left: 0px;
+}
+
+.detailsContainer .detailBox .labelHolder {
+  
+  font-size: 14px;
+  
+  margin: 0;
+}
+
+.detailsContainer .detailBox .valueHolder {
+    font-size: 13px;
+    margin: 0;
+}
+
 }

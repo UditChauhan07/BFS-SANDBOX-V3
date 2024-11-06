@@ -1,3 +1,4 @@
+
 .reasonContainer {
 }
 .iconHolder {
@@ -101,4 +102,18 @@
     font-size: 14px;
     font-weight: 600;
   }
+}
+
+
+@media(max-width:767px){
+  .reasonHolder {
+    grid-template-columns: repeat(2, auto);
+}
+}
+
+
+@media(max-width:500px){
+  .reasonHolder {
+    grid-template-columns: repeat(1, auto);
+}
 }

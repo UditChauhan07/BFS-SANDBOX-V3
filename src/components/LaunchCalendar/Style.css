@@ -1,3 +1,4 @@
+
 h1.TopHeading {
   color: #000;
   text-align: left;
@@ -59,6 +60,9 @@ h1.TopHeading {
   width: 98%;
   padding: 12px 16px;
   margin-left: 50px;
+  display: flex ;
+  justify-content: space-around;
+  align-items: center;
 }
 .DateCurrent01 {
   background-color: #e5e5e5;
@@ -118,6 +122,7 @@ h1.TopHeading {
   letter-spacing: 1.12px;
   margin-bottom: 8px;
   display: flex;
+  gap: 15px;
   justify-content: space-between;
 }
 .size p {
@@ -217,15 +222,10 @@ span.ProductQty {
 
 .launchBrand img {
   border-radius: unset;
-display: flex;
-max-width:200px;
-height:auto
-}
-.timeline-content {
+
   display: flex;
-  justify-content: space-around;
-  align-items: center;
 }
+
 .ProductInfo {
   border-right: 1px dashed #000;
   margin-right: 20px;
@@ -238,10 +238,7 @@ height:auto
 }
 
 .PlusBtn {
-  padding: 35px;
-}
-.maindiv{
-  display: flex !important;
+  padding: 15px;
 }
 .AddNewInner {
   background-color: #fff;
@@ -255,7 +252,7 @@ height:auto
   color: #b5b5b5;
   text-align: center;
   font-family: Montserrat;
-  font-size: 25px;
+  font-size: 1vw;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -303,59 +300,105 @@ height:auto
 .EDate {
   gap: 2px !important;
 }
-.Unleashedfeature{
-  width: 25%;
+
+.ScrollRight::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px #0000004d;}
+
+
+ .ScrollRight::-webkit-scrollbar-thumb {
+    background-color: #434c4f;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px #00000092;
 }
 
-/* Media Query  */
- 
-@media (max-width: 1345px) and (min-width:1025px){
-.timeline-content {
-    width: 100%;
-    margin-left: 35px;
-  }
-  span.ProductQty {
-    background-color: #000;
-    color: #fff;
-    text-align: center;
-    margin-left: 10px;
-    padding: 5px 8px 5px 8px;
-    border-radius: 7px;
-    text-transform: uppercase;
-    font-size: 10px;
-  }
-  .AddNewInner p {
-    font-size: 18px;
-    
-  }
-  .LaunchProductDetail h3 {
-    font-size: 15px;
-    }
-  
-} 
-/* @media (max-width: 1254px) and (min-width:1025) {
-  .timeline-content {
-      width: 100%;
-      margin-left: 35px;
-    }
-    span.ProductQty {
-      background-color: #000;
-      color: #fff;
-      text-align: center;
-      margin-left: 10px;
-      padding: 5px 8px 5px 8px;
-      border-radius: 7px;
-      text-transform: uppercase;
-      font-size: 0;
-    } 
-    .launchBrand img {
-      border-radius: unset;
+.ScrollRight::-webkit-scrollbar {
+  background-color: #f5f5f5;
+  width: 4px;}
+
+
+  .ProductMain{
     display: flex;
-    max-width:150px;
-    height:auto
-    }
-  } */
-/* @media (min-width: 769.98px) {
+    gap: 15px;
+    align-items: center;
+  }
+  .launchBrand{
+    width: 200px;
+    min-width: 50px;
+    height: auto;
+  }
+
+  .launchBrand img{
+    width: 100%;
+       height: auto;
+  }
+
+/* Media Query  */
+@media (max-width: 991.98px) {
+  .LaunchProductDetail {
+    margin-left: -3px;
+    width: 100%;
+}
+
+  .launchBrand{
+    width: 140px;
+  }
+
+  .ScrollRight {
+       height: 87px;
+    overflow: auto;
+    padding: 10px 0;
+    margin: 17px 0 0 0;
+}
+.ProductMain{
+  display: grid;
+justify-content: start;
+gap: 20px;
+}
+
+
+
+
+}
+
+@media (max-width: 769.98px) {
+
+  .DateEod {
+    font-size: 12px;
+    font-weight: 500;
+ }
+
+ .DateCurrent03 {
+   font-size: 12px;
+   width: 100px;
+ 
+}
+ 
+
+  .timeline-content{
+    display: grid !important;
+  }
+  .ProductInfo {
+    border-right: 0px dashed #000;
+    margin-right: 20px;
+    width: 100%;
+}
+
+.LaunchProductDetail {
+  margin: 0;
+}
+
+
+
+}
+
+
+@media (min-width: 769.98px) {
+ 
+
+
+
   .DateCurrent01 {
     font-size: 16px;
   }
@@ -367,12 +410,12 @@ height:auto
     padding: 5px 8px 5px 8px;
     border-radius: 7px;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: 12px;
   }
   .LaunchProductDetail h3 {
     color: #000;
     font-family: "Montserrat";
-    font-size: 16px;
+    font-size: 13px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
@@ -389,168 +432,76 @@ height:auto
     line-height: 20px;
     letter-spacing: 1.12px;
   }
-} */
+}
+
+@media (max-width: 600px) {
+  span.ProductQty {
+   margin-left: 0px;
+   padding: 5px 8px 5px 8px;
+   font-size: 12px;
+}
+
+  .timeline > li::before, .timelineHolder01, .timelineHolder03{
+    /* content: counter(counter, decimal-leading-zero); */
+    position: absolute;
+    padding: 16px;
+    width: 40px;
+    height: 40px;
+    left: 0;
+    font-size: 12px;
+ }
+
+ .timeline{
+  padding-left: 10px;
+ }
+
+ .timeline > li::after {
+   width: 1px;
+  top: 48px;
+  bottom: -25px;
+  left: 18px;
+ 
+}
 
 
+  .size{
+    display: grid;
+  }
+  
+  .BothDateTopFlex {
+    display: grid;
+  }
+
+  .DateCurrent01 {
+     font-size: 13px;
+     width: 100px;
+ 
+}
+
+.DateCurrent02 {
+  font-size: 13px;
+  width: 100px;
+
+}
+
+
+  .ProductInfo .d-flex.mt-2 {
+    display: block !important;
+  }
+  /* .LaunchProductDetail {
+    margin: 15px;
+  } */
+  .timeline-content {
+    /* width: 90%; */
+    /* margin-left: 35px; */
+  }
+}
 @media (max-width: 400px) {
   .ProductInfo {
     border-right: 0px dashed #000;
   }
   .timeline-content {
-    display: block;
-    width: 86%;
+    /* display: block; */
+    /* width: 86%; */
   }
-}
-
-@media (max-width: 1150px) and (min-width:750px) {
-  .maindiv{
-    display:block !important;
-  }
-  .timeline-content {
-    width: 110%;
-    margin-left: 35px;
-  }
-  .launchBrand img {
-    border-radius: unset;
-    display: flex;
-    max-width: 135px;
-    height: auto;
-}
-
-.DateCurrent01 {
-  background-color: #e5e5e5;
-  color: #237ca2;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 3px 8px;
-  width: 121px;
-  border-radius: 6px;
-  text-align: center;
-  letter-spacing: 1.2px;
-  margin-left: 24PX;
-}
-.DateCurrent02 {
-  background-color: #f3e8e0;
-  color: #3c9a4e;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 3px 8px;
-  width: 155px;
-  border-radius: 6px;
-  text-align: center;
-  letter-spacing: 1.2px;
-}
-.DateCurrent03 {
-  background-color: #e0d3cc;
-  color: #9e4545;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 3px 8px;
-  width: 119px;
-  border-radius: 6px;
-  text-align: center;
-  letter-spacing: 1.2px;
-  margin-left: 20px;
-}
-.ShipDate span {
-  margin-right: -4px;
-  font-size: 15px;
-}
-.LaunchProductDetail h3 {
-font-size: 12px;
-}
-span.ProductQty {
-  background-color: #000;
-  color: #fff;
-  text-align: center;
-  margin-left: 1px;
-  padding: 5px 8px 5px 8px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  font-size: 10px;
-}
-.Unleashedfeature{
-  width: 82%;
-  margin-left: 29px;
-}
-h1.TopHeading {
-font-size: 22px;
-margin-left: 23px;
-}
-}
-@media (max-width: 750px) and (min-width:400px) {
-  .maindiv{
-    display:block !important;
-  }
-  .timeline-content {
-    width: 110%;
-    margin-left: 35px;
-  }
-  .launchBrand img {
-    border-radius: unset;
-    display: flex;
-    max-width: 135px;
-    height: auto;
-}
-
-.DateCurrent01 {
-  background-color: #e5e5e5;
-  color: #237ca2;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 3px 8px;
-  width: 121px;
-  border-radius: 6px;
-  text-align: center;
-  letter-spacing: 1.2px;
-  margin-left: 24PX;
-}
-.DateCurrent02 {
-  background-color: #f3e8e0;
-  color: #3c9a4e;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 3px 8px;
-  width: 155px;
-  border-radius: 6px;
-  text-align: center;
-  letter-spacing: 1.2px;
-}
-.DateCurrent03 {
-  background-color: #e0d3cc;
-  color: #9e4545;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 3px 8px;
-  width: 119px;
-  border-radius: 6px;
-  text-align: center;
-  letter-spacing: 1.2px;
-  margin-left: 20px;
-}
-.ShipDate span {
-  margin-right: -4px;
-  font-size: 15px;
-}
-.LaunchProductDetail h3 {
-font-size: 12px;
-}
-span.ProductQty {
-  background-color: #000;
-  color: #fff;
-  text-align: center;
-  margin-left: 1px;
-  padding: 5px 8px 5px 8px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  font-size: 10px;
-}
-.Unleashedfeature{
-  width: 82%;
-  margin-left: 29px;
-}
-h1.TopHeading {
-font-size: 22px;
-margin-left: 23px;
-}
 }

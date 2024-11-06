@@ -1,3 +1,4 @@
+
 import AppLayout from "../components/AppLayout";
 import { useEffect, useState } from "react";
 import { GetAuthData, getProductDetails } from "../lib/store";
@@ -24,9 +25,9 @@ const ProductDetails = ({ productId, setProductDetailId, AccountId = null }) => 
             setProduct({ isLoaded: false, data: [], discount: {} })
             GetAuthData().then((user) => {
 
-                let rawData = { productId: productId, key: user?.data?.x_access_token, accountIds: JSON.stringify(AccountId||user.data.accountIds) }
+                let rawData = { productId: productId, key: user?.data?.x_access_token, accountIds: JSON.stringify(AccountId || user.data.accountIds) }
                 getProductDetails({ rawData }).then((productRes) => {
-                    
+
                     setProduct({ isLoaded: true, data: productRes.data, discount: productRes.discount })
                 }).catch((proErr) => {
                     console.log({ proErr });
@@ -161,12 +162,11 @@ const ProductDetails = ({ productId, setProductDetailId, AccountId = null }) => 
                 open={dealAccountList?.length ? true : false}
                 content={
                     <div className="d-flex flex-column gap-3">
-                        <h2>Alert!</h2>
+                        <h2>Attention!</h2>
                         <p>
-                            You have multi store with deal with this Brand.<br /> can you please select you create order for
-                            <br/>
-                            <HtmlFieldSelect value={selectAccount} list={dealAccountList} onChange={(value) => setSelectAccount(value)} />
+                            Please select store you want to order for
                         </p>
+                        <HtmlFieldSelect value={selectAccount} list={dealAccountList} onChange={(value) => setSelectAccount(value)} />
                         <div className="d-flex justify-content-around ">
                             <button style={styles.btn} onClick={accountSelectionHandler}>
                                 OK
@@ -183,7 +183,7 @@ const ProductDetails = ({ productId, setProductDetailId, AccountId = null }) => 
                 <ModalPage
                     open
                     content={
-                        <div className="d-flex flex-column gap-3" style={{ width: '75vw' }}>
+                        <div className="d-flex flex-column gap-3" style={{ width: '100%' }}>
                             <div style={{
                                 position: 'sticky',
                                 top: '-20px',

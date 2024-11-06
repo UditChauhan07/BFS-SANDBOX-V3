@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Open+Sans:wght@300;400;500;600&family=Rubik:wght@300;400;500;600;700;800&display=swap");
 
 .goaltable {
@@ -15,15 +16,6 @@
 }
 
 .Tabletext {
-  color: #000;
-  font-family: Arial;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 32px;
-  letter-spacing: 1.12px;
-}
-.Tabletext2 {
   color: #000;
   font-family: Arial;
   font-size: 20px;
@@ -266,28 +258,20 @@
 }
 
 .donuttop {
-  width: 98%;
+  width: 100%;
   padding: 20px;
  
   border: 1px black dashed;
 }
 
 .donuttop1 {
-  width: 95%;
-  height: 250px;
+  width: 100%;
+  max-height: 250px;
+  position: relative;
   border: 1px black dashed;
   background-color: rgb(252, 252, 252);
 }
 
-.donuttop2 {
-  width: 95%;
-  height: 250px;
-  border: 1px black dashed;
-  background-color: rgb(252, 252, 252);
-}
-.Maindiv{
-  display: flex;
-}
 .donutchart {
   justify-content: center;
   align-items: center;
@@ -323,6 +307,17 @@
   border: 1px solid green;
   margin-left: 15%;
 }
+
+.Graphcontrol{
+  display: flex !important;
+  gap: 20px;
+  width: 100%;
+}
+
+.Graph1{
+  width: 100%;
+}
+
 .Tabletextt {
   color: #000;
   text-align: center;
@@ -483,7 +478,7 @@
   width: 99%;
 }
 
-/* @media (max-width: 1570px) and (min-width: 1025px) {
+@media (max-width: 1570px) and (min-width: 1025px) {
   .top_accounttext {
     font-size: 15px;
   }
@@ -491,9 +486,9 @@
   .tablerow {
     font-size: 16px;
   }
-} */
+}
 
-/* @media (max-width: 1024px  ) and (min-width:769px) {
+@media (max-width: 1024px  ) and (min-width:769px) {
   .top_accounttext {
     font-size: 14px;
   }
@@ -504,46 +499,25 @@
     font-size: 14px;
   }
   .donutbox {
-    margin-top: -28%;
-    margin-left: -23%;
-
+    margin-top: -19%;
+    margin-left: 0%;
 }
 .Tabletext {
   font-size: 13px;
 }
-.Tabletext1 {
-  font-size: 13px;
 }
-} */
-/* @media (max-width: 768px ) and (min-width:425px)  {
+@media (max-width: 768px) {
   .activetext{
     font-size: 13px;
   }
   .donutbox {
     margin-top: -28%;
     margin-left: -4%;
-}
-.donuttop1 {
-  width: 109%;
-  height: 250px;
-  border: 1px black dashed;
-  background-color: rgb(252, 252, 252);
-  
-}
-.donuttop2 {
-  width: 109%;
-  height: 250px;
-  border: 1px black dashed;
-  background-color: rgb(252, 252, 252);
-  margin-left: 15%;
-}
-.Tabletext1 {
-  font-size: 13px;
- margin-left: 5%;
-}
-} */
 
-/* @media (max-width: 1299px) {
+}
+}
+
+@media (max-width: 1299px) {
   .activetext1 {
     font-size: 35px;
   }
@@ -557,9 +531,6 @@
   .Tabletext {
     font-size: 15px;
   }
-  .Tabletext1 {
-    font-size: 15px;
-  }
 
   .top_accounttext {
     font-size: 12px;
@@ -570,9 +541,9 @@
   .tabletd {
     font-size: 12px;
   }
-} */
+}
 
-/* @media (max-width: 991px) {
+@media (max-width: 991px) {
   .top_account {
     height: 35px;
   }
@@ -585,9 +556,9 @@
   .top_perform1 {
     border-right: 0px rgb(32, 32, 32) dashed;
   }
-} */
+}
 
-/* @media (max-width: 767.98px) {
+@media (max-width: 767.98px) {
   .head_topp {
     display: none;
   }
@@ -603,173 +574,17 @@
     left: 49.5%;
     border-right: 0px dashed rgb(32, 32, 32);
   }
-} */
-/* 
-@media (max-width: 425px) {
-  .Maindiv{
-    display: block;
-  }
-  .donuttop1 {
-    width: 100%;
-    height: 250px;
-    border: 1px black dashed;
-    background-color: rgb(252, 252, 252);
-   
-  }
-  .donuttop2 {
-    width: 100%;
-    height: 250px;
-    border: 1px black dashed;
-    background-color: rgb(252, 252, 252);
-    margin-left: 0%;
-  }
- 
-  .Tabletext1 {
-margin-left: 0;
-  }
-} */
-
-@keyframes shine {
-  100% {
-    left: 125%;
-  }
-}
-@media (max-width: 1200px) {
-  .dGrid {
-    grid-template-columns: repeat(auto-fill, minmax(24%, 1fr));
-  }
-  .activetext1 {
-    font-size: 35px;
-  }
-  .main_heading {
-    font-size: 15px;
-  }
-  .Tabletextt {
-    font-size: 16px;
-  }
-
-  .Tabletext {
-    font-size: 15px;
-  }
-  .Tabletext1 {
-    font-size: 15px;
-  }
-
-  .top_accounttext {
-    font-size: 12px;
-  }
-  .tablerow {
-    font-size: 12px;
-  }
-  .tabletd {
-    font-size: 12px;
-  }
-
 }
 
-@media (max-width: 900px) {
-  .dGrid {
-    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
-  }
-  .top_account {
-    height: 35px;
-  }
-  .top_accnew {
-    height: 35px;
-
-   
-  }
-
-  .top_perform1 {
-    border-right: 0px rgb(32, 32, 32) dashed;
-  }
-  .activetext{
-    font-size: 13px;
-  }
-  .donutbox {
-    margin-top: -28%;
-    margin-left: -4%;
-}
-.donuttop1 {
-  width: 109%;
-  height: 250px;
-  border: 1px black dashed;
-  background-color: rgb(252, 252, 252);
-  /* margin-left: 10%; */
-}
-.donuttop2 {
-  width: 109%;
-  height: 250px;
-  border: 1px black dashed;
-  background-color: rgb(252, 252, 252);
-  margin-left: 15%;
-}
-.Tabletext1 {
-  font-size: 13px;
- margin-left: 5%;
-}
-}
-
-@media (max-width: 650px) {
-  .dGrid {
-    grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
-  }
-
-  .Maindiv{
-    display: block;
-  }
-  .donuttop1 {
-    width: 100%;
-    height: 250px;
-    border: 1px black dashed;
-    background-color: rgb(252, 252, 252);
-    /* margin-left: 10%; */
-  }
-  .donuttop2 {
-    width: 100%;
-    height: 250px;
-    border: 1px black dashed;
-    background-color: rgb(252, 252, 252);
-    margin-left: 0%;
-  }
-  .donutchart {
-    /* justify-content: center;
-    align-items: center; */
-    /* display: block; */
-  }
-  .Tabletext1 {
-margin-left: 0;
+@media (max-width:600px){
+  .Graphcontrol{
+    display: grid !important;
   }
 }
 
-@media(max-width:425px){
-  .donuttop2 {
-    width: 100%;
-    height: 205px;
-    border: 1px black dashed;
-    background-color: rgb(252, 252, 252);
-    margin-left: 0%;
 
-}
-.donuttop1{
-  width: 100%;
-  height: 205px;
-  border: 1px black dashed;
-  background-color: rgb(252, 252, 252);
-  margin-left: 0%;
-}
-.table_scroll {
-gap: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  height: 300px;
-  overflow: auto;
-  width: 100%;
-  display: flex;
-  min-width: 600px;
-}
 
-}
+
 
 
 /* @media (max-width: 768px) {

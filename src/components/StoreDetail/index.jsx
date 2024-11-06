@@ -1,3 +1,4 @@
+
 import Styles from "./index.module.css";
 import { DateConvert, GetAuthData, formatNumber, originAPi } from "../../lib/store";
 import { useState } from "react";
@@ -152,13 +153,13 @@ const StoreDetailCard = ({ account }) => {
         {fileDownload ? <Loading /> :
             <div>
                 <div className={`${Styles.accountHolder} ${Styles.dFlex} flex-column`}>
-                    <div className={`d-flex w-[100%]`}>
+                    <div className={Styles.accountDet}>
                         <div className={Styles.accountTitleHolder}>
                             <p className={Styles.accountLabel}>ACCOUNT NAME</p>
                             <h3 className={Styles.accountNameHolder}>{account.Name}</h3>
                             {account.Website ? <Link to={account.Website} style={{ color: '#000', zIndex: "0" }} className={Styles.webLinkHolder}>{account.Website}</Link> : null}
                         </div>
-                        <div className="d-flex w-[100%] justify-between pl-2 mt-3">
+                        <div className={Styles.AccountFlel}>
                             <div className="d-flex gap-4">
                                 {account.ShippingCity ? <div className={`${Styles.addressHoilder} d-flex flex-column`}>
                                     <span className={Styles.labelHolder}>Store City</span>
@@ -170,7 +171,7 @@ const StoreDetailCard = ({ account }) => {
                                     <span className={Styles.labelHolder}>Phone</span>
                                     <span className={Styles.addCard}>{account.Phone}</span></div> : null}
                             </div>
-                            <div>
+                            <div className={Styles.totalMain}>
                                 <p className={Styles.totalRevenueLinkHolder}>Total Purchase</p>
                                 <p className={Styles.totalRevenueHolder}>${formatNumber(account.TotalSales || 0)}</p>
                             </div>
@@ -213,13 +214,13 @@ const StoreDetailCard = ({ account }) => {
                 </div>
                 <div className={Styles.detailsContainer}>
                     <h3 className={Styles.detailTitleHolder}>Details</h3>
-                    <div className="d-flex mt-4">
+                    <div className={Styles.detailTitleHolderMain}>
                         <div className={`${Styles.accountNumberHolder}`}>
                             <span className={`${Styles.buttonHolder} ${account.Active_Closed__c == "Active Account" ? Styles.activeHolder : Styles.closeHolder}`}>Status: {account.Active_Closed__c == "Active Account" ? "Active" : "In-Active"}</span>
                             <h4 className={Styles.accountNumber}>{account.Estee_Lauder_Account_Number__c}</h4>
                             <p className={Styles.accountNumberTinyText}>Estee Launder Account Name</p>
                         </div>
-                        <div className={`${Styles.dGrid} w-[80%]`}>
+                        <div className={`${Styles.dGrid} w-[100%]`}>
                             <div className={Styles.detailBox}>
                                 <p className={Styles.labelHolder}>Account Owner:</p>
                                 <p className={Styles.valueHolder}>{account.Owner?.Name ?? 'NA'}</p>
@@ -234,11 +235,11 @@ const StoreDetailCard = ({ account }) => {
                             </div>
                             <div className={Styles.detailBox}>
                                 <p className={Styles.labelHolder}>Number of Order Placed:</p>
-                                <p className={Styles.valueHolder} style={{ marginTop: '20px' }}>{account.TotalSaleCount ?? 0}</p>
+                                <p className={Styles.valueHolder} style={{ marginTop: '0px' }}>{account.TotalSaleCount ?? 0}</p>
                             </div>
                             <div className={Styles.detailBox}>
                                 <p className={Styles.labelHolder}>Date Account Est. with BFSG:</p>
-                                <p className={Styles.valueHolder} style={{ marginTop: '20px' }}>{DateConvert(account.Date_account_established_with_BFSG__c || null, true) ?? 'NA'}</p>
+                                <p className={Styles.valueHolder} style={{ marginTop: '0px' }}>{DateConvert(account.Date_account_established_with_BFSG__c || null, true) ?? 'NA'}</p>
                             </div>
                             <div className={Styles.detailBox}>
                                 <p className={Styles.labelHolder}>Address:</p>
@@ -247,24 +248,24 @@ const StoreDetailCard = ({ account }) => {
                         </div>
                     </div>
                 </div>
-                <div className={`${Styles.detailsContainer} d-flex`}>
-                    <div className={`${Styles.mapContainer} w-[50%]`}>
+                <div className={`${Styles.detailsContainer} ${Styles.detailsContainer1} `}>
+                    <div className={`${Styles.mapContainer} `}>
                         <h3 className={Styles.detailTitleHolder}>Store Address</h3>
                         <div className={`${Styles.mapHolder} mt-4`}>
                             <MapGenerator focusOn={{ lat: account.ShippingLatitude, lng: account.ShippingLongitude }} MarkLocations={[{ lat: account.ShippingLatitude, lng: account.ShippingLongitude }]} zoom={12} icon={false} />
-                            <div className="d-flex mt-3">
-                                <div className="w-[50%]">
+                            <div className={Styles.subTitleFlex}>
+                                <div className="">
                                     <p className={Styles.subTitleHolder}>Shipping Address</p>
                                     <p className={Styles.addressLabelHolder} style={{ color: '#3296ED' }}>{account.ShippingAddress?.street}{account.ShippingAddress?.street ? ',' : ""}{account.ShippingAddress.city}{account.ShippingAddress?.city ? <>,<br /></> : ""}{account.ShippingAddress.state},{account.ShippingAddress.postalCode}<br /> {account.ShippingAddress.country}</p>
                                 </div>
-                                <div className="w-[50%]">
+                                <div className="">
                                     <p className={Styles.subTitleHolder}>Billing Address</p>
                                     <p className={Styles.addressLabelHolder} style={{ color: '#3296ED' }}>{account.BillingAddress?.street},<br />{account.BillingAddress.city},<br />{account.BillingAddress.state},{account.BillingAddress.postalCode}<br /> {account.BillingAddress.country}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="w-[50%]">
+                    <div className={Styles.subTiHolder}>
                         <h3 className={`${Styles.detailTitleHolder} ml-4`}>Chart</h3>
                         <div>
                             <Chart options={graph.options} series={graph.series} type="bar" width={'100%'} height={320} />

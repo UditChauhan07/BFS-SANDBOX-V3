@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { cartSync, GetAuthData } from '../lib/store';
+import { AuthCheck, cartSync, GetAuthData } from '../lib/store';
 let orderCartKey = "AA0KfX2OoNJvz7x"
 
 // Create the context
@@ -40,16 +40,82 @@ const initialOrder = {
 
 // Cart Provider component
 const CartProvider = ({ children }) => {
-    const [order, setOrder] = useState(() => {
-        const savedCart = localStorage.getItem(orderCartKey);
-        return savedCart ? JSON.parse(savedCart) : initialOrder;
-    });
+
+    const [order, setOrder] = useState({});
+
+
+    const fetchCart = async () => {
+        try {
+            const user = await GetAuthData();
+            const getOrder = { CreatedBy: user?.data?.retailerId };
+            const cart = await cartSync({ cart: getOrder });
+            console.log({ cart });
+
+            // Validate if the fetched cart has essential content like Account and Manufacturer
+            if (cart.id && cart.Account?.id && cart.Manufacturer?.id) {
+                setOrder(cart); // Set the fetched cart if valid
+                localStorage.setItem(orderCartKey, JSON.stringify(cart)); // Store in local storage
+            } else {
+                setOrder(initialOrder); // Use initial order if no valid cart is found
+            }
+        } catch (err) {
+            console.error('Error fetching cart:', err);
+        }
+    };
+
+
+    useEffect(() => {
+        // Add event listener for storage changes
+        const handleStorageChange = (event) => {
+            if (event.key === orderCartKey) {
+                const updatedCart = event.newValue ? JSON.parse(event.newValue) : initialOrder;
+                setOrder(updatedCart); // Update the order state when another tab modifies the cart
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        return () => {
+            window.removeEventListener('storage', handleStorageChange); // Cleanup listener on unmount
+        };
+    }, []);
+
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                fetchCart();
+                // console.log('Page is active');
+                // Check for updates or fetch data
+            }
+        };
+
+        const handleFocus = () => {
+            // console.log('Window is focused');
+            // Maybe refresh data or resume actions
+        };
+
+        const handleBlur = () => {
+            // console.log('Window is blurred');
+            // Pause any ongoing activities
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('focus', handleFocus);
+        window.addEventListener('blur', handleBlur);
+
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('focus', handleFocus);
+            window.removeEventListener('blur', handleBlur);
+        };
+    }, []);
 
     useEffect(() => {
         const syncCart = async () => {
             try {
-                localStorage.setItem(orderCartKey, JSON.stringify(order));
 
+                // Save the updated cart to local storage
+                localStorage.setItem(orderCartKey, JSON.stringify(order));
                 const user = await GetAuthData();
                 if (!order.CreatedBy) {
                     order.CreatedBy = user.data.retailerId;
@@ -63,20 +129,16 @@ const CartProvider = ({ children }) => {
                             keyBasedUpdateCart({ id: uniqueId });
                         }
                     }
+                    await cartSync({ cart: order });
                 }
-
-                const res = await cartSync({ cart: order });
-                // if (res?.id) {
-                //     setOrder(res);
-                // }
             } catch (err) {
                 console.error(err);
             }
         };
 
-
         syncCart();
     }, [order]);
+
 
 
 
@@ -338,11 +400,12 @@ const CartProvider = ({ children }) => {
     // Remove a product from the cart by productId
     const removeProduct = (productId) => {
         setOrder((prevOrder) => {
-            const updatedItems = prevOrder.items.filter(item => item.Id !== productId);
-            const removedItem = prevOrder.items.find(item => item.Id === productId);
+            const updatedItems = prevOrder.items?.filter(item => item.Id !== productId);
+            const removedItem = prevOrder.items?.find(item => item.Id === productId);
 
-            // If the cart is empty after removing the item, reset to initialOrder
+            // Check if the cart is empty after removing the item
             if (updatedItems.length === 0) {
+                deleteOrder();  // Call deleteOrder() if items array is empty
                 return initialOrder;
             }
 
@@ -356,6 +419,8 @@ const CartProvider = ({ children }) => {
         });
     };
 
+
+
     // update order based on data 
     const keyBasedUpdateCart = (data) => {
         setOrder((prevOrder) => {
@@ -367,7 +432,8 @@ const CartProvider = ({ children }) => {
 
     const isProductCarted = (productId) => {
         // Check if the product exists in the cart
-        const matchingProducts = order.items.filter(item => item.Id === productId);
+        const matchingProducts = order.items?.filter(item => item.Id === productId) || [];
+
 
         // If found, return the array of matching products; if not, return false
         return matchingProducts.length > 0 ? { ...order, items: matchingProducts[0] } : false;
@@ -395,8 +461,9 @@ const CartProvider = ({ children }) => {
 
         return false;
     };
+    
 
-    const contentApiFunction = (productList, account, manufacturer, ordertype = 'wholesale') => {
+    const contentApiFunction = async (productList, account, manufacturer, ordertype = 'wholesale') => {
         // Directly replace the current order with a new one based on the provided product list
         const newOrderTotal = productList.reduce((sum, product) => sum + product.price * (product.qty || 1), 0);
         const newOrderQuantity = productList.reduce((sum, product) => sum + (product.qty || 1), 0);
@@ -410,14 +477,24 @@ const CartProvider = ({ children }) => {
             orderQuantity: newOrderQuantity,
             total: newOrderTotal,
         });
+        let orderStatus = await cartSync({
+            cart: {
+                ordertype, // Set the order type; adjust if needed
+                Account: account,
+                Manufacturer: manufacturer,
+                items: productList.map(product => ({ ...product, qty: product.qty || 1 })), // Ensure each product has a qty
+                orderQuantity: newOrderQuantity,
+                total: newOrderTotal,
+            }
+        })
+        return orderStatus;
     };
 
 
     // Delete the entire cart (reset to initial state)
     const deleteOrder = async () => {
         try {
-            order.delete = true;
-            const res = await cartSync({ cart: order });
+            const res = await cartSync({ cart: { id: order.id, delete: true } });
 
             if (res) {
                 setOrder(initialOrder); // Only reset if deletion was successful
@@ -432,12 +509,12 @@ const CartProvider = ({ children }) => {
 
     // Get order total
     const getOrderTotal = () => {
-        return order.total;
+        return order?.total||0;
     };
 
     // Get order quantity
     const getOrderQuantity = () => {
-        return order.orderQuantity;
+        return order?.orderQuantity||0;
     };
 
     const contextValue = {
@@ -452,7 +529,8 @@ const CartProvider = ({ children }) => {
         isProductCarted,
         isCategoryCarted,
         contentApiFunction,
-        keyBasedUpdateCart
+        keyBasedUpdateCart,
+        fetchCart
     };
 
     return <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>;

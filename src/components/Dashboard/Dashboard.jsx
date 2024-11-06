@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import Styles from "./Dashboard.module.css";
 import Chart from "react-apexcharts";
@@ -13,6 +14,7 @@ import AppLayout from "../AppLayout";
 import { FilterItem } from "../FilterItem";
 import { UserIcon } from "../../lib/svg";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContent";
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const monthList = [
   {
@@ -66,6 +68,7 @@ const monthList = [
 ];
 
 function Dashboard({ dashboardData }) {
+  const {fetchCart} = useCart();
   const navigate = useNavigate();
   const [dataa, setDataa] = useState({
     series: [
@@ -205,6 +208,7 @@ function Dashboard({ dashboardData }) {
   // API INTEGRATION
 
   useEffect(() => {
+    fetchCart();
     if (!AuthCheck()) {
       // navigate("/");
     }
@@ -213,7 +217,7 @@ function Dashboard({ dashboardData }) {
   const [salesRepId, setSalesRepId] = useState();
 
   const getDataHandler = (headers = null) => {
-    
+
     // setIsLoaded(true);
     GetAuthData()
       .then((user) => {
@@ -672,23 +676,23 @@ function Dashboard({ dashboardData }) {
           </div>
         </div>
         <div className="row my-3">
-          <div className="col-lg-6">
+          <div className="col-lg-6 col-md-12">
             <p className={Styles.Tabletext}>Your Purchases by brand {monthNames[parseInt(PurchaseMonth)-1] + '-' + PurchaseYear}</p>
-            <div className={Styles.donuttop} style={{ height: '635px' }}>
+            <div className={Styles.donuttop} style={{ Maxheight: '635px' }}>
               {/* <p className={` text-center mt-3  ${Styles.Tabletextt}`}>Sum of Order</p> */}
               <p className={`text-end ${Styles.main_heading}`}>MANUFACTURER</p>
               {!isLoading ? (
                 <ContentLoader />
               ) : (
                 <>
-                  <Chart options={salesByBrandData.options} series={salesByBrandData.series} type="donut" className={Styles.donutchart} width="95%" height="600px" />
+                  <Chart options={salesByBrandData.options} series={salesByBrandData.series} type="donut" className={Styles.donutchart} width="100%" height="600px" />
                 </>
               )}
             </div>
           </div>
-          <div className="col-lg-6 ">
-            <div className={`${Styles.Maindiv}`}>
-              <div className="col-lg-6" >
+          <div className="col-lg-6 col-md-12 ">
+            <div className={`${Styles.Graphcontrol}  `}>
+              <div className={Styles.Graph1}>
                 <p className={Styles.Tabletext}>Purchases Performance</p>
                 <div className={Styles.donuttop1}>
                   {!isLoading ? (
@@ -715,9 +719,9 @@ function Dashboard({ dashboardData }) {
                   )}
                 </div>
               </div>
-              <div className="col-lg-6">
-                <p className={`${Styles.Tabletext1} `}>Sales Performance</p>
-                <div className={Styles.donuttop2}>
+              <div className={Styles.Graph1}>
+                <p className={Styles.Tabletext}>Sales Performance</p>
+                <div className={Styles.donuttop1}>
                   {!isLoading ? (
                     <ContentLoader />
                   ) : (

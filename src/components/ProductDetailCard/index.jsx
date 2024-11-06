@@ -43,12 +43,12 @@ const ProductDetailCard = ({ product, orders, onQuantityChange = null }) => {
   }
   salesPrice = (+listPrice - ((discount || 0) / 100) * +listPrice).toFixed(2);
   return (
-    <div className="container mt-4 product-card-element">
-      <div className="d-flex">
-        <div className={`${Styles.productimage} col-4`} style={{ flex: '40% 1' }}>
+    <div className=" mt-4 product-card-element">
+      <div className={Styles.flexCon}>
+        <div className={`${Styles.productimage} col-md-6  col-12`} style={{ flex: '40% 1' }}>
           {product?.data?.imgSrc?.length > 0 ? <Slider data={product?.data?.imgSrc} /> : <Slider data={fakeProductSlider} />}
         </div>
-        <div className="col-8 ml-4 product-card-element-holder" style={{ flex: '60% 1' }}>
+        <div className="col-md-8  col-12 ml-4 product-card-element-holder" style={{ flex: '60% 1' }}>
           <p style={{ textAlign: "start" }}>
             <b>BY</b>, <Link to={'/Brand/' + product.data.ManufacturerId__c} className={Styles.brandHolder}><b>{product?.data?.ManufacturerName__c}</b></Link>
           </p>
@@ -117,7 +117,7 @@ const ProductDetailCard = ({ product, orders, onQuantityChange = null }) => {
             </div>
           )}
           {/* {product?.data?.Description && <p style={{ textAlign: 'start', color: "#898989" }}>{product?.data?.Description}</p>} */}
-          <hr className="mt-5" style={{ borderTop: "3px dashed #000", fontSize: "20px", color: "black" }}></hr>
+          <hr  style={{ borderTop: "3px dashed #000", fontSize: "20px", color: "black" }}></hr>
           {product?.data?.ProductCode && <p className={Styles.descHolder}>
             Product Code: <span >{product?.data?.ProductCode}</span>
           </p>}
@@ -250,7 +250,7 @@ const ProductDetailCard = ({ product, orders, onQuantityChange = null }) => {
     </div>
   );
   return (
-    <div className="container mt-4 product-card-element">
+    <div className=" mt-4 product-card-element">
       <div className="d-flex">
         <div className="col-4">
           {product?.data?.imgSrc?.length > 0 ? <Slider data={product?.data?.imgSrc} /> : <Slider data={fakeProductSlider} />}
