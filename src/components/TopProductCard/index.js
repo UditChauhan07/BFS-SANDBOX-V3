@@ -145,6 +145,10 @@ const TopProductCard = ({ data, productImages, to = null, accountDetails = {}, a
         type="text"
         id={title?.replaceAll(/\s+/g, '-')}
         options={list}
+        menuPortalTarget={document.body} // This will render the dropdown outside of the div
+        styles={{
+          menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure dropdown appears over everything
+        }}
         onChange={(option) => {
           onChange?.(option)
         }}
@@ -157,7 +161,7 @@ const TopProductCard = ({ data, productImages, to = null, accountDetails = {}, a
       <ModalPage
         open={dealAccountList?.length ? true : false}
         content={
-          <div className="d-flex flex-column" style={{width:'400px'}}>
+          <div className="d-flex flex-column" style={{width:'400px', height: "215px"}}>
             <h2>Attention!</h2>
             <p>
               Please select store you want to order for
@@ -304,11 +308,11 @@ const TopProductCard = ({ data, productImages, to = null, accountDetails = {}, a
                   {product?.Name.substring(0, 20)}...
                 </p>
                 {product?.Category__c === "PREORDER" && <small className={Styles.preOrderBadge}>Pre-Order</small>}
-                {selAccount?.Name ? <small>Price for <b>{selAccount.Name}</b></small> :ProductInCart?<small>Price for <b>{ProductInCart.Account.name}</b></small> : null}
+                {selAccount?.Name ? <small className={Styles.priceFor}>Price for <b className={Styles.pricebold}>{selAccount.Name}</b></small> :ProductInCart?<small>Price for <b>{ProductInCart.Account.name}</b></small> : null}
                 <p className={Styles.priceHolder}>
                   <div>
-                    {salesPrice != listPrice ? <p className={Styles.priceCrossed}>${listPrice.toFixed(2)}&nbsp;</p>:ProductInCart?<p className={Styles.priceCrossed}>${listPrice.toFixed(2)}&nbsp;</p>:null}
-                  </div>
+                    {salesPrice != listPrice ? <p className={Styles.priceCrossed}>${listPrice.toFixed(2)}</p>:ProductInCart?<p className={Styles.priceCrossed}>${listPrice.toFixed(2)}</p>:null}
+                  </div>&nbsp;
                   <div>
                     <p>${ProductInCart ? <Link to={"/my-bag"}>{Number(ProductInCart?.items?.price).toFixed(2)}</Link> : salesPrice}</p>
                   </div>

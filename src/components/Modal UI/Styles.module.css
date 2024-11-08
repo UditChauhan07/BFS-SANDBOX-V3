@@ -103,6 +103,8 @@
   padding-right: 16px; */
   padding-top: 25px;
   padding-bottom: 8px;
+  width: 100%;
+  max-width: 1020px;
 }
 .ModalHeader {
   color: #000;

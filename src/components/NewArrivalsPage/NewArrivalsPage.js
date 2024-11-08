@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import ProductDetails from "../../pages/productDetails";
 import Styles from "./NewArrivals.module.css";
@@ -180,7 +181,7 @@ function NewArrivalsPage({ productList, selectBrand, brand, month, isLoaded, to 
         let cartStatus = addOrder(element, account, manufacturer);
       }
     }
-  };
+  }  
   const accountSelectionHandler = () => {
     onQuantityChange(replaceCartProduct.product, replaceCartProduct.quantity, replaceCartProduct.salesPrice)
     accountSelectionCloseHandler();
@@ -189,6 +190,7 @@ function NewArrivalsPage({ productList, selectBrand, brand, month, isLoaded, to 
     setReplaceCartProduct();
     setAccountList();
     setSelectAccount();
+    setDealAccountList();
   }
 
   const HtmlFieldSelect = ({ title, list = [], value, onChange }) => {
@@ -245,10 +247,10 @@ function NewArrivalsPage({ productList, selectBrand, brand, month, isLoaded, to 
               <HtmlFieldSelect value={selectAccount} list={dealAccountList} onChange={(value) => setSelectAccount(value)} />
             </p>
             <div className="d-flex justify-content-around ">
-              <button className={Styles.btn} onClick={accountSelectionHandler}>
+              <button className={`${StylesModal.modalButton}`} onClick={accountSelectionHandler}>
                 OK
               </button>
-              <button className={Styles.btn} onClick={accountSelectionCloseHandler}>
+              <button className={`${StylesModal.modalButton}`} onClick={accountSelectionCloseHandler}>
                 Cancel
               </button>
             </div>
@@ -261,9 +263,11 @@ function NewArrivalsPage({ productList, selectBrand, brand, month, isLoaded, to 
         content={
           <>
             <div style={{ maxWidth: "309px" }}>
-              <h1 className={`fs-5 ${StylesModal.ModalHeader}`}>Select Store</h1>
-              <p className={` ${StylesModal.ModalContent}`}>Please select Store you want to order for.</p>
-              <Select options={accountList.map((account) => ({ label: account.Name, value: account.Id }))} />
+              <h1 className={`fs-5 ${StylesModal.ModalHeader}`}>Attention!</h1>
+              <p>
+              Please select store you want to order for
+            </p>
+              <Select options={accountList?.map((account) => ({ label: account.Name, value: account.Id }))} />
               <div className="d-flex justify-content-center">
                 <button
                   className={`${Styles.modalButton}`}
@@ -370,7 +374,8 @@ function NewArrivalsPage({ productList, selectBrand, brand, month, isLoaded, to 
                           </p>
                           {selAccount?.Name ? <small>Price for <b>{selAccount.Name}</b></small> :ProductInCart?<small>Price for <b>{ProductInCart.Account.name}</b></small> : null}
                           <p className={Styles.priceHolder}> 
-                          {(!isNaN(salesPrice)&&!isNaN(listPrice)) ?salesPrice != listPrice ? <div className={Styles.priceCrossed}>${listPrice.toFixed(2)}&nbsp;</div>:ProductInCart?<div className={Styles.priceCrossed}>${listPrice.toFixed(2)}&nbsp;</div>:null:null}
+                          {(!isNaN(salesPrice)&&!isNaN(listPrice)) ?salesPrice != listPrice ? <div className={Styles.priceCrossed}>${listPrice.toFixed(2)}</div>:ProductInCart?<div className={Styles.priceCrossed}>${listPrice.toFixed(2)}</div>:null:null}
+                          &nbsp;
                             <div>${ProductInCart ? <Link to={"/my-bag"}>{Number(ProductInCart?.items?.price).toFixed(2)}</Link> : !isNaN(salesPrice)?salesPrice.toFixed(2):listPrice ?? "-- . --"}</div>
                             </p>
                             <div className={Styles.linkHolder}>
