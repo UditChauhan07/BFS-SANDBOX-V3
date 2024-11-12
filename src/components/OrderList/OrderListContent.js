@@ -239,16 +239,16 @@ function OrderListContent({ data, hideDetailedShow = false }) {
                         View Order Status
                       </h3>}
                     {item?.Attachment && item.Attachment?.length ?
-                      <h4
+                      <h3
                         title="click to download invoice"
                         onClick={(e) =>
                           downloadFiles(item.Attachment)
                         }
                       >
                         Download Invoice
-                      </h4>
+                      </h3>
                       :
-                      <h4
+                      <h3
                         title="Support Inquiry for this Order on Invoice"
                         onClick={(e) =>
                           setConfirm({
@@ -258,9 +258,9 @@ function OrderListContent({ data, hideDetailedShow = false }) {
                         }
                       >
                         Request invoice
-                      </h4>}
+                      </h3>}
                     {!item?.Tracking__c ?
-                      <h4
+                      <h3
                         title="Get Help with Tracking Status"
                         onClick={(e) =>
                           setConfirm({
@@ -270,13 +270,13 @@ function OrderListContent({ data, hideDetailedShow = false }) {
                         }
                       >
                         Request tracking number
-                      </h4> : <h4
+                      </h3> : <h3
                         title="Click to see the tracking status"
                         onClick={(e) => { setModalData(item); setModalType(3) }
                         }
                       >
                         View Tracking
-                      </h4>}
+                      </h3>}
                   </div>
 
                   <div className={Styles.Status2}>

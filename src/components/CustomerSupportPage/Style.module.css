@@ -221,11 +221,18 @@
   }
 }
 @media (max-width: 991px) {
+
   .supportLeft {
+    border-right: 0px dashed #000;
     display: grid;
     grid-template-columns: repeat(2, auto);
     gap: 20px;
   }
+
+  .supportLeftBox {
+        gap: 10px;
+    padding: 20px 10px;
+   }
 }
 
 @media (max-width: 767px) {
@@ -236,7 +243,7 @@
 }
 @media (max-width: 1024.98px) {
     .supportLeftBox{
-        flex-wrap: wrap;
+        /* flex-wrap: wrap; */
     }
 }
 

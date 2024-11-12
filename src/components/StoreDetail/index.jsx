@@ -132,15 +132,17 @@ const StoreDetailCard = ({ account }) => {
         nav: true,
         dots: false,
         navText: [
-            '<svg width="46" style="position: absolute; left: -6%; top: -25%;" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg"><g filter="url(#filter0_d_3824_341)"><circle cx="23" cy="21" r="19" fill="white"/><circle cx="23" cy="21" r="18.75" stroke="#E1E1E1" stroke-width="0.5"/></g><path d="M26.454 27.9102L19.5449 21.0011L26.454 14.092" stroke="black"/><defs><filter id="filter0_d_3824_341" x="0" y="0" width="46" height="46" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/><feOffset dy="2"/><feGaussianBlur stdDeviation="2"/><feComposite in2="hardAlpha" operator="out"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/><feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3824_341"/><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3824_341" result="shape"/></filter></defs></svg>',
-            '<svg width="46" style="position: absolute; right: -6%; top: -25%;" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg"><g filter="url(#filter0_d_3824_342)"><circle cx="23" cy="21" r="19" transform="rotate(-180 23 21)" fill="white"/><circle cx="23" cy="21" r="18.75" transform="rotate(-180 23 21)" stroke="#E1E1E1" stroke-width="0.5"/></g><path d="M19.546 14.0898L26.4551 20.9989L19.546 27.908" stroke="black"/><defs><filter id="filter0_d_3824_342" x="0" y="0" width="46" height="46" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/><feOffset dy="2"/><feGaussianBlur stdDeviation="2"/><feComposite in2="hardAlpha" operator="out"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/><feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3824_342"/><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3824_342" result="shape"/></filter></defs></svg>',
+            '<svg width="46" style="position: absolute; left: -6%; top: 0%;" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg"><g filter="url(#filter0_d_3824_341)"><circle cx="23" cy="21" r="19" fill="white"/><circle cx="23" cy="21" r="18.75" stroke="#E1E1E1" stroke-width="0.5"/></g><path d="M26.454 27.9102L19.5449 21.0011L26.454 14.092" stroke="black"/><defs><filter id="filter0_d_3824_341" x="0" y="0" width="46" height="46" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/><feOffset dy="2"/><feGaussianBlur stdDeviation="2"/><feComposite in2="hardAlpha" operator="out"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/><feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3824_341"/><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3824_341" result="shape"/></filter></defs></svg>',
+            '<svg width="46" style="position: absolute; right: -6%; top: 0%;" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg"><g filter="url(#filter0_d_3824_342)"><circle cx="23" cy="21" r="19" transform="rotate(-180 23 21)" fill="white"/><circle cx="23" cy="21" r="18.75" transform="rotate(-180 23 21)" stroke="#E1E1E1" stroke-width="0.5"/></g><path d="M19.546 14.0898L26.4551 20.9989L19.546 27.908" stroke="black"/><defs><filter id="filter0_d_3824_342" x="0" y="0" width="46" height="46" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/><feOffset dy="2"/><feGaussianBlur stdDeviation="2"/><feComposite in2="hardAlpha" operator="out"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/><feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3824_342"/><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3824_342" result="shape"/></filter></defs></svg>',
         ],
         responsive: {
             0: {
                 items: 1,
+                margin: 0,
             },
             767: {
                 items: 2,
+                margin: 30,
             },
             1000: {
                 items: 3,
@@ -178,7 +180,7 @@ const StoreDetailCard = ({ account }) => {
                         </div>
                     </div>
                     {account.Brands.length >= 3 ?
-                        <div className="d-flex mt-4 min-h-[75px]">
+                        <div className={`${Styles.CodeDer} mt-4 min-h-[75px]`}>
                             <div className={`${Styles.infoHolder} d-flex`}>
                                 <p className={Styles.accountDetailerLabel}>Account Details</p>
                                 <p className={`${Styles.webLinkHolder} m-auto`} style={{zIndex: "0"}}>More Info</p>

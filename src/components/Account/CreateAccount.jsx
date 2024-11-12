@@ -106,7 +106,7 @@ function CreateAccountForm() {
           open
           content={
             <>
-              <div style={{ maxWidth: "309px" }}>
+              <div style={{ maxWidth: "309px; margin: auto;" }}>
                 <h1 className={`fs-5 ${Styles.ModalHeader}`}>Warning</h1>
                 <p className={` ${Styles.ModalContent}`}>
                   Something went wrong. Try Again!

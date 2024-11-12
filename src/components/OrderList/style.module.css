@@ -108,6 +108,7 @@ ul.dropdown-menu.show {
 
 .inorderflex {
   display: flex;
+  gap: 20px;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px dashed #000;
@@ -133,6 +134,7 @@ ul.dropdown-menu.show {
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
+  white-space: nowrap;
   line-height: normal;
   letter-spacing: 1.8px;
   border-radius: 0px 8px 8px 0px;
@@ -154,13 +156,14 @@ ul.dropdown-menu.show {
   background: #fff;
   padding: 0 15px;
   outline: none;
+  width: 100%;
 }
 
 .InputControll input::placeholder {
   padding: 0 0 10px 0;
 }
 
-.poNumber {
+.poNumber{
   display: flex;
   justify-content: space-between;
   padding: 15px 36px;
@@ -263,7 +266,7 @@ ul.dropdown-menu.show {
 
 .ProtuctInnerBox1 ul li,
 .noProductLabel {
-  margin-top: 4%;
+  margin-top: 10px;
   color: #000;
   font-family: "Montserrat";
   font-size: 16px;
@@ -454,6 +457,28 @@ cursor: pointer;
 }
 
 @media (max-width: 767px) {
+  .OrderMainPr {
+    width: 95%;
+    margin: auto;
+  }
+
+  .inorderflex h2 {
+        font-size: 16px;
+    letter-spacing: 1px;
+    }
+
+    .InputControll input {
+      font-size: 12px;
+       }
+
+       .inorderflex button {
+        font-size: 12px;
+        letter-spacing: 0.8px;
+        white-space: nowrap;
+          }
+
+        
+
   .Status2 {
     margin-top: 20px;
   }
@@ -515,4 +540,23 @@ cursor: pointer;
     padding: 22px 18px 22px;
     margin: 0;
 }
+}
+
+
+@media(max-width:530px){
+  .inorderflex {
+    display: grid;
+    justify-content: unset;
+   
+}
+
+.productDetail .Prod1 {
+  display: grid;
+  gap: 15px;
+}
+
+.productDetail {
+padding: 0 10px 0 20px;
+}
+
 }

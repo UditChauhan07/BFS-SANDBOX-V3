@@ -1,9 +1,9 @@
 
 .dGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  justify-content: space-between;
-  gap: 2.5rem 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  /* justify-content: space-between; */
+  gap: 20px;
   transition: all 0.25s;
   margin: 3rem auto;
   overflow-x: hidden;
@@ -206,19 +206,27 @@
 /* Media Queries for Responsiveness */
 @media (max-width: 1200px) {
   .dGrid {
-    grid-template-columns: repeat(auto-fill, minmax(24%, 1fr));
+    grid-template-columns: repeat(4 ,auto);
   }
 }
 
-@media (max-width: 900px) {
+
+@media (max-width: 1024px) {
   .dGrid {
-    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+    grid-template-columns: repeat(3 ,auto);
   }
 }
 
-@media (max-width: 650px) {
+
+@media (max-width: 800px) {
   .dGrid {
-    grid-template-columns: 1fr; /* Show one product per row */
+    grid-template-columns: repeat(2 ,auto);
+  }
+}
+
+@media (max-width: 500px) {
+  .dGrid {
+    grid-template-columns: repeat(1 ,auto); /* Show one product per row */
   }
 
   .titleHolder {
@@ -231,7 +239,7 @@
 
   .imgHolder {
     width: 100%; /* Full width for the image */
-    height: auto; /* Maintain aspect ratio */
+    /* height: auto;  */
   }
 
   .btnHolder {

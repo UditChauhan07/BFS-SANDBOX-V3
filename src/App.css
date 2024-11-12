@@ -418,3 +418,14 @@ input#searchright {
 .css-1xc3v61-indicatorContainer{
   color: #fff!important;
 }
+
+.owl-carousel.owl-drag .owl-item {
+   text-align: center;
+}
+
+
+@media(max-width:767px){
+  .container {
+    max-width: 95% !important;
+ }
+}

@@ -1,9 +1,24 @@
 .carouselWrapperElement{
-    height: 500px;
-    width: auto;
+    max-height: 500px;
+    width: 100%;
   }
   .carouselWrapperElement img{
-    height: 500px;
-    width: auto;
+    height: 100%;
+    width: 100%;
     object-fit: contain;
+  }
+
+  @media(max-width:767px){
+   
+    .carouselWrapperElement{
+      max-height: 300px;
+      width: 100%;
+    }
+    .carouselWrapperElement img{
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+    }
+
+
   }

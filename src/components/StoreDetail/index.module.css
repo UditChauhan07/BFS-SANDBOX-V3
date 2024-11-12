@@ -4,7 +4,7 @@
   width: 100%;
   min-height: 200px;
   border: 1px solid #d3d3d3;
-  padding: 3rem 2rem 2rem;
+  padding: 3rem 2rem 3rem;
 }
 .accountHolder .accountTitleHolder {
   width: 50%;
@@ -107,6 +107,7 @@
   max-width: 263px;
   margin: 0 10px 0 0;
   padding: 0 10px 0 0;
+  text-align: center;
 }
 .accountHolder .BrandInfoHolder {
   width: 75%;
@@ -208,6 +209,7 @@
 }
 .detailsContainer .detailBox{
   display: flex;
+  align-items: center;
 }
 
 .accountDet{
@@ -278,6 +280,17 @@ text-align: left;
   gap: 10px;
 }
 
+.CodeDer{
+  display: flex;
+  gap: 20px;
+}.CodeDer{
+  display: flex;
+  gap: 20px;
+}.CodeDer{
+  display: flex;
+  gap: 20px;
+}
+
 
 @media (max-width: 1530px) {
 .detailsContainer .accountNumberHolder{
@@ -323,6 +336,30 @@ text-align: left;
 }
 
 @media(max-width:767px){
+
+  .accountHolder .infoHolder {
+    border-right: 0px solid #d9d9d9;
+    max-width: 100%;
+
+    text-align: center;
+}
+
+  .accountHolder .accountTitleHolder{
+    width: 100%;
+    display: grid;
+    gap: 10px;
+}
+
+
+  .accountHolder {
+    padding: 3rem 2rem 5rem;
+}
+
+  .CodeDer{
+    display: grid;
+  }
+
+
   .detailsContainer1 {
     display: grid;
     gap: 20px;

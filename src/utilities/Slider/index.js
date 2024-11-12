@@ -14,8 +14,8 @@ const Slider = ({ data }) => {
   const [style, setStyle] = useState({
     backgroundPosition: "0% 0%",
     position: "absolute",
-    height: "500px",
-    width: "500px",
+    // height: "500px",
+    // width: "500px",
     zIndex: 11,
     left: "40%",
     top: "15%",
@@ -38,11 +38,11 @@ const Slider = ({ data }) => {
     setStyle({ ...style, display: "none" });
   };
   return (
-    <section onmouseout={handleMouveOut} style={isDesktop ? {maxWidth:'500px'}:{maxWidth:`${windowWidth}px`}}>
+    <section onmouseout={handleMouveOut} >
       {/* <div style={style}></div> */}
       <div className="carousel-wrapper">
         <Carousel
-          infiniteLoop
+          // infiniteLoop
           useKeyboardArrows
           autoPlay
           showArrows
@@ -56,7 +56,7 @@ const Slider = ({ data }) => {
                   key={i}
                   className={Style.carouselWrapperElement}
                 >
-                  {e.ContentDownloadUrl ?<img src={e.ContentDownloadUrl} alt={e.ContentDownloadUrl} height={500} width={'auto'}/>:<div dangerouslySetInnerHTML={{__html:e.icon}}/>}
+                  {e.ContentDownloadUrl ?<img src={e.ContentDownloadUrl} alt={e.ContentDownloadUrl}  width={'auto'}/>:<div dangerouslySetInnerHTML={{__html:e.icon}}/>}
                 </div>
               );
             })}

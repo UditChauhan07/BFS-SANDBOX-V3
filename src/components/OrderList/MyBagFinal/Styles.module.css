@@ -414,6 +414,19 @@
 } */
 
 @media (max-width: 1246px) {
+  .col-lg-6.col-sm-12.html2canvas {
+    padding: 0 10px 0 0;
+}
+
+.ShipBut {
+  width: 100%;
+  display: flex;
+  padding: 0 10px 0 0;
+}
+  .html2canvas{
+    /* padding: 0 0 0 10px; */
+  }
+
   .MainInner {
     padding: 17px 5px;
   }
@@ -445,9 +458,7 @@
     margin: 23px 0 0 0;
     padding-left: 37px;
   }
-  .Mainbox {
-    display: block;
-  }
+
   .Mainbox2M {
     margin: 20px 0 0px 0;
   }
@@ -464,6 +475,12 @@
 }
 
 @media (max-width: 1024px) {
+  .MyBagFinalMain{
+    border: 1px dashed #000;
+    background: #fff;
+    padding: 10px 10px 10px 10px;
+    margin: 10px 0 0 0;
+}
  .MainInner {
     padding: 17px 5px;
   }
@@ -539,13 +556,38 @@
    }
    .ShipBut button,
    .btnHolder {
-   font-size: 13px;
+   font-size: 12px;
    display: block;
    }
   }
+
+  
+
+@media(max-width:530px){
+ 
+
+  .dFlex{
+    display: grid;
+    flex-wrap: wrap;
+  }
+}
+
+
 
  @media(max-width:425px){
   .ShipBut button{
     font-size: 10px;
   }
  }
+
+ @media(max-width:319px){
+  .Mainbox {
+    display: grid;
+  }
+
+
+  .MyBagFinalMain {
+        padding: 10px 0px 10px 0px;
+    }
+
+}
